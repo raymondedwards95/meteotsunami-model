@@ -1,3 +1,4 @@
+""" Functions to write time and space varying pressure fields for use with Delft3D-FM """
 
 import os
 
@@ -44,7 +45,7 @@ def convert_to_xarray(t, x, y, p):
 
 
 def write_pressure(data):
-    """ Function to write a pressure field to an `pressure.amp` file for use with Delft-3D FLOW 
+    """ Function to write a pressure field to a `pressure.amp` file for use with Delft3D-FM
     
     Input:
         data:   pressure field and coordinate data
@@ -76,8 +77,8 @@ def write_pressure(data):
     grid_unit       = m
     x_llcorner      = {x_min}
     y_llcorner      = {y_min}
-    dx              = {dx:0.0f}
-    dy              = {dy:0.0f}
+    dx              = {dx}
+    dy              = {dy}
     n_quantity      = 1
     quantity1       = ap
     unit1           = Pa
@@ -92,7 +93,7 @@ def write_pressure(data):
         # loop over time
         for i in range(t_num):
             file.write(
-                f"TIME = {data.t[i]/3600. :0.06f} hours since 1970-01-01 00:00:00 +00:00\n")
+                f"TIME = {data.t[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n")
 
             # put nothing if all values are close to reference
             if np.all(np.isclose(data.values[i, :, :], 0.)):  # maybe set rtol and atol?
@@ -108,11 +109,10 @@ def write_pressure(data):
                     for m in range(x_num):
 
                         # write a value and neglect trailing zeros after decimal point
-                        file.write(f"{data.values[i, n, m] :0.2f} ".replace(".00", ""))
+                        file.write(f"{data.values[i, n, m]:0.2f} ".replace(".00", ""))
                     file.write("\n")
     
     print(f"Finished writing to '{filename}'")
-
 
 
 if __name__ == "__main__":
