@@ -1,3 +1,7 @@
 
+*.vscode*
+*.ipynb_checkpoints*
+*.spyproject*
+
 helper-scripts/pressure.amp
 helper-scripts/bathymetry.xyb
