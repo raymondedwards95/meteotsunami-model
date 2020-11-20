@@ -44,7 +44,7 @@ def convert_to_xarray(x, y, b):
     return data
 
 
-def write_bathymetry(data):
+def write_bathymetry(data, filename=None):
     """ Function to write bathymetry data to a `bethymetry.xyb` file for use with Delft3D-FM
     
     Input:
@@ -53,7 +53,8 @@ def write_bathymetry(data):
     ## prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
-    filename = os.path.dirname(os.path.realpath(__file__)) + "\\bathymetry.xyb"
+    if filename is None:
+        filename = os.path.dirname(os.path.realpath(__file__)) + "\\bathymetry.xyb"
     print(f"\nWriting pressure data to '{filename}'")
 
 
