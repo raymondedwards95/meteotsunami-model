@@ -29,7 +29,7 @@ ManholeFile                       =                 # File *.ini containing manh
 WaterLevIni                       = 0               # Initial water level at missing s0 values
 Bedlevuni                         = -5              # Uniform bed level used at missing z values if BedlevType > 2
 Bedslope                          = 0               # Bed slope inclination if BedlevType > 2
-BedlevType                        = 3               # Bathymetry specification (1: at cell centers (from BathymetryFile), 2: at cell interfaces (from BathymetryFile), 3: at nodes, face levels mean of node values, 4: at nodes, face levels min. of node values, 5: at nodes, face levels max. of node values, 6: at cell centers, cell levels mean of node values)
+BedlevType                        = 1               # Bathymetry specification (1: at cell centers (from BathymetryFile), 2: at cell interfaces (from BathymetryFile), 3: at nodes, face levels mean of node values, 4: at nodes, face levels min. of node values, 5: at nodes, face levels max. of node values, 6: at cell centers, cell levels mean of node values)
 Blmeanbelow                       = -999            # If not -999d0, below this level the cell center bed level is the mean of surrouding net nodes
 Blminabove                        = -999            # If not -999d0, above this level the cell center bed level is the min. of surrouding net nodes
 PartitionFile                     =                 # Domain partition polygon file *_part.pol for parallel run
@@ -136,7 +136,7 @@ DtMax                             = 30              # Maximal computation timest
 DtInit                            = 1               # Initial computation timestep
 Tunit                             = S               # Time unit for start/stop times (H, M or S)
 TStart                            = 0               # Start time w.r.t. RefDate (in TUnit)
-TStop                             = 252000 #86400   # Stop  time w.r.t. RefDate (in TUnit)
+TStop                             = 250000 #86400   # Stop  time w.r.t. RefDate (in TUnit)
 
 [restart]
 RestartFile                       =                 # Restart netcdf-file, either *_rst.nc or *_map.nc
