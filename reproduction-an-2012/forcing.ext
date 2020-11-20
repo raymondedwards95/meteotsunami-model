@@ -53,7 +53,6 @@
 * FACTOR  =   : Conversion factor for this provider
 *
 **************************************************************************************************************
-
 * Meteo forcing
 QUANTITY = atmosphericpressure
 FILENAME = pressure.amp
