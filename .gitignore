@@ -3,5 +3,7 @@
 *.ipynb_checkpoints*
 *.spyproject*
 
-helper-scripts/pressure.amp
-helper-scripts/bathymetry.xyb
+*.pyc
+
+functions/pressure.amp
+functions/bathymetry.xyb
