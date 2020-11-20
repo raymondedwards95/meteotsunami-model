@@ -2,6 +2,7 @@
 *.vscode*
 *.ipynb_checkpoints*
 *.spyproject*
+*backup*
 
 *.pyc
 
