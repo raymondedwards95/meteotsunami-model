@@ -3,8 +3,11 @@
 *.ipynb_checkpoints*
 *.spyproject*
 *backup*
+*output*
 
 *.pyc
+*.cache
+*.dia
 
-functions/pressure.amp
-functions/bathymetry.xyb
+functions/*.amp
+functions/*.xyb
