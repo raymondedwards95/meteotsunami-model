@@ -57,15 +57,15 @@ def write_pressure(data, filename=None):
         filename = os.path.dirname(os.path.realpath(__file__)) + "\\pressure.amp"
     print(f"\nWriting pressure data to '{filename}'")
 
-    x_num = data.x.size
-    y_num = data.y.size
-    t_num = data.t.size
+    x_num = data.x.values.size
+    y_num = data.y.values.size
+    t_num = data.t.values.size
 
-    x_min = data.x.min()
-    y_min = data.y.min()
+    x_min = data.x.values.min()
+    y_min = data.y.values.min()
 
-    dx = _find_step(data.x)
-    dy = _find_step(data.y)
+    dx = _find_step(data.x.values)
+    dy = _find_step(data.y.values)
 
 
     ## header
@@ -97,7 +97,9 @@ unit1           = Pa
                 f"TIME = {data.t.values[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n")
 
             # put nothing if all values are close to reference
-            if np.all(np.isclose(data.values[i, :, :].round(2), 0.)):  # maybe set rtol and atol?
+            # if np.all(np.isclose(data.values[i, :, :].round(2), 0.)):  # maybe set rtol and atol?
+            #     pass
+            if False:
                 pass
 
             # write if there are values other than reference
