@@ -70,21 +70,21 @@ def write_pressure(data, filename=None):
 
     ## header
     header = f"""### START OF HEADER
-    FileVersion     = 1.03
-    filetype        = meteo_on_equidistant_grid
-    NODATA_value    = 0
-    n_cols          = {x_num:0.0f}
-    n_rows          = {y_num:0.0f}
-    grid_unit       = m
-    x_llcorner      = {x_min}
-    y_llcorner      = {y_min}
-    dx              = {dx}
-    dy              = {dy}
-    n_quantity      = 1
-    quantity1       = ap
-    unit1           = Pa
-    ### END OF HEADER
-    """
+FileVersion     = 1.03
+filetype        = meteo_on_equidistant_grid
+NODATA_value    = 0
+n_cols          = {x_num:0.0f}
+n_rows          = {y_num:0.0f}
+grid_unit       = m
+x_llcorner      = {x_min}
+y_llcorner      = {y_min}
+dx              = {dx}
+dy              = {dy}
+n_quantity      = 1
+quantity1       = ap
+unit1           = Pa
+### END OF HEADER
+"""
 
 
     ## write
@@ -94,10 +94,10 @@ def write_pressure(data, filename=None):
         # loop over time
         for i in range(t_num):
             file.write(
-                f"TIME = {data.t[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n")
+                f"TIME = {data.t.values[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n")
 
             # put nothing if all values are close to reference
-            if np.all(np.isclose(data.values[i, :, :], 0.)):  # maybe set rtol and atol?
+            if np.all(np.isclose(data.values[i, :, :].round(2), 0.)):  # maybe set rtol and atol?
                 pass
 
             # write if there are values other than reference
