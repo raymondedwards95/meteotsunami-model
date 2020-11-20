@@ -44,7 +44,7 @@ def convert_to_xarray(t, x, y, p):
     return data
 
 
-def write_pressure(data):
+def write_pressure(data, filename=None):
     """ Function to write a pressure field to a `pressure.amp` file for use with Delft3D-FM
     
     Input:
@@ -53,7 +53,8 @@ def write_pressure(data):
     ## prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
     
-    filename = os.path.dirname(os.path.realpath(__file__)) + "\\pressure.amp"
+    if filename is None:
+        filename = os.path.dirname(os.path.realpath(__file__)) + "\\pressure.amp"
     print(f"\nWriting pressure data to '{filename}'")
 
     x_num = data.x.size
