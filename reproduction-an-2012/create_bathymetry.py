@@ -17,7 +17,7 @@ slope = 1./400.
 
 ###
 def depth(x, alpha=1/400):
-    return alpha * x
+    return -1. * alpha * x
 
 ###
 x = np.linspace(0, 1e6, 5)
