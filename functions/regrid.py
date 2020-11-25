@@ -24,9 +24,15 @@ def _regrid_variable(var, x, y, x_grid, y_grid, index=None):
     var_regrid = np.zeros((num_steps, y_grid.size, x_grid.size), dtype=np.float)  # shape: time, y_grid, x_grid
     xy = np.vstack((x, y)).transpose()
     x_grid_mesh, y_grid_mesh = np.meshgrid(x_grid, y_grid)
+    f_progress = np.max([num_steps // 10, 1])
+
 
     # loop over time
     for i in range(num_steps):
+        # show progress
+        if not (i+1) % f_progress:
+            print(
+                f"Step {i+1 : 3.0f}/{num_steps : 3.0f} ({100 * (i+1)/f_progress : 3.0f}%)")
         temp = scipy.interpolate.griddata(xy, var[i, :], (x_grid_mesh, y_grid_mesh), "linear")
         var_regrid[i, :, :] = temp
 
