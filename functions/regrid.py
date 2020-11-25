@@ -32,7 +32,7 @@ def _regrid_variable(var, x, y, x_grid, y_grid, index=None):
         # show progress
         if not (i+1) % f_progress:
             print(
-                f"Step {i+1 : 3.0f}/{num_steps : 3.0f} ({100 * (i+1)/f_progress : 3.0f}%)")
+                f"Step {i+1 : 3.0f}/{num_steps : 3.0f}")
         temp = scipy.interpolate.griddata(xy, var[i, :], (x_grid_mesh, y_grid_mesh), "linear")
         var_regrid[i, :, :] = temp
 
