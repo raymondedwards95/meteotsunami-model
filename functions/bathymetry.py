@@ -55,7 +55,7 @@ def write_bathymetry(data, filename=None):
 
     if filename is None:
         filename = os.path.dirname(os.path.realpath(__file__)) + "\\bathymetry.xyb"
-    print(f"\nWriting pressure data to '{filename}'")
+    print(f"\nWriting bathymetry data to '{filename}'")
 
 
     ## write
