@@ -4,8 +4,8 @@ import sys
 
 import numpy as np
 
-sys.path.append("./")
-
+# fix for importing functions below
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.bathymetry as fb
 
 
