@@ -14,6 +14,9 @@ def _convert_coordinate_to_regular_grid(coordinate, numsteps=None):
 
 
 def _regrid_variable(var, x, y, x_grid, y_grid, index=None):
+def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
+    if type(var) is xr.DataArray:
+        var = var.values
     assert var.ndim == 2
 
     if index is None:
@@ -31,8 +34,8 @@ def _regrid_variable(var, x, y, x_grid, y_grid, index=None):
     for i in range(num_steps):
         # show progress
         if not (i+1) % f_progress:
-            print(
-                f"Step {i+1 : 3.0f}/{num_steps : 3.0f}")
+            print(f"Step {i+1 : 3.0f}/{num_steps : 3.0f}")
+
         temp = scipy.interpolate.griddata(xy, var[i, :], (x_grid_mesh, y_grid_mesh), "linear")
         var_regrid[i, :, :] = temp
 
@@ -69,27 +72,27 @@ def extract_data(filename: str, savename: str = None):
 
     ## Regrid variables
     print("Processing bathymetry")
-    data["b"] = (("y", "x"), _regrid_variable(b, x, y, x_grid, y_grid, index=1)[0, :, :])
+    data["b"] = (("y", "x"), _regrid_variable_interpolate(b, x, y, x_grid, y_grid, index=1)[0, :, :])
     data.b.attrs["long_name"] = "Water depth"
     data.b.attrs["units"] = "m"
 
     print("Processing water levels")
-    data["wl"] = (("t", "y", "x"), _regrid_variable(wl, x, y, x_grid, y_grid))
+    data["wl"] = (("t", "y", "x"), _regrid_variable_interpolate(wl, x, y, x_grid, y_grid))
     data.wl.attrs["long_name"] = "Water level"
     data.wl.attrs["units"] = "m"
 
     print("Processing zonal flow velocity")
-    data["u"] = (("t", "y", "x"), _regrid_variable(u, x, y, x_grid, y_grid))
+    data["u"] = (("t", "y", "x"), _regrid_variable_interpolate(u, x, y, x_grid, y_grid))
     data.u.attrs["long_name"] = "Zonal flow velocity"
     data.u.attrs["units"] = "m s-1"
 
     print("Processing meridional flow velocity")
-    data["v"] = (("t", "y", "x"), _regrid_variable(v, x, y, x_grid, y_grid))
+    data["v"] = (("t", "y", "x"), _regrid_variable_interpolate(v, x, y, x_grid, y_grid))
     data.v.attrs["long_name"] = "Meridional flow velocity"
     data.v.attrs["units"] = "m s-1"
 
     print("Processing atmospheric pressure")
-    data["p"] = (("t", "y", "x"), _regrid_variable(p, x, y, x_grid, y_grid))
+    data["p"] = (("t", "y", "x"), _regrid_variable_interpolate(p, x, y, x_grid, y_grid))
     data.p.attrs["long_name"] = "Atmospheric pressure near surface"
     data.p.attrs["units"] = "N m-2"
 
