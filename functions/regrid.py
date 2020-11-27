@@ -13,7 +13,6 @@ def _convert_coordinate_to_regular_grid(coordinate, numsteps=None):
     return np.linspace(np.min(coordinate), np.max(coordinate), numsteps, retstep=True)
 
 
-def _regrid_variable(var, x, y, x_grid, y_grid, index=None):
 def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
     if type(var) is xr.DataArray:
         var = var.values
