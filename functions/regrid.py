@@ -14,6 +14,10 @@ def _convert_coordinate_to_regular_grid(coordinate, numsteps=None):
 
 
 def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
+    if type(x) is xr.DataArray:
+        x = x.values
+    if type(y) is xr.DataArray:
+        y = y.values
     if type(var) is xr.DataArray:
         var = var.values
     assert var.ndim == 2
@@ -23,7 +27,7 @@ def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
     else:
         num_steps = 1
 
-    var_regrid = np.zeros((num_steps, y_grid.size, x_grid.size), dtype=np.float)  # shape: time, y_grid, x_grid
+    var_grid = np.zeros((num_steps, y_grid.size, x_grid.size), dtype=np.float)  # shape: time, y_grid, x_grid
     xy = np.vstack((x, y)).transpose()
     x_grid_mesh, y_grid_mesh = np.meshgrid(x_grid, y_grid)
     f_progress = np.max([num_steps // 10, 1])
@@ -36,9 +40,9 @@ def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
             print(f"Step {i+1 : 3.0f}/{num_steps : 3.0f}")
 
         temp = scipy.interpolate.griddata(xy, var[i, :], (x_grid_mesh, y_grid_mesh), "linear")
-        var_regrid[i, :, :] = temp
+        var_grid[i, :, :] = temp
 
-    return var_regrid
+    return var_grid
 
 
 def extract_data(filename: str, savename: str = None):
@@ -66,8 +70,8 @@ def extract_data(filename: str, savename: str = None):
     data.x.attrs["units"] = "m"
     data.y.attrs["long_name"] = "y coordinate"
     data.y.attrs["units"] = "m"
-    data.t.attrs["long_name"] = "time"
-    data.t.attrs["units"] = "-"
+    # data.t.attrs["long_name"] = "time"
+    # data.t.attrs["units"] = "s"
 
     ## Regrid variables
     print("Processing bathymetry")
