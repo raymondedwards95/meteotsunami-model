@@ -4,6 +4,8 @@
 *.spyproject*
 *backup*
 *output*
+*test*
+*dask-worker-space*
 
 *.pyc
 *.cache
