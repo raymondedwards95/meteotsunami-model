@@ -13,6 +13,50 @@ def _convert_coordinate_to_regular_grid(coordinate, numsteps=None):
     return np.linspace(np.min(coordinate), np.max(coordinate), numsteps, retstep=True)
 
 
+def _create_grid_mapping(x, y, x_grid, y_grid):
+    if type(x) is xr.DataArray:
+        x = x.values
+    if type(y) is xr.DataArray:
+        y = y.values
+
+    assert x.size == y.size
+    # assert x.size == x_grid.size * y_grid.size
+
+    grid_map = np.zeros((x.size, 3), dtype=np.int)
+
+    for n in range(x.size):
+        i = np.argmin(np.abs(x[n] - x_grid))
+        j = np.argmin(np.abs(y[n] - y_grid))
+
+        grid_map[n, :] = [n, i, j]
+    
+    return grid_map
+
+
+def _regrid_variable_map(var, grid_mapping, index=None):
+    if type(var) is xr.DataArray:
+        var = var.values
+    assert var.ndim == 2
+    assert grid_mapping.ndim == 2
+
+    t_size = var.shape[0]
+    x_size = np.max(grid_mapping[:, 1]) + 1
+    y_size = np.max(grid_mapping[:, 2]) + 1
+
+    var_grid = np.full((t_size, y_size, x_size), np.nan, dtype=np.float)
+
+    for k in range(t_size):
+        # show progress
+        # if not (k+1) % 1:
+        #     print(f"Step {k+1 : 3.0f}/{t_size : 3.0f}")
+
+        for m in range(grid_mapping.shape[0]):
+            n, i, j = grid_mapping[m, :]
+            var_grid[k, j, i] = var[k, n]
+    
+    return var_grid
+
+
 def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
     if type(x) is xr.DataArray:
         x = x.values
@@ -73,29 +117,36 @@ def extract_data(filename: str, savename: str = None):
     # data.t.attrs["long_name"] = "time"
     # data.t.attrs["units"] = "s"
 
+    grid_map = _create_grid_mapping(x, y, x_grid, y_grid)
+
     ## Regrid variables
     print("Processing bathymetry")
-    data["b"] = (("y", "x"), _regrid_variable_interpolate(b, x, y, x_grid, y_grid, index=1)[0, :, :])
+    # data["b"] = (("y", "x"), _regrid_variable_interpolate(b, x, y, x_grid, y_grid, index=1)[0, :, :])
+    data["b"] = (("y", "x"), _regrid_variable_map(b, grid_map, index=1)[0, :, :])
     data.b.attrs["long_name"] = "Water depth"
     data.b.attrs["units"] = "m"
 
     print("Processing water levels")
-    data["wl"] = (("t", "y", "x"), _regrid_variable_interpolate(wl, x, y, x_grid, y_grid))
+    # data["wl"] = (("t", "y", "x"), _regrid_variable_interpolate(wl, x, y, x_grid, y_grid))
+    data["wl"] = (("t", "y", "x"), _regrid_variable_map(wl, grid_map))
     data.wl.attrs["long_name"] = "Water level"
     data.wl.attrs["units"] = "m"
 
     print("Processing zonal flow velocity")
-    data["u"] = (("t", "y", "x"), _regrid_variable_interpolate(u, x, y, x_grid, y_grid))
+    # data["u"] = (("t", "y", "x"), _regrid_variable_interpolate(u, x, y, x_grid, y_grid))
+    data["u"] = (("t", "y", "x"), _regrid_variable_map(u, grid_map))
     data.u.attrs["long_name"] = "Zonal flow velocity"
     data.u.attrs["units"] = "m s-1"
 
     print("Processing meridional flow velocity")
-    data["v"] = (("t", "y", "x"), _regrid_variable_interpolate(v, x, y, x_grid, y_grid))
+    # data["v"] = (("t", "y", "x"), _regrid_variable_interpolate(v, x, y, x_grid, y_grid))
+    data["v"] = (("t", "y", "x"), _regrid_variable_map(v, grid_map))
     data.v.attrs["long_name"] = "Meridional flow velocity"
     data.v.attrs["units"] = "m s-1"
 
     print("Processing atmospheric pressure")
-    data["p"] = (("t", "y", "x"), _regrid_variable_interpolate(p, x, y, x_grid, y_grid))
+    # data["p"] = (("t", "y", "x"), _regrid_variable_interpolate(p, x, y, x_grid, y_grid))
+    data["p"] = (("t", "y", "x"), _regrid_variable_map(p, grid_map))
     data.p.attrs["long_name"] = "Atmospheric pressure near surface"
     data.p.attrs["units"] = "N m-2"
 
