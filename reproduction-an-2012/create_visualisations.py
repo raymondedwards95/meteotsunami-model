@@ -1,12 +1,13 @@
 """ Script for making simple visualisations to compare with paper An et al. (2012) """
 
+import argparse
 import os
 import sys
 import time
 
+import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
-import matplotlib.pyplot as plt
 
 from matplotlib.animation import FuncAnimation
 
@@ -17,17 +18,27 @@ import functions.visualisation as fv
 
 
 ### Parameters
-case = "00"
 make_ani = True
 show_figs = False
+
+parser = argparse.ArgumentParser(
+    description="Process model outputs and create visualisations for a specific case"
+)
+parser.add_argument(
+    "case",
+    help="Case number",
+    default="00",
+    type=int
+)
+args = parser.parse_args()
+
+case = f"{args.case:02}"
 
 
 ### Set paths
 output_dir = os.path.dirname(os.path.realpath(__file__)) + f"\\output_repr_{case}\\"
 figure_dir = os.path.dirname(os.path.realpath(
     __file__)) + f"\\figures_repr_{case}\\"
-
-os.makedirs(figure_dir, exist_ok=True)
 
 filename_output = output_dir + "FlowFM_map.nc"
 filename_processed = output_dir + "processed_data.nc"
@@ -38,10 +49,17 @@ print(f"\t * File with raw data is \n\t'{filename_output}'")
 print(f"\t * File with processed data is \n\t'{filename_processed}'")
 print(f"\t * Folder that contains figures is \n\t'{figure_dir}'")
 
+# Check if data exists
+if not os.path.exists(filename_output):
+    print(f"File '{filename_output}' is not found. Exiting.")
+    sys.exit(1)
+
 # Convert data if it didn't happen yet
 if not os.path.exists(filename_processed):
     print(f"File '{filename_processed}' is not found. Processing data.")
     fr.extract_data(filename_output, savename=filename_processed)
+
+os.makedirs(figure_dir, exist_ok=True)
 
 
 ### Get data
