@@ -26,7 +26,7 @@ fi
 if [ ! -f ../settings.sh ]
   then
     echo "../settings.sh does not exist. Creating file... Probably it needs to be adjusted manually."
-    cp ../setup/settings.sh ../settings.sh
+    cp ../setup/settings.sh.template ../settings.sh
 fi
 
 source ../settings.sh
