@@ -1,7 +1,6 @@
 #!/bin/bash
 # Runs and make figures for a given case, for which the path to the inputfile (*.mdu) should be given as an argument
-# 
-# make sure the settings in the root folder are correct, following the template
+# Make sure the settings in the root folder are correct, following the template
 
 # check if there are arguments
 if [ $# -eq 0 ]
@@ -24,7 +23,13 @@ if [ ! -f $INPUT_FILE ]
 fi
 
 # set path to model executables
-source ../setup/settings.sh
+if [ ! -f ../settings.sh ]
+  then
+    echo "../settings.sh does not exist. Creating file... Probably it needs to be adjusted manually."
+    cp ../setup/settings.sh ../settings.sh
+fi
+
+source ../settings.sh
 echo "Path to executables is $DFLOWFM_BIN_PATH"
 
 # check if executable exists
