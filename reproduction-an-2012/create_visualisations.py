@@ -1,5 +1,9 @@
 """ Script for making simple visualisations to compare with paper An et al. (2012) """
 
+# fix for systems without display
+import matplotlib
+matplotlib.use("Agg")
+
 import argparse
 import os
 import sys

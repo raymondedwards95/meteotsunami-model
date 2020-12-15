@@ -1,3 +1,8 @@
+""""""
+
+# fix for systems without display
+import matplotlib
+matplotlib.use("Agg")
 
 import os
 import sys
