@@ -23,4 +23,4 @@ model = FFMF.WaterFlowFMModel()
 SF.AddToProject(model)
 FFMF.GenerateRegularGridForModelUsingExtend(
     model, x_length, y_length, x_num, y_num, x_min, y_min)
-model.WriteNetFile(os.path.dirname(os.path.realpath(__file__)) + "\\FlowFM_net.nc")
+model.WriteNetFile(os.path.dirname(os.path.realpath(__file__)) + "/FlowFM_net.nc")

@@ -12,7 +12,7 @@ import functions.pressure as fp
 
 ### Filenames
 current_dir = os.path.dirname(os.path.realpath(__file__))
-filename = current_dir + "\\pressure.amp"
+filename = current_dir + "/pressure.amp"
 
 ### Parameters
 t0 = 10000.
@@ -66,5 +66,5 @@ for i in range(5):
     ax[i].set_xlim([0, 500])
 ax[0].set_ylabel("y [km]")
 fig.colorbar(im[-2], ax=ax[-1])
-plt.savefig(current_dir + "\\test_pressure.jpg")
+plt.savefig(current_dir + "/test_pressure.jpg")
 plt.show()

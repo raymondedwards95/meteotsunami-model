@@ -27,6 +27,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "case",
     help="Case number",
+    nargs="?",
     default="00",
     type=int
 )
@@ -36,9 +37,9 @@ case = f"{args.case:02}"
 
 
 ### Set paths
-output_dir = os.path.dirname(os.path.realpath(__file__)) + f"\\output_repr_{case}\\"
+output_dir = os.path.dirname(os.path.realpath(__file__)) + f"/output_repr_{case}/"
 figure_dir = os.path.dirname(os.path.realpath(
-    __file__)) + f"\\figures_repr_{case}\\"
+    __file__)) + f"/figures_repr_{case}/"
 
 filename_output = output_dir + "FlowFM_map.nc"
 filename_processed = output_dir + "processed_data.nc"

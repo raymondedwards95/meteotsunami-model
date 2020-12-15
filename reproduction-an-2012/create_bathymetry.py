@@ -10,7 +10,7 @@ import functions.bathymetry as fb
 
 
 ###
-filename = os.path.dirname(os.path.realpath(__file__)) + "\\bathymetry.xyb"
+filename = os.path.dirname(os.path.realpath(__file__)) + "/bathymetry.xyb"
 
 ###
 slope = 1./400.
