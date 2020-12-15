@@ -57,34 +57,43 @@ def write_bathymetry(data, filename=None):
         filename = os.path.dirname(os.path.realpath(__file__)) + "\\bathymetry.xyb"
     print(f"\nWriting bathymetry data to '{filename}'")
 
+    x = data.x.values
+    y = data.y.values
+    b = data.values
+
 
     ## write
     with open(filename, "w") as file:
         file.write("")
 
         # loop over x
-        for i in range(data.x.size):
-            _x = data.x.values[i]
+        for i in range(x.size):
+            _x = x[i]
 
             # loop over y
-            for j in range(data.y.size):
+            for j in range(y.size):
 
                 # write a set of x y b on one line + remove trailing zeros
-                file.write(f"{_x:0.2f} {data.y.values[j]:0.2f} {data.values[j, i]:0.2f}\n".replace(".00", ""))
+                file.write(f"{_x:0.2f} {y[j]:0.2f} {b[j, i]:0.2f}\n".replace(".00", ""))
     
     print(f"Finished writing to '{filename}'")
 
 
 if __name__ == "__main__":
+    import time
+
     @np.vectorize
     def function(x, y):
         return np.min([x / 500., 200.])
 
-
-    x = np.array([0., 5e5, 1e6], dtype=np.float)
-    y = np.array([-1e7, +1e7], dtype=np.float)
+    t0 = time.perf_counter()
+    x = np.linspace(0., 1e6, 5, dtype=np.float)
+    y = np.linspace(-1e7, +1e7, 5, dtype=np.float)
     xx, yy = np.meshgrid(x, y)
     b = function(xx, yy)
 
     data = convert_to_xarray(x, y, b)
     write_bathymetry(data)
+
+    t1 = time.perf_counter()
+    print(f"Created bathymetry data in {t1 - t0 :0.2f} seconds.")
