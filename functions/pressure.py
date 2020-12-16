@@ -119,4 +119,23 @@ unit1           = Pa
 
 
 if __name__ == "__main__":
-    print("")
+    import time
+
+    def f(x, y, t):
+        return np.min([1, t / 5]) * np.sin(x) * np.sin(y)
+
+    t0 = time.perf_counter()
+    x = np.linspace(-1, 1, 51)
+    y = np.linspace(-1, 1, 51)
+    t = np.arange(10)
+    p = np.zeros((t.size, y.size, x.size), dtype=np.float)
+
+    for n in range(t.size):
+        for j in range(y.size):
+            for i in range(x.size):
+                p[n,j,i] = f(x[i], y[j], t[n])
+    
+    data = convert_to_xarray(t, x, y, p)
+    write_pressure(data)
+    t1 = time.perf_counter()
+    print(f"Created test pressure data in {t1 - t0 :0.2f} seconds.")
