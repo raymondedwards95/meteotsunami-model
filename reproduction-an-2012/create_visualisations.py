@@ -69,7 +69,7 @@ os.makedirs(figure_dir, exist_ok=True)
 
 ### Get data
 print("Read data")
-data = xr.open_dataset(filename_processed, chunks={"t": 3})
+data = xr.open_dataset(filename_processed)
 x = data["x"]
 y = data["y"]
 t = data["t"]
@@ -99,7 +99,7 @@ plt.ylabel("$y$ [km]")
 plt.axhline(color="black", linewidth=1)
 plt.axvline(color="black", linewidth=1)
 
-# plt.axhline(-7.56e3, linestyle="--", color="gray", linewidth=1)
+# plt.axhline(7.56e3, linestyle="--", color="gray", linewidth=1)
 # plt.axvline(10, linestyle="--", color="gray", linewidth=1)
 # plt.axvline(100, linestyle="--", color="gray", linewidth=1)
 # plt.axvline(200, linestyle="--", color="gray", linewidth=1)
@@ -121,7 +121,7 @@ for i in range(4):
     _ax = ax[i//2, i%2]
     im = _ax.contourf(x/1000, y/1000, p.interp(t=fv.to_timestr(plot_times[i])), vmin=0, vmax=2000)
     _ax.set_xlim([0, 300])
-    _ax.set_ylim([0, -y.max()/1000])
+    _ax.set_ylim([0, y.max()/1000])
     _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
     
     if i//2: _ax.set_xlabel("$x$ [km]")
@@ -129,7 +129,7 @@ for i in range(4):
     
     fig.colorbar(im, ax=_ax)
     
-#     _ax.axhline(-7.56e3, linestyle="--", color="gray", linewidth=1)
+#     _ax.axhline(7.56e3, linestyle="--", color="gray", linewidth=1)
 #     _ax.axvline(10, linestyle="--", color="gray", linewidth=1)
 #     _ax.axvline(100, linestyle="--", color="gray", linewidth=1)
 #     _ax.axvline(200, linestyle="--", color="gray", linewidth=1)
@@ -150,7 +150,7 @@ for i in range(4):
     _ax = ax[i//2, i%2]
     im = _ax.contourf(x/1000, y/1000, wl.interp(t=fv.to_timestr(plot_times[i])), vmin=-0.8, vmax=0.8)
     _ax.set_xlim([0, 300])
-    _ax.set_ylim([0, -y.max()/1000])
+    _ax.set_ylim([0, y.max()/1000])
     _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
     
     if i//2: _ax.set_xlabel("$x$ [km]")
@@ -158,7 +158,7 @@ for i in range(4):
     
     fig.colorbar(im, ax=_ax)
     
-#     _ax.axhline(-7.56e3, linestyle="--", color="gray", linewidth=1)
+#     _ax.axhline(7.56e3, linestyle="--", color="gray", linewidth=1)
 #     _ax.axvline(10, linestyle="--", color="gray", linewidth=1)
 #     _ax.axvline(100, linestyle="--", color="gray", linewidth=1)
 #     _ax.axvline(200, linestyle="--", color="gray", linewidth=1)
@@ -170,7 +170,7 @@ fig.savefig(figure_dir + "sse_contours.jpg", bbox_inches="tight")
 # figure 2
 print("Figure: sse alongshore profile")
 plot_times = [4e4, 8e4, 12e4, 16e4]
-plot_ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * -1e3
+plot_ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
 
 fig, ax = plt.subplots(2, 2, sharex=False, sharey=False)
 fig.set_size_inches(8, 8)
@@ -183,10 +183,10 @@ for i in range(4):
     _ax.set_ylim([-0.65, 0.65])
     _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
     
-    if i//2: _ax.set_xlabel("$x$ [km]")
+    if i//2: _ax.set_xlabel("$y$ [km]")
     if not i%2: _ax.set_ylabel("$SSE$ [m]")
         
-    _ax.axvline(-7.56e3, linestyle="--", color="gray", linewidth=1)
+    _ax.axvline(7.56e3, linestyle="--", color="gray", linewidth=1)
     _ax.axhline(color="black", linewidth=1)
     _ax.axvline(color="black", linewidth=1)
     
@@ -196,7 +196,7 @@ fig.savefig(figure_dir + "sse_along.jpg", bbox_inches="tight")
 ### Figure cross-shore profile sse
 # figure 3
 print("Figure: sse cross-shore profile")
-y_slices = np.array([7.56]) * -1e6
+y_slices = np.array([7.56]) * 1e6
 
 plt.figure(figsize=(5, 5), dpi=150)
 for i in range(len(y_slices)):
@@ -235,12 +235,12 @@ for i in range(len(x_slices)):
 plt.legend()
 plt.axhline(color="black", linewidth=1)
 plt.axvline(color="black", linewidth=1)
-plt.xlim([0, -y.max()/1000])
-plt.axvline(-7.56e3, linestyle="--", color="gray", linewidth=1)
+plt.xlim([0, y.max()/1000])
+plt.axvline(7.56e3, linestyle="--", color="gray", linewidth=1)
 plt.xlabel("$y$ [km]")
 plt.ylabel("$SSE$ [m]")
     
-fig.savefig(figure_dir + "sse_along_2.jpg", bbox_inches="tight")
+plt.savefig(figure_dir + "sse_along_2.jpg", bbox_inches="tight")
 
 
 ### Animation
