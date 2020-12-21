@@ -20,13 +20,13 @@ current_dir = os.path.dirname(os.path.realpath(__file__))
 filename = current_dir + "/pressure.amp"
 
 ### Parameters
-t0 = 10000.
-U = - 50.
-a = 200000.
-p0 = 2000.
+t0 = 10000.  # default: 10000
+U = 50.  # default: 50
+a = 200000.  # default: 200000
+p0 = 2000.  # default: 2000
 
 ### Function
-def pressure(x, y, t, t0=10000, U=50, a=200000, p0=2000):
+def pressure(x, y, t, t0=t0, U=U, a=a, p0=p0):
     return (
         p0
         * (1. - np.exp(-t / t0))
@@ -44,7 +44,7 @@ p = np.zeros((t.size, y.size, x.size))
 for i in range(t.size):
     for j in range(y.size):
         for k in range(x.size):
-            p[i,j,k] = pressure(x[k], y[j], t[i])
+            p[i,j,k] = pressure(x[k], y[j], t[i], t0, U, a, p0)
 
 # remove zero-columns and zero-rows
 ix = np.where(~ np.all(np.isclose(p, 0), axis=(0,1)))[0]
@@ -56,6 +56,7 @@ p = p[:,:,ix][:,iy,:]
 ### Write field
 print("Writing pressure field")
 data = fp.convert_to_xarray(t, x, y, p)
+del t, x, y, p
 fp.write_pressure(data, filename)
 
 ### Visualise field
@@ -64,9 +65,9 @@ fig, ax = plt.subplots(1, 5, sharey=True)
 fig.set_tight_layout(True)
 im = [None] * 5
 for i in range(5):
-    idx = t.size * i // 5
-    im[i] = ax[i].contourf(x/1000., y/1000., p[idx,:,:], vmin=0, vmax=p0)
-    ax[i].set_title(f"$t = {t[idx] : 0.0f}$s")
+    idx = data.t.size * i // 5
+    im[i] = ax[i].contourf(data.x.values/1000., data.y.values/1000., data.values[idx,:,:], vmin=0, vmax=p0)
+    ax[i].set_title(f"$t = {data.t.values[idx] : 0.0f}$s")
     ax[i].set_xlabel("x [km]")
     ax[i].set_xlim([0, 500])
 ax[0].set_ylabel("y [km]")
