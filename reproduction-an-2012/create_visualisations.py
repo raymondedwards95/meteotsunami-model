@@ -22,9 +22,6 @@ import functions.visualisation as fv
 
 
 ### Parameters
-make_ani = True
-show_figs = False
-
 parser = argparse.ArgumentParser(
     description="Process model outputs and create visualisations for a specific case"
 )
@@ -38,14 +35,30 @@ parser.add_argument(
 parser.add_argument(
     "--reprocess",
     "-r",
-    help="Force reprocessing of data. ",
+    help="Force processing of original data.",
     default=False,
+    type=bool
+)
+parser.add_argument(
+    "--show",
+    "-s",
+    help="Show figures after creation.",
+    default=False,
+    type=bool
+)
+parser.add_argument(
+    "--animate",
+    "-a",
+    help="Create animation.",
+    default=True,
     type=bool
 )
 args = parser.parse_args()
 
 case = f"{args.case:02}"
 reprocess_data = bool(args.reprocess)
+show_figs = bool(args.show)
+make_ani = bool(args.animate)
 
 
 ### Set paths
