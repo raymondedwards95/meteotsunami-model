@@ -35,8 +35,8 @@ def pressure(x, y, t, t0=t0, U=U, a=a, p0=p0):
 
 ### Compute field
 print("Computing pressure field")
-x = np.linspace(0, 1e6, 75, dtype=np.float)
-y = np.linspace(-1e7, 1e7, 751, dtype=np.float)
+x = np.linspace(0, 1e6, 101, dtype=np.float)
+y = np.linspace(-1e7, 1e7, 501, dtype=np.float)
 t = np.arange(0, 70, 1, dtype=np.float) * 3600.
 
 # loop over all t, y and x
