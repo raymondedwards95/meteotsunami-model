@@ -262,7 +262,7 @@ texts[0] = ax[0].set_title(f"$t = {t.isel(t=0).values.tolist() / 1e9 / 3600 : 5.
 def initfig():
     for i in range(2):
         ax[i].grid()
-        ax[i].set_xlim(0, -y.max()/1000)
+        # ax[i].set_xlim(0, y.max()/1000)
         ax[i].axhline(0, color="black", linewidth=1)
     ax[0].set_ylabel("$SSE$ [m]")
     ax[1].set_ylabel("$Pressure$ [Pa]")
