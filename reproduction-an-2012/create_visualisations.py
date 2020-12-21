@@ -35,9 +35,17 @@ parser.add_argument(
     default="00",
     type=int
 )
+parser.add_argument(
+    "--reprocess",
+    "-r",
+    help="Force reprocessing of data. ",
+    default=False,
+    type=bool
+)
 args = parser.parse_args()
 
 case = f"{args.case:02}"
+reprocess_data = bool(args.reprocess)
 
 
 ### Set paths
@@ -60,7 +68,7 @@ if not os.path.exists(filename_output):
     sys.exit(1)
 
 # Convert data if it didn't happen yet
-if not os.path.exists(filename_processed):
+if not os.path.exists(filename_processed) or reprocess_data:
     print(f"File '{filename_processed}' is not found. Processing data.")
     fr.extract_data(filename_output, savename=filename_processed)
 
