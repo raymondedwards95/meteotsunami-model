@@ -8,6 +8,13 @@ import scipy.interpolate
 import xarray as xr
 
 
+# set method for regridding
+# 1 is the default; it should work
+# 2 is faster, but can give wrong results
+__regrid_method = 1
+__regrid_error = f"Set '__regrid_method' in file 'regrid.py' to '1'! Now it is {__regrid_method}"
+
+
 def _convert_coordinate_to_regular_grid(coordinate, numsteps=None):
     if numsteps is None:
         numsteps = np.unique(coordinate).size
@@ -23,15 +30,23 @@ def _create_grid_mapping(x, y, x_grid, y_grid):
     assert x.size == y.size
     # assert x.size == x_grid.size * y_grid.size
 
-    # grid_map = np.zeros((x.size, 3), dtype=np.int)
-    grid_map = np.zeros((x.size, 2), dtype=np.int)
+    if __regrid_method == 1:
+        grid_map = np.zeros((x.size, 3), dtype=np.int)  # slow method 1
+    elif __regrid_method == 2:
+        grid_map = np.zeros((x.size, 2), dtype=np.int)  # fast method 2
+    else:
+        raise NotImplementedError(__regrid_error)
 
     for n in range(x.size):
         i = np.argmin(np.abs(x[n] - x_grid))
         j = np.argmin(np.abs(y[n] - y_grid))
 
-        # grid_map[n, :] = [n, i, j]
-        grid_map[n, :] = [j, i]
+        if __regrid_method == 1:
+            grid_map[n, :] = [n, i, j]  # slow method 1
+        elif __regrid_method == 2:
+            grid_map[n, :] = [j, i]  # fast method 2
+        else:
+            raise NotImplementedError(__regrid_error)
     
     return grid_map
 
@@ -44,7 +59,13 @@ def _regrid_variable_map(var, grid_mapping, index=None):
 
     t_size = var.shape[0]
     x_size = np.max(grid_mapping[:, 1]) + 1
-    y_size = np.max(grid_mapping[:, 0]) + 1
+
+    if __regrid_method == 1:
+        y_size = np.max(grid_mapping[:, 2]) + 1  # slow method 1
+    elif __regrid_method == 2:
+        y_size = np.max(grid_mapping[:, 0]) + 1  # fast method 2
+    else:
+        raise NotImplementedError(__regrid_error)
 
     var_grid = np.full((t_size, y_size, x_size), np.nan, dtype=np.float)
 
@@ -53,11 +74,16 @@ def _regrid_variable_map(var, grid_mapping, index=None):
         # if not (k+1) % 1:
         #     print(f"Step {k+1 : 3.0f}/{t_size : 3.0f}")
 
-        # for m in range(grid_mapping.shape[0]):
-        #     n, i, j = grid_mapping[m, :]
-        #     var_grid[k, j, i] = var[k, n]
+        if __regrid_method == 1:
+            for m in range(grid_mapping.shape[0]):  # slow method 1
+                n, i, j = grid_mapping[m, :]
+                var_grid[k, j, i] = var[k, n]
 
-        var_grid[k] = var[k, :].reshape(y_size, x_size)[tuple(grid_mapping.T)].reshape(y_size, x_size)
+        elif __regrid_method == 2:
+            var_grid[k] = var[k, :].reshape(y_size, x_size)[tuple(grid_mapping.T)].reshape(y_size, x_size)  # fast method 2
+        
+        else:
+            raise NotImplementedError(__regrid_error)
     
     return var_grid
 
