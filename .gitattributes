@@ -1,0 +1,2 @@
+# change all line endings to /n for use with unix
+text eol=lf
