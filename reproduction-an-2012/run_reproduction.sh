@@ -46,7 +46,7 @@ T_START=$(date +%s)
 $DFLOWFM_BIN_PATH/run_dflowfm.sh $INPUT_FILE
 
 # process outputs
-python3 create_visualisations.py $CASE_NUMBER
+python3 create_visualisations.py $CASE_NUMBER --reprocess 1
 
 # stop timer
 T_END=$(date +%s)
