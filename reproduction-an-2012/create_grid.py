@@ -1,3 +1,7 @@
+""" Creates a file that contains a gridfor D3D-FM-FLOW 
+Note: this script should be run from Delta-Shell
+"""
+
 import os
 
 import Libraries.FlowFlexibleMeshFunctions as FFMF

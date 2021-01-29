@@ -1,3 +1,4 @@
+""" Creates a file for D3D-FM-FLOW with a bathymetry as in paper An et al. (2012) """
 
 import os
 import sys

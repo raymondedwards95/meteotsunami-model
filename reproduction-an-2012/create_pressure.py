@@ -1,4 +1,4 @@
-""""""
+""" Creates a file for D3D-FM-FLOW with the pressure-field as in the paper An et al. (2012) """
 
 # fix for systems without display
 import matplotlib
