@@ -100,7 +100,7 @@ unit1           = Pa
                 f"TIME = {t[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n")
 
             # put nothing if all values are close to reference
-            # if np.all(np.isclose(data.values[i, :, :].round(2), 0.)):  # maybe set rtol and atol?
+            # if ((i != 0) and (np.all(np.isclose(data.values[i, :, :].round(2), 0.)))):  # maybe set rtol and atol?
             #     pass
             if False:
                 pass
