@@ -23,5 +23,8 @@ fi
 bash ./run_reproduction.sh 00 &
 bash ./run_reproduction.sh 01 &
 bash ./run_reproduction.sh 02 &
+bash ./run_reproduction.sh 03 &
+bash ./run_reproduction.sh 04 &
+bash ./run_reproduction.sh 05 &
 
 exit 0
