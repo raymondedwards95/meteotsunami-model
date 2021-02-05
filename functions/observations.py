@@ -58,7 +58,7 @@ def write_observations(data: list, filename: str=None):
         with open(filename_points, "w") as file:
             for element in points:
                 _name = element.name.replace("\'", "")
-                file.write(f"{element.x} {element.y} '{_name}'\n")
+                file.write(f"{element.x} \t{element.y} \t'{_name}'\n")
 
     # Process cross sections
     if len(sections) > 0:
@@ -75,8 +75,10 @@ def write_observations(data: list, filename: str=None):
 
 
 if __name__ == "__main__":
-    obs_1 = ObservationPoint(name="Point", x=0, y=0)
+    obs_0 = ObservationPoint(name="Center", x=0, y=0)
+    obs_1 = ObservationPoint(name="Point", x=1, y=1)
     obs_2 = ObservationCrossSection(name="Line", x=[-2, 2], y=[0, 0])
     obs_3 = ObservationCrossSection(name="Curve", x=[-2, 0, 0], y=[0, 0, 2])
+    obs_4 = ObservationCrossSection(name="Square", x=[-4, -4 ,4, 4], y=[-4, 4, 4, -4])
 
-    write_observations([obs_1, obs_2, obs_3])
+    write_observations([obs_0, obs_1, obs_2, obs_3, obs_4])
