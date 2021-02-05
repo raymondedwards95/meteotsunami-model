@@ -54,7 +54,9 @@ def write_pressure(data, filename=None):
     assert type(data) == xr.DataArray, "Input is not a DataArray"
     
     if filename is None:
-        filename = os.path.dirname(os.path.realpath(__file__)) + "/pressure.amp"
+        filename = os.path.dirname(os.path.realpath(__file__)) + "/pressure"
+    if not filename.endswith(".amp"):
+        filename += ".amp"
     print(f"\nWriting pressure data to '{filename}'")
 
     x_num = data.x.values.size

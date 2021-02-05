@@ -121,7 +121,8 @@ def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
 
 
 def extract_data(filename: str, savename: str = None):
-    assert filename.endswith(".nc")
+    if not filename.endswith(".nc"):
+        filename += ".nc"
     print("\nStart processing data")
     print(f"Reading file '{filename}'")
 

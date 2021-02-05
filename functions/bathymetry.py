@@ -54,7 +54,9 @@ def write_bathymetry(data, filename=None):
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
     if filename is None:
-        filename = os.path.dirname(os.path.realpath(__file__)) + "/bathymetry.xyb"
+        filename = os.path.dirname(os.path.realpath(__file__)) + "/bathymetry"
+    if not filename.endswith(".xyb"):
+        filename += ".xyb"
     print(f"\nWriting bathymetry data to '{filename}'")
 
     x = data.x.values
