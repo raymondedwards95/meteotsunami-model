@@ -11,6 +11,8 @@
 *.cache
 *.dia
 
+settings.sh
 functions/*.amp
 functions/*.xyb
-settings.sh
+functions/observations.xyn
+functions/observations_crs.pli
