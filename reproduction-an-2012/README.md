@@ -7,6 +7,14 @@ Scripts are used to create certain fields:
 
 Other files are `forcing*.ext` which activates the pressure field in `pressure*.amp`, and `input*.mdu` is the main file with parameters for simulations. Normally these two files should not change much.
 
+
+### Running experiments
+
+Simulations can be done by running `bash run_reproduction.sh case`, where `case` is a case number as in the table below. It will run the model and afterwards it will create some figures.
+
+Running `bash run_all.sh` will run all experiments.
+
+
 ### Experiments
 
 Multiple simulations are done, related to the base experiments. In these cases one or more parameters are changed, compared to the base experiment. All different cases are numbered.
