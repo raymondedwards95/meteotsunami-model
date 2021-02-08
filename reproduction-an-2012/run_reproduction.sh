@@ -51,8 +51,9 @@ python3 create_visualisations.py $CASE_NUMBER --reprocess 1
 # stop timer
 T_END=$(date +%s)
 let TIME_DELTA="$T_END-$T_START"
+let TIME_DELTA_MINUTE="$TIME_DELTA/60"
 let TIME_DELTA_HOUR="$TIME_DELTA/3600"
 
 # end script
-echo "Finished simulations and processing and visualising data in $TIME_DELTA seconds ($TIME_DELTA_HOUR hours)"
+echo "Finished simulations and processing and visualising data in $TIME_DELTA seconds ($TIME_DELTA_MINUTE minutes or $TIME_DELTA_HOUR hours)"
 exit 0
