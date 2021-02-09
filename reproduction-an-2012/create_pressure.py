@@ -19,25 +19,25 @@ import functions.pressure as fp
 filename = "pressure_repr_00"
 
 # pressure distribution
-t0 = 10000.  # default: 10000
-U = 50.  # default: 50
-a = 200000.  # default: 200000
-p0 = 2000.  # default: 2000
+t0 = 10000.  # default: 10000 s
+U = 50.  # default: 50 m/s
+a = 200000.  # default: 200 km
+p0 = 2000.  # default: 2000 Pa
 
 # cross shore (meters)
-x_min = 0.
-x_max = 1e6
-x_step = 1e4
+x_min = 0.  # default: 0 km
+x_max = 1e6  # default: 1000 km
+x_step = 1e4  # default: 10 km
 
 # along shore (meters)
-y_min = -1e7
-y_max = 1e7
-y_step = x_step
+y_min = -1e7  # default: -10000 km
+y_max = 1e7  # default: 10000 km
+y_step = x_step  # default: 10 km
 
-# time (hours)
-t_min = 0
-t_max = 70 * 3600.
-t_step = 1 * 3600.
+# time (seconds)
+t_min = 0  # default: 0
+t_max = 70 * 3600.  # default: 70 hours
+t_step = 1 * 3600.  # default: 1 hour
 
 
 ### Filenames
