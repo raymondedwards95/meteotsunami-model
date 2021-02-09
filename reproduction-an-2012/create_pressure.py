@@ -4,6 +4,7 @@
 import matplotlib
 matplotlib.use("Agg")
 
+import argparse
 import os
 import sys
 
@@ -18,6 +19,7 @@ import functions.pressure as fp
 ### Filenames
 current_dir = os.path.dirname(os.path.realpath(__file__))
 filename = current_dir + "/pressure.amp"
+
 
 ### Parameters
 t0 = 10000.  # default: 10000
@@ -40,6 +42,40 @@ t_min = 0
 t_max = 70 * 3600.
 t_step = 1 * 3600.
 
+# command line
+parser = argparse.ArgumentParser(
+    description="Create pressure field for use with D3D-FM"
+)
+parser.add_argument(
+    "--filename",
+    "-f",
+    help="Filename (without extension)",
+    default="pressure",
+    type=str
+)
+parser.add_argument(
+    "--dx",
+    help="Grid spacing (in meters)",
+    default=None
+)
+parser.add_argument(
+    "--dt",
+    help="Time step (in hours)",
+    default=None
+)
+
+args = parser.parse_args()
+filename = str(args.filename)
+if args.dx is not None:
+    x_step = args.dx
+    y_step = x_step
+if args.dt is not None:
+    t_step = args.dx * 3600.
+
+
+if filename.endswith(".amp"):
+    filename = filename.strip(".amp")
+
 
 ### Function
 def pressure(x, y, t, t0=t0, U=U, a=a, p0=p0):
@@ -48,6 +84,7 @@ def pressure(x, y, t, t0=t0, U=U, a=a, p0=p0):
         * (1. - np.exp(-t / t0))
         * np.exp(-(x**2. + (y - U * t)**2. ) / a**2.)
     )
+
 
 ### Compute field
 x_num = int((x_max - x_min) / x_step + 1)
@@ -72,11 +109,13 @@ x = x[ix]
 y = y[iy]
 p = p[:,:,ix][:,iy,:]
 
+
 ### Write field
 print("Writing pressure field")
 data = fp.convert_to_xarray(t, x, y, p)
 del t, x, y, p
 fp.write_pressure(data, filename)
+
 
 ### Visualise field
 print("Plotting pressure field")
@@ -91,5 +130,5 @@ for i in range(5):
     ax[i].set_xlim([0, 500])
 ax[0].set_ylabel("y [km]")
 fig.colorbar(im[-2], ax=ax[-1])
-plt.savefig(current_dir + "/test_pressure.jpg")
+plt.savefig(f"{current_dir}/example_{filename}.jpg")
 plt.show()
