@@ -18,7 +18,6 @@ import functions.pressure as fp
 
 ### Filenames
 current_dir = os.path.dirname(os.path.realpath(__file__))
-filename = current_dir + "/pressure.amp"
 
 
 ### Parameters
@@ -75,6 +74,8 @@ if args.dt is not None:
 
 if filename.endswith(".amp"):
     filename = filename.strip(".amp")
+figurename = f"{current_dir}/test_{filename}.jpg"
+filename = f"{current_dir}/{filename}.amp"
 
 
 ### Function
@@ -130,5 +131,5 @@ for i in range(5):
     ax[i].set_xlim([0, 500])
 ax[0].set_ylabel("y [km]")
 fig.colorbar(im[-2], ax=ax[-1])
-plt.savefig(f"{current_dir}/example_{filename}.jpg")
+plt.savefig(figurename)
 plt.show()
