@@ -25,6 +25,22 @@ U = 50.  # default: 50
 a = 200000.  # default: 200000
 p0 = 2000.  # default: 2000
 
+# cross shore (meters)
+x_min = 0.
+x_max = 1e6
+x_step = 1e4
+
+# along shore (meters)
+y_min = -1e7
+y_max = 1e7
+y_step = x_step
+
+# time (hours)
+t_min = 0
+t_max = 70 * 3600.
+t_step = 1 * 3600.
+
+
 ### Function
 def pressure(x, y, t, t0=t0, U=U, a=a, p0=p0):
     return (
@@ -34,10 +50,13 @@ def pressure(x, y, t, t0=t0, U=U, a=a, p0=p0):
     )
 
 ### Compute field
+x_num = int((x_max - x_min) / x_step + 1)
+y_num = int((y_max - y_min) / y_step + 1)
+
 print("Computing pressure field")
-x = np.linspace(0, 1e6, 101, dtype=np.float)
-y = np.linspace(-1e7, 1e7, 501, dtype=np.float)
-t = np.arange(0, 70, 1, dtype=np.float) * 3600.
+x = np.linspace(x_min, x_max, x_num, dtype=np.float)
+y = np.linspace(y_min, y_max, y_num, dtype=np.float)
+t = np.arange(t_min, t_max+1, t_step, dtype=np.float)
 
 # loop over all t, y and x
 p = np.zeros((t.size, y.size, x.size))
