@@ -4,7 +4,6 @@
 import matplotlib
 matplotlib.use("Agg")
 
-import argparse
 import os
 import sys
 
@@ -16,11 +15,10 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.pressure as fp
 
 
-### Filenames
-current_dir = os.path.dirname(os.path.realpath(__file__))
-
-
 ### Parameters
+filename = "pressure_repr_00"
+
+# pressure distribution
 t0 = 10000.  # default: 10000
 U = 50.  # default: 50
 a = 200000.  # default: 200000
@@ -41,39 +39,9 @@ t_min = 0
 t_max = 70 * 3600.
 t_step = 1 * 3600.
 
-# command line
-parser = argparse.ArgumentParser(
-    description="Create pressure field for use with D3D-FM"
-)
-parser.add_argument(
-    "--filename",
-    "-f",
-    help="Filename (without extension)",
-    default="pressure",
-    type=str
-)
-parser.add_argument(
-    "--dx",
-    help="Grid spacing (in meters)",
-    default=None
-)
-parser.add_argument(
-    "--dt",
-    help="Time step (in hours)",
-    default=None
-)
 
-args = parser.parse_args()
-filename = str(args.filename)
-if args.dx is not None:
-    x_step = args.dx
-    y_step = x_step
-if args.dt is not None:
-    t_step = args.dx * 3600.
-
-
-if filename.endswith(".amp"):
-    filename = filename.strip(".amp")
+### Filenames
+current_dir = os.path.dirname(os.path.realpath(__file__))
 figurename = f"{current_dir}/test_{filename}.jpg"
 filename = f"{current_dir}/{filename}.amp"
 
