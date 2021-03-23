@@ -1,5 +1,10 @@
 # Reproduction of experiments in paper An et al. (2012)
 
+This part is aimed at reproducing the results of the experiments in the paper by An et al. (2012). The purpose is to get the model running and to get results comparable with those in the mentioned paper. An other goal is to investigate the effects of the different model parameters on the simulations.
+
+
+### Structure
+
 Scripts are used to create certain fields:
 * `create_bathymetry.py` creates the `bath*.xyb` file;
 * `create_pressure.py` sets up a space and time varying pressure field in `pressure*.amp`;
