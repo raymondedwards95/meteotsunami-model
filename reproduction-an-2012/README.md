@@ -1,6 +1,8 @@
 # Reproduction of experiments in paper An et al. (2012)
 
-This part is aimed at reproducing the results of the experiments in the paper by An et al. (2012). The purpose is to get the model running and to get results comparable with those in the mentioned paper. An other goal is to investigate the effects of the different model parameters on the simulations.
+This part is aimed at reproducing the results of the experiments in the paper by An et al. (2012). 
+The purpose is to get the model running and to get results comparable with those in the mentioned paper. 
+An other goal is to investigate the effects of the different model parameters on the simulations.
 
 
 ### Structure
@@ -15,14 +17,17 @@ Other files are `forcing*.ext` which activates the pressure field in `pressure*.
 
 ### Running experiments
 
-Simulations can be done by running `bash run_reproduction.sh case`, where `case` is a case number as in the table below. It will run the model and afterwards it will create some figures.
+Simulations can be done by running `bash run_reproduction.sh case`, where `case` is a case number as in the table below. 
+It will run the model and afterwards it will create some figures.
 
 Running `bash run_all.sh` will run all experiments.
 
 
 ### Experiments
 
-Multiple simulations are done, related to the base experiments. In these cases one or more parameters are changed, compared to the base experiment. All different cases are numbered.
+Multiple simulations are done, related to the base experiments. 
+In these cases one or more parameters are changed, compared to the base experiment. 
+All different cases are numbered.
 
 | Number | Changes | Comments |
 | :--- | :--- | :--- |
