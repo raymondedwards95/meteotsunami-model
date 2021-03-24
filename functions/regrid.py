@@ -2,6 +2,7 @@
 
 import os
 import time
+import warnings
 
 import numpy as np
 import scipy.interpolate
@@ -57,9 +58,16 @@ def _regrid_variable_map(var, grid_mapping, index=None):
     assert var.ndim == 2
     assert grid_mapping.ndim == 2
 
+    if index is not None:
+        warnings.warn("Warning: Parameter 'index' is not used here")
+    
+    # t
     t_size = var.shape[0]
+
+    # x
     x_size = np.max(grid_mapping[:, 1]) + 1
 
+    # y
     if __regrid_method == 1:
         y_size = np.max(grid_mapping[:, 2]) + 1  # slow method 1
     elif __regrid_method == 2:
@@ -89,6 +97,8 @@ def _regrid_variable_map(var, grid_mapping, index=None):
 
 
 def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
+    warnings.warn("Warning: Using interpolation as regridding tool!")
+
     if type(x) is xr.DataArray:
         x = x.values
     if type(y) is xr.DataArray:
