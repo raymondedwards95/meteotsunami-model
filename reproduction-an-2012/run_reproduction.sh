@@ -1,6 +1,7 @@
 #!/bin/bash
 # Runs and make figures for a given case, for which the path to the inputfile (*.mdu) should be given as an argument
 # Make sure the settings in the root folder are correct, following the template
+# Also check if required files are present; use the python-scripts if necessary
 
 # check if there are arguments
 if [ $# -eq 0 ]

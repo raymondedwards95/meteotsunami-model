@@ -16,3 +16,5 @@ functions/*.amp
 functions/*.xyb
 functions/observations.xyn
 functions/observations_crs.pli
+
+*.xyb
