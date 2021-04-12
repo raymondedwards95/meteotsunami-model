@@ -16,8 +16,6 @@ import functions.pressure as fp
 
 
 ### Parameters
-filename = "pressure_repr_00"
-
 # pressure distribution
 t0 = 10000.  # default: 10000 s
 U = 50.  # default: 50 m/s
@@ -42,8 +40,11 @@ t_step = 1 * 3600.  # default: 1 hour
 
 ### Filenames
 current_dir = os.path.dirname(os.path.realpath(__file__))
-figurename = f"{current_dir}/test_{filename}.jpg"
-filename = f"{current_dir}/{filename}.amp"
+pressure_dir = f"{current_dir}/pressure"
+figurename = f"{pressure_dir}/test_repr_00.jpg"
+filename = f"{pressure_dir}/repr_00.amp"
+
+os.makedirs(pressure_dir, exist_ok=True)
 
 
 ### Function
