@@ -12,7 +12,7 @@ import functions.bathymetry as fb
 
 ###
 bathymetry_dir = os.path.dirname(os.path.realpath(__file__)) + "/bathymetry"
-os.makedirs(bathymetry_dir)
+os.makedirs(bathymetry_dir, exist_ok=True)
 filename = f"{bathymetry_dir}/repr_00.xyb"
 
 ###
