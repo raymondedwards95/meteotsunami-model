@@ -11,7 +11,7 @@ PathsRelativeToParent             = 1               # Default: 0. Whether or not
 
 [geometry]
 NetFile                           = grid_repr_00_net.nc # Unstructured grid file *_net.nc
-BathymetryFile                    = bath_repr_00.xyb  # Bathymetry points file *.xyb
+BathymetryFile                    = bathymetry/repr_00.xyb  # Bathymetry points file *.xyb
 DryPointsFile                     =                 # Dry points file *.xyz (third column dummy z values), or dry areas polygon file *.pol (third column 1/-1: inside/outside)
 GridEnclosureFile                 =                 # Enclosure polygon file *.pol (third column 1/-1: inside/outside)
 WaterLevIniFile                   =                 # Initial water levels sample file *.xyz
