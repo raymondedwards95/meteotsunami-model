@@ -62,7 +62,7 @@ make_ani = bool(args.animate)
 
 
 ### Set paths
-output_dir = os.path.dirname(os.path.realpath(__file__)) + f"/output_repr_{case}/"
+output_dir = os.path.dirname(os.path.realpath(__file__)) + f"/output/repr_{case}/"
 figure_dir = os.path.dirname(os.path.realpath(
     __file__)) + f"/figures/repr_{case}/"
 
@@ -70,10 +70,10 @@ filename_output = output_dir + "FlowFM_map.nc"
 filename_processed = output_dir + "processed_data.nc"
 
 print(f"Making figures for case {case}")
-print(f"\t * Folder with data is \n\t'{output_dir}'")
-print(f"\t * File with raw data is \n\t'{filename_output}'")
-print(f"\t * File with processed data is \n\t'{filename_processed}'")
-print(f"\t * Folder that contains figures is \n\t'{figure_dir}'")
+print(f"# Folder with data is \n# '{output_dir}'")
+print(f"# File with raw data is \n# '{filename_output}'")
+print(f"# File with processed data is \n# '{filename_processed}'")
+print(f"# Folder that contains figures is \n# '{figure_dir}'")
 
 # Check if data exists
 if not os.path.exists(filename_output):
