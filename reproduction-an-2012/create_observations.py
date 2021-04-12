@@ -15,6 +15,9 @@ x_max = 1e6
 y_min = -1e7
 y_max = +1e7
 
+obs_dir = f"{os.path.dirname(os.path.realpath(__file__))}/obs"
+os.makedirs(obs_dir, exist_ok=True)
+
 
 ## Observation Points and Cross Sections
 obs = []
@@ -42,4 +45,4 @@ for i in range(5):
         )
     )
 
-fo.write_observations(obs, filename=os.path.dirname(os.path.realpath(__file__)) + "/obs_repr_00")
+fo.write_observations(obs, filename=f"{obs_dir}/repr_00")

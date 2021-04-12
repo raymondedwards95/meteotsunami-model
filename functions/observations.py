@@ -70,6 +70,9 @@ def write_observations(data: list, filename: str=None):
                 for i in range(element.n):
                     file.write(f"\t{element.x[i]} \t{element.y[i]} \n")
                 file.write(f"\n")
+
+    print(f"Finished writing points to '{filename_points}'")
+    print(f"Finished writing cross-sections to '{filename_sections}'")
     
     return
 
