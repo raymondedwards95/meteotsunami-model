@@ -16,6 +16,10 @@ import functions.pressure as fp
 
 
 ### Parameters
+# generic
+cases = [0, 10, 11, 12, 15, 16, 17]
+num_cases = len(cases)
+
 # pressure distribution
 t0 = 10000.  # default: 10000 s
 U = 50.  # default: 50 m/s
@@ -25,24 +29,31 @@ p0 = 2000.  # default: 2000 Pa
 # cross shore (meters)
 x_min = 0.  # default: 0 km
 x_max = 1e6  # default: 1000 km
-x_step = 1e4  # default: 10 km
+x_steps = [1e4, 2e4, 4e4, 0.5e4, 1e4, 1e4, 1e4]  # default: 10 km
 
 # along shore (meters)
 y_min = -1e7  # default: -10000 km
 y_max = 1e7  # default: 10000 km
-y_step = x_step  # default: 10 km
+y_steps = x_steps  # default: 10 km
 
 # time (seconds)
 t_min = 0  # default: 0
 t_max = 70 * 3600.  # default: 70 hours
-t_step = 1 * 3600.  # default: 1 hour
+t_steps = list(np.array([1., 1., 1., 1., 2., 1./2., 1./4.]) * 3600.)  # default: 1 hour
+
+# check parameters
+assert len(x_steps) == num_cases
+assert len(y_steps) == num_cases
+assert len(t_steps) == num_cases
+
+print("\nPressure fields for the following cases are computed (case, x_step, y_step, t_step)")
+for i in range(num_cases):
+    print(cases[i], x_steps[i], y_steps[i], t_steps[i])
 
 
-### Filenames
+### Directories
 current_dir = os.path.dirname(os.path.realpath(__file__))
 pressure_dir = f"{current_dir}/pressure"
-figurename = f"{pressure_dir}/test_repr_00.jpg"
-filename = f"{pressure_dir}/repr_00.amp"
 
 os.makedirs(pressure_dir, exist_ok=True)
 
@@ -57,48 +68,62 @@ def pressure(x, y, t, t0=t0, U=U, a=a, p0=p0):
 
 
 ### Compute field
-x_num = int((x_max - x_min) / x_step + 1)
-y_num = int((y_max - y_min) / y_step + 1)
+for case_number in range(num_cases):
+    case = cases[case_number]
+    x_step = x_steps[case_number]
+    y_step = y_steps[case_number]
+    t_step = t_steps[case_number]
 
-print("Computing pressure field")
-x = np.linspace(x_min, x_max, x_num, dtype=np.float)
-y = np.linspace(y_min, y_max, y_num, dtype=np.float)
-t = np.arange(t_min, t_max+1, t_step, dtype=np.float)
+    filename = f"{pressure_dir}/repr_{case:02.0f}"
+    figurename = f"{pressure_dir}/test_repr_{case:02.0f}"
 
-# loop over all t, y and x
-p = np.zeros((t.size, y.size, x.size))
-for i in range(t.size):
-    for j in range(y.size):
-        for k in range(x.size):
-            p[i,j,k] = pressure(x[k], y[j], t[i], t0, U, a, p0)
+    x_num = int((x_max - x_min) / x_step + 1)
+    y_num = int((y_max - y_min) / y_step + 1)
 
-# remove zero-columns and zero-rows
-ix = np.where(~ np.all(np.isclose(p, 0), axis=(0,1)))[0]
-iy = np.where(~ np.all(np.isclose(p, 0), axis=(0,2)))[0]
-x = x[ix]
-y = y[iy]
-p = p[:,:,ix][:,iy,:]
+    print(f"\nComputing pressure field for case {case} ({x_step}, {y_step}, {t_step})")
+    x = np.linspace(x_min, x_max, x_num, dtype=np.float)
+    y = np.linspace(y_min, y_max, y_num, dtype=np.float)
+    t = np.arange(t_min, t_max+1, t_step, dtype=np.float)
+
+    # loop over all t, y and x
+    # p = np.zeros((t.size, y.size, x.size))
+    # for i in range(t.size):
+    #     for j in range(y.size):
+    #         for k in range(x.size):
+    #             p[i,j,k] = pressure(x[k], y[j], t[i], t0, U, a, p0)
+
+    tt, yy, xx = np.meshgrid(t, y, x, indexing="ij")
+    p = pressure(xx, yy, tt, t0, U, a, p0)
+
+    # remove zero-columns and zero-rows
+    ix = np.where(~ np.all(np.isclose(p, 0), axis=(0,1)))[0]
+    iy = np.where(~ np.all(np.isclose(p, 0), axis=(0,2)))[0]
+    x = x[ix]
+    y = y[iy]
+    p = p[:,:,ix][:,iy,:]
 
 
-### Write field
-print("Writing pressure field")
-data = fp.convert_to_xarray(t, x, y, p)
-del t, x, y, p
-fp.write_pressure(data, filename)
+    ### Write field
+    print(f"Writing pressure field for case {case}")
+    data = fp.convert_to_xarray(t, x, y, p)
+    del t, x, y, p
+    fp.write_pressure(data, filename)
 
 
-### Visualise field
-print("Plotting pressure field")
-fig, ax = plt.subplots(1, 5, sharey=True)
-fig.set_tight_layout(True)
-im = [None] * 5
-for i in range(5):
-    idx = data.t.size * i // 5
-    im[i] = ax[i].contourf(data.x.values/1000., data.y.values/1000., data.values[idx,:,:], vmin=0, vmax=p0)
-    ax[i].set_title(f"$t = {data.t.values[idx] : 0.0f}$s")
-    ax[i].set_xlabel("x [km]")
-    ax[i].set_xlim([0, 500])
-ax[0].set_ylabel("y [km]")
-fig.colorbar(im[-2], ax=ax[-1])
-plt.savefig(figurename)
-plt.show()
+    ### Visualise field
+    print(f"Plotting pressure field for case {case}")
+    fig, ax = plt.subplots(1, 5, sharey=True)
+    fig.set_tight_layout(True)
+    im = [None] * 5
+    for i in range(5):
+        idx = data.t.size * i // 5
+        im[i] = ax[i].contourf(data.x.values/1000., data.y.values/1000., data.values[idx,:,:], vmin=0, vmax=p0)
+        ax[i].set_title(f"$t = {data.t.values[idx] : 0.0f}$s")
+        ax[i].set_xlabel("x [km]")
+        ax[i].set_xlim([0, 500])
+    ax[0].set_ylabel("y [km]")
+    fig.colorbar(im[-2], ax=ax[-1])
+    plt.savefig(figurename)
+
+
+# plt.show()

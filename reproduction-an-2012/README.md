@@ -33,11 +33,21 @@ All different cases are numbered.
 | :--- | :--- | :--- |
 ||||
 | 00 | - | Base experiment |
+||||
 | 01 | Change `Dtmax` from `20` to `10` s | Maximum compuational time step |
 | 02 | Change `Dtmax` from `20` to `3` s | See 01 |
+||||
 | 03 | Change `Teta0` from `0.55` to `0.99` | Parameter for implicitness of the numerical scheme (between 0.5 and 1.0) |
 | 04 | Change `Teta0` from `0.55` to `0.59` | See 03 |
 | 05 | Change `Teta0` from `0.55` to `0.51` | See 03 |
+||||
+| 10 | Set `dx_p` and `dy_p` from `10` to `20` km | Spatial resolution of pressure distribution |
+| 11 | Set `dx_p` and `dy_p` from `10` to `40` km | See 10 |
+| 12 | Set `dx_p` and `dy_p` from `10` to `5` km | See 10 |
+||||
+| 15 | Set `dt_p` from `60` to `120` min | Temporal resolution of pressure distribution |
+| 16 | Set `dt_p` from `60` to `30` min | See 15 |
+| 17 | Set `dt_p` from `60` to `15` min | See 15 |
 ||||
 | 20 | Set `dx` and `dy` from `10` to `20` km | Spatial resolution of model |
 | 21 | Set `dx` and `dy` from `10` to `40` km | See 20 |
