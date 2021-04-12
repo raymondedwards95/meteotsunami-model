@@ -19,9 +19,6 @@ if [ ! -f $INPUT_FILE ]
     exit 1
 fi
 
-# prepare files
-python3 ./create_bathymetry.py
-
 # run cases
 bash ./run_reproduction.sh 00 &
 bash ./run_reproduction.sh 01 &
@@ -29,5 +26,8 @@ bash ./run_reproduction.sh 02 &
 bash ./run_reproduction.sh 03 &
 bash ./run_reproduction.sh 04 &
 bash ./run_reproduction.sh 05 &
+bash ./run_reproduction.sh 20 &
+bash ./run_reproduction.sh 21 &
+bash ./run_reproduction.sh 22 &
 
 exit 0
