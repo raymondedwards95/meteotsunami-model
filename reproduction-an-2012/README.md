@@ -31,8 +31,8 @@ All different cases are numbered.
 
 | Number | Changes | Comments |
 | :--- | :--- | :--- |
-| 00 |  | Base experiment |
-| 01 | Change `Dtmax` from `20` to `10` s | Smaller maximum compuational time step |
+| 00 | - | Base experiment |
+| 01 | Change `Dtmax` from `20` to `10` s | Maximum compuational time step |
 | 02 | Change `Dtmax` from `20` to `3` s | See 01 |
 | 03 | Change `Teta0` from `0.55` to `0.99` | Parameter for implicitness of the numerical scheme (between 0.5 and 1.0) |
 | 04 | Change `Teta0` from `0.55` to `0.59` | See 03 |
