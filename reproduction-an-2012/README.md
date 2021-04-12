@@ -37,3 +37,7 @@ All different cases are numbered.
 | 03 | Change `Teta0` from `0.55` to `0.99` | Parameter for implicitness of the numerical scheme (between 0.5 and 1.0) |
 | 04 | Change `Teta0` from `0.55` to `0.59` | See 03 |
 | 05 | Change `Teta0` from `0.55` to `0.51` | See 03 |
+|
+| 20 | Set `dx` and `dy` from `10` to `20` km | Spatial resolution of model |
+| 21 | Set `dx` and `dy` from `10` to `40` km | See 20 |
+| 22 | Set `dx` and `dy` from `10` to `5` km | See 20 |
