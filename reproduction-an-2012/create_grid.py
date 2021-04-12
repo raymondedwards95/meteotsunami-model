@@ -33,17 +33,6 @@ FFMF.GenerateRegularGridForModelUsingExtend(
 model.WriteNetFile(os.path.dirname(os.path.realpath(__file__)) + "/FlowFM_net.nc")
 
 
-## Observation Points and Cross Sections
-obs = []
-obs.append(fo.ObservationPoint("Test Point", x=10e3, y=x_max/2.))
-
-for i in range(4):
-    _x = i * 1e4
-    obs.append(fo.ObservationCrossSection(name=f"Along Shore x={_x/1000:0.0f}km", x=[_x, _x], y=[y_min, y_max]))
-
-for i in range(5):
-    _y = i*y_max/4
-    obs.append(fo.ObservationCrossSection(name=f"Cross Shore y={_y/1000:0.0f}km", x=[x_min, x_max], y=[_y, _y]))
 
 ## Write to file
 for i in range(num_cases):
