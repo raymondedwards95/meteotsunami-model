@@ -19,6 +19,8 @@ if [ ! -f $INPUT_FILE ]
     exit 1
 fi
 
+echo "Last runs:" > last_runs.log
+
 # run cases
 bash ./run_reproduction.sh 00 &
 bash ./run_reproduction.sh 01 &
