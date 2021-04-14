@@ -10,6 +10,7 @@
 *.pyc
 *.cache
 *.dia
+*.log
 
 settings.sh
 functions/*.amp
