@@ -69,6 +69,8 @@ figure_dir = os.path.dirname(os.path.realpath(
 filename_output = output_dir + "FlowFM_map.nc"
 filename_processed = output_dir + "processed_data.nc"
 
+filename_log = os.path.dirname(os.path.realpath(__file__)) + "/last_runs.log"
+
 print(f"Making figures for case {case}")
 print(f"# Folder with data is \n# '{output_dir}'")
 print(f"# File with raw data is \n# '{filename_output}'")
@@ -84,6 +86,8 @@ if not os.path.exists(filename_output):
 if not os.path.exists(filename_processed) or reprocess_data:
     print(f"File '{filename_processed}' is not found. Processing data.")
     fr.extract_data(filename_output, savename=filename_processed)
+    with open(filename_log, "a+") as _file:
+        _file.write(f"Processed data for case {case}")
 
 os.makedirs(figure_dir, exist_ok=True)
 
@@ -323,5 +327,8 @@ else:
     print("\tNo animation")
 
 ### End
+with open(filename_log, "a+") as _file:
+    _file.write(f"Created visualisations for case {case}")
+        
 if show_figs: 
     plt.show()
