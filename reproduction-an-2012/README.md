@@ -9,10 +9,10 @@ An other goal is to investigate the effects of the different model parameters on
 
 Scripts are used to create certain fields:
 * `create_bathymetry.py` creates `.xyb` files in `bathymetry/` that contain the bathymetry;
-* `create_pressure.py` sets up a space and time varying pressure field in `pressure/*.amp`;
+* `create_pressure.py` sets up a space and time varying pressure field in `pressure/*.amp` and also creates corresponding `forcing*.ext` files to activate the pressure fields in the model;
 * `create_grid.py` creates a grid in `grid/*.nc` using macros in `Delta Shell` (note that `Delta Shell` should be used to run this file). Furthermore it also creates observation points and observation cross sections in the files `obs/*.xyn` and `obs/*_crs.pli`.
 
-Other files are `forcing*.ext` which activates the pressure field in `pressure/*.amp`, and `input*.mdu` is the main file with parameters for simulations. Normally these two files should not change much.
+The `input*.mdu` are the main files that contain all parameters for simulations. They also specify what additional files are used, like bathymetry, pressure and grid.
 
 
 ### Running experiments
