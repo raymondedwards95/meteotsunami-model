@@ -51,4 +51,4 @@ All different cases are numbered.
 ||||
 | 20 | Set `dx` and `dy` from `10` to `20` km | Spatial resolution of model |
 | 21 | Set `dx` and `dy` from `10` to `40` km | See 20 |
-| 22 | Set `dx` and `dy` from `10` to `5` km | See 20 |
+| 22 | Set `dx` and `dy` from `10` to `5` km | See 20 (not included in `run_all.sh`) |
