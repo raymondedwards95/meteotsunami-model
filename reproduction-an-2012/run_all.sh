@@ -38,6 +38,6 @@ bash ./run_reproduction.sh 17 &
 
 bash ./run_reproduction.sh 20 &
 bash ./run_reproduction.sh 21 &
-bash ./run_reproduction.sh 22 &
+# bash ./run_reproduction.sh 22 &
 
 exit 0
