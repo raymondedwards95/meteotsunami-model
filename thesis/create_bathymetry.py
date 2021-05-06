@@ -36,16 +36,6 @@ fb.write_bathymetry(data, filename)
 
 
 ###
-i = y.size // 2
-plt.figure()
-plt.plot(x, zz[i, :])
-plt.title(f"Bottom cross-section at $y={y[i]}$")
-plt.savefig(f"{bathymetry_dir}/profile_bath_exp_00.jpg")
-
-plt.figure()
-plt.contourf(x, y, zz)
-plt.axhline(y[i], color="gray")
-plt.title(f"Bottom contours")
-plt.savefig(f"{bathymetry_dir}/contour_bath_exp_00.jpg")
+fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_exp_00")
 
 # plt.show()
