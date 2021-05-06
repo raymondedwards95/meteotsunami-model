@@ -14,7 +14,7 @@ import functions.bathymetry as fb
 ###
 @np.vectorize
 def exponential_shelf(x, h=20, a=1e-5):
-    return - h * (1. - np.exp(- 1. * a * x))
+    return -1. * h * (1. - np.exp(- 1. * a * x))
 
 
 ###
