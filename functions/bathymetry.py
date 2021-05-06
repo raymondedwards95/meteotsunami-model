@@ -2,6 +2,7 @@
 
 import os
 
+import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 
@@ -81,12 +82,46 @@ def write_bathymetry(data, filename=None):
     print(f"Finished writing to '{filename}'")
 
 
+def plot_bathymetry(data, filename=None):
+    """ Function to visualize bathymetry data
+    
+    Input:
+        data:   bathymetry and coordinate data
+    """
+    ## prepare
+    assert type(data) == xr.DataArray, "Input is not a DataArray"
+
+    if filename is None:
+        filename = os.path.dirname(os.path.realpath(__file__)) + "/fig_bathymetry"
+    if filename.endswith(".jpg"):
+        filename.strip(".jpg")
+    print(f"\nVisualizing bathymetry in '{filename}'")
+
+    x = data.x.values
+    y = data.y.values
+    b = data.values
+
+    i = y.size // 2
+
+    plt.figure()
+    plt.plot(x, b[i, :])
+    plt.title(f"Bottom cross-section at $y={y[i]}$")
+    plt.savefig(f"{filename}_cross.jpg")
+
+    plt.figure()
+    plt.contourf(x, y, b)
+    plt.colorbar()
+    plt.axhline(y[i], color="gray")
+    plt.title(f"Bottom contours")
+    plt.savefig(f"{filename}_contour.jpg")
+
+
 if __name__ == "__main__":
     import time
 
     @np.vectorize
     def function(x, y):
-        return np.min([x / 500., 200.])
+        return -1. * np.min([x / 1000., 200.])
 
     t0 = time.perf_counter()
     x = np.linspace(0., 1e6, 5, dtype=np.float)
@@ -99,3 +134,7 @@ if __name__ == "__main__":
 
     t1 = time.perf_counter()
     print(f"Created bathymetry data in {t1 - t0 :0.2f} seconds.")
+
+    plot_bathymetry(data)
+    t2 = time.perf_counter()
+    print(f"Visualized bathymetry data in {t2 - t1 :0.2f} seconds.")

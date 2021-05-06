@@ -15,5 +15,6 @@
 settings.sh
 functions/*.amp
 functions/*.xyb
-functions/observations.xyn
-functions/observations_crs.pli
+functions/fig_*
+functions/*.xyn
+functions/*.pli
