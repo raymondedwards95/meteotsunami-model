@@ -39,7 +39,7 @@ fb.write_bathymetry(data, filename)
 
 
 ###
-i = x.size // 2
+i = y.size // 2
 plt.figure()
 plt.plot(x, zz[i, :])
 plt.title(f"Bottom cross-section at $y={y[i]}$")
