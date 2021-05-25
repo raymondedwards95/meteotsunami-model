@@ -103,17 +103,21 @@ def plot_bathymetry(data, filename=None):
 
     i = y.size // 2
 
+    ## figure 1 - cross-section
     plt.figure()
     plt.plot(x, b[i, :])
     plt.title(f"Bottom cross-section at $y={y[i]}$")
     plt.savefig(f"{filename}_cross.jpg")
 
+    ## figure 2 - map
     plt.figure()
     plt.contourf(x, y, b)
     plt.colorbar()
     plt.axhline(y[i], color="gray")
     plt.title(f"Bottom contours")
     plt.savefig(f"{filename}_contour.jpg")
+
+    return
 
 
 if __name__ == "__main__":
