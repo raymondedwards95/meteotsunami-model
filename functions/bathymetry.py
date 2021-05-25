@@ -137,8 +137,8 @@ if __name__ == "__main__":
     write_bathymetry(data)
 
     t1 = time.perf_counter()
-    print(f"Created bathymetry data in {t1 - t0 :0.2f} seconds.")
+    print(f"Created test bathymetry data in {t1 - t0 :0.2f} seconds.")
 
     plot_bathymetry(data)
     t2 = time.perf_counter()
-    print(f"Visualized bathymetry data in {t2 - t1 :0.2f} seconds.")
+    print(f"Visualized test bathymetry data in {t2 - t1 :0.2f} seconds.")
