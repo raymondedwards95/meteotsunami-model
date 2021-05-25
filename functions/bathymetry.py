@@ -46,7 +46,7 @@ def convert_to_xarray(x, y, b):
 
 
 def write_bathymetry(data, filename=None):
-    """ Function to write bathymetry data to a `bethymetry.xyb` file for use with Delft3D-FM
+    """ Function to write bathymetry data to a `bathymetry.xyb` file for use with Delft3D-FM
     
     Input:
         data:   bathymetry and coordinate data
@@ -126,11 +126,14 @@ def plot_bathymetry(data, filename=None):
 if __name__ == "__main__":
     import time
 
+    # function for computing 'bathymetry'
     @np.vectorize
     def function(x, y):
         return -1. * np.min([x / 1000., 200.])
 
     t0 = time.perf_counter()
+
+    # grid and data
     x = np.linspace(0., 1e6, 5, dtype=np.float)
     y = np.linspace(-1e7, +1e7, 5, dtype=np.float)
     xx, yy = np.meshgrid(x, y)
@@ -138,11 +141,16 @@ if __name__ == "__main__":
 
     data = convert_to_xarray(x, y, b)
     del x, y, b
+
+    # write data to .xyb-file
     write_bathymetry(data)
 
+    # evaluate performance
     t1 = time.perf_counter()
     print(f"Created test bathymetry data in {t1 - t0 :0.2f} seconds.")
 
     plot_bathymetry(data)
+
+    # evaluate performance
     t2 = time.perf_counter()
     print(f"Visualized test bathymetry data in {t2 - t1 :0.2f} seconds.")

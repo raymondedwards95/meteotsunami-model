@@ -179,15 +179,19 @@ def plot_pressure(data, filename=None, x_scales=None):
 if __name__ == "__main__":
     import time
 
+    # function for computing 'pressure'
     def f(x, y, t):
         return np.min([1, t / 5]) * np.sin(x) * np.sin(y)
 
     t0 = time.perf_counter()
+
+    # grid
     x = np.linspace(-1, 1, 51)
     y = np.linspace(-1, 1, 51)
     t = np.arange(0, 10) * 3600.
     p = np.zeros((t.size, y.size, x.size), dtype=np.float)
 
+    # compute and convert data
     for n in range(t.size):
         for j in range(y.size):
             for i in range(x.size):
@@ -195,10 +199,17 @@ if __name__ == "__main__":
     
     data = convert_to_xarray(t, x, y, p)
     del t, x, y, p
+
+    # write data to .amp-file
     write_pressure(data)
+
+    # evaluate performance
     t1 = time.perf_counter()
     print(f"Created test pressure data in {t1 - t0 :0.2f} seconds.")
 
+    # visualise data
     plot_pressure(data)
+
+    # evaluate performance
     t2 = time.perf_counter()
     print(f"Visualized test pressure data in {t2 - t1 :0.2f} seconds.")
