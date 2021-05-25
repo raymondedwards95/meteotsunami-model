@@ -188,3 +188,7 @@ if __name__ == "__main__":
     write_pressure(data)
     t1 = time.perf_counter()
     print(f"Created test pressure data in {t1 - t0 :0.2f} seconds.")
+
+    plot_pressure(data)
+    t2 = time.perf_counter()
+    print(f"Visualized test pressure data in {t2 - t1 :0.2f} seconds.")
