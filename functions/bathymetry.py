@@ -87,6 +87,9 @@ def plot_bathymetry(data, filename=None):
     
     Input:
         data:   bathymetry and coordinate data
+    
+    Parameters:
+        filename:   name of figures
     """
     ## prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
@@ -134,6 +137,7 @@ if __name__ == "__main__":
     b = function(xx, yy)
 
     data = convert_to_xarray(x, y, b)
+    del x, y, b
     write_bathymetry(data)
 
     t1 = time.perf_counter()
