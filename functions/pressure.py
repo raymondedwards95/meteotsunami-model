@@ -2,6 +2,7 @@
 
 import os
 
+import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 
@@ -122,6 +123,48 @@ unit1           = Pa
                     file.write("\n")
     
     print(f"Finished writing to '{filename}'")
+
+
+def plot_pressure(data, filename=None, x_scales=[0, 500]):
+    """ Function to visualize pressure data
+    
+    Input:
+        data:   pressure and coordinate data
+    """
+    ## prepare
+    assert type(data) == xr.DataArray, "Input is not a DataArray"
+
+    if filename is None:
+        filename = os.path.dirname(os.path.realpath(__file__)) + "/fig_pressure"
+    if filename.endswith(".jpg"):
+        filename.strip(".jpg")
+    print(f"\nVisualizing pressure field in '{filename}'")
+
+    x = data.x.values
+    y = data.y.values
+    t = data.t.values
+    p = data.values
+
+    ## figure
+    t_num = 5
+    fig, ax = plt.subplots(1, t_num, sharey=True)
+    im = [None] * t_num
+    for i in range(t_num):
+        idx = t.size * i // t_num
+        im[i] = ax[i].contourf(
+            x / 1000.,
+            y / 1000.,
+            p[idx, :, :],
+            vmin=p.min(),
+            vmax=p.max()
+        )
+        ax[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
+        ax[i].set_xlabel("$x$ [km]")
+        ax[i].set_xlim(x_scales)  # make it automatic?
+    
+    ax[0].set_ylabel("$y$ [km]")
+    fig.colorbar(im[-2], ax=ax[-1])
+    plt.savefig(f"{filename}_field.jpg")
 
 
 if __name__ == "__main__":
