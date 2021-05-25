@@ -151,6 +151,8 @@ def plot_pressure(data, filename=None, x_scales=None):
     ## figure
     t_num = 5
     fig, ax = plt.subplots(1, t_num, sharey=True)
+    fig.set_tight_layout(True)
+
     im = [None] * t_num
     for i in range(t_num):
         idx = t.size * i // t_num
@@ -179,7 +181,7 @@ if __name__ == "__main__":
     t0 = time.perf_counter()
     x = np.linspace(-1, 1, 51)
     y = np.linspace(-1, 1, 51)
-    t = np.arange(10)
+    t = np.arange(0, 10) * 3600.
     p = np.zeros((t.size, y.size, x.size), dtype=np.float)
 
     for n in range(t.size):
@@ -188,6 +190,7 @@ if __name__ == "__main__":
                 p[n,j,i] = f(x[i], y[j], t[n])
     
     data = convert_to_xarray(t, x, y, p)
+    del t, x, y, p
     write_pressure(data)
     t1 = time.perf_counter()
     print(f"Created test pressure data in {t1 - t0 :0.2f} seconds.")
