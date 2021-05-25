@@ -125,7 +125,7 @@ unit1           = Pa
     print(f"Finished writing to '{filename}'")
 
 
-def plot_pressure(data, filename=None, x_scales=[0, 500]):
+def plot_pressure(data, filename=None, x_scales=None):
     """ Function to visualize pressure data
     
     Input:
@@ -144,6 +144,9 @@ def plot_pressure(data, filename=None, x_scales=[0, 500]):
     y = data.y.values
     t = data.t.values
     p = data.values
+
+    if x_scales is None:
+        x_scales = [x.min(), x.max()]
 
     ## figure
     t_num = 5
