@@ -129,7 +129,11 @@ def plot_pressure(data, filename=None, x_scales=None):
     """ Function to visualize pressure data
     
     Input:
-        data:   pressure and coordinate data
+        data:       pressure and coordinate data
+    
+    Parameters:
+        filename:   name of figures
+        x_scales:   lower and upper limit of x (should be a list of length 2)
     """
     ## prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
