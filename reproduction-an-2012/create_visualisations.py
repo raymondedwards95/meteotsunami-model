@@ -62,12 +62,13 @@ make_ani = bool(args.animate)
 
 
 ### Set paths
-output_dir = os.path.dirname(os.path.realpath(__file__)) + f"/output/repr_{case}/"
+parent_dir = os.path.dirname(os.path.realpath(__file__)) + "/output/"
+output_dir = parent_dir + f"repr_{case}/"
 figure_dir = os.path.dirname(os.path.realpath(
     __file__)) + f"/figures/repr_{case}/"
 
 filename_output = output_dir + "FlowFM_map.nc"
-filename_processed = output_dir + "processed_data.nc"
+filename_processed = parent_dir + f"data_{case}.nc"
 
 filename_log = os.path.dirname(os.path.realpath(__file__)) + "/last_runs.log"
 
