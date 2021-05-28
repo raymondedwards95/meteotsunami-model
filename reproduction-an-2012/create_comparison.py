@@ -102,5 +102,7 @@ def make_comparison(cases, title, id="test"):
 
 
 ### Executing Comparison
-for i in range(num_comparisons):
-    make_comparison(cases[i], titles[i])
+# for i in range(num_comparisons):
+#     make_comparison(cases[i], titles[i], id=i)
+
+make_comparison([0], "test")
