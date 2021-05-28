@@ -10,7 +10,7 @@ class ObservationPoint():
         self.y = y
 
     def __str__(self):
-        return f"Observation point '{self.name}'' at x={self.x} and y={self.y}"
+        return f"Observation point '{self.name}'' at x={self.x:.0e} and y={self.y:.0e}".replace("e+00", "")
 
 
 class ObservationCrossSection():
@@ -26,7 +26,7 @@ class ObservationCrossSection():
         self.n = len(x)
 
     def __str__(self):
-        return f"Observation cross-section '{self.name}' between points p_start=({self.x[0]}, {self.y[0]}) and P_end=({self.x[-1]}, {self.y[-1]})"
+        return f"Observation cross-section '{self.name}' between points p_start=({self.x[0]:.0e}, {self.y[0]:.0e}) and p_end=({self.x[-1]:.0e}, {self.y[-1]:.0e})".replace("e+00", "")
 
 
 def write_observations(data: list, filename: str=None):
