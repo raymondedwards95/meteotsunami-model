@@ -4,6 +4,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 
+import os
+import sys
+
+# fix for importing functions below
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+import functions.visualisation as fv
+
 
 ### Cases
 cases = [
@@ -23,6 +30,13 @@ titles = [
 ]
 
 num_comparisons = len(cases)
+assert len(titles) == num_comparisons
+
+
+### Paths
+file_dir = os.path.dirname(os.path.realpath(__file__))
+output_dir = file_dir + "/output/"
+figure_dir = file_dir + "/figures/"
 
 
 ### Defining Visualisations
@@ -36,6 +50,27 @@ def vis_crossshore(data_list, title):
 
 def make_comparison(cases, title):
     raise NotImplementedError
+
+
+def make_comparison(cases, title, id="test"):
+    # Paths
+    if isinstance(id, float):
+        id = f"{id:03.0f}"
+    savename = figure_dir + f"/comparison_{id}"
+    os.makedirs(savename, exist_ok=True)
+
+    # Import data (lazy?)
+    data_list = []
+    for i in range(len(cases)):
+        case = f"{cases[i]:02.0f}"
+        print(f"Reading data for case {case}")
+        data_list.append(xr.open_dataset(f"{output_dir}/data_repr_{case}.nc"))
+    
+    # Make figures
+    vis_alongshore(data_list, title, cases, savename)
+    vis_crossshore(data_list, title, cases, savename)
+
+    return
 
 
 ### Executing Comparison
