@@ -34,7 +34,7 @@ All different cases are numbered.
 ||||
 | 00 | - | Base experiment |
 ||||
-| 01 | Change `Dtmax` from `20` to `10` s | Maximum compuational time step |
+| 01 | Change `Dtmax` from `20` to `10` s | Maximum computational time step |
 | 02 | Change `Dtmax` from `20` to `3` s | See 01 |
 ||||
 | 03 | Change `Teta0` from `0.55` to `0.99` | Parameter for implicitness of the numerical scheme (between 0.5 and 1.0) |
