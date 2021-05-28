@@ -9,6 +9,9 @@ class ObservationPoint():
         self.x = x
         self.y = y
 
+    def __str__(self):
+        return f"Observation point '{self.name}'' at x={self.x} and y={self.y}"
+
 
 class ObservationCrossSection():
     def __init__(self, name: str="", x: list=[0, 1], y: list=[0, 1]):
@@ -22,6 +25,9 @@ class ObservationCrossSection():
         self.y = y
         self.n = len(x)
 
+    def __str__(self):
+        return f"Observation cross-section '{self.name}' between points p_start=({self.x[0]}, {self.y[0]}) and P_end=({self.x[-1]}, {self.y[-1]})"
+
 
 def write_observations(data: list, filename: str=None):
     """ Write observation points and observation cross sections to files 
@@ -29,6 +35,8 @@ def write_observations(data: list, filename: str=None):
         data:       List of observation points and observation cross sections
         filename:   Name of file to write (extensions are added automatically)
     """
+    print("\nWriting observation points and cross-sections")
+
     if filename is None:
         filename = os.path.dirname(os.path.realpath(__file__)) + "/observations"
     if filename.endswith(".xyn"):
@@ -57,6 +65,7 @@ def write_observations(data: list, filename: str=None):
     if len(points) > 0:
         with open(filename_points, "w") as file:
             for element in points:
+                print(f"* {element}")
                 _name = element.name.replace("\'", "")
                 file.write(f"{element.x} \t{element.y} \t'{_name}'\n")
 
@@ -64,6 +73,7 @@ def write_observations(data: list, filename: str=None):
     if len(sections) > 0:
         with open(filename_sections, "w") as file:
             for element in sections:
+                print(f"* {element}")
                 _name = element.name.replace("\'", "")
                 file.write(f"{_name}\n")
                 file.write(f"{element.n} \t2\n")
