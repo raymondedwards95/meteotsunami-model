@@ -43,6 +43,7 @@ figure_dir = file_dir + "/figures/"
 ### Defining Visualisations
 def vis_alongshore(data_list, title, cases, savename):
     ## Parameters
+    savename = savename.strip(".jpg") + "/along.jpg"
     _ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
     _times = [4e4, 8e4, 12e4, 16e4]
 
@@ -73,12 +74,14 @@ def vis_alongshore(data_list, title, cases, savename):
         if i == 3:
             _ax.legend()
         
-    fig.savefig(savename + "/along.jpg", bbox_inches="tight")
+    fig.savefig(savename, bbox_inches="tight")
+    print(f"Saved figure as '{savename}'\n")
     return
 
 
 def vis_crossshore(data_list, title, cases, savename):
     ## Parameters
+    savename = savename.strip(".jpg") + "/cross.jpg"
     _yslices = np.array([7.56]) * 1e6
     _tslice = 1.6e5
 
@@ -127,7 +130,8 @@ def vis_crossshore(data_list, title, cases, savename):
 
         _ax.legend()
 
-    fig.savefig(savename + "/cross.jpg", bbox_inches="tight")
+    fig.savefig(savename, bbox_inches="tight")
+    print(f"Saved figure as '{savename}'\n")
     return
 
 
