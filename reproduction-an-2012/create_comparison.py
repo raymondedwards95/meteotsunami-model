@@ -57,7 +57,7 @@ def vis_alongshore(data_list, title, cases, savename):
         _ax = ax[i//2, i%2]  # select subplot
         _ax.set_xlim(_ylims[i])
         _ax.set_ylim([-0.8, 0.8])
-        _ax.set_title(f"$t = {_times[i].:0.0f}$s")
+        _ax.set_title(f"$t = {_times[i]:0.0f}$s")
         if i//2: _ax.set_xlabel("$y$ [km]")
         if not i%2: _ax.set_ylabel("$SSE$ [m]")
 
