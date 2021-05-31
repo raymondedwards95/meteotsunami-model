@@ -51,5 +51,9 @@ def _test_compute_decay_parameter(showfig=True):
     plt.show()
 
 
+def spectral_analysis(data, x, y, t):
+    raise NotImplementedError
+
+
 if __name__ == "__main__":
     _test_compute_decay_parameter(showfig=True)
