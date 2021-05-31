@@ -58,7 +58,7 @@ def vis_alongshore(data_list, title, cases, savename):
     for i in range(ax.size):
         _ax = ax[i//2, i%2]  # select subplot
         _ax.set_xlim(_ylims[i])
-        _ax.set_ylim([-0.8, 0.8])
+        _ax.set_ylim([-0.9, 0.9])
         _ax.set_title(f"$t = {_times[i]:0.0f}$s")
         if i//2: _ax.set_xlabel("$y$ [km]")
         if not i%2: _ax.set_ylabel("$SSE$ [m]")
@@ -75,7 +75,7 @@ def vis_alongshore(data_list, title, cases, savename):
             _ax.legend()
         
     fig.savefig(savename, bbox_inches="tight")
-    print(f"Saved figure as '{savename}'\n")
+    print(f"Saved figure as '{savename}'")
     return
 
 
@@ -90,7 +90,7 @@ def vis_crossshore(data_list, title, cases, savename):
     fig.set_size_inches(8, 8)
     fig.set_dpi(150)
     fig.set_tight_layout(True)
-    fig.suptitle(f"{title}\Cross-shore Profile of Sea Surface Elevation")
+    fig.suptitle(f"{title}\nCross-shore Profile of Sea Surface Elevation")
     
     if not isinstance(ax, np.ndarray):
         ax = np.array([ax])
@@ -99,7 +99,7 @@ def vis_crossshore(data_list, title, cases, savename):
     for i in range(ax.size):
         _ax = ax[i]
         _ax.set_xlim([0, 600])
-        _ax.set_ylim([0, 0.8])
+        _ax.set_ylim([0, 0.9])
         _ax.set_title(f"$y = {_yslices[i]/1000.}$km")
         _ax.set_ylabel("$SSE$ [m]")
         if i == ax.size: _ax.set_xlabel("x [km]")
@@ -114,7 +114,7 @@ def vis_crossshore(data_list, title, cases, savename):
 
             # Plot data
             plt.plot(
-                data["x"],
+                data["x"] / 1000.,
                 data["wl"].interp(t=fv.to_timestr(_tslice), y=_yslices[i]),
                 color=f"C{j}",
                 label=f"Case {cases[j]:02.0f}"
@@ -122,16 +122,17 @@ def vis_crossshore(data_list, title, cases, savename):
 
             # Plot best fit
             plt.plot(
-                data["x"],
+                data["x"] / 1000.,
                 fa.exp_decay(data["x"], k0, y0),
                 color=f"C{j}",
-                label=f"Best fit: $1/k_0 = {1./(k0/1000.)}$km"
+                linestyle="--",
+                label=f"Best fit: $1/k_0 = {1./k0/1000.:0.1f}$km"
             )
 
         _ax.legend()
 
     fig.savefig(savename, bbox_inches="tight")
-    print(f"Saved figure as '{savename}'\n")
+    print(f"Saved figure as '{savename}'")
     return
 
 
@@ -146,8 +147,9 @@ def make_comparison(cases, title, id="test"):
     data_list = []
     for i in range(len(cases)):
         case = f"{cases[i]:02.0f}"
-        print(f"Reading data for case {case}")
-        data_list.append(xr.open_dataset(f"{output_dir}/data_repr_{case}.nc"))
+        datafile = f"{output_dir}/data_repr_{case}.nc"
+        print(f"Reading data for case {case} ({datafile})")
+        data_list.append(xr.open_dataset(datafile))
     
     # Make figures
     vis_alongshore(data_list, title, cases, savename)
