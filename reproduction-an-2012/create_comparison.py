@@ -165,4 +165,4 @@ def make_comparison(cases, title, id="test"):
 # for i in range(num_comparisons):
 #     make_comparison(cases[i], titles[i], id=i)
 
-make_comparison([0], "test")
+make_comparison(cases=[0, 15, 16, 17], title="test", id="test")
