@@ -9,6 +9,7 @@ import sys
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+import functions.analysis as fa
 import functions.visualisation as fv
 
 
@@ -77,7 +78,57 @@ def vis_alongshore(data_list, title, cases, savename):
 
 
 def vis_crossshore(data_list, title, cases, savename):
-    raise NotImplementedError
+    ## Parameters
+    _yslices = np.array([7.56]) * 1e6
+    _tslice = 1.6e5
+
+    ## Figure
+    fig, ax = plt.subplots(_yslices.size, 1)
+    fig.set_size_inches(8, 8)
+    fig.set_dpi(150)
+    fig.set_tight_layout(True)
+    fig.suptitle(f"{title}\Cross-shore Profile of Sea Surface Elevation")
+    
+    if not isinstance(ax, np.ndarray):
+        ax = np.array([ax])
+
+    ## Subplots
+    for i in range(ax.size):
+        _ax = ax[i]
+        _ax.set_xlim([0, 600])
+        _ax.set_ylim([0, 0.8])
+        _ax.set_title(f"$y = {_yslices[i]/1000.}$km")
+        _ax.set_ylabel("$SSE$ [m]")
+        if i == ax.size: _ax.set_xlabel("x [km]")
+
+        for j in range(len(data_list)):
+            data = data_list[j]
+
+            # Compute best fit parameters
+            k0, y0 = fa.compute_decay_parameter(
+                data, _yslices[i], _tslice
+            )
+
+            # Plot data
+            plt.plot(
+                data["x"],
+                data["wl"].interp(t=fv.to_timestr(_tslice), y=_yslices[i]),
+                color=f"C{j}",
+                label=f"Case {cases[j]:02.0f}"
+            )
+
+            # Plot best fit
+            plt.plot(
+                data["x"],
+                fa.exp_decay(data["x"], k0, y0),
+                color=f"C{j}",
+                label=f"Best fit: $1/k_0 = {1./(k0/1000.)}$km"
+            )
+
+        _ax.legend()
+
+    fig.savefig(savename + "/cross.jpg", bbox_inches="tight")
+    return
 
 
 def make_comparison(cases, title, id="test"):
