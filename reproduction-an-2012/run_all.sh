@@ -28,6 +28,7 @@ bash ./run_reproduction.sh 02 &
 bash ./run_reproduction.sh 03 &
 bash ./run_reproduction.sh 04 &
 bash ./run_reproduction.sh 05 &
+wait
 
 bash ./run_reproduction.sh 10 &
 bash ./run_reproduction.sh 11 &
@@ -35,9 +36,13 @@ bash ./run_reproduction.sh 12 &
 bash ./run_reproduction.sh 15 &
 bash ./run_reproduction.sh 16 &
 bash ./run_reproduction.sh 17 &
+wait
 
 bash ./run_reproduction.sh 20 &
 bash ./run_reproduction.sh 21 &
 # bash ./run_reproduction.sh 22 &
+wait
+
+python3 ./create_comparison.py
 
 exit 0
