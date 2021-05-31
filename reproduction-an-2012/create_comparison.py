@@ -56,10 +56,12 @@ def vis_alongshore(data_list, title, cases, savename):
 
     # Subplots
     for i in range(ax.size):
-        _ax = ax[i//2, i%2]  # select subplot
+        _ax = ax[i//2, i % 2]  # select subplot
+        _ax.grid()
         _ax.set_xlim(_ylims[i])
         _ax.set_ylim([-0.9, 0.9])
         _ax.set_title(f"$t = {_times[i]:0.0f}$s")
+        _ax.axhline(color="black", linewidth=1)
         if i//2: _ax.set_xlabel("$y$ [km]")
         if not i%2: _ax.set_ylabel("$SSE$ [m]")
 
@@ -98,6 +100,7 @@ def vis_crossshore(data_list, title, cases, savename):
     ## Subplots
     for i in range(ax.size):
         _ax = ax[i]
+        _ax.grid()
         _ax.set_xlim([0, 600])
         _ax.set_ylim([0, 0.9])
         _ax.set_title(f"$y = {_yslices[i]/1000.}$km")
