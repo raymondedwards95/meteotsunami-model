@@ -54,7 +54,7 @@ def vis_alongshore(data_list, title, cases, savename):
     fig.suptitle(f"{title}\nAlong-shore Profile of Sea Surface Elevation")
 
     # Subplots
-    for i in range(4):
+    for i in range(ax.size):
         _ax = ax[i//2, i%2]  # select subplot
         _ax.set_xlim(_ylims[i])
         _ax.set_ylim([-0.8, 0.8])
