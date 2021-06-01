@@ -43,7 +43,7 @@ figure_dir = file_dir + "/figures/"
 ### Defining Visualisations
 def vis_alongshore(data_list, title, cases, savename):
     ## Parameters
-    savename = savename.strip(".jpg") + "/along.jpg"
+    savename = savename.replace(".jpg", "") + "/along.jpg"
     _ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
     _times = [4e4, 8e4, 12e4, 16e4]
 
@@ -83,7 +83,7 @@ def vis_alongshore(data_list, title, cases, savename):
 
 def vis_crossshore(data_list, title, cases, savename):
     ## Parameters
-    savename = savename.strip(".jpg") + "/cross.jpg"
+    savename = savename.replace(".jpg", "") + "/cross.jpg"
     _yslices = np.array([7.56]) * 1e6
     _tslice = 1.6e5
 
@@ -143,7 +143,7 @@ def make_comparison(cases, title, id="test"):
     # Paths
     if isinstance(id, float):
         id = f"{id:03.0f}"
-    savename = figure_dir + f"/comparison_{id}"
+    savename = figure_dir + f"/compare_{id}"
     os.makedirs(savename, exist_ok=True)
 
     # Import data (lazy?)
