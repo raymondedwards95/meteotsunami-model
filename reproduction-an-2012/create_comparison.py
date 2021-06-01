@@ -1,5 +1,10 @@
 """ Script to compare different simulations """
 
+# fix for systems without display
+import matplotlib
+matplotlib.use("Agg")
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
@@ -75,7 +80,7 @@ def vis_alongshore(data_list, title, cases, savename):
                 label=f"Case {cases[j]:02.0f}"
             )
         
-        if i == 3:
+        if i == 0:
             _ax.legend()
         
     fig.savefig(savename, bbox_inches="tight")
@@ -120,7 +125,7 @@ def vis_alongshore_diff(data_list, title, cases, savename):
                 label=f"Case {cases[j]:02.0f}"
             )
         
-        if i == 3:
+        if i == 0:
             _ax.legend()
         
     fig.savefig(savename, bbox_inches="tight")
