@@ -62,6 +62,7 @@ def vis_alongshore(data_list, title, cases, savename):
         _ax.set_ylim([-0.9, 0.9])
         _ax.set_title(f"$t = {_times[i]:0.0f}$s")
         _ax.axhline(color="black", linewidth=1)
+        _ax.axvline(color="black", linewidth=1)
         if i//2: _ax.set_xlabel("$y$ [km]")
         if not i%2: _ax.set_ylabel("$SSE$ [m]")
 
@@ -93,7 +94,7 @@ def vis_alongshore_diff(data_list, title, cases, savename):
     fig.set_size_inches(8, 8)
     fig.set_dpi(150)
     fig.set_tight_layout(True)
-    fig.suptitle(f"{title}\nDifference in Along-shore Profile compared to Reference Case")
+    fig.suptitle(f"{title}\nChange in Along-shore Profile")
 
     # Subplots
     for i in range(ax.size):
@@ -103,8 +104,9 @@ def vis_alongshore_diff(data_list, title, cases, savename):
         _ax.set_ylim([-0.2, 0.2])
         _ax.set_title(f"$t = {_times[i]:0.0f}$s")
         _ax.axhline(color="black", linewidth=1)
+        _ax.axvline(color="black", linewidth=1)
         if i//2: _ax.set_xlabel("$y$ [km]")
-        if not i%2: _ax.set_ylabel("$SSE$ [m]")
+        if not i%2: _ax.set_ylabel("$\\Delta SSE$ [m]")
 
         reference = data_list[0]["wl"].interp(t=fv.to_timestr(_times[i]), x=10e3)
 
@@ -145,6 +147,8 @@ def vis_crossshore(data_list, title, cases, savename):
     ## Subplots
     for i in range(ax.size):
         _ax = ax[i]
+        _ax.axhline(color="black", linewidth=1)
+        _ax.axvline(color="black", linewidth=1)
         _ax.grid()
         _ax.set_xlim([0, 600])
         _ax.set_ylim([0, 0.9])
@@ -195,7 +199,7 @@ def vis_crossshore_diff(data_list, title, cases, savename):
     fig.set_size_inches(8, 8)
     fig.set_dpi(150)
     fig.set_tight_layout(True)
-    fig.suptitle(f"{title}\nCross-shore Profile of Sea Surface Elevation")
+    fig.suptitle(f"{title}\nChange in Cross-shore Profile")
     
     if not isinstance(ax, np.ndarray):
         ax = np.array([ax])
@@ -203,6 +207,8 @@ def vis_crossshore_diff(data_list, title, cases, savename):
     ## Subplots
     for i in range(ax.size):
         _ax = ax[i]
+        _ax.axhline(color="black", linewidth=1)
+        _ax.axvline(color="black", linewidth=1)
         _ax.grid()
         _ax.set_xlim([0, 600])
         _ax.set_ylim([-0.2, 0.2])
