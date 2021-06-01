@@ -184,6 +184,53 @@ def vis_crossshore(data_list, title, cases, savename):
     return
 
 
+def vis_crossshore_diff(data_list, title, cases, savename):
+    ## Parameters
+    savename = savename.replace(".jpg", "") + "/cross_diff.jpg"
+    _yslices = np.array([7.56]) * 1e6
+    _tslice = 1.6e5
+
+    ## Figure
+    fig, ax = plt.subplots(_yslices.size, 1)
+    fig.set_size_inches(8, 8)
+    fig.set_dpi(150)
+    fig.set_tight_layout(True)
+    fig.suptitle(f"{title}\nCross-shore Profile of Sea Surface Elevation")
+    
+    if not isinstance(ax, np.ndarray):
+        ax = np.array([ax])
+
+    ## Subplots
+    for i in range(ax.size):
+        _ax = ax[i]
+        _ax.grid()
+        _ax.set_xlim([0, 600])
+        _ax.set_ylim([-0.2, 0.2])
+        _ax.set_title(f"$y = {_yslices[i]/1000.}$km")
+        _ax.set_ylabel("$\\Delta SSE$ [m]")
+        if i == ax.size: _ax.set_xlabel("x [km]")
+
+        reference = data_list[0]["wl"].interp(t=fv.to_timestr(_tslice), y=_yslices[i])
+
+        for _j in range(len(data_list) - 1):
+            j = _j + 1
+            data = data_list[j]
+
+            # Plot data
+            plt.plot(
+                data["x"] / 1000.,
+                data["wl"].interp(t=fv.to_timestr(_tslice), y=_yslices[i]) - reference,
+                color=f"C{j}",
+                label=f"Case {cases[j]:02.0f}"
+            )
+
+        _ax.legend()
+
+    fig.savefig(savename, bbox_inches="tight")
+    print(f"Saved figure as '{savename}'")
+    return
+
+
 def make_comparison(cases, title, id="test"):
     # Paths
     if isinstance(id, float):
@@ -203,6 +250,7 @@ def make_comparison(cases, title, id="test"):
     vis_alongshore(data_list, title, cases, savename)
     vis_crossshore(data_list, title, cases, savename)
     vis_alongshore_diff(data_list, title, cases, savename)
+    vis_crossshore_diff(data_list, title, cases, savename)
 
     return
 
