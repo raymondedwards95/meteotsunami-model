@@ -70,6 +70,51 @@ def vis_alongshore(data_list, title, cases, savename):
             _ax.plot(
                 data["y"]/1000.,
                 data["wl"].interp(t=fv.to_timestr(_times[i]), x=10e3),
+                color=f"C{j}",
+                label=f"Case {cases[j]:02.0f}"
+            )
+        
+        if i == 3:
+            _ax.legend()
+        
+    fig.savefig(savename, bbox_inches="tight")
+    print(f"Saved figure as '{savename}'")
+    return
+
+    
+def vis_alongshore_diff(data_list, title, cases, savename):
+    ## Parameters
+    savename = savename.replace(".jpg", "") + "/along_diff.jpg"
+    _ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
+    _times = [4e4, 8e4, 12e4, 16e4]
+
+    ## Figure
+    fig, ax = plt.subplots(2, 2, sharex=False, sharey=True)
+    fig.set_size_inches(8, 8)
+    fig.set_dpi(150)
+    fig.set_tight_layout(True)
+    fig.suptitle(f"{title}\nDifference in Along-shore Profile compared to Reference Case")
+
+    # Subplots
+    for i in range(ax.size):
+        _ax = ax[i//2, i % 2]  # select subplot
+        _ax.grid()
+        _ax.set_xlim(_ylims[i])
+        _ax.set_ylim([-0.2, 0.2])
+        _ax.set_title(f"$t = {_times[i]:0.0f}$s")
+        _ax.axhline(color="black", linewidth=1)
+        if i//2: _ax.set_xlabel("$y$ [km]")
+        if not i%2: _ax.set_ylabel("$SSE$ [m]")
+
+        reference = data_list[0]["wl"].interp(t=fv.to_timestr(_times[i]), x=10e3)
+
+        for _j in range(len(data_list) - 1):
+            j = _j + 1
+            data = data_list[j]
+            _ax.plot(
+                data["y"]/1000.,
+                data["wl"].interp(t=fv.to_timestr(_times[i]), x=10e3) - reference,
+                color=f"C{j}",
                 label=f"Case {cases[j]:02.0f}"
             )
         
@@ -157,6 +202,7 @@ def make_comparison(cases, title, id="test"):
     # Make figures
     vis_alongshore(data_list, title, cases, savename)
     vis_crossshore(data_list, title, cases, savename)
+    vis_alongshore_diff(data_list, title, cases, savename)
 
     return
 
