@@ -58,14 +58,16 @@ def animation_contour(dataset, saveloc=None):
             vmax=np.ceil(p.max())
         )
     
+    def set_plottext(i=0):
+        plottext[0] = ax[0].set_title(
+            f"Sea Surface Elevation  \n$t={t.isel(t=i).values.tolist()/1e9/3600}$ hours since start"
+        )
+        plottext[1] = ax[1].set_title(
+            f"Surface Air Pressure  \n$t={t.isel(t=i).values.tolist()/1e9/3600}$ hours since start"
+        )
+    
     set_plotdata()
-
-    plottext[0] = ax[0].set_title(
-        f"Sea Surface Elevation  \n$t={t.isel(t=0).values.tolist()/1e9/3600}$ hours since start"
-    )
-    plottext[1] = ax[1].set_title(
-        f"Surface Air Pressure  \n$t={t.isel(t=0).values.tolist()/1e9/3600}$ hours since start"
-    )
+    set_plottext()
 
     ## Subplot layout
     def initfig():
@@ -83,18 +85,14 @@ def animation_contour(dataset, saveloc=None):
 
     ## Update data
     def update(i):
+        # remove data in contour plots
         for _temp in plotdata[0].collections:
             _temp.remove()
         for _temp in plotdata[1].collections:
             _temp.remove()
-        set_plotdata(i)
 
-        plottext[0].set_text(
-            f"Sea Surface Elevation  \n$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
-        )
-        plottext[1].set_text(
-            f"Surface Air Pressure  \n$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
-        )
+        set_plotdata(i)
+        set_plottext(i)
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
     
