@@ -24,6 +24,7 @@ def animation_contour(dataset, saveloc=None):
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/test-animation"
     if saveloc.endswith(".mp4"):
         saveloc.replace(".mp4", "")
+    os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + "/anim_contours.mp4"
 
     ## Figure options
