@@ -141,7 +141,7 @@ def plot_pressure(data, filename=None, x_scales=None):
     if filename is None:
         filename = os.path.dirname(os.path.realpath(__file__)) + "/fig_pressure"
     if filename.endswith(".jpg"):
-        filename.strip(".jpg")
+        filename.replace(".jpg", "")
     print(f"\nVisualizing pressure field in '{filename}'")
 
     x = data.x.values
