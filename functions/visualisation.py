@@ -63,7 +63,7 @@ def animation_contour(dataset, saveloc=None):
             ax[i].axvline(color="black", linewidth=1)
             ax[i].set_xlabel("$x$ [km]")
             ax[i].set_xlim([0, 200])
-            ax[i].set_ylim([0, dataset["y"].max()])
+            ax[i].set_ylim([0, dataset["y"].max() / 1000.])
         
         ax[0].set_ylabel("$y$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
