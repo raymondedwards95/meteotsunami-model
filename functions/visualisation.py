@@ -27,6 +27,13 @@ def animation_contour(dataset, saveloc=None):
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + "/anim_contours.mp4"
 
+    ## Shortcuts
+    x = dataset["x"]
+    y = dataset["y"]
+    t = dataset["t"]
+    wl = dataset["wl"]
+    p = dataset["p"]
+
     ## Figure options
     fig, ax = plt.subplots(1, 2, sharey=True)
     fig.set_size_inches(14.4, 7.2)
@@ -39,25 +46,25 @@ def animation_contour(dataset, saveloc=None):
 
     def set_plotdata(i=0):
         plotdata[0] = ax[0].contourf(
-            dataset["x"] / 1000,
-            dataset["y"] / 1000,
-            dataset["wl"].isel(t=i)
+            x / 1000,
+            y / 1000,
+            wl.isel(t=i)
         )
         plotdata[1] = ax[1].contourf(
-            dataset["x"] / 1000,
-            dataset["y"] / 1000,
-            dataset["p"].isel(t=i),
-            vmin=np.floor(dataset["p"].min()),
-            vmax=np.ceil(dataset["p"].max())
+            x / 1000,
+            y / 1000,
+            p.isel(t=i),
+            vmin=np.floor(p.min()),
+            vmax=np.ceil(p.max())
         )
     
     set_plotdata()
-    
+
     plottext[0] = ax[0].set_title(
-        f"Sea Surface Elevation  \n$t={dataset['t'].isel(t=0).values.tolist()/1e9/3600}$ hours since start"
+        f"Sea Surface Elevation  \n$t={t.isel(t=0).values.tolist()/1e9/3600}$ hours since start"
     )
     plottext[1] = ax[1].set_title(
-        f"Surface Air Pressure  \n$t={dataset['t'].isel(t=0).values.tolist()/1e9/3600}$ hours since start"
+        f"Surface Air Pressure  \n$t={t.isel(t=0).values.tolist()/1e9/3600}$ hours since start"
     )
 
     ## Subplot layout
@@ -67,7 +74,7 @@ def animation_contour(dataset, saveloc=None):
             ax[i].axvline(color="black", linewidth=1)
             ax[i].set_xlabel("$x$ [km]")
             ax[i].set_xlim([0, 200])
-            ax[i].set_ylim([0, dataset["y"].max() / 1000.])
+            ax[i].set_ylim([0, y.max() / 1000.])
         
         ax[0].set_ylabel("$y$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
@@ -83,16 +90,16 @@ def animation_contour(dataset, saveloc=None):
         set_plotdata(i)
 
         plottext[0].set_text(
-            f"Sea Surface Elevation  \n$t={dataset['t'].isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
+            f"Sea Surface Elevation  \n$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
         plottext[1].set_text(
-            f"Surface Air Pressure  \n$t={dataset['t'].isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
+            f"Surface Air Pressure  \n$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
     
     ## Animation
-    frames = (np.arange(dataset["t"].size)).astype(np.int)
+    frames = (np.arange(t.size)).astype(np.int)
     anim = FuncAnimation(
         fig,
         update,
