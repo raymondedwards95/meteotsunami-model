@@ -34,6 +34,11 @@ def animation_contour(dataset, saveloc=None):
     wl = dataset["wl"]
     p = dataset["p"]
 
+    x = x - x.min()
+    wl_max = np.max([wl.max(), np.abs(wl.min())])
+    p_max = np.ceil(p.max())
+    p_min = np.floor(p.min())
+
     ## Figure options
     fig, ax = plt.subplots(1, 2, sharey=True)
     fig.set_size_inches(14.4, 7.2)
@@ -48,22 +53,24 @@ def animation_contour(dataset, saveloc=None):
         plotdata[0] = ax[0].contourf(
             x / 1000,
             y / 1000,
-            wl.isel(t=i)
+            wl.isel(t=i),
+            vmin=-1.*wl_max,
+            vmax=wl_max
         )
         plotdata[1] = ax[1].contourf(
             x / 1000,
             y / 1000,
             p.isel(t=i),
-            vmin=np.floor(p.min()),
-            vmax=np.ceil(p.max())
+            vmin=p_min,
+            vmax=p_max
         )
     
     def set_plottext(i=0):
         plottext[0] = ax[0].set_title(
-            f"Sea Surface Elevation  \n$t={t.isel(t=i).values.tolist()/1e9/3600}$ hours since start"
+            f"Sea Surface Elevation  \n$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
         plottext[1] = ax[1].set_title(
-            f"Surface Air Pressure  \n$t={t.isel(t=i).values.tolist()/1e9/3600}$ hours since start"
+            f"Surface Air Pressure  \n$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
     
     set_plotdata()
