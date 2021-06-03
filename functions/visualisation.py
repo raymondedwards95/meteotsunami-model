@@ -21,7 +21,7 @@ def animation_contour(dataset, saveloc=None):
     assert isinstance(dataset, xr.Dataset)
 
     if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/test-animation"
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".mp4"):
         saveloc.replace(".mp4", "")
     os.makedirs(saveloc, exist_ok=True)
@@ -75,10 +75,10 @@ def animation_contour(dataset, saveloc=None):
         plotdata[0].set_array(dataset["wl"].isel(t=i))
         plotdata[1].set_array(dataset["p"].isel(t=i))
         plottext[0].set_text(
-            f"Sea Surface Elevation  \n$t={dataset['t'].isel(t=i).values.tolist()/1e9/3600}$ hours since start"
+            f"Sea Surface Elevation  \n$t={dataset['t'].isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
-        plottext[0].set_text(
-            f"Surface Air Pressure  \n$t={dataset['t'].isel(t=i).values.tolist()/1e9/3600}$ hours since start"
+        plottext[1].set_text(
+            f"Surface Air Pressure  \n$t={dataset['t'].isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
