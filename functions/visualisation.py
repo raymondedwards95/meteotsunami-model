@@ -1,6 +1,8 @@
 """ Functions for visualising model outputs """
 
 import datetime
+import os
+import sys
 import time
 
 import matplotlib.pyplot as plt
@@ -15,8 +17,14 @@ def to_timestr(seconds):
     return datetime.datetime.fromtimestamp(seconds).strftime("%Y-%m-%d %H:%M:%S")
 
 
-def animation_contour(dataset, savename=None):
+def animation_contour(dataset, saveloc=None):
     assert isinstance(dataset, xr.DataSet)
+
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/test-animation"
+    if saveloc.endswith(".mp4"):
+        saveloc.replace(".mp4", "")
+    savename = saveloc + "/anim_contours.mp4"
 
     ## Figure options
     fig, ax = plt.subplots(1, 2, sharey=True)
