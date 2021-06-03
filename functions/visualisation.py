@@ -75,7 +75,7 @@ def animation_contour(dataset, savename=None):
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
     
     ## Animation
-    frames = (np.arange(t.size)).astype(np.int)
+    frames = (np.arange(dataset["t"].size)).astype(np.int)
     anim = FuncAnimation(
         fig,
         update,
