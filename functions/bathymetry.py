@@ -97,7 +97,7 @@ def plot_bathymetry(data, filename=None):
     if filename is None:
         filename = os.path.dirname(os.path.realpath(__file__)) + "/fig_bathymetry"
     if filename.endswith(".jpg"):
-        filename.strip(".jpg")
+        filename.replace(".jpg", "")
     print(f"\nVisualizing bathymetry in '{filename}'")
 
     x = data.x.values
