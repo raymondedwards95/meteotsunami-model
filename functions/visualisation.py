@@ -84,7 +84,12 @@ def animation_contour(dataset, saveloc=None):
     initfig()
 
     ## Update data
+    num_frames = t.size
     def update(i):
+        # progress
+        if not (num_frames-i-1) % (num_frames // 5):
+            print(f"Frame {i:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%)")
+
         # remove data in contour plots
         for _temp in plotdata[0].collections:
             _temp.remove()
