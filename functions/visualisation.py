@@ -37,18 +37,21 @@ def animation_contour(dataset, saveloc=None):
     plotdata = np.zeros(2, dtype=np.object)
     plottext = np.zeros(2, dtype=np.object)
 
-    plotdata[0] = ax[0].contourf(
-        dataset["x"] / 1000,
-        dataset["y"] / 1000,
-        dataset["wl"].isel(t=0)
-    )
-    plotdata[1] = ax[1].contourf(
-        dataset["x"] / 1000,
-        dataset["y"] / 1000,
-        dataset["p"].isel(t=0),
-        vmin=np.floor(dataset["p"].min()),
-        vmax=np.ceil(dataset["p"].max())
-    )
+    def set_plotdata(i=0):
+        plotdata[0] = ax[0].contourf(
+            dataset["x"] / 1000,
+            dataset["y"] / 1000,
+            dataset["wl"].isel(t=i)
+        )
+        plotdata[1] = ax[1].contourf(
+            dataset["x"] / 1000,
+            dataset["y"] / 1000,
+            dataset["p"].isel(t=i),
+            vmin=np.floor(dataset["p"].min()),
+            vmax=np.ceil(dataset["p"].max())
+        )
+    
+    set_plotdata()
     plottext[0] = ax[0].set_title(
         f"Sea Surface Elevation  \n$t={dataset['t'].isel(t=0).values.tolist()/1e9/3600}$ hours since start"
     )
@@ -72,8 +75,14 @@ def animation_contour(dataset, saveloc=None):
 
     ## Update data
     def update(i):
-        plotdata[0].set_array(dataset["wl"].isel(t=i))
-        plotdata[1].set_array(dataset["p"].isel(t=i))
+        for _temp in plotdata[0].collections:
+            _temp.remove()
+        for _temp in plotdata[1].collections:
+            _temp.remove()
+        set_plotdata(i)
+        
+        # plotdata[0].set_array(dataset["wl"].isel(t=i))
+        # plotdata[1].set_array(dataset["p"].isel(t=i))
         plottext[0].set_text(
             f"Sea Surface Elevation  \n$t={dataset['t'].isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
