@@ -18,7 +18,7 @@ def to_timestr(seconds):
 
 
 def animation_contour(dataset, saveloc=None):
-    assert isinstance(dataset, xr.DataSet)
+    assert isinstance(dataset, xr.Dataset)
 
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/test-animation"
