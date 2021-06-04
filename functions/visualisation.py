@@ -132,3 +132,110 @@ def animation_contour(dataset, saveloc=None):
     print(f"Finished contour-animation in {t1-t0:0.1f} seconds")
     print(f"Saved animation as '{savename}'")
     return
+
+
+def animation_alongshore(dataset, saveloc=None):
+    """ Creates an animation of an alongshore cross-section of the water level and surface air pressure data
+
+    Input:
+        dataset:    Dataset that contains all variables
+    
+    Parameters:
+        saveloc:    Folder to write the animation to
+    """
+    assert isinstance(dataset, xr.Dataset)
+
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".mp4"):
+        saveloc.replace(".mp4", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + "/anim_alongshore.mp4"
+
+    ## Shortcuts
+    x = dataset["x"]
+    y = dataset["y"]
+    t = dataset["t"]
+    wl = dataset["wl"]
+    p = dataset["p"]
+
+    x = x - x.min()
+    wl_max = np.max([wl.max(), np.abs(wl.min())])
+    p_max = np.ceil(p.max())
+    p_min = np.floor(p.min())
+
+    ## Figure options
+    fig, ax = plt.subplots(2, 1, sharey=True)
+    fig.set_size_inches(14.4, 7.2)
+    fig.set_dpi(100)
+    fig.set_tight_layout(True)
+
+    ## Initial data
+    plotdata = np.zeros(2, dtype=np.object)
+    plottext = np.zeros(1, dtype=np.object)
+
+    def set_plotdata(i=0):
+        plotdata[0] = ax[0].plot(
+            y / 1000,
+            wl.isel(t=i).interp(x=10000),
+            color="C0"
+        )[0]
+        plotdata[1] = ax[1].plot(
+            y / 1000,
+            p.isel(t=i).interp(x=10000),
+        )[0]
+    
+    def set_plottext(i=0):
+        plottext[0] = ax[0].set_title(
+            f"$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
+        )
+    
+    set_plotdata()
+    set_plottext()
+
+    ## Subplot layout
+    def initfig():
+        for i in range(2):
+            ax[i].axhline(color="black", linewidth=1)
+            ax[i].axvline(color="black", linewidth=1)
+            ax[i].set_xlim([y.min() / 1000. / 10., y.max() / 1000.])
+        
+        ax[0].set_ylim([-1. * wl_max, wl.max])
+        ax[1].set_ylim([p_min, p_max])
+        ax[1].set_xlabel("$y$ [km]")
+        ax[0].set_ylabel("Sea Surface Elevation [m]")
+        ax[0].set_ylabel("Surface Air Pressure [Pa]")
+        return tuple(plotdata.flatten()) + tuple(plottext.flatten())
+    
+    initfig()
+
+    ## Update data
+    num_frames = t.size
+    def update(i):
+        # progress
+        if not (num_frames-i-1) % (num_frames // 5):
+            print(f"Frame {i:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%)")
+
+        # new data
+        set_plotdata(i)
+        set_plottext(i)
+
+        return tuple(plotdata.flatten()) + tuple(plottext.flatten())
+    
+    ## Animation
+    frames = (np.arange(t.size)).astype(np.int)
+    anim = FuncAnimation(
+        fig,
+        update,
+        init_func=initfig,
+        frames=frames,
+        interval=1000/20
+    )
+    print(f"Creating animation '{savename}'")
+    t0 = time.perf_counter()
+    anim.save(savename)
+    t1 = time.perf_counter()
+    print(f"Finished alongshore-animation in {t1-t0:0.1f} seconds")
+    print(f"Saved animation as '{savename}'")
+    return
+
