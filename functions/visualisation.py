@@ -291,7 +291,7 @@ def animation_crossshore(dataset, saveloc=None):
                 x / 1000,
                 wl.isel(t=i).interp(y=_y[j]),
                 color="C0",
-                label=f"$y={_y[j]:0.0f}$"
+                label=f"$y={_y[j]/1000:0.0f}$ km"
             )[0]
     
     def set_plottext(i=0):
@@ -307,12 +307,12 @@ def animation_crossshore(dataset, saveloc=None):
         for i in range(slices):
             ax[i].axhline(color="black", linewidth=1)
             ax[i].axvline(color="black", linewidth=1)
-            ax[i].set_xlim([y.min() / 1000. / 10., y.max() / 1000.])
-            ax[i].set_ylabel("Sea Surface Elevation [m]")
+            ax[i].set_xlim([0, 200])
+            ax[i].set_ylabel("SSE [m]")
             ax[i].set_ylim([-1. * wl_max, wl_max])
             ax[i].legend()
             
-        ax[-1].set_xlabel("$y$ [km]")
+        ax[-1].set_xlabel("$x$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
     
     initfig()
