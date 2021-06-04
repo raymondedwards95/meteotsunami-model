@@ -327,6 +327,13 @@ if make_ani:
 else:
     print("\tNo animation")
 
+
+if make_ani:
+    fv.animation_contour(data, saveloc=figure_dir)
+else:
+    print("\nNot creating animations")
+
+
 ### End
 with open(filename_log, "a+") as _file:
     _file.write(f"Created visualisations for case {case}")
