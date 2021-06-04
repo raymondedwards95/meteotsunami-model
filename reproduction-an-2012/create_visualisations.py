@@ -329,6 +329,7 @@ else:
 
 
 if make_ani:
+    fv.animation_alongshore(data, saveloc=figure_dir)
     fv.animation_contour(data, saveloc=figure_dir)
 else:
     print("\nNot creating animations")
