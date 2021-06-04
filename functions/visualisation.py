@@ -18,6 +18,14 @@ def to_timestr(seconds):
 
 
 def animation_contour(dataset, saveloc=None):
+    """ Creates an animation of the top-down view of the water level and surface air pressure data
+
+    Input:
+        dataset:    Dataset that contains all variables
+    
+    Parameters:
+        saveloc:    Folder to write the animation to
+    """
     assert isinstance(dataset, xr.Dataset)
 
     if saveloc is None:
