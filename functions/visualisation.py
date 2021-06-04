@@ -43,7 +43,7 @@ def animation_contour(dataset, saveloc=None):
     p = dataset["p"]
 
     x = x - x.min()
-    wl_max = np.max([wl.max(), np.abs(wl.min())])
+    wl_max = np.max([np.abs(wl.max()), np.abs(wl.min())])
     p_max = np.ceil(p.max())
     p_min = np.floor(p.min())
 
@@ -160,7 +160,7 @@ def animation_alongshore(dataset, saveloc=None):
     p = dataset["p"]
 
     x = x - x.min()
-    wl_max = np.max([wl.max(), np.abs(wl.min())])
+    wl_max = np.max([np.abs(wl.max()), np.abs(wl.min())])
     p_max = np.ceil(p.max())
     p_min = np.floor(p.min())
 
@@ -169,6 +169,10 @@ def animation_alongshore(dataset, saveloc=None):
     fig.set_size_inches(14.4, 7.2)
     fig.set_dpi(100)
     fig.set_tight_layout(True)
+
+    # small fix?
+    ax[0].set_ylim([-1. * wl_max, wl_max])
+    ax[1].set_ylim([p_min, p_max])
 
     ## Initial data
     plotdata = np.zeros(2, dtype=np.object)
@@ -183,6 +187,7 @@ def animation_alongshore(dataset, saveloc=None):
         plotdata[1] = ax[1].plot(
             y / 1000,
             p.isel(t=i).interp(x=10000),
+            color="C1"
         )[0]
     
     def set_plottext(i=0):
@@ -200,11 +205,11 @@ def animation_alongshore(dataset, saveloc=None):
             ax[i].axvline(color="black", linewidth=1)
             ax[i].set_xlim([y.min() / 1000. / 10., y.max() / 1000.])
         
-        ax[0].set_ylim([-1. * wl_max, wl.max])
+        ax[0].set_ylim([-1. * wl_max, wl_max])
         ax[1].set_ylim([p_min, p_max])
         ax[1].set_xlabel("$y$ [km]")
         ax[0].set_ylabel("Sea Surface Elevation [m]")
-        ax[0].set_ylabel("Surface Air Pressure [Pa]")
+        ax[1].set_ylabel("Surface Air Pressure [Pa]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
     
     initfig()
@@ -217,7 +222,8 @@ def animation_alongshore(dataset, saveloc=None):
             print(f"Frame {i:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%)")
 
         # new data
-        set_plotdata(i)
+        plotdata[0].set_ydata(wl.isel(t=i).interp(x=10000))
+        plotdata[1].set_ydata(p.isel(t=i).interp(x=10000))
         set_plottext(i)
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
