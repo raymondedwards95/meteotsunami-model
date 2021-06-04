@@ -270,64 +270,6 @@ plt.savefig(figure_dir + "sse_along_2.jpg", bbox_inches="tight")
 
 
 ### Animation
-print("Animation: sse + pressure")
-fig, ax = plt.subplots(2, 1, sharex=True)
-fig.set_size_inches(14.4, 7.2)
-fig.set_dpi(100)
-fig.set_tight_layout(True)
-
-##
-lines = np.zeros(2, dtype=np.object)
-texts = np.zeros(1, dtype=np.object)
-
-lines[0] = ax[0].plot(y/1000, wl.isel(t=0).interp(x=10000))[0]
-lines[1] = ax[1].plot(y/1000, p.isel(t=0).interp(x=10000), color="tab:red")[0]
-texts[0] = ax[0].set_title(f"$t = {t.isel(t=0).values.tolist() / 1e9 / 3600 : 5.1f}$ hours since start")
-
-##
-def initfig():
-    for i in range(2):
-        ax[i].grid()
-        # ax[i].set_xlim(0, y.max()/1000)
-        ax[i].axhline(0, color="black", linewidth=1)
-    ax[0].set_ylabel("$SSE$ [m]")
-    ax[1].set_ylabel("$Pressure$ [Pa]")
-    ax[1].set_xlabel("$y$ [km]")
-    ax[0].set_ylim([-0.7, 0.7])
-    ax[1].set_ylim([0, 2000])
-    return tuple(lines.flatten()) + tuple(texts.flatten())
-
-initfig()
-
-##
-def update(i):
-    lines[0].set_ydata(wl.isel(t=i).interp(x=10000))
-    lines[1].set_ydata(p.isel(t=i).interp(x=10000))
-    texts[0].set_text(f"$t = {t.isel(t=i).values.tolist() / 1e9 / 3600 : 5.1f}$ hours since start")
-
-    return tuple(lines.flatten()) + tuple(texts.flatten())
-
-##
-frames = (np.arange(t.size)).astype(np.int)
-anim = FuncAnimation(
-    fig,
-    update,
-    init_func=initfig,
-    blit=True,
-    frames=frames,
-    interval=1000/20
-    )
-
-if make_ani:
-    print("\tAnimating")
-    t0 = time.perf_counter()
-    anim.save(figure_dir + "animation_sse_p.mp4")
-    t1 = time.perf_counter()
-    print(f"\tFinished animation in {t1 - t0 : 0.1f} seconds")
-else:
-    print("\tNo animation")
-
-
 if make_ani:
     fv.animation_alongshore(data, saveloc=figure_dir)
     fv.animation_contour(data, saveloc=figure_dir)
