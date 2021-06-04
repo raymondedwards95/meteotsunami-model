@@ -167,14 +167,10 @@ def animation_alongshore(dataset, saveloc=None):
     p_min = np.floor(p.min())
 
     ## Figure options
-    fig, ax = plt.subplots(2, 1, sharey=True)
+    fig, ax = plt.subplots(2, 1, sharex=True)
     fig.set_size_inches(14.4, 7.2)
     fig.set_dpi(100)
     fig.set_tight_layout(True)
-
-    # small fix?
-    ax[0].set_ylim([-1. * wl_max, wl_max])
-    ax[1].set_ylim([p_min, p_max])
 
     ## Initial data
     plotdata = np.zeros(2, dtype=np.object)
