@@ -72,7 +72,7 @@ def animation_contour(dataset, saveloc=None):
             vmin=p_min,
             vmax=p_max
         )
-    
+
     def set_plottext(i=0):
         plottext[0] = ax[0].set_title(
             f"Sea Surface Elevation  \n$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
@@ -80,7 +80,7 @@ def animation_contour(dataset, saveloc=None):
         plottext[1] = ax[1].set_title(
             f"Surface Air Pressure  \n$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
-    
+
     set_plotdata()
     set_plottext()
 
@@ -92,14 +92,15 @@ def animation_contour(dataset, saveloc=None):
             ax[i].set_xlabel("$x$ [km]")
             ax[i].set_xlim([0, 200])
             ax[i].set_ylim([0, y.max() / 1000.])
-        
+
         ax[0].set_ylabel("$y$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
-    
+
     initfig()
 
     ## Update data
     num_frames = t.size
+
     def update(i):
         # progress
         if not (num_frames-i-1) % (num_frames // 5):
@@ -111,11 +112,12 @@ def animation_contour(dataset, saveloc=None):
         for _temp in plotdata[1].collections:
             _temp.remove()
 
+        # new data
         set_plotdata(i)
         set_plottext(i)
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
-    
+
     ## Animation
     frames = (np.arange(t.size)).astype(np.int)
     anim = FuncAnimation(
