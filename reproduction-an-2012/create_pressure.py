@@ -124,18 +124,7 @@ for case_number in range(num_cases):
 
     ### Visualise field
     print(f"Plotting pressure field for case {case}")
-    fig, ax = plt.subplots(1, 5, sharey=True)
-    fig.set_tight_layout(True)
-    im = [None] * 5
-    for i in range(5):
-        idx = data.t.size * i // 5
-        im[i] = ax[i].contourf(data.x.values/1000., data.y.values/1000., data.values[idx,:,:], vmin=0, vmax=p0)
-        ax[i].set_title(f"$t = {data.t.values[idx] : 0.0f}$s")
-        ax[i].set_xlabel("x [km]")
-        ax[i].set_xlim([0, 500])
-    ax[0].set_ylabel("y [km]")
-    fig.colorbar(im[-2], ax=ax[-1])
-    plt.savefig(figurename)
+    fp.plot_pressure(data, filename=figurename, x_scales=[0, 500])
 
 
 # plt.show()
