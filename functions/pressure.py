@@ -150,8 +150,8 @@ def plot_pressure(data, filename=None, x_scales=None):
     t = data.t.values
     p = data.values
 
-    p_max = np.ceil(p.max())  # note: limits work only if p is positive everywhere
-    p_min = np.floor(p.min())
+    p_max = np.max([p.max(), np.abs(p.min())])  # note: limits work only if p is positive everywhere
+    p_min = -1. * p_max
 
     if x_scales is None:
         x_scales = [x.min(), x.max()]
@@ -171,7 +171,7 @@ def plot_pressure(data, filename=None, x_scales=None):
             levels=31,
             vmin=p_min,
             vmax=p_max,
-            cmap=cmo.cm.delta
+            cmap=cmo.cm.curl
         )
         ax[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
         ax[i].set_xlabel("$x$ [km]")
