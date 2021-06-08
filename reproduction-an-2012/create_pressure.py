@@ -75,7 +75,7 @@ for case_number in range(num_cases):
     t_step = t_steps[case_number]
 
     filename = f"{pressure_dir}/repr_{case:02.0f}"
-    figurename = f"{pressure_dir}/test_repr_{case:02.0f}"
+    figurename = f"{pressure_dir}/fig_repr_{case:02.0f}"
 
     x_num = int((x_max - x_min) / x_step + 1)
     y_num = int((y_max - y_min) / y_step + 1)

@@ -82,7 +82,7 @@ for case_number in range(num_cases):
     p0 = p0_list[case_number]
 
     filename = f"{pressure_dir}/repr_{case:02.0f}"
-    figurename = f"{pressure_dir}/test_repr_{case:02.0f}"
+    figurename = f"{pressure_dir}/fig_repr_{case:02.0f}"
 
     print(
         f"\nComputing pressure field for case {case} (U={U}, a={a}, p0={p0})")
