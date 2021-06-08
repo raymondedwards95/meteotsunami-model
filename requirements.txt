@@ -1,3 +1,4 @@
+cmocean
 dask
 matplotlib
 numpy

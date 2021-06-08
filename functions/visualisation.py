@@ -5,6 +5,7 @@ import os
 import sys
 import time
 
+import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
@@ -47,6 +48,7 @@ def animation_contour(dataset, saveloc=None):
     p_max = np.ceil(p.max())
     p_min = np.floor(p.min())
 
+    cmaps = [cmo.cm.balance, cmo.cm.delta]
     ## Figure options
     fig, ax = plt.subplots(1, 2, sharey=True)
     fig.set_size_inches(14.4, 7.2)
@@ -64,6 +66,7 @@ def animation_contour(dataset, saveloc=None):
             wl.isel(t=i),
             vmin=-1.*wl_max,
             vmax=wl_max
+            cmap=cmaps[0]
         )
         plotdata[1] = ax[1].contourf(
             x / 1000,
@@ -71,6 +74,7 @@ def animation_contour(dataset, saveloc=None):
             p.isel(t=i),
             vmin=p_min,
             vmax=p_max
+            cmap=cmaps[1]
         )
 
     def set_plottext(i=0):
