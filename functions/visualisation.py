@@ -73,7 +73,7 @@ def animation_contour(dataset, saveloc=None):
             y / 1000,
             p.isel(t=i),
             vmin=p_min,
-            vmax=p_max
+            vmax=p_max,
             cmap=cmaps[1]
         )
 
