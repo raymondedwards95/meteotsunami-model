@@ -2,6 +2,7 @@
 
 import os
 
+import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
@@ -149,6 +150,9 @@ def plot_pressure(data, filename=None, x_scales=None):
     t = data.t.values
     p = data.values
 
+    p_max = np.ceil(p.max())  # note: limits work only if p is positive everywhere
+    p_min = np.floor(p.min())
+
     if x_scales is None:
         x_scales = [x.min(), x.max()]
 
@@ -164,8 +168,10 @@ def plot_pressure(data, filename=None, x_scales=None):
             x / 1000.,
             y / 1000.,
             p[idx, :, :],
-            vmin=p.min(),
-            vmax=p.max()
+            levels=31,
+            vmin=p_min,
+            vmax=p_max,
+            cmap=cmo.cm.delta
         )
         ax[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
         ax[i].set_xlabel("$x$ [km]")
@@ -181,13 +187,13 @@ if __name__ == "__main__":
 
     # function for computing 'pressure'
     def f(x, y, t):
-        return np.min([1, t / 5]) * np.sin(x) * np.sin(y)
+        return np.min([1, t / 5]) * np.sin(x * np.pi) * np.sin(y * np.pi)
 
     t0 = time.perf_counter()
 
     # grid
-    x = np.linspace(-1, 1, 51)
-    y = np.linspace(-1, 1, 51)
+    x = np.linspace(-5, 5, 51)
+    y = np.linspace(-10, 10, 51)
     t = np.arange(0, 10) * 3600.
     p = np.zeros((t.size, y.size, x.size), dtype=np.float)
 
