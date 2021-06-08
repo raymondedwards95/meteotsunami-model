@@ -46,33 +46,36 @@ def animation_contour(dataset, saveloc=None):
 
     x = x - x.min()
     wl_max = np.max([np.abs(wl.max()), np.abs(wl.min())])
+    wl_min = -1. * wl_max
     p_max = np.ceil(p.max())
     p_min = np.floor(p.min())
 
+    limits = [(wl_min, wl_max), (p_min, p_max)]
     cmaps = [cmo.cm.balance, cmo.cm.delta]
+
     ## Figure options
-    fig, ax = plt.subplots(1, 2, sharey=True)
+    fig, ax = plt.subplots(2, 1, sharey=True)
     fig.set_size_inches(14.4, 7.2)
     fig.set_dpi(100)
     fig.set_tight_layout(True)
 
     ## Initial data
     plotdata = np.zeros(2, dtype=np.object)
-    plottext = np.zeros(2, dtype=np.object)
+    plottext = np.zeros(1, dtype=np.object)
 
     def set_plotdata(i=0):
         plotdata[0] = ax[0].contourf(
-            x / 1000,
             y / 1000,
-            wl.isel(t=i),
+            x / 1000,
+            wl.isel(t=i).T,
             vmin=-1.*wl_max,
             vmax=wl_max,
             cmap=cmaps[0]
         )
         plotdata[1] = ax[1].contourf(
-            x / 1000,
             y / 1000,
-            p.isel(t=i),
+            x / 1000,
+            p.isel(t=i).T,
             vmin=p_min,
             vmax=p_max,
             cmap=cmaps[1]
@@ -80,10 +83,7 @@ def animation_contour(dataset, saveloc=None):
 
     def set_plottext(i=0):
         plottext[0] = ax[0].set_title(
-            f"Sea Surface Elevation  \n$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
-        )
-        plottext[1] = ax[1].set_title(
-            f"Surface Air Pressure  \n$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
+            f"$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
 
     set_plotdata()
@@ -94,11 +94,20 @@ def animation_contour(dataset, saveloc=None):
         for i in range(2):
             ax[i].axhline(color="black", linewidth=1)
             ax[i].axvline(color="black", linewidth=1)
-            ax[i].set_xlabel("$x$ [km]")
-            ax[i].set_xlim([0, 200])
-            ax[i].set_ylim([0, y.max() / 1000.])
+            ax[i].set_ylabel("$x$ [km]")
+            ax[i].set_ylim([0, 200])
+            ax[i].set_xlim([0, y.max() / 1000.])
 
-        ax[0].set_ylabel("$y$ [km]")
+            # colorbar
+            plotdata[i].set_clim(limits[i])
+            cbar = fig.colorbar(
+                plotdata[i],
+                ax=ax[i],
+                fraction=0.01,
+                aspect=50
+            )
+
+        ax[0].set_xlabel("$y$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
     initfig()
