@@ -47,8 +47,8 @@ def animation_contour(dataset, saveloc=None):
     x = x - x.min()
     wl_max = np.max([np.abs(wl.max()), np.abs(wl.min())])
     wl_min = -1. * wl_max
-    p_max = np.ceil(p.max())
-    p_min = np.floor(p.min())
+    p_max = np.max([p.max(), np.abs(p.min())])
+    p_min = -1. * p_max
 
     limits = [(wl_min, wl_max), (p_min, p_max)]
     cmaps = [cmo.cm.balance, cmo.cm.delta]
@@ -70,7 +70,8 @@ def animation_contour(dataset, saveloc=None):
             wl.isel(t=i).T,
             vmin=-1.*wl_max,
             vmax=wl_max,
-            cmap=cmaps[0]
+            cmap=cmaps[0],
+            levels=31
         )
         plotdata[1] = ax[1].contourf(
             y / 1000,
@@ -78,7 +79,8 @@ def animation_contour(dataset, saveloc=None):
             p.isel(t=i).T,
             vmin=p_min,
             vmax=p_max,
-            cmap=cmaps[1]
+            cmap=cmaps[1],
+            levels=31
         )
 
     def set_plottext(i=0):
