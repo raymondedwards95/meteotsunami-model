@@ -66,7 +66,7 @@ def animation_contour(dataset, saveloc=None):
             y / 1000,
             wl.isel(t=i),
             vmin=-1.*wl_max,
-            vmax=wl_max
+            vmax=wl_max,
             cmap=cmaps[0]
         )
         plotdata[1] = ax[1].contourf(
