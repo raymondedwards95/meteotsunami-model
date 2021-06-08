@@ -35,6 +35,7 @@ def animation_contour(dataset, saveloc=None):
         saveloc.replace(".mp4", "")
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + "/anim_contours.mp4"
+    savename_static = saveloc + "/test_anim_contours.jpg"
 
     ## Shortcuts
     x = dataset["x"]
@@ -133,6 +134,7 @@ def animation_contour(dataset, saveloc=None):
     )
     print(f"Creating animation '{savename}'")
     t0 = time.perf_counter()
+    plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter()
     print(f"Finished contour-animation in {t1-t0:0.1f} seconds")
@@ -157,6 +159,7 @@ def animation_alongshore(dataset, saveloc=None):
         saveloc.replace(".mp4", "")
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + "/anim_alongshore.mp4"
+    savename_static = saveloc + "/test_anim_alongshore.jpg"
 
     ## Shortcuts
     x = dataset["x"]
@@ -241,6 +244,7 @@ def animation_alongshore(dataset, saveloc=None):
     )
     print(f"Creating animation '{savename}'")
     t0 = time.perf_counter()
+    plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter()
     print(f"Finished alongshore-animation in {t1-t0:0.1f} seconds")
@@ -265,6 +269,7 @@ def animation_crossshore(dataset, saveloc=None):
         saveloc.replace(".mp4", "")
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + "/anim_crossshore.mp4"
+    savename_static = saveloc + "/test_anim_crossshore.jpg"
 
     ## Shortcuts
     x = dataset["x"]
@@ -346,6 +351,7 @@ def animation_crossshore(dataset, saveloc=None):
     )
     print(f"Creating animation '{savename}'")
     t0 = time.perf_counter()
+    plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter()
     print(f"Finished crossshore-animation in {t1-t0:0.1f} seconds")
