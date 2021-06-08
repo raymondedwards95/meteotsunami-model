@@ -10,9 +10,14 @@ An other goal is to investigate the effects of the different model parameters on
 Scripts are used to create certain fields:
 * `create_bathymetry.py` creates `.xyb` files in `bathymetry/` that contain the bathymetry;
 * `create_pressure.py` sets up a space and time varying pressure field in `pressure/*.amp` and also creates corresponding `forcing*.ext` files to activate the pressure fields in the model;
-* `create_grid.py` creates a grid in `grid/*.nc` using macros in `Delta Shell` (note that `Delta Shell` should be used to run this file). Furthermore it also creates observation points and observation cross sections in the files `obs/*.xyn` and `obs/*_crs.pli`.
+* `create_grid.py` creates a grid in `grid/*.nc` using macros in `Delta Shell` (note that `Delta Shell` should be used to run this file); 
+* `create_observations.py` creates observation points and observation cross sections in the files `obs/*.xyn` and `obs/*_crs.pli`.
 
 The `input*.mdu` are the main files that contain all parameters for simulations. They also specify what additional files are used, like bathymetry, pressure and grid.
+
+Two scripts are used to visualize data:
+* `create_visualisations.py` creates figures and animations for each case separately;
+* `create_comparison.py` is used to compare two or more simulations.
 
 
 ### Running experiments
@@ -51,4 +56,4 @@ All different cases are numbered.
 ||||
 | 20 | Set `dx` and `dy` from `10` to `20` km | Spatial resolution of model |
 | 21 | Set `dx` and `dy` from `10` to `40` km | See 20 |
-| 22 | Set `dx` and `dy` from `10` to `5` km | See 20 (not included in `run_all.sh`) |
+| 22 | Set `dx` and `dy` from `10` to `5` km | See 20; *not included in `run_all.sh`* |
