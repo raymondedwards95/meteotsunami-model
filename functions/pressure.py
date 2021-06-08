@@ -150,7 +150,7 @@ def plot_pressure(data, filename=None, x_scales=None):
     t = data.t.values
     p = data.values
 
-    p_max = np.max([p.max(), np.abs(p.min())])  # note: limits work only if p is positive everywhere
+    p_max = np.max([p.max(), np.abs(p.min())])
     p_min = -1. * p_max
 
     if x_scales is None:
