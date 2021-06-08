@@ -2,6 +2,7 @@
 
 import os
 
+import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
@@ -104,6 +105,9 @@ def plot_bathymetry(data, filename=None):
     y = data.y.values
     b = data.values
 
+    b_max = np.max(np.abs([b.min(), b.max()]))
+    b_min = -1. * b_max
+
     i = y.size // 2
 
     ## figure 1 - cross-section
@@ -114,7 +118,7 @@ def plot_bathymetry(data, filename=None):
 
     ## figure 2 - map
     plt.figure()
-    plt.contourf(x, y, b)
+    plt.contourf(x, y, b, levels=31, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
     plt.colorbar()
     plt.axhline(y[i], color="gray")
     plt.title(f"Bottom contours")
