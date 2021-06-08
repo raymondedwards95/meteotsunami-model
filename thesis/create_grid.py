@@ -20,11 +20,11 @@ case = [0]
 num_cases = len(case)
 
 x_min = 0
-x_max = 1e6
-x_step = 1e4
+x_max = 1e5
+x_step = 1e3
 
-y_min = -1e7
-y_max = +1e7
+y_min = -1e6
+y_max = +1e6
 y_step = x_step
 
 x_length = x_max - x_min
@@ -36,7 +36,6 @@ y_num = int(y_length / y_step) + 1
 
 ## Write to file
 for i in range(num_cases):
-
     net_file_path = grid_dir + "/exp_{:02.0f}_net.nc".format(float(case[i]))
 
     model = FFMF.WaterFlowFMModel()
