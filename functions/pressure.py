@@ -174,11 +174,11 @@ def plot_pressure(data, filename=None, x_scales=None):
             cmap=cmo.cm.curl
         )
         ax[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
-        ax[i].set_xlabel("$x$ [km]")
         ax[i].set_xlim(x_scales)  # make it automatic?
     
+    ax[t_num // 2].set_xlabel("$x$ [km]")
     ax[0].set_ylabel("$y$ [km]")
-    fig.colorbar(im[-2], ax=ax[-1])
+    fig.colorbar(im[-2], ax=ax[-1])  # need to put on new ax?
     plt.savefig(f"{filename}_field", bbox_inches="tight")
 
 
