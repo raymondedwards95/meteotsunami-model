@@ -66,11 +66,11 @@ os.makedirs(pressure_dir, exist_ok=True)
 
 
 ### Function
-def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000.):
+def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
     return (
         p0
         * (1. - np.exp(-t / t0))
-        * np.exp(-(x**2. + (y - U * t)**2.) / a**2.)
+        * np.exp(-((x - x0)**2. + (y - U * t)**2.) / a**2.)
     )
 
 
