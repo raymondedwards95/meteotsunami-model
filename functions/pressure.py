@@ -154,7 +154,7 @@ def plot_pressure(data, filename=None, x_scales=None):
     p_min = -1. * p_max
 
     if x_scales is None:
-        x_scales = [x.min(), x.max()]
+        x_scales = [x.min() / 1000., x.max() / 1000.]
 
     ## figure
     t_num = 5
