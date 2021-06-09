@@ -5,4 +5,5 @@ python3 ./create_bathymetry.py &
 python3 ./create_observations.py &
 python3 ./create_pressure.py &
 
+wait
 exit 0
