@@ -13,38 +13,40 @@ import functions.pressure as fp
 
 ### Parameters
 # generic
-cases = [0]
+cases = [0, 1]
 num_cases = len(cases)
 
 # pressure distribution
-t0 = 10000.  # default: 10000 s
-U_list = [50.]  # default: 50 m/s
-a_list = [200000.]  # default: 200 km
-p0_list = [2000.]  # default: 2000 Pa
+t0 = 10000.
+U_list = [50.] * 2
+a_list = [20000.] * 2
+p0_list = [2000] * 2 
+x0_list = [0., 5e4]
 
 # cross shore (meters)
-x_min = 0.  # default: 0 km
-x_max = 1e6  # default: 1000 km
-x_step = 10e3  # default: 10 km
+x_min = 0.  
+x_max = 1e5
+x_step = 10e3  
 
 # along shore (meters)
-y_min = -1e7  # default: -10000 km
-y_max = 1e7  # default: 10000 km
-y_step = x_step  # default: 10 km
+y_min = -1e6
+y_max = 1e6
+y_step = x_step  
 
 # time (seconds)
-t_min = 0  # default: 0
-t_max = 70 * 3600.  # default: 70 hours
-t_step = 3600. / 4.  # default: 1 hour
+t_min = 0
+t_max = 70 * 3600.  
+t_step = 3600. / 4.  
 
 # check parameters
 assert len(U_list) == num_cases
 assert len(a_list) == num_cases
 assert len(p0_list) == num_cases
+assert len(x0_list) == num_cases
 
-print("\nPressure fields for the following cases are computed (case, U, a, p0)")
+print("\nPressure fields for the following cases are computed (case, U, a, p0, x0)")
 for i in range(num_cases):
-    print(cases[i], U_list[i], a_list[i], p0_list[i])
+    print(cases[i], U_list[i], a_list[i], p0_list[i], x0_list[i])
 
 
 ### Grid
@@ -80,6 +82,7 @@ for case_number in range(num_cases):
     U = U_list[case_number]
     a = a_list[case_number]
     p0 = p0_list[case_number]
+    x0 = x0_list[case_number]
 
     filename = f"{pressure_dir}/exp_{case:02.0f}"
     figurename = f"{pressure_dir}/fig_exp_{case:02.0f}"
@@ -94,7 +97,7 @@ for case_number in range(num_cases):
     #         for k in range(x.size):
     #             p[i,j,k] = pressure(x[k], y[j], t[i], t0, U, a, p0)
 
-    p = pressure(xx, yy, tt, t0, U, a, p0)
+    p = pressure(xx, yy, tt, t0, U, a, p0, x0)
 
     # remove zero-columns and zero-rows
     ix = np.where(~ np.all(np.isclose(p, 0), axis=(0, 1)))[0]
