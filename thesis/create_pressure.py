@@ -126,3 +126,4 @@ for case_number in range(num_cases):
 
 
 # plt.show()
+print("Finished creating pressure-files")
