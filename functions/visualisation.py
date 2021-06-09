@@ -45,9 +45,9 @@ def animation_contour(dataset, saveloc=None):
     p = dataset["p"]
 
     x = x - x.min()
-    wl_max = np.max([np.abs(wl.max()), np.abs(wl.min())])
+    wl_max = np.max([np.abs([wl.max(), wl.min()])])
     wl_min = -1. * wl_max
-    p_max = np.max([p.max(), np.abs(p.min())])
+    p_max = np.max([np.abs([p.max(), p.min()])])
     p_min = -1. * p_max
 
     limits = [(wl_min, wl_max), (p_min, p_max)]
@@ -68,7 +68,7 @@ def animation_contour(dataset, saveloc=None):
             y / 1000,
             x / 1000,
             wl.isel(t=i).T,
-            vmin=-1.*wl_max,
+            vmin=wl_min,
             vmax=wl_max,
             cmap=cmaps[0],
             levels=31
@@ -180,9 +180,10 @@ def animation_alongshore(dataset, saveloc=None):
     p = dataset["p"]
 
     x = x - x.min()
-    wl_max = np.max([np.abs(wl.max()), np.abs(wl.min())])
-    p_max = np.ceil(p.max())
-    p_min = np.floor(p.min())
+    wl_max = np.max([np.abs([wl.max(), wl.min()])])
+    wl_min = -1. * wl_max
+    p_max = np.max([np.abs([p.max(), p.min()])])
+    p_min = -1. * p_max
 
     ## Figure options
     fig, ax = plt.subplots(2, 1, sharex=True)
@@ -221,7 +222,7 @@ def animation_alongshore(dataset, saveloc=None):
             ax[i].axvline(color="black", linewidth=1)
             ax[i].set_xlim([y.min() / 1000. / 10., y.max() / 1000.])
         
-        ax[0].set_ylim([-1. * wl_max, wl_max])
+        ax[0].set_ylim([wl_min, wl_max])
         ax[1].set_ylim([p_min, p_max])
         ax[1].set_xlabel("$y$ [km]")
         ax[0].set_ylabel("Sea Surface Elevation [m]")
@@ -287,10 +288,10 @@ def animation_crossshore(dataset, saveloc=None):
     y = dataset["y"]
     t = dataset["t"]
     wl = dataset["wl"]
-    p = dataset["p"]
 
     x = x - x.min()
-    wl_max = np.max([np.abs(wl.max()), np.abs(wl.min())])
+    wl_max = np.max([np.abs([wl.max(), wl.min()])])
+    wl_min = -1. * wl_max
     y_max = y.max().values
 
     ## Figure options
@@ -329,7 +330,7 @@ def animation_crossshore(dataset, saveloc=None):
             ax[i].axvline(color="black", linewidth=1)
             ax[i].set_xlim([0, 200])
             ax[i].set_ylabel("SSE [m]")
-            ax[i].set_ylim([-1. * wl_max, wl_max])
+            ax[i].set_ylim([wl_min, wl_max])
             ax[i].legend()
             
         ax[-1].set_xlabel("$x$ [km]")
