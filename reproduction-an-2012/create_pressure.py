@@ -81,9 +81,9 @@ for case_number in range(num_cases):
     y_num = int((y_max - y_min) / y_step + 1)
 
     print(f"\nComputing pressure field for case {case} ({x_step}, {y_step}, {t_step})")
-    x = np.linspace(x_min, x_max, x_num, dtype=np.float)
-    y = np.linspace(y_min, y_max, y_num, dtype=np.float)
-    t = np.arange(t_min, t_max+1, t_step, dtype=np.float)
+    x = np.linspace(x_min, x_max, x_num)
+    y = np.linspace(y_min, y_max, y_num)
+    t = np.arange(t_min, t_max+1, t_step)
 
     # loop over all t, y and x
     # p = np.zeros((t.size, y.size, x.size))

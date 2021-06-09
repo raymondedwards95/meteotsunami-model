@@ -51,9 +51,9 @@ for i in range(num_cases):
 x_num = int((x_max - x_min) / x_step + 1)
 y_num = int((y_max - y_min) / y_step + 1)
 
-x = np.linspace(x_min, x_max, x_num, dtype=np.float)
-y = np.linspace(y_min, y_max, y_num, dtype=np.float)
-t = np.arange(t_min, t_max+1, t_step, dtype=np.float)
+x = np.linspace(x_min, x_max, x_num)
+y = np.linspace(y_min, y_max, y_num)
+t = np.arange(t_min, t_max+1, t_step)
 
 tt, yy, xx = np.meshgrid(t, y, x, indexing="ij")
 
