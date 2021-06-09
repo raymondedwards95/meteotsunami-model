@@ -112,22 +112,27 @@ def plot_bathymetry(data, filename=None, xmax=None):
 
     if xmax is None:
         xmax = x.max()
+    xmax /= 1000
 
     ## figure 1 - cross-section
     plt.figure()
-    plt.plot(x, b[i, :])
-    plt.title(f"Bottom cross-section at $y={y[i]}$")
+    plt.plot(x / 1000., b[i, :])
+    plt.title(f"Bottom Profile Cross-Section at $y={y[i]}$")
     plt.xlim(0, xmax)
-    plt.savefig(f"{filename}_cross")
+    plt.xlabel("$x$ [km]")
+    plt.ylabel("Bed Level [m]")
+    plt.savefig(f"{filename}_cross", bbox_inches="tight")
 
     ## figure 2 - map
     plt.figure()
-    plt.contourf(x, y, b, levels=31, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
+    plt.contourf(x / 1000., y / 1000., b, levels=31, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
     plt.colorbar()
     plt.axhline(y[i], color="gray")
-    plt.title(f"Bottom contours")
+    plt.title(f"Bottom Profile")
     plt.xlim(0, xmax)
-    plt.savefig(f"{filename}_contour")
+    plt.xlabel("$x$ [km]")
+    plt.ylabel("$y$ [km]")
+    plt.savefig(f"{filename}_contour", bbox_inches="tight")
 
     return
 
