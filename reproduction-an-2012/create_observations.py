@@ -46,3 +46,4 @@ for i in range(5):
     )
 
 fo.write_observations(obs, filename=f"{obs_dir}/repr_00")
+print("Finished creating observation-files")
