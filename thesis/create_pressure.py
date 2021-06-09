@@ -18,7 +18,7 @@ num_cases = len(cases)
 
 # pressure distribution
 t0 = 10000.
-U_list = [50.] * 2
+U_list = [3.] * 2
 a_list = [20000.] * 2
 p0_list = [2000] * 2 
 x0_list = [0., 5e4]
