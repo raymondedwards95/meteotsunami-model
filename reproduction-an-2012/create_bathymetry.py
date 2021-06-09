@@ -42,3 +42,4 @@ fb.write_bathymetry(data, filename)
 fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_repr_00")
 
 # plt.show()
+print("Finished creating bathymetry-files")
