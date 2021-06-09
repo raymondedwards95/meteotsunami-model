@@ -99,14 +99,14 @@ for case_number in range(num_cases):
     # remove zero-columns and zero-rows
     ix = np.where(~ np.all(np.isclose(p, 0), axis=(0, 1)))[0]
     iy = np.where(~ np.all(np.isclose(p, 0), axis=(0, 2)))[0]
-    x = x[ix]
-    y = y[iy]
+    _x = x[ix]
+    _y = y[iy]
     p = p[:, :, ix][:, iy, :]
 
     ### Write field
     print(f"Writing pressure field for case {case}")
-    data = fp.convert_to_xarray(t, x, y, p)
-    del t, x, y, p
+    data = fp.convert_to_xarray(t, _x, _y, p)
+    del _x, _y, p
     fp.write_pressure(data, filename)
 
     ### Write forcing file
@@ -122,7 +122,7 @@ for case_number in range(num_cases):
 
     ### Visualise field
     print(f"Plotting pressure field for case {case}")
-    fp.plot_pressure(data, filename=figurename, x_scales=[0, 500])
+    fp.plot_pressure(data, filename=figurename)
 
 
 # plt.show()
