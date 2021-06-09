@@ -24,10 +24,10 @@ filename = f"{bathymetry_dir}/exp_00.xyb"
 
 
 ###
-x = np.linspace(0, 1e6, 51)
-y = np.linspace(-1e7, 1e7, 5)
+x = np.concatenate(([0], np.logspace(0, 5, 51)))
+y = np.linspace(-1e6, 1e6, 5)
 xx, yy = np.meshgrid(x, y)
-zz = exponential_shelf(xx)
+zz = exponential_shelf(xx, a=5e-4)
 
 
 ###
@@ -36,7 +36,7 @@ fb.write_bathymetry(data, filename)
 
 
 ###
-fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_exp_00")
+fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_exp_00", xmax=x.max()/5.)
 
 # plt.show()
 print("Finished creating bathymetry-files")

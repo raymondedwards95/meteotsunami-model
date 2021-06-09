@@ -83,7 +83,7 @@ def write_bathymetry(data, filename=None):
     print(f"Finished writing to '{filename}'")
 
 
-def plot_bathymetry(data, filename=None):
+def plot_bathymetry(data, filename=None, xmax=None):
     """ Function to visualize bathymetry data
     
     Input:
@@ -110,10 +110,14 @@ def plot_bathymetry(data, filename=None):
 
     i = y.size // 2
 
+    if xmax is None:
+        xmax = x.max()
+
     ## figure 1 - cross-section
     plt.figure()
     plt.plot(x, b[i, :])
     plt.title(f"Bottom cross-section at $y={y[i]}$")
+    plt.xlim(0, xmax)
     plt.savefig(f"{filename}_cross")
 
     ## figure 2 - map
@@ -122,6 +126,7 @@ def plot_bathymetry(data, filename=None):
     plt.colorbar()
     plt.axhline(y[i], color="gray")
     plt.title(f"Bottom contours")
+    plt.xlim(0, xmax)
     plt.savefig(f"{filename}_contour")
 
     return
