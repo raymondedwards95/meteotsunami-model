@@ -179,7 +179,7 @@ def plot_pressure(data, filename=None, x_scales=None):
     
     ax[0].set_ylabel("$y$ [km]")
     fig.colorbar(im[-2], ax=ax[-1])
-    plt.savefig(f"{filename}_field.jpg")
+    plt.savefig(f"{filename}_field", bbox_inches="tight")
 
 
 if __name__ == "__main__":

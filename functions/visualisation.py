@@ -35,7 +35,7 @@ def animation_contour(dataset, saveloc=None):
         saveloc.replace(".mp4", "")
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + "/anim_contours.mp4"
-    savename_static = saveloc + "/test_anim_contours.jpg"
+    savename_static = saveloc + "/test_anim_contours"
 
     ## Shortcuts
     x = dataset["x"]
@@ -170,7 +170,7 @@ def animation_alongshore(dataset, saveloc=None):
         saveloc.replace(".mp4", "")
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + "/anim_alongshore.mp4"
-    savename_static = saveloc + "/test_anim_alongshore.jpg"
+    savename_static = saveloc + "/test_anim_alongshore"
 
     ## Shortcuts
     x = dataset["x"]
@@ -281,7 +281,7 @@ def animation_crossshore(dataset, saveloc=None):
         saveloc.replace(".mp4", "")
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + "/anim_crossshore.mp4"
-    savename_static = saveloc + "/test_anim_crossshore.jpg"
+    savename_static = saveloc + "/test_anim_crossshore"
 
     ## Shortcuts
     x = dataset["x"]

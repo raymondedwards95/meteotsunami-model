@@ -48,7 +48,7 @@ figure_dir = file_dir + "/figures/"
 ### Defining Visualisations
 def vis_alongshore(data_list, title, cases, savename):
     ## Parameters
-    savename = savename.replace(".jpg", "") + "/along.jpg"
+    savename = savename.replace(".jpg", "") + "/along"
     _ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
     _times = [4e4, 8e4, 12e4, 16e4]
 
@@ -90,7 +90,7 @@ def vis_alongshore(data_list, title, cases, savename):
     
 def vis_alongshore_diff(data_list, title, cases, savename):
     ## Parameters
-    savename = savename.replace(".jpg", "") + "/along_diff.jpg"
+    savename = savename.replace(".jpg", "") + "/along_diff"
     _ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
     _times = [4e4, 8e4, 12e4, 16e4]
 
@@ -135,7 +135,7 @@ def vis_alongshore_diff(data_list, title, cases, savename):
 
 def vis_crossshore(data_list, title, cases, savename):
     ## Parameters
-    savename = savename.replace(".jpg", "") + "/cross.jpg"
+    savename = savename.replace(".jpg", "") + "/cross"
     _yslices = np.array([7.56]) * 1e6
     _tslice = 1.6e5
 
@@ -195,7 +195,7 @@ def vis_crossshore(data_list, title, cases, savename):
 
 def vis_crossshore_diff(data_list, title, cases, savename):
     ## Parameters
-    savename = savename.replace(".jpg", "") + "/cross_diff.jpg"
+    savename = savename.replace(".jpg", "") + "/cross_diff"
     _yslices = np.array([7.56]) * 1e6
     _tslice = 1.6e5
 
