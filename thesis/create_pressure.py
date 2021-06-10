@@ -30,7 +30,7 @@ x_step = 10e3
 
 # along shore (meters)
 y_min = -1e6
-y_max = 1e6
+y_max = +2e6
 y_step = x_step  
 
 # time (seconds)

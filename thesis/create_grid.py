@@ -24,7 +24,7 @@ x_max = 1e5
 x_step = 1e3
 
 y_min = -1e6
-y_max = +1e6
+y_max = +2e6
 y_step = x_step
 
 x_length = x_max - x_min

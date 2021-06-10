@@ -13,7 +13,7 @@ x_min = 0
 x_max = 1e5
 
 y_min = -1e6
-y_max = +1e6
+y_max = +2e6
 
 obs_dir = f"{os.path.dirname(os.path.realpath(__file__))}/obs"
 os.makedirs(obs_dir, exist_ok=True)
