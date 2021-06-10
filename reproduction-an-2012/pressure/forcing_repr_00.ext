@@ -55,7 +55,7 @@
 **************************************************************************************************************
 * Meteo forcing
 QUANTITY = atmosphericpressure
-FILENAME = pressure/repr_00.amp
+FILENAME = repr_00.amp
 FILETYPE = 4
 METHOD   = 1
 OPERAND  = O
