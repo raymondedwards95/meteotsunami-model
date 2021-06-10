@@ -1,6 +1,6 @@
 * Meteo forcing 
 QUANTITY = atmosphericpressure 
-FILENAME = pressure/exp_00.amp 
+FILENAME = exp_12.amp 
 FILETYPE = 4 
 METHOD   = 1 
 OPERAND  = O 

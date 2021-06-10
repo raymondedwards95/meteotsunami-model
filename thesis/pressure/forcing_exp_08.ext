@@ -1,0 +1,6 @@
+* Meteo forcing 
+QUANTITY = atmosphericpressure 
+FILENAME = exp_08.amp 
+FILETYPE = 4 
+METHOD   = 1 
+OPERAND  = O 
