@@ -113,10 +113,10 @@ for case_number in range(num_cases):
     ### Write forcing file
     if case != 0:
         print(f"Overwriting forcing file for case {case}")
-        with open(f"{current_dir}/forcing_repr_{case:02.0f}.ext", "w") as file:
+        with open(f"{current_dir}/pressure/forcing_repr_{case:02.0f}.ext", "w") as file:
             file.write("* Meteo forcing \n")
             file.write("QUANTITY = atmosphericpressure \n")
-            file.write(f"FILENAME = pressure/repr_{case:02.0f}.amp \n")
+            file.write(f"FILENAME = repr_{case:02.0f}.amp \n")
             file.write("FILETYPE = 4 \n")
             file.write("METHOD   = 1 \n")
             file.write("OPERAND  = O \n")
