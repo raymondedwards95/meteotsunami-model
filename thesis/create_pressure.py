@@ -13,15 +13,15 @@ import functions.pressure as fp
 
 ### Parameters
 # generic
-cases = [0, 1]
-num_cases = len(cases)
+# cases = [0, 1]
+# num_cases = len(cases)
 
 # pressure distribution
 t0 = 10000.
-U_list = [3.] * 2
-a_list = [20000.] * 2
-p0_list = [2000] * 2 
-x0_list = [0., 5e4]
+U_list = np.array([5, 15, 25])
+a_list = np.array([10000, 20000, 30000])
+p0_list = np.array([2000])
+x0_list = np.array([0, 5e4])
 
 # cross shore (meters)
 x_min = 0.  
@@ -37,6 +37,16 @@ y_step = x_step
 t_min = 0
 t_max = 70 * 3600.  
 t_step = 3600. / 4.  
+
+## Convert parameters
+U_list, a_list, p0_list, x0_list = np.meshgrid(U_list, a_list, p0_list, x0_list)
+U_list = np.ravel(U_list)
+a_list = np.ravel(a_list)
+p0_list = np.ravel(p0_list)
+x0_list = np.ravel(x0_list)
+
+cases = np.arange(len(U_list))
+num_cases = len(cases)
 
 # check parameters
 assert len(U_list) == num_cases
