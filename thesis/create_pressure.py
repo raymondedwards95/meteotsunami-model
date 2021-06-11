@@ -42,11 +42,11 @@ y_step = x_step
 
 # time (seconds)
 t_min = 0
-t_max = 70 * 3600.  
-t_step = 3600. / 4.  
+t_max = 96. * 3600.  
+t_step = 3600. / 6.  
 
 ## Convert parameters
-U_list, a_list, p0_list, x0_list = np.meshgrid(U_list, a_list, p0_list, x0_list)
+U_list, a_list, p0_list, x0_list = np.meshgrid(U_list, a_list, p0_list, x0_list, indexing="ij")
 U_list = np.ravel(U_list)
 a_list = np.ravel(a_list)
 p0_list = np.ravel(p0_list)
