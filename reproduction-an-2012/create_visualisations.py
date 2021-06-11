@@ -18,8 +18,8 @@ from matplotlib.animation import FuncAnimation
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.regrid as fr
-import functions.visualisation as fv
 import functions.utilities as fu
+import functions.visualisation as fv
 
 
 ### Parameters

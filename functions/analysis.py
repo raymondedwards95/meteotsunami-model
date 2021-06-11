@@ -10,6 +10,7 @@ from scipy.optimize import curve_fit
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+import functions.utilities as fu
 import functions.visualisation as fv
 
 
@@ -21,7 +22,7 @@ def compute_decay_parameter(data, y, t):
     popt, _ = curve_fit(
         exp_decay,  # f
         data["x"],  # xdata
-        data["wl"].interp(t=fv.to_timestr(t), y=y),  # ydata
+        data["wl"].interp(t=fu.to_timestr(t), y=y),  # ydata
         p0=[1./100000., 1.],  # p0
         bounds=(0., [10., 10.])  # bounds (min, max)
     )
