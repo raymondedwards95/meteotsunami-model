@@ -1,8 +1,6 @@
 """ Functions for visualising model outputs """
 
-import datetime
 import os
-import sys
 import time
 
 import cmocean as cmo

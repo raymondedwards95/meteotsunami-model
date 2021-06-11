@@ -17,9 +17,9 @@ from matplotlib.animation import FuncAnimation
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+import functions.animation as anim
 import functions.regrid as fr
 import functions.utilities as fu
-import functions.visualisation as fv
 
 
 ### Parameters
@@ -272,8 +272,8 @@ plt.savefig(figure_dir + "sse_along_2.jpg", bbox_inches="tight")
 
 ### Animation
 if make_ani:
-    fv.animation_alongshore(data, saveloc=figure_dir)
-    fv.animation_contour(data, saveloc=figure_dir)
+    anim.animation_alongshore(data, saveloc=figure_dir)
+    anim.animation_contour(data, saveloc=figure_dir)
 else:
     print("\nNot creating animations")
 
