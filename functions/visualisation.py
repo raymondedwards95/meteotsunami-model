@@ -12,12 +12,6 @@ import xarray as xr
 from matplotlib.animation import FuncAnimation
 
 
-@np.vectorize
-def to_timestr(seconds):
-    """ Converts time in seconds since reference to a date-string """
-    return datetime.datetime.fromtimestamp(seconds).strftime("%Y-%m-%d %H:%M:%S")
-
-
 def animation_contour(dataset, saveloc=None):
     """ Creates an animation of the top-down view of the water level and surface air pressure data
 

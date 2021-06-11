@@ -19,6 +19,7 @@ from matplotlib.animation import FuncAnimation
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.regrid as fr
 import functions.visualisation as fv
+import functions.utilities as fu
 
 
 ### Parameters
@@ -145,7 +146,7 @@ fig.set_tight_layout(True)
 
 for i in range(4):
     _ax = ax[i//2, i%2]
-    im = _ax.contourf(x/1000, y/1000, p.interp(t=fv.to_timestr(plot_times[i])), vmin=0, vmax=2000)
+    im = _ax.contourf(x/1000, y/1000, p.interp(t=fu.to_timestr(plot_times[i])), vmin=0, vmax=2000)
     _ax.set_xlim([0, 300])
     _ax.set_ylim([0, y.max()/1000])
     _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
@@ -174,7 +175,7 @@ fig.set_dpi(150)
 fig.suptitle("Sea Surface Elevation [m]")
 for i in range(4):
     _ax = ax[i//2, i%2]
-    im = _ax.contourf(x/1000, y/1000, wl.interp(t=fv.to_timestr(plot_times[i])), vmin=-0.8, vmax=0.8)
+    im = _ax.contourf(x/1000, y/1000, wl.interp(t=fu.to_timestr(plot_times[i])), vmin=-0.8, vmax=0.8)
     _ax.set_xlim([0, 300])
     _ax.set_ylim([0, y.max()/1000])
     _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
@@ -204,7 +205,7 @@ fig.set_dpi(150)
 fig.suptitle("Along-shore profile of Sea Surface Elevation [m]")
 for i in range(4):
     _ax = ax[i//2, i%2]
-    im = _ax.plot(y/1000, wl.interp(t=fv.to_timestr(plot_times[i]), x=10e3))
+    im = _ax.plot(y/1000, wl.interp(t=fu.to_timestr(plot_times[i]), x=10e3))
     _ax.set_xlim(plot_ylims[i])
     _ax.set_ylim([-0.65, 0.65])
     _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
@@ -226,7 +227,7 @@ y_slices = np.array([7.56]) * 1e6
 
 plt.figure(figsize=(5, 5), dpi=150)
 for i in range(len(y_slices)):
-    plt.plot(x/1000, wl.interp(t=fv.to_timestr(1.6e5), y=y_slices[i]), label=f"$y={y_slices[i]/1000 : 0.0f}$ km")
+    plt.plot(x/1000, wl.interp(t=fu.to_timestr(1.6e5), y=y_slices[i]), label=f"$y={y_slices[i]/1000 : 0.0f}$ km")
 plt.legend()
 plt.axhline(color="black", linewidth=1)
 plt.axvline(color="black", linewidth=1)
@@ -254,7 +255,7 @@ plt.title("Along-shore profile of Sea Surface Elevation [m]")
 for i in range(len(x_slices)):
     plt.plot(
         y/1000, 
-        wl.interp(t=fv.to_timestr(1.6e5), x=x_slices[i]), 
+        wl.interp(t=fu.to_timestr(1.6e5), x=x_slices[i]), 
         label=f"$x={x_slices[i]/1000 : 0.0f}$ km",
         linestyle=linestyles[i]
     )

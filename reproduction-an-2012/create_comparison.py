@@ -15,6 +15,7 @@ import sys
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.analysis as fa
+import functions.utilities as fu
 import functions.visualisation as fv
 
 
@@ -75,7 +76,7 @@ def vis_alongshore(data_list, title, cases, savename):
             data = data_list[j]
             _ax.plot(
                 data["y"]/1000.,
-                data["wl"].interp(t=fv.to_timestr(_times[i]), x=10e3),
+                data["wl"].interp(t=fu.to_timestr(_times[i]), x=10e3),
                 color=f"C{j}",
                 label=f"Case {cases[j]:02.0f}"
             )
@@ -113,14 +114,14 @@ def vis_alongshore_diff(data_list, title, cases, savename):
         if i//2: _ax.set_xlabel("$y$ [km]")
         if not i%2: _ax.set_ylabel("$\\Delta SSE$ [m]")
 
-        reference = data_list[0]["wl"].interp(t=fv.to_timestr(_times[i]), x=10e3)
+        reference = data_list[0]["wl"].interp(t=fu.to_timestr(_times[i]), x=10e3)
 
         for _j in range(len(data_list) - 1):
             j = _j + 1
             data = data_list[j]
             _ax.plot(
                 data["y"]/1000.,
-                data["wl"].interp(t=fv.to_timestr(_times[i]), x=10e3) - reference,
+                data["wl"].interp(t=fu.to_timestr(_times[i]), x=10e3) - reference,
                 color=f"C{j}",
                 label=f"Case {cases[j]:02.0f}"
             )
@@ -172,7 +173,7 @@ def vis_crossshore(data_list, title, cases, savename):
             # Plot data
             plt.plot(
                 data["x"] / 1000.,
-                data["wl"].interp(t=fv.to_timestr(_tslice), y=_yslices[i]),
+                data["wl"].interp(t=fu.to_timestr(_tslice), y=_yslices[i]),
                 color=f"C{j}",
                 label=f"Case {cases[j]:02.0f}"
             )
@@ -221,7 +222,7 @@ def vis_crossshore_diff(data_list, title, cases, savename):
         _ax.set_ylabel("$\\Delta SSE$ [m]")
         if i == ax.size: _ax.set_xlabel("x [km]")
 
-        reference = data_list[0]["wl"].interp(t=fv.to_timestr(_tslice), y=_yslices[i])
+        reference = data_list[0]["wl"].interp(t=fu.to_timestr(_tslice), y=_yslices[i])
 
         for _j in range(len(data_list) - 1):
             j = _j + 1
@@ -230,7 +231,7 @@ def vis_crossshore_diff(data_list, title, cases, savename):
             # Plot data
             plt.plot(
                 data["x"] / 1000.,
-                data["wl"].interp(t=fv.to_timestr(_tslice), y=_yslices[i]) - reference,
+                data["wl"].interp(t=fu.to_timestr(_tslice), y=_yslices[i]) - reference,
                 color=f"C{j}",
                 label=f"Case {cases[j]:02.0f}"
             )
