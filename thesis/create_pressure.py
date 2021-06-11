@@ -28,7 +28,7 @@ t0 = 10000.
 U_list = np.array([5, 15, 25])
 a_list = np.array([10000, 20000, 30000])
 p0_list = np.array([2000])
-x0_list = np.array([0, 5e4])
+x0_list = np.array([0, 50000])
 
 # cross shore (meters)
 x_min = 0.  
@@ -103,7 +103,7 @@ for case_number in range(num_cases):
     figurename = f"{pressure_dir}/fig_exp_{case:02.0f}"
 
     print(
-        f"\nComputing pressure field for case {case} (U={U}, a={a}, p0={p0})")
+        f"\nComputing pressure field for {case=} ({U=}, {a=}, {p0=}, {x0=})")
 
     # loop over all t, y and x
     # p = np.zeros((t.size, y.size, x.size))
