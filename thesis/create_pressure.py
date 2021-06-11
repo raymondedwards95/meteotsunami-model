@@ -11,6 +11,13 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.pressure as fp
 
 
+### Directories
+current_dir = os.path.dirname(os.path.realpath(__file__))
+pressure_dir = f"{current_dir}/pressure"
+
+os.makedirs(pressure_dir, exist_ok=True)
+
+
 ### Parameters
 # generic
 # cases = [0, 1]
@@ -55,8 +62,13 @@ assert len(p0_list) == num_cases
 assert len(x0_list) == num_cases
 
 print("\nPressure fields for the following cases are computed (case, U, a, p0, x0)")
-for i in range(num_cases):
-    print(cases[i], U_list[i], a_list[i], p0_list[i], x0_list[i])
+with open(f"{current_dir}/parameters_pressure.txt", "w") as file:
+    for i in range(num_cases):
+        line = f"{cases[i]},{U_list[i]},{a_list[i]},{p0_list[i]},{x0_list[i]}"
+        print(line.replace(",", "\t"))
+        file.write(line + "\n")
+    
+    del line, i
 
 
 ### Grid
@@ -68,13 +80,6 @@ y = np.linspace(y_min, y_max, y_num)
 t = np.arange(t_min, t_max+1, t_step)
 
 tt, yy, xx = np.meshgrid(t, y, x, indexing="ij")
-
-
-### Directories
-current_dir = os.path.dirname(os.path.realpath(__file__))
-pressure_dir = f"{current_dir}/pressure"
-
-os.makedirs(pressure_dir, exist_ok=True)
 
 
 ### Function
