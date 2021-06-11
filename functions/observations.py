@@ -38,7 +38,7 @@ def write_observations(data: list, filename: str=None):
     print("\nWriting observation points and cross-sections")
 
     if filename is None:
-        filename = os.path.dirname(os.path.realpath(__file__)) + "/observations"
+        filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/observations"
     if filename.endswith(".xyn"):
         filename.replace(".xyn", "")
     if filename.endswith("_crs.pli"):
