@@ -140,7 +140,7 @@ def plot_pressure(data, filename=None, x_scales=None):
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
     if filename is None:
-        filename = os.path.dirname(os.path.realpath(__file__)) + "/fig_pressure"
+        filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/fig_pressure"
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
     print(f"\nVisualizing pressure field in '{filename}'")
