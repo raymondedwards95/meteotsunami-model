@@ -11,7 +11,6 @@ from scipy.optimize import curve_fit
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.utilities as fu
-import functions.visualisation as fv
 
 
 def exp_decay(x, k0, y0):
@@ -50,6 +49,20 @@ def _test_compute_decay_parameter(showfig=True):
     plt.xlabel("$x$")
     plt.ylabel("$y$")
     plt.show()
+
+
+def compute_wave_periods(data, y, x=None, crests=True):
+    """ Computes the wave period at given x,y """
+    t_idx = fu.find_peaks_const_y(data, y, x=x, crests=crests)
+    t_idx = np.sort(t_idx)
+
+    if t_idx.size < 2:
+        print("No wave period can be computed!")
+        return np.nan
+
+    periods = data["t"][t_idx].diff(dim="t").values.astype("timedelta64[s]").astype(float) / 3600
+
+    return periods
 
 
 def spectral_analysis(data, x, y, t):
