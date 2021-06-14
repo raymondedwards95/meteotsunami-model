@@ -7,6 +7,7 @@ import xarray as xr
 
 
 def _filter_peaks(wl, wl_idx, wl_std, window):
+    """ Find the largest values, remove large values when they are close """
     idx = []  # list of indices corresponding to maxima
     for i in wl_idx:
         if len(idx) == 0:
@@ -33,6 +34,15 @@ def to_timestr(seconds):
 def find_peaks_const_y(data, y, x=None):
     """ Finds the times at which the peaks of the waves are present for a given y-coordinate. 
     This can be used to determine the speed at which the waves travel. 
+
+    Input:
+        data:   Dataset that contains coordinates and data
+        y:      y-coordinate
+    
+    Parameters:
+        x:      x-coordinate
+
+    Output:     indices corresponding to the largest maxima
     """
     window = 10  # number of neighbours to consider
 
@@ -60,6 +70,15 @@ def find_peaks_const_y(data, y, x=None):
 def find_peaks_const_t(data, t, x=None):
     """ Finds the y-coordinates of the maxima in water level at a given time. 
     This information can be used to compute the wavelength of the wave. 
+
+    Input:
+        data:   Dataset that contains coordinates and data
+        t:      t-coordinate
+    
+    Parameters:
+        x:      x-coordinate
+
+    Output:     indices corresponding to the largest maxima
     """
     window = 50  # number of neighbours to consider
 
