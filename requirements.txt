@@ -1,6 +1,8 @@
 cmocean
 dask
+h5netcdf
 matplotlib
+netcdf4
 numpy
 scipy
 seaborn
