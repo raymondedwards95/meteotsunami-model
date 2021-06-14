@@ -3,6 +3,7 @@
 import datetime
 
 import numpy as np
+import xarray as xr
 
 
 def _filter_peaks(wl, wl_idx, wl_std, window):
@@ -38,10 +39,12 @@ def find_peaks_const_y(data, y, x=None):
     if x is None:
         x = data["x"].max().values / 50.  # random scaling? close to shore
 
-    if not isinstance(y, (int, float)):
+    if not np.isscalar(y):
         raise ValueError(f"{y=} is not a number")
-    if not isinstance(x, (int, float)):
+    if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
+    if not isinstance(data, (xr.Dataset)):
+        raise ValueError(f"{data=} is not a Dataset")
     
     # Extract data
     wl = data["wl"].interp(x=x, y=y)
@@ -63,10 +66,12 @@ def find_peaks_const_t(data, t, x=None):
     if x is None:
         x = data["x"].max().values / 50.  # random scaling? close to shore
 
-    if isinstance(t, (int, float)):
+    if np.isscalar(t):
         t = to_timestr(t)
-    if not isinstance(x, (int, float)):
+    if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
+    if not isinstance(data, (xr.Dataset)):
+        raise ValueError(f"{data=} is not a Dataset")
     
     # Extract data
     wl = data["wl"].interp(x=x, t=t)
