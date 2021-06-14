@@ -20,7 +20,7 @@ def _filter_peaks(wl, wl_idx, wl_std, window):
                     break
             else:  # i is a new peak
                 # check if peak is large enough
-                if wl[i] > wl_std:  
+                if np.abs(wl[i]) > wl_std:  
                     idx.append(i)
     return np.array(idx)
 
@@ -31,7 +31,7 @@ def to_timestr(seconds):
     return datetime.datetime.fromtimestamp(seconds).strftime("%Y-%m-%d %H:%M:%S")
 
 
-def find_peaks_const_y(data, y, x=None, window=10):
+def find_peaks_const_y(data, y, x=None, window=10, crests=True):
     """ Finds the times at which the peaks of the waves are present for a given y-coordinate. 
     This can be used to determine the speed at which the waves travel. 
 
@@ -42,6 +42,7 @@ def find_peaks_const_y(data, y, x=None, window=10):
     Parameters:
         x:      x-coordinate
         window: expected width of a peak (default: 10)
+        factor: find crests (True) or throughs (False)
 
     Output:     indices corresponding to the largest maxima
     """
@@ -60,13 +61,16 @@ def find_peaks_const_y(data, y, x=None, window=10):
     wl_std = np.std(wl)
 
     # Find largest values
-    wl_idx = wl.argsort().values[::-1]
+    wl_idx = wl.argsort().values
+
+    if crests:
+        wl_idx = np.flip(wl_idx)
 
     # Find distinct peaks
     return _filter_peaks(wl, wl_idx, wl_std, window)
 
 
-def find_peaks_const_t(data, t, x=None, window=50):
+def find_peaks_const_t(data, t, x=None, window=50, crests=True):
     """ Finds the y-coordinates of the maxima in water level at a given time. 
     This information can be used to compute the wavelength of the wave. 
 
@@ -77,6 +81,7 @@ def find_peaks_const_t(data, t, x=None, window=50):
     Parameters:
         x:      x-coordinate
         window: expected width of a peak (default: 50)
+        crests: find crests (True) or throughs (False)
 
     Output:     indices corresponding to the largest maxima
     """
@@ -95,7 +100,10 @@ def find_peaks_const_t(data, t, x=None, window=50):
     wl_std = np.std(wl)
 
     # Find largest values
-    wl_idx = wl.argsort().values[::-1]
+    wl_idx = wl.argsort().values
+
+    if crests:
+        wl_idx = np.flip(wl_idx)
 
     # Find distinct peaks
     return _filter_peaks(wl, wl_idx, wl_std, window)
