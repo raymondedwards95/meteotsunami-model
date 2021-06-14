@@ -32,8 +32,7 @@ def to_timestr(seconds):
 
 
 def find_peaks_const_y(data, y, x=None, window=10, crests=True):
-    """ Finds the times at which the peaks of the waves are present for a given y-coordinate. 
-    This can be used to determine the speed at which the waves travel. 
+    """ Finds the times at which the local maxima (or minima) of the waves are present for a given y-coordinate
 
     Input:
         data:   Dataset that contains coordinates and data
@@ -44,7 +43,8 @@ def find_peaks_const_y(data, y, x=None, window=10, crests=True):
         window: expected width of a peak (default: 10)
         factor: find crests (True) or throughs (False)
 
-    Output:     indices corresponding to the largest maxima
+    Output:     
+        t_idx:  indices corresponding to the time of the largest maxima
     """
     if x is None:
         x = data["x"].max().values / 50.  # random scaling? close to shore
@@ -61,18 +61,18 @@ def find_peaks_const_y(data, y, x=None, window=10, crests=True):
     wl_std = np.std(wl)
 
     # Find largest values
-    wl_idx = wl.argsort().values
+    wl_idx = wl.argsort().values  # sorts from low to high
 
     if crests:
         wl_idx = np.flip(wl_idx)
 
     # Find distinct peaks
-    return _filter_peaks(wl, wl_idx, wl_std, window)
+    t_idx = _filter_peaks(wl, wl_idx, wl_std, window)
+    return t_idx
 
 
 def find_peaks_const_t(data, t, x=None, window=50, crests=True):
-    """ Finds the y-coordinates of the maxima in water level at a given time. 
-    This information can be used to compute the wavelength of the wave. 
+    """ Finds the y-coordinates of the maxima in water level at a given time
 
     Input:
         data:   Dataset that contains coordinates and data
@@ -83,7 +83,8 @@ def find_peaks_const_t(data, t, x=None, window=50, crests=True):
         window: expected width of a peak (default: 50)
         crests: find crests (True) or throughs (False)
 
-    Output:     indices corresponding to the largest maxima
+    Output:     
+        y_idx:  indices corresponding to the y-coordinates of the largest maxima
     """
     if x is None:
         x = data["x"].max().values / 50.  # random scaling? close to shore
@@ -100,10 +101,11 @@ def find_peaks_const_t(data, t, x=None, window=50, crests=True):
     wl_std = np.std(wl)
 
     # Find largest values
-    wl_idx = wl.argsort().values
+    wl_idx = wl.argsort().values  # sorts from low to high
 
     if crests:
         wl_idx = np.flip(wl_idx)
 
     # Find distinct peaks
-    return _filter_peaks(wl, wl_idx, wl_std, window)
+    y_idx = _filter_peaks(wl, wl_idx, wl_std, window)
+    return y_idx
