@@ -31,7 +31,7 @@ def to_timestr(seconds):
     return datetime.datetime.fromtimestamp(seconds).strftime("%Y-%m-%d %H:%M:%S")
 
 
-def find_peaks_const_y(data, y, x=None):
+def find_peaks_const_y(data, y, x=None, window=10):
     """ Finds the times at which the peaks of the waves are present for a given y-coordinate. 
     This can be used to determine the speed at which the waves travel. 
 
@@ -41,11 +41,10 @@ def find_peaks_const_y(data, y, x=None):
     
     Parameters:
         x:      x-coordinate
+        window: expected width of a peak (default: 10)
 
     Output:     indices corresponding to the largest maxima
     """
-    window = 10  # number of neighbours to consider
-
     if x is None:
         x = data["x"].max().values / 50.  # random scaling? close to shore
 
@@ -67,7 +66,7 @@ def find_peaks_const_y(data, y, x=None):
     return _filter_peaks(wl, wl_idx, wl_std, window)
 
 
-def find_peaks_const_t(data, t, x=None):
+def find_peaks_const_t(data, t, x=None, window=50):
     """ Finds the y-coordinates of the maxima in water level at a given time. 
     This information can be used to compute the wavelength of the wave. 
 
@@ -77,11 +76,10 @@ def find_peaks_const_t(data, t, x=None):
     
     Parameters:
         x:      x-coordinate
+        window: expected width of a peak (default: 50)
 
     Output:     indices corresponding to the largest maxima
     """
-    window = 50  # number of neighbours to consider
-
     if x is None:
         x = data["x"].max().values / 50.  # random scaling? close to shore
 
