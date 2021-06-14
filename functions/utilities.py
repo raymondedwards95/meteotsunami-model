@@ -6,7 +6,7 @@ import numpy as np
 import xarray as xr
 
 
-def _filter_peaks(wl, wl_idx, wl_std, window):
+def _filter_peaks(wl, wl_idx, wl_std, window, factor):
     """ Find the largest values, remove large values when they are close """
     idx = []  # list of indices corresponding to maxima
     for i in wl_idx:
@@ -20,7 +20,7 @@ def _filter_peaks(wl, wl_idx, wl_std, window):
                     break
             else:  # i is a new peak
                 # check if peak is large enough
-                if np.abs(wl[i]) > wl_std:  
+                if wl[i] * factor > wl_std:
                     idx.append(i)
     return np.array(idx)
 
@@ -62,12 +62,14 @@ def find_peaks_const_y(data, y, x=None, window=10, crests=True):
 
     # Find largest values
     wl_idx = wl.argsort().values  # sorts from low to high
+    factor = -1
 
     if crests:
         wl_idx = np.flip(wl_idx)
+        factor = 1
 
     # Find distinct peaks
-    t_idx = _filter_peaks(wl, wl_idx, wl_std, window)
+    t_idx = _filter_peaks(wl, wl_idx, wl_std, window, factor)
     return t_idx
 
 
@@ -102,10 +104,12 @@ def find_peaks_const_t(data, t, x=None, window=50, crests=True):
 
     # Find largest values
     wl_idx = wl.argsort().values  # sorts from low to high
+    factor = -1
 
     if crests:
         wl_idx = np.flip(wl_idx)
+        factor = 1
 
     # Find distinct peaks
-    y_idx = _filter_peaks(wl, wl_idx, wl_std, window)
+    y_idx = _filter_peaks(wl, wl_idx, wl_std, window, factor)
     return y_idx
