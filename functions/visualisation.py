@@ -62,13 +62,13 @@ def vis_alongshore(data, t=3600, x=1e4):
 
 
 def vis_crossshore(data, y=1e5, t=3600):
-    if np.isscalar(y):
-        y = np.array([y])
-    if np.isscalar(t):
-        t = np.array([t])
+    # if np.isscalar(y):
+    #     y = np.array([y])
+    # if np.isscalar(t):
+    #     t = np.array([t])
 
-    assert y.size == 1
-    assert t.size == 1
+    # assert y.size == 1
+    # assert t.size == 1
 
     ## Fit
     k0, y0 = fa.compute_decay_parameter(data, y, t)
