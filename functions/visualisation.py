@@ -45,12 +45,12 @@ def vis_timeseries(data, x=1e4, y=1e5):
 
 
 def vis_alongshore(data, t=3600, x=1e4):
-    if np.isscalar(t):
-        t = np.array([t])
+    # if np.isscalar(t):
+    #     t = np.array([t])
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
 
-    assert t.size == 1
+    # assert t.size == 1
 
     y = data["y"]
     wl = data["wl"].interp(t=fu.to_timestr(t), x=x)
