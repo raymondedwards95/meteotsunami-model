@@ -52,7 +52,19 @@ def _test_compute_decay_parameter(showfig=True):
 
 
 def compute_wave_periods(data, y, x=None, crests=True):
-    """ Computes the wave period at given x,y """
+    """ Computes the wave period at given x,y 
+    
+    Input:
+        data:       dataset containing all data
+        y:          y-coordinate
+    
+    Parameters:
+        x:          x-coordinate
+        crests:     find crests (True) or throughs (False)
+    
+    Output:
+        periods:    list of time-intervals between wave crests
+    """
     t_idx = fu.find_peaks_const_y(data, y, x=x, crests=crests)
     t_idx = np.sort(t_idx)
 
@@ -66,6 +78,19 @@ def compute_wave_periods(data, y, x=None, crests=True):
 
 
 def compute_wave_lengths(data, t, x=None, crests=True):
+    """ Computes the wave length at given x,t 
+    
+    Input:
+        data:       dataset containing all data
+        t:          t-coordinate
+    
+    Parameters:
+        x:          x-coordinate
+        crests:     find crests (True) or throughs (False)
+    
+    Output:
+        lengths:    list of distances between wave crests
+    """
     y_idx = fu.find_peaks_const_t(data, t, x=x, crests=crests)
     y_idx = np.sort(y_idx)
 
