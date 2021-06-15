@@ -65,6 +65,19 @@ def compute_wave_periods(data, y, x=None, crests=True):
     return periods
 
 
+def compute_wave_lengths(data, t, x=None, crests=True):
+    y_idx = fu.find_peaks_const_t(data, t, x=x, crests=crests)
+    y_idx = np.sort(y_idx)
+
+    if y_idx.size < 2:
+        print("No wave period can be computed!")
+        return np.nan
+
+    lengths = data["y"][y_idx].diff(dim="y").values
+
+    return lengths
+
+
 def spectral_analysis(data, x, y, t):
     raise NotImplementedError
 
