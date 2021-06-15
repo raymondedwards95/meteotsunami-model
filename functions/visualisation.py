@@ -15,6 +15,8 @@ import functions.utilities as fu
 def vis_timeseries(data, x=1e4, y=1e5):
     if np.isscalar(y):
         y = np.array([y])
+    if isinstance(y, list):
+        y = np.array(y)
 
     t = data["t"]
     wl = data["wl"].interp(x=x, y=y)
