@@ -43,7 +43,20 @@ def vis_timeseries(data, x=1e4, y=1e5):
 
 
 def vis_alongshore(data, t=3600, x=1e4):
-    raise NotImplementedError
+    if np.isscalar(y):
+        y = np.array([y])
+    if not np.isscalar(x):
+        raise ValueError(f"{x=} is not a number")
+
+    assert t.size == 1
+
+    y = data["y"]
+    wl = data["wl"].interp(t=fu.to_timestr(t), x=x)
+
+    fig, ax = plt.subplots(1, 1, squeeze=False)
+    ax = np.ravel(ax)
+
+    ax[0].plot(y, wl)
 
 
 def vis_crossshore(data, y=1e5, t=3600):
