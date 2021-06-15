@@ -58,7 +58,7 @@ def compute_wave_periods(data, y, x=None, crests=True):
 
     if t_idx.size < 2:
         print("No wave period can be computed!")
-        return np.nan
+        return np.array(np.nan)
 
     periods = data["t"][t_idx].diff(dim="t").values.astype("timedelta64[s]").astype(float) / 3600
 
@@ -71,7 +71,7 @@ def compute_wave_lengths(data, t, x=None, crests=True):
 
     if y_idx.size < 2:
         print("No wave period can be computed!")
-        return np.nan
+        return np.array(np.nan)
 
     lengths = data["y"][y_idx].diff(dim="y").values
 
