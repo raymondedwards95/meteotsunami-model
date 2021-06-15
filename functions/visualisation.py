@@ -72,7 +72,7 @@ def vis_crossshore(data, y=1e5, t=3600):
 
     ## Fit
     k0, y0 = fa.compute_decay_parameter(data, y, t)
-    wl_model = fa.exp_decay(x, k0, y0)
+    wl_model = fa.exp_decay(data["x"], k0, y0)
 
     ## Data
     x = data["x"]
