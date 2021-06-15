@@ -14,10 +14,12 @@ import functions.utilities as fu
 
 
 def exp_decay(x, k0, y0):
+    """ Returns an exponential decay in x with decay parameter k0 and scale y0 """
     return y0 * np.exp(-k0 * x)
 
 
 def compute_decay_parameter(data, y, t):
+    """"Computes the decay parameter and scaling parameter for data at given y and t """
     popt, _ = curve_fit(
         exp_decay,  # f
         data["x"],  # xdata
@@ -30,6 +32,7 @@ def compute_decay_parameter(data, y, t):
 
 
 def _test_compute_decay_parameter(showfig=True):
+    """ Test for computation of decay parameter """
     k0 = 1./12.
     y0 = 0.7
 
