@@ -6,7 +6,7 @@ import xarray as xr
 
 def vis_timeseries(data, x=1e4, y=1e5):
     if isinstance(y, (int, float)):
-        y = [y]
+        y = np.array([y])
 
     t = data["t"]
     wl = data["wl"].interp(x=x, y=y)
@@ -18,14 +18,14 @@ def vis_timeseries(data, x=1e4, y=1e5):
     for i in range(2):
         ax[i].axhline(color="black", linewidth=1)
 
-    fig, ax = plt.subplots(len(y), 1, sharex=True)
-    for i in range(len(y)):
+    fig, ax = plt.subplots(y.size, 1, sharex=True)
+    for i in range(y.size):
         ax[i].plot(t, wl[:, i])
         ax[i].plot(t, p[:, i] / 2000.)
         ax[i].axhline(color="black", linewidth=1)
 
-    fig, ax = plt.subplots(2, len(y), sharex=True, sharey=True)
-    for i in range(len(y)):
+    fig, ax = plt.subplots(2, y.size, sharex=True, sharey=True)
+    for i in range(y.size):
         ax[0,i].plot(t, wl[:, i])
         ax[1,i].plot(t, p[:, i] / 2000.)
         for j in range(2):
