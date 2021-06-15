@@ -11,7 +11,7 @@ import functions.utilities as fu
 
 
 def vis_timeseries(data, x=1e4, y=1e5):
-    if isinstance(y, (int, float)):
+    if np.isscalar(y):
         y = np.array([y])
 
     t = data["t"]
@@ -43,10 +43,10 @@ def vis_alongshore(data, t=3600, x=1e4):
 
 
 def vis_crossshore(data, y=1e5, t=3600):
-    if isinstance(y, (int, float)):
-        y = [y]
-    if isinstance(t, (int, float)):
-        t = [t]
+    if np.isscalar(y):
+        y = np.array([y])
+    if np.isscalar(t):
+        t = np.array([t])
 
     assert y.size == 1
     assert t.size == 1
