@@ -45,8 +45,8 @@ def vis_timeseries(data, x=1e4, y=1e5):
 
 
 def vis_alongshore(data, t=3600, x=1e4):
-    if np.isscalar(y):
-        y = np.array([y])
+    if np.isscalar(t):
+        t = np.array([t])
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
 
