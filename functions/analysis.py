@@ -136,6 +136,20 @@ def spectral_analysis_1d(data, y, x=1e4, variable="wl"):
 
 
 def spectral_analysis_2d(data, x=1e4, variable="wl"):
+    """ Apply fourier transform on spatial and temporal varying data 
+    
+    Input:
+        data:       Dataset containing all data and coordinates
+    
+    Parameters:
+        x:          x-coordinate
+        variable:   name of the variable to use, e.g. "wl" or "p"
+    
+    Output:
+        f_var:      corresponding frequencies (time-domain)      
+        k_var:      corresponding wavenumbers (space-domain)
+        p_var:      power-spectrum
+    """
     t = data["t"].values.astype("datetime64[s]").astype(float)
     dt = np.median(np.diff(t))
     y = data["y"].values
