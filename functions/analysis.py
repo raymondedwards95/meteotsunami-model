@@ -111,11 +111,13 @@ def spectral_analysis_1d(data, y, x=1e4, variable="wl"):
     dt = np.median(np.diff(t))
     var = data[variable].interp(x=x, y=y)
 
-    f_var = np.fft.rfftfreq(var.size, dt)
     t_var = np.fft.rfft(var)
-    p_var = np.power(np.abs(f_var), 2.)
+    p_var = np.power(np.abs(t_var), 2.)
+
+    f_var = np.fft.rfftfreq(var.size, dt)
 
     return f_var, p_var
+
 
 
 if __name__ == "__main__":
