@@ -164,7 +164,7 @@ def spectral_analysis_2d(data, x=1e4, variable="wl"):
     wavenumber = np.fft.fftfreq(var.shape[1], dy)
     wavenumber = np.fft.fftshift(wavenumber)
 
-    return freqs, wavenumber, power
+    return wavenumber, freqs, power
 
 
 if __name__ == "__main__":
