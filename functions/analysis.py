@@ -119,6 +119,23 @@ def spectral_analysis_1d(data, y, x=1e4, variable="wl"):
     return f_var, p_var
 
 
+def spectral_analysis_2d(data, x=1e4, variable="wl"):
+    t = data["t"].values.astype("datetime64[s]").astype(float)
+    dt = np.median(np.diff(t))
+    y = data["y"].values
+    dy = np.median(np.diff(y))
+    var = data[variable].interp(x=x)
+
+    t_var = np.fft.rfft2(var, axes=(1, 0))  # first over time, then space
+    t_var = np.fft.fftshift(t_var, axis=1)  # rearrange data, so that wavenumber is in increasing order
+    p_var = np.power(np.abs(t_var), 2.)
+
+    f_var = np.fft.rfftfreq(var.shape[0], dt)
+    k_var = np.fft.fftfreq(var.shape[1], dy)
+    k_var = np.fft.fftshift(k_var)
+
+    return f_var, k_var, p_var
+
 
 if __name__ == "__main__":
     _test_compute_decay_parameter(showfig=True)
