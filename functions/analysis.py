@@ -109,6 +109,20 @@ def compute_wave_lengths(data, t, x=None, crests=True):
 
 
 def spectral_analysis_1d(data, y, x=1e4, variable="wl"):
+    """ Apply fourier transform on timeseries 
+    
+    Input:
+        data:       Dataset containing all data and coordinates
+        y:          y-coordinate
+    
+    Parameters:
+        x:          x-coordinate
+        variable:   name of the variable to use, e.g. "wl" or "p"
+    
+    Output:
+        f_var:      corresponding frequencies (time-domain)      
+        p_var:      power-spectrum
+    """
     t = data["t"].values.astype("datetime64[s]").astype(float)
     dt = np.median(np.diff(t))
     var = data[variable].interp(x=x, y=y)
