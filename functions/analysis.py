@@ -106,14 +106,14 @@ def compute_wave_lengths(data, t, x=None, crests=True):
     return lengths
 
 
-def spectral_analysis_1d(data, x, y, variable="wl"):
+def spectral_analysis_1d(data, y, x=1e4, variable="wl"):
     t = data["t"].values.astype("datetime64[s]").astype(float)
     dt = np.median(np.diff(t))
     var = data[variable].interp(x=x, y=y)
 
     f_var = np.fft.rfftfreq(var.size, dt)
     t_var = np.fft.rfft(var)
-    p_var = np.power(np.abs(t_var), 2.)
+    p_var = np.power(np.abs(f_var), 2.)
 
     return f_var, p_var
 
