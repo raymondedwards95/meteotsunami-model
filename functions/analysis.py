@@ -120,19 +120,19 @@ def spectral_analysis_1d(data, y, x=1e4, variable="wl"):
         variable:   name of the variable to use, e.g. "wl" or "p"
     
     Output:
-        f_var:      corresponding frequencies (time-domain)      
-        p_var:      power-spectrum
+        freqs:      corresponding frequencies (time-domain)      
+        power:      power-spectrum
     """
     t = data["t"].values.astype("datetime64[s]").astype(float)
     dt = np.median(np.diff(t))
     var = data[variable].interp(x=x, y=y)
 
-    t_var = np.fft.rfft(var)
-    p_var = np.power(np.abs(t_var), 2.)
+    transform = np.fft.rfft(var)
+    power = np.power(np.abs(transform), 2.)
 
-    f_var = np.fft.rfftfreq(var.size, dt)
+    freqs = np.fft.rfftfreq(var.size, dt)
 
-    return f_var, p_var
+    return freqs, power
 
 
 def spectral_analysis_2d(data, x=1e4, variable="wl"):
@@ -146,9 +146,9 @@ def spectral_analysis_2d(data, x=1e4, variable="wl"):
         variable:   name of the variable to use, e.g. "wl" or "p"
     
     Output:
-        f_var:      corresponding frequencies (time-domain)      
-        k_var:      corresponding wavenumbers (space-domain)
-        p_var:      power-spectrum
+        freqs:      corresponding frequencies (time-domain)      
+        wavenumber: corresponding wavenumbers (space-domain)
+        power:      power-spectrum
     """
     t = data["t"].values.astype("datetime64[s]").astype(float)
     dt = np.median(np.diff(t))
@@ -156,15 +156,15 @@ def spectral_analysis_2d(data, x=1e4, variable="wl"):
     dy = np.median(np.diff(y))
     var = data[variable].interp(x=x)
 
-    t_var = np.fft.rfft2(var, axes=(1, 0))  # first over time, then space
-    t_var = np.fft.fftshift(t_var, axis=1)  # rearrange data, so that wavenumber is in increasing order
-    p_var = np.power(np.abs(t_var), 2.)
+    transform = np.fft.rfft2(var, axes=(1, 0))  # first over time, then space
+    transform = np.fft.fftshift(transform, axes=1)  # rearrange data, so that wavenumber is in increasing order
+    power = np.power(np.abs(transform), 2.)
 
-    f_var = np.fft.rfftfreq(var.shape[0], dt)
-    k_var = np.fft.fftfreq(var.shape[1], dy)
-    k_var = np.fft.fftshift(k_var)
+    freqs = np.fft.rfftfreq(var.shape[0], dt)
+    wavenumber = np.fft.fftfreq(var.shape[1], dy)
+    wavenumber = np.fft.fftshift(wavenumber)
 
-    return f_var, k_var, p_var
+    return freqs, wavenumber, power
 
 
 if __name__ == "__main__":
