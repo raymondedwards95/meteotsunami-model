@@ -45,13 +45,15 @@ def _test_compute_decay_parameter(showfig=True):
         y
     )
 
-    plt.figure()
-    plt.scatter(x, y)
-    plt.plot(x, exp_decay(x, k0_est, y0_est), "C1", label=f"$1/k_0={1/k0_est:0.1f}$; $y_0={y0_est:0.2f}$")
-    plt.legend()
-    plt.xlabel("$x$")
-    plt.ylabel("$y$")
-    plt.show()
+    if showfig:
+        plt.figure()
+        plt.scatter(x, y)
+        plt.plot(x, exp_decay(x, k0_est, y0_est), "C1", label=f"$1/k_0={1/k0_est:0.1f}$; $y_0={y0_est:0.2f}$")
+        plt.legend()
+        plt.xlabel("$x$")
+        plt.ylabel("$y$")
+        plt.show()
+    return
 
 
 def compute_wave_periods(data, y, x=None, crests=True):
