@@ -64,7 +64,7 @@ assert len(x0_list) == num_cases
 print("\nPressure fields for the following cases are computed (case, U, a, p0, x0)")
 with open(f"{current_dir}/parameters_pressure.txt", "w") as file:
     for i in range(num_cases):
-        line = f"{cases[i]},{U_list[i]},{a_list[i]},{p0_list[i]},{x0_list[i]}"
+        line = f"{cases[i]:02.0f},{U_list[i]:0.0f},{a_list[i]:0.0f},{p0_list[i]:0.0f},{x0_list[i]:0.0f}"
         print(line.replace(",", "\t"))
         file.write(line + "\n")
     
@@ -102,8 +102,7 @@ for case_number in range(num_cases):
     filename = f"{pressure_dir}/exp_{case:02.0f}"
     figurename = f"{pressure_dir}/fig_exp_{case:02.0f}"
 
-    print(
-        f"\nComputing pressure field for {case=} ({U=}, {a=}, {p0=}, {x0=})")
+    print(f"\nComputing pressure field for {case=} ({U=}, {a=}, {p0=}, {x0=})")
 
     # loop over all t, y and x
     # p = np.zeros((t.size, y.size, x.size))
