@@ -45,13 +45,15 @@ def _test_compute_decay_parameter(showfig=True):
         y
     )
 
-    plt.figure()
-    plt.scatter(x, y)
-    plt.plot(x, exp_decay(x, k0_est, y0_est), "C1", label=f"$1/k_0={1/k0_est:0.1f}$; $y_0={y0_est:0.2f}$")
-    plt.legend()
-    plt.xlabel("$x$")
-    plt.ylabel("$y$")
-    plt.show()
+    if showfig:
+        plt.figure()
+        plt.scatter(x, y)
+        plt.plot(x, exp_decay(x, k0_est, y0_est), "C1", label=f"$1/k_0={1/k0_est:0.1f}$; $y_0={y0_est:0.2f}$")
+        plt.legend()
+        plt.xlabel("$x$")
+        plt.ylabel("$y$")
+        plt.show()
+    return
 
 
 def compute_wave_periods(data, y, x=None, crests=True):
@@ -106,8 +108,63 @@ def compute_wave_lengths(data, t, x=None, crests=True):
     return lengths
 
 
-def spectral_analysis(data, x, y, t):
-    raise NotImplementedError
+def spectral_analysis_1d(data, y, x=1e4, variable="wl"):
+    """ Apply fourier transform on timeseries 
+    
+    Input:
+        data:       Dataset containing all data and coordinates
+        y:          y-coordinate
+    
+    Parameters:
+        x:          x-coordinate
+        variable:   name of the variable to use, e.g. "wl" or "p"
+    
+    Output:
+        freqs:      corresponding frequencies (time-domain)      
+        power:      power-spectrum
+    """
+    t = data["t"].values.astype("datetime64[s]").astype(float)
+    dt = np.median(np.diff(t))
+    var = data[variable].interp(x=x, y=y)
+
+    transform = np.fft.rfft(var)
+    power = np.power(np.abs(transform), 2.)
+
+    freqs = np.fft.rfftfreq(var.size, dt)
+
+    return freqs, power
+
+
+def spectral_analysis_2d(data, x=1e4, variable="wl"):
+    """ Apply fourier transform on spatial and temporal varying data 
+    
+    Input:
+        data:       Dataset containing all data and coordinates
+    
+    Parameters:
+        x:          x-coordinate
+        variable:   name of the variable to use, e.g. "wl" or "p"
+    
+    Output:
+        freqs:      corresponding frequencies (time-domain)      
+        wavenumber: corresponding wavenumbers (space-domain)
+        power:      power-spectrum
+    """
+    t = data["t"].values.astype("datetime64[s]").astype(float)
+    dt = np.median(np.diff(t))
+    y = data["y"].values
+    dy = np.median(np.diff(y))
+    var = data[variable].interp(x=x)
+
+    transform = np.fft.rfft2(var, axes=(1, 0))  # first over time, then space
+    transform = np.fft.fftshift(transform, axes=1)  # rearrange data, so that wavenumber is in increasing order
+    power = np.power(np.abs(transform), 2.)
+
+    freqs = np.fft.rfftfreq(var.shape[0], dt)
+    wavenumber = np.fft.fftfreq(var.shape[1], dy)
+    wavenumber = np.fft.fftshift(wavenumber)
+
+    return wavenumber, freqs, power
 
 
 if __name__ == "__main__":
