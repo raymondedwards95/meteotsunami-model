@@ -4,3 +4,25 @@ This part is aimed at simulating meteotsunamis along the Dutch coast.
 The goal is to investigate how different forcings affect the generated waves.
 Here the physical parameters are important, for example bottom topography and speed and size of the low pressure system.
 
+## Parameters
+
+| Number | Speed `U` | Radius `a` | Shift `x0` |
+| :--- | :--- | :--- | :--- |
+| 00 | 5 | 10000 | 0 |
+| 01 | 5 | 10000 | 50000 |
+| 02 | 5 | 20000 | 0 |
+| 03 | 5 | 20000 | 50000 |
+| 04 | 5 | 30000 | 0 |
+| 05 | 5 | 30000 | 50000 |
+| 06 | 15 | 10000 | 0 |
+| 07 | 15 | 10000 | 50000 |
+| 08 | 15 | 20000 | 0 |
+| 09 | 15 | 20000 | 50000 |
+| 10 | 15 | 30000 | 0 |
+| 11 | 15 | 30000 | 50000 |
+| 12 | 25 | 10000 | 0 |
+| 13 | 25 | 10000 | 50000 |
+| 14 | 25 | 20000 | 0 |
+| 15 | 25 | 20000 | 50000 |
+| 16 | 25 | 30000 | 0 |
+| 17 | 25 | 30000 | 50000 |
