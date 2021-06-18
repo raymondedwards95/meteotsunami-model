@@ -57,3 +57,12 @@ All different cases are numbered.
 | 20 | Set `dx` and `dy` from `10` to `20` km | Spatial resolution of model |
 | 21 | Set `dx` and `dy` from `10` to `40` km | See 20 |
 | 22 | Set `dx` and `dy` from `10` to `5` km | See 20; *not included in `run_all.sh`* |
+||||
+| 31 | Set `x0_p` from `0` km to `100` km | Position of center of pressure disturbance | 
+| 32 | Set `x0_p` from `0` km to `200` km | See 31 |
+| 33 | Set `x0_p` from `0` km to `300` km | See 31 |
+||||
+| 36 | Set `alpha` from `1/400` to `1/200`  | Slope of bottom |
+| 37 | Set `alpha` from `1/400` to `1/200` and set `x0_p` from `0` km to `100` km | See 31 and 36 | 
+| 38 | Set `alpha` from `1/400` to `1/200` and set `x0_p` from `0` km to `200` km | See 31 and 36 |
+| 39 | Set `alpha` from `1/400` to `1/200` and set `x0_p` from `0` km to `300` km | See 31 and 36 |
