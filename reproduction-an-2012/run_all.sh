@@ -43,6 +43,15 @@ bash ./run_reproduction.sh 21 &
 # bash ./run_reproduction.sh 22 &
 wait
 
+bash ./run_reproduction.sh 31 &
+bash ./run_reproduction.sh 32 &
+bash ./run_reproduction.sh 33 &
+bash ./run_reproduction.sh 36 &
+bash ./run_reproduction.sh 37 &
+bash ./run_reproduction.sh 38 &
+bash ./run_reproduction.sh 39 &
+wait
+
 python3 ./create_comparison.py
 
 exit 0
