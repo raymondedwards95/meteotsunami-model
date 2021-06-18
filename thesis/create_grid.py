@@ -20,7 +20,7 @@ case = [0]
 num_cases = len(case)
 
 x_min = 0
-x_max = 1e5
+x_max = 5e5
 x_step = 1e3
 
 y_min = -1e6
