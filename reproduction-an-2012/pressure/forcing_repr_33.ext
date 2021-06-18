@@ -1,0 +1,6 @@
+* Meteo forcing 
+QUANTITY = atmosphericpressure 
+FILENAME = repr_33.amp 
+FILETYPE = 4 
+METHOD   = 1 
+OPERAND  = O 
