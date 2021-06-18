@@ -12,13 +12,8 @@ import functions.bathymetry as fb
 
 
 ###
-bathymetry_dir = os.path.dirname(os.path.realpath(__file__)) + "/bathymetry"
-os.makedirs(bathymetry_dir, exist_ok=True)
-filename = f"{bathymetry_dir}/repr_00.xyb"
-
-
-###
-slope = 1./400.
+cases = [0, 36]
+slopes = [1./400., 1./800.]
 
 
 ###
@@ -27,19 +22,27 @@ def depth(x, alpha=1/400):
 
 
 ###
+bathymetry_dir = os.path.dirname(os.path.realpath(__file__)) + "/bathymetry"
+os.makedirs(bathymetry_dir, exist_ok=True)
+
+
+###
 x = np.linspace(0, 1e6, 5)
 y = np.linspace(-1e7, 1e7, 5)
 xx, yy = np.meshgrid(x, y)
-zz = depth(xx, slope)
 
 
 ###
-data = fb.convert_to_xarray(x, y, zz)
-fb.write_bathymetry(data, filename)
+for i in range(len(cases)):
+    case = cases[i]
+    slope = slopes[i]
+    print(f"###\nCreating bathymetry for case {case:02.0f}")
 
+    zz = depth(xx, slope)
+    data = fb.convert_to_xarray(x, y, zz)
+    fb.write_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}.xyb")
+    fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_repr_{case:02.0f}")
 
-###
-fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_repr_00")
 
 # plt.show()
 print("Finished creating bathymetry-files")
