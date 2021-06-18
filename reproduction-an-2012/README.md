@@ -62,7 +62,7 @@ All different cases are numbered.
 | 32 | Set `x0_p` from `0` km to `200` km | See 31 |
 | 33 | Set `x0_p` from `0` km to `300` km | See 31 |
 ||||
-| 36 | Set `alpha` from `1/400` to `1/200`  | Slope of bottom |
-| 37 | Set `alpha` from `1/400` to `1/200` and set `x0_p` from `0` km to `100` km | See 31 and 36 | 
-| 38 | Set `alpha` from `1/400` to `1/200` and set `x0_p` from `0` km to `200` km | See 31 and 36 |
-| 39 | Set `alpha` from `1/400` to `1/200` and set `x0_p` from `0` km to `300` km | See 31 and 36 |
+| 36 | Set `alpha` from `1/400` to `1/800`  | Slope of bottom |
+| 37 | Set `alpha` from `1/400` to `1/800` and set `x0_p` from `0` km to `100` km | See 31 and 36 | 
+| 38 | Set `alpha` from `1/400` to `1/800` and set `x0_p` from `0` km to `200` km | See 31 and 36 |
+| 39 | Set `alpha` from `1/400` to `1/800` and set `x0_p` from `0` km to `300` km | See 31 and 36 |
