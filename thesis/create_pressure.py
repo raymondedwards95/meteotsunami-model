@@ -81,6 +81,10 @@ t = np.arange(t_min, t_max+1, t_step)
 
 tt, yy, xx = np.meshgrid(t, y, x, indexing="ij")
 
+t_num = t.size
+print("Grid parameters:")
+print(f"{x_num=}\t{y_num=}\t{t_num=}")
+
 
 ### Function
 def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
@@ -121,13 +125,14 @@ for case_number in range(num_cases):
     p = p[:, :, ix][:, iy, :]
 
     ### Write field
-    print(f"Writing pressure field for case {case}")
     data = fp.convert_to_xarray(t, _x, _y, p)
+    print(f"Process pressure field for {case=}")
     del _x, _y, p
+    print(f"Writing pressure field for {case=}")
     fp.write_pressure(data, filename)
 
     ### Write forcing file
-    print(f"Overwriting forcing file for case {case}")
+    print(f"Overwriting forcing file for {case=}")
     with open(f"{current_dir}/pressure/forcing_exp_{case:02.0f}.ext", "w") as file:
         file.write("* Meteo forcing \n")
         file.write("QUANTITY = atmosphericpressure \n")
@@ -137,7 +142,7 @@ for case_number in range(num_cases):
         file.write("OPERAND  = O \n")
 
     ### Visualise field
-    print(f"Plotting pressure field for case {case}")
+    print(f"Plotting pressure field for {case=}")
     fp.plot_pressure(data, filename=figurename)
 
 
