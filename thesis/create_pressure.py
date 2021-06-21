@@ -79,9 +79,10 @@ x = np.linspace(x_min, x_max, x_num)
 y = np.linspace(y_min, y_max, y_num)
 t = np.arange(t_min, t_max+1, t_step)
 
-tt, yy, xx = np.meshgrid(t, y, x, indexing="ij")
-
 t_num = t.size
+
+tt, yy, xx = np.meshgrid(t, y, x, indexing="ij", sparse=True)
+
 print("Grid parameters:")
 print(f"{x_num=}\t{y_num=}\t{t_num=}")
 
@@ -93,6 +94,7 @@ def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
         * (1. - np.exp(-t / t0))
         * np.exp(-((x - x0)**2. + (y - U * t)**2.) / a**2.)
     )
+pressure = np.vectorize(pressure, otypes=[np.float32])
 
 
 ### Compute field
