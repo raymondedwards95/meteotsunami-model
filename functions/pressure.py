@@ -95,13 +95,15 @@ unit1           = Pa
 
 
     ## write
+    t_factor = np.min([t_num, 20])
+
     with open(filename, "w") as file:
         file.write(header)
 
         # loop over time
         for i in range(t_num):
             # progress
-            if not (t_num-i-1) % (t_num // 20):
+            if not (t_num-i-1) % (t_num // t_factor):
                 print(f"Step {i+1:4.0f} of {t_num:0.0f} ({(i+1)/t_num*100:0.1f}%)")
 
             file.write(
