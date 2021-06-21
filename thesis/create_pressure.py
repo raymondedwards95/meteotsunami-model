@@ -89,12 +89,11 @@ print(f"{x_num=}\t{y_num=}\t{t_num=}")
 
 ### Function
 def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
-    return (
+    return np.float32(
         p0
         * (1. - np.exp(-t / t0))
         * np.exp(-((x - x0)**2. + (y - U * t)**2.) / a**2.)
     )
-pressure = np.vectorize(pressure, otypes=[np.float32])
 
 
 ### Compute field
