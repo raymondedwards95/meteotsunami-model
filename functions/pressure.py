@@ -95,7 +95,7 @@ unit1           = Pa
 
 
     ## write
-    t_factor = np.min([t_num, 20])
+    t_factor = np.min([t_num, 10])
 
     with open(filename, "w") as file:
         file.write(header)
