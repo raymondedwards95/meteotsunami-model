@@ -71,8 +71,8 @@ def write_pressure(data, filename=None):
     dx = _find_step(data.x.values)
     dy = _find_step(data.y.values)
 
-    t = data.t.values
-    p = data.values
+    t = data.t
+    p = data
 
 
     ## header
@@ -101,7 +101,7 @@ unit1           = Pa
         # loop over time
         for i in range(t_num):
             file.write(
-                f"TIME = {t[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n")
+                f"TIME = {t[i].values/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n")
 
             # put nothing if all values are close to reference
             # if ((i != 0) and (np.all(np.isclose(data.values[i, :, :].round(2), 0.)))):  # maybe set rtol and atol?
@@ -120,7 +120,7 @@ unit1           = Pa
 
                         # write a value and neglect trailing zeros after decimal point
                         # note: second index for p (i.e. -1*n) to fix coordinate-system
-                        file.write(f"{p[i, -1*n, m]:0.2f} ".replace(".00", ""))
+                        file.write(f"{p[i, -1*n, m].values:0.2f} ".replace(".00", ""))
                     file.write("\n")
     
     print(f"Finished writing to '{filename}'")
