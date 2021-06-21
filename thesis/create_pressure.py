@@ -3,6 +3,7 @@
 import os
 import sys
 
+import dask.array as da
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -75,13 +76,13 @@ with open(f"{current_dir}/parameters_pressure.txt", "w") as file:
 x_num = int((x_max - x_min) / x_step + 1)
 y_num = int((y_max - y_min) / y_step + 1)
 
-x = np.linspace(x_min, x_max, x_num)
-y = np.linspace(y_min, y_max, y_num)
-t = np.arange(t_min, t_max+1, t_step)
+x = da.linspace(x_min, x_max, x_num, chunks=256)
+y = da.linspace(y_min, y_max, y_num, chunks=1024)
+t = da.arange(t_min, t_max+1, t_step, chunks=32)
 
 t_num = t.size
 
-tt, yy, xx = np.meshgrid(t, y, x, indexing="ij", sparse=True)
+tt, yy, xx = da.meshgrid(t, y, x, indexing="ij", sparse=True)
 
 print("Grid parameters:")
 print(f"{x_num=}\t{y_num=}\t{t_num=}")
@@ -91,8 +92,8 @@ print(f"{x_num=}\t{y_num=}\t{t_num=}")
 def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
     return (
         p0
-        * (1. - np.exp(-t / t0))
-        * np.exp(-((x - x0)**2. + (y - U * t)**2.) / a**2.)
+        * (1. - da.exp(-t / t0))
+        * da.exp(-((x - x0)**2. + (y - U * t)**2.) / a**2.)
     )
 
 
@@ -119,14 +120,14 @@ for case_number in range(num_cases):
     p = pressure(xx, yy, tt, t0, U, a, p0, x0).astype(np.float32)
 
     # remove zero-columns and zero-rows
-    ix = np.where(~ np.all(np.isclose(p, 0), axis=(0, 1)))[0]
-    iy = np.where(~ np.all(np.isclose(p, 0), axis=(0, 2)))[0]
+    ix = da.where(~ da.all(da.isclose(p, 0), axis=(0, 1)))[0]
+    iy = da.where(~ da.all(da.isclose(p, 0), axis=(0, 2)))[0]
     _x = x[ix]
     _y = y[iy]
     p = p[:, :, ix][:, iy, :]
 
     ### Write field
-    data = fp.convert_to_xarray(t, _x, _y, p)
+    data = fp.convert_to_xarray(t, _x, _y, p.compute())
     print(f"Process pressure field for {case=}")
     del _x, _y, p
     print(f"Writing pressure field for {case=}")
