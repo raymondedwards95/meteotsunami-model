@@ -86,6 +86,7 @@ tt, yy, xx = da.meshgrid(t, y, x, indexing="ij", sparse=True)
 
 print("Grid parameters:")
 print(f"{x_num=}\t{y_num=}\t{t_num=}")
+print(f"{x.chunksize=}\t{y.chunksize=}\t{t.chunksize=}")
 
 
 ### Function
