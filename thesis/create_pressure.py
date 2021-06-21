@@ -76,16 +76,16 @@ with open(f"{current_dir}/parameters_pressure.txt", "w") as file:
 x_num = int((x_max - x_min) / x_step + 1)
 y_num = int((y_max - y_min) / y_step + 1)
 
-x = da.linspace(x_min, x_max, x_num)
-y = da.linspace(y_min, y_max, y_num)
-t = da.arange(t_min, t_max+1, t_step)
+x = da.linspace(x_min, x_max, x_num, chunks=256)
+y = da.linspace(y_min, y_max, y_num, chunks=1024)
+t = da.arange(t_min, t_max+1, t_step, chunks=128)
 
 t_num = t.size
 
 tt, yy, xx = da.meshgrid(t, y, x, indexing="ij", sparse=True)
 
 print("Grid parameters:")
-print(f"{x_num=}\t{y_num=}\t{t_num=}")
+print(f"{x.size=}\t\t{y.size=}\t\t{t.size=}")
 print(f"{x.chunksize=}\t{y.chunksize=}\t{t.chunksize=}")
 
 
