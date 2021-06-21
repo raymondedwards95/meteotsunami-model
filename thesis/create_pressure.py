@@ -32,14 +32,14 @@ p0_list = np.array([2000])
 x0_list = np.array([0, 50000])
 
 # cross shore (meters)
-x_min = 0.  
-x_max = 5e5
-x_step = 5e3  # best to put to 1e3 as with grid...  
+x_min = 0
+x_max = 1e6
+x_step = 2.5e3
 
 # along shore (meters)
-y_min = -1e6
-y_max = +2e6
-y_step = x_step  
+y_min = -2e6
+y_max = +3e6
+y_step = x_step
 
 # time (seconds)
 t_min = 0

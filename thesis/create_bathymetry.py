@@ -25,7 +25,7 @@ filename = f"{bathymetry_dir}/exp_00.xyb"
 
 ###
 x = np.concatenate(([0], np.logspace(0, 6, 51)))
-y = np.linspace(-1e6, +2e6, 5)
+y = np.linspace(-2e6, +3e6, 5)
 xx, yy = np.meshgrid(x, y)
 zz = exponential_shelf(xx, a=5e-4)
 
