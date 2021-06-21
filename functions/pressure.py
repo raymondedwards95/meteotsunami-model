@@ -101,7 +101,7 @@ unit1           = Pa
         # loop over time
         for i in range(t_num):
             # progress
-            if not (t_num-i-1) % (t_num // 5):
+            if not (t_num-i-1) % (t_num // 20):
                 print(f"Step {i+1:4.0f} of {t_num:0.0f} ({(i+1)/t_num*100:0.1f}%)")
 
             file.write(
