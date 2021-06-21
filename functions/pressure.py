@@ -100,6 +100,10 @@ unit1           = Pa
 
         # loop over time
         for i in range(t_num):
+            # progress
+            if not (t_num-i-1) % (t_num // 5):
+                print(f"Step {i+1:4.0f} of {t_num:0.0f} ({(i+1)/t_num*100:0.1f}%)")
+
             file.write(
                 f"TIME = {t[i].values/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n")
 
