@@ -58,11 +58,11 @@ def _regrid_variable_map(var, grid_mapping, index=None):
     assert var.ndim == 2
     assert grid_mapping.ndim == 2
 
-    if index is not None:
-        warnings.warn("Warning: Parameter 'index' is not used here")
-    
     # t
     t_size = var.shape[0]
+    if index is not None:
+        warnings.warn("Warning: Parameter 'index' is not used properly in this function. Check source for details!")
+        t_size = 1
 
     # x
     x_size = np.max(grid_mapping[:, 1]) + 1
