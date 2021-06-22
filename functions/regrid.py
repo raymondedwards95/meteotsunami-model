@@ -169,7 +169,7 @@ def extract_data(filename: str, savename: str = None):
     data.b.attrs["long_name"] = "Water depth"
     data.b.attrs["units"] = "m"
     t1 = time.perf_counter()
-    print(f"  Used {t1 - t0:0.0f} seconds to process bathymetry data")
+    print(f"\tUsed {t1 - t0:0.0f} seconds to process bathymetry data")
 
     print("Processing water levels")
     t0 = time.perf_counter()
@@ -177,7 +177,7 @@ def extract_data(filename: str, savename: str = None):
     data.wl.attrs["long_name"] = "Water level"
     data.wl.attrs["units"] = "m"
     t1 = time.perf_counter()
-    print(f"  Used {t1 - t0:0.0f} seconds to process water level data")
+    print(f"\tUsed {t1 - t0:0.0f} seconds to process water level data")
 
     print("Processing zonal flow velocity")
     t0 = time.perf_counter()
@@ -185,7 +185,7 @@ def extract_data(filename: str, savename: str = None):
     data.u.attrs["long_name"] = "Zonal flow velocity"
     data.u.attrs["units"] = "m s-1"
     t1 = time.perf_counter()
-    print(f"  Used {t1 - t0:0.0f} seconds to process zonal flow velocity data")
+    print(f"\tUsed {t1 - t0:0.0f} seconds to process zonal flow velocity data")
 
     print("Processing meridional flow velocity")
     t0 = time.perf_counter()
@@ -193,7 +193,7 @@ def extract_data(filename: str, savename: str = None):
     data.v.attrs["long_name"] = "Meridional flow velocity"
     data.v.attrs["units"] = "m s-1"
     t1 = time.perf_counter()
-    print(f"  Used {t1 - t0:0.0f} seconds to process meridional flow velocity data")
+    print(f"\tUsed {t1 - t0:0.0f} seconds to process meridional flow velocity data")
 
     print("Processing atmospheric pressure")
     t0 = time.perf_counter()
@@ -201,7 +201,7 @@ def extract_data(filename: str, savename: str = None):
     data.p.attrs["long_name"] = "Atmospheric pressure near surface"
     data.p.attrs["units"] = "N m-2"
     t1 = time.perf_counter()
-    print(f"  Used {t1 - t0:0.0f} seconds to process pressure data")
+    print(f"\tUsed {t1 - t0:0.0f} seconds to process pressure data")
 
     print("\nFinished extracting data")
 
