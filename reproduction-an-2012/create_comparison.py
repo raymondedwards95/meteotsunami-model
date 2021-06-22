@@ -26,6 +26,9 @@ cases = [
     [0, 10, 11, 12],
     [0, 15, 16, 17],
     [0, 20, 21],
+    [0, 31, 32, 33],
+    [0, 36],
+    [36, 37, 38, 39]
 ]
 
 titles = [
@@ -33,7 +36,10 @@ titles = [
     "Implicitness of Numerical Scheme",
     "Spatial Resolution - Pressure",
     "Temporal Resolution - Pressure",
-    "Spatial Resolution - Model"
+    "Spatial Resolution - Model",
+    "Pressure Distribution Location",
+    "Bottom Slope",
+    "Location Pressure and Slope Bottom"
 ]
 
 num_comparisons = len(cases)
