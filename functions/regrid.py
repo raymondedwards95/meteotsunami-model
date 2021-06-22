@@ -58,11 +58,11 @@ def _regrid_variable_map(var, grid_mapping, index=None):
     assert var.ndim == 2
     assert grid_mapping.ndim == 2
 
-    if index is not None:
-        warnings.warn("Warning: Parameter 'index' is not used here")
-    
     # t
     t_size = var.shape[0]
+    if index is not None:
+        warnings.warn("Warning: Parameter 'index' is not used properly in this function. Check source for details!")
+        t_size = 1
 
     # x
     x_size = np.max(grid_mapping[:, 1]) + 1
@@ -77,10 +77,12 @@ def _regrid_variable_map(var, grid_mapping, index=None):
 
     var_grid = np.full((t_size, y_size, x_size), np.nan, dtype=np.float)
 
+    progress_factor = np.min([5, t_size])
+
     for k in range(t_size):
         # show progress
-        # if not (k+1) % 1:
-        #     print(f"Step {k+1 : 3.0f}/{t_size : 3.0f}")
+        if not (t_size-k-1) % (t_size // progress_factor):
+            print(f"Step {k:4.0f} of {t_size:0.0f} ({(k+1)/t_size*100:0.1f}%)")
 
         if __regrid_method == 1:
             for m in range(grid_mapping.shape[0]):  # slow method 1
@@ -115,14 +117,15 @@ def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
     var_grid = np.zeros((num_steps, y_grid.size, x_grid.size), dtype=np.float)  # shape: time, y_grid, x_grid
     xy = np.vstack((x, y)).transpose()
     x_grid_mesh, y_grid_mesh = np.meshgrid(x_grid, y_grid)
-    f_progress = np.max([num_steps // 10, 1])
+
+    progress_factor = np.min([5, num_steps])
 
 
     # loop over time
     for i in range(num_steps):
         # show progress
-        if not (i+1) % f_progress:
-            print(f"Step {i+1 : 3.0f}/{num_steps : 3.0f}")
+        if not (num_steps-i-1) % (num_steps // progress_factor):
+            print(f"Step {i:4.0f} of {num_steps:0.0f} ({(i+1)/num_steps*100:0.1f}%)")
 
         temp = scipy.interpolate.griddata(xy, var[i, :], (x_grid_mesh, y_grid_mesh), "linear")
         var_grid[i, :, :] = temp
@@ -165,48 +168,43 @@ def extract_data(filename: str, savename: str = None):
     ## Regrid variables
     print("Processing bathymetry")
     t0 = time.perf_counter()
-    # data["b"] = (("y", "x"), _regrid_variable_interpolate(b, x, y, x_grid, y_grid, index=1)[0, :, :])
     data["b"] = (("y", "x"), _regrid_variable_map(b, grid_map, index=1)[0, :, :])
     data.b.attrs["long_name"] = "Water depth"
     data.b.attrs["units"] = "m"
     t1 = time.perf_counter()
-    print(f"  Used {t1 - t0:0.0f} seconds to process bathymetry data")
+    print(f"\tUsed {t1 - t0:0.0f} seconds to process bathymetry data")
 
     print("Processing water levels")
     t0 = time.perf_counter()
-    # data["wl"] = (("t", "y", "x"), _regrid_variable_interpolate(wl, x, y, x_grid, y_grid))
     data["wl"] = (("t", "y", "x"), _regrid_variable_map(wl, grid_map))
     data.wl.attrs["long_name"] = "Water level"
     data.wl.attrs["units"] = "m"
     t1 = time.perf_counter()
-    print(f"  Used {t1 - t0:0.0f} seconds to process water level data")
+    print(f"\tUsed {t1 - t0:0.0f} seconds to process water level data")
 
     print("Processing zonal flow velocity")
     t0 = time.perf_counter()
-    # data["u"] = (("t", "y", "x"), _regrid_variable_interpolate(u, x, y, x_grid, y_grid))
     data["u"] = (("t", "y", "x"), _regrid_variable_map(u, grid_map))
     data.u.attrs["long_name"] = "Zonal flow velocity"
     data.u.attrs["units"] = "m s-1"
     t1 = time.perf_counter()
-    print(f"  Used {t1 - t0:0.0f} seconds to process zonal flow velocity data")
+    print(f"\tUsed {t1 - t0:0.0f} seconds to process zonal flow velocity data")
 
     print("Processing meridional flow velocity")
     t0 = time.perf_counter()
-    # data["v"] = (("t", "y", "x"), _regrid_variable_interpolate(v, x, y, x_grid, y_grid))
     data["v"] = (("t", "y", "x"), _regrid_variable_map(v, grid_map))
     data.v.attrs["long_name"] = "Meridional flow velocity"
     data.v.attrs["units"] = "m s-1"
     t1 = time.perf_counter()
-    print(f"  Used {t1 - t0:0.0f} seconds to process meridional flow velocity data")
+    print(f"\tUsed {t1 - t0:0.0f} seconds to process meridional flow velocity data")
 
     print("Processing atmospheric pressure")
     t0 = time.perf_counter()
-    # data["p"] = (("t", "y", "x"), _regrid_variable_interpolate(p, x, y, x_grid, y_grid))
     data["p"] = (("t", "y", "x"), _regrid_variable_map(p, grid_map))
     data.p.attrs["long_name"] = "Atmospheric pressure near surface"
     data.p.attrs["units"] = "N m-2"
     t1 = time.perf_counter()
-    print(f"  Used {t1 - t0:0.0f} seconds to process pressure data")
+    print(f"\tUsed {t1 - t0:0.0f} seconds to process pressure data")
 
     print("\nFinished extracting data")
 
