@@ -34,7 +34,7 @@ x0_list = np.array([0, 50000])
 # cross shore (meters)
 x_min = 0
 x_max = 1e6
-x_step = 2.5e3
+x_step = 5e3
 
 # along shore (meters)
 y_min = -2e6

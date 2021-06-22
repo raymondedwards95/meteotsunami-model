@@ -21,7 +21,7 @@ num_cases = len(case)
 
 x_min = 0
 x_max = 1e6
-x_step = 2.5e3
+x_step = 5e3
 
 y_min = -2e6
 y_max = +3e6
