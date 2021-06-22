@@ -165,7 +165,6 @@ def extract_data(filename: str, savename: str = None):
     ## Regrid variables
     print("Processing bathymetry")
     t0 = time.perf_counter()
-    # data["b"] = (("y", "x"), _regrid_variable_interpolate(b, x, y, x_grid, y_grid, index=1)[0, :, :])
     data["b"] = (("y", "x"), _regrid_variable_map(b, grid_map, index=1)[0, :, :])
     data.b.attrs["long_name"] = "Water depth"
     data.b.attrs["units"] = "m"
@@ -174,7 +173,6 @@ def extract_data(filename: str, savename: str = None):
 
     print("Processing water levels")
     t0 = time.perf_counter()
-    # data["wl"] = (("t", "y", "x"), _regrid_variable_interpolate(wl, x, y, x_grid, y_grid))
     data["wl"] = (("t", "y", "x"), _regrid_variable_map(wl, grid_map))
     data.wl.attrs["long_name"] = "Water level"
     data.wl.attrs["units"] = "m"
@@ -183,7 +181,6 @@ def extract_data(filename: str, savename: str = None):
 
     print("Processing zonal flow velocity")
     t0 = time.perf_counter()
-    # data["u"] = (("t", "y", "x"), _regrid_variable_interpolate(u, x, y, x_grid, y_grid))
     data["u"] = (("t", "y", "x"), _regrid_variable_map(u, grid_map))
     data.u.attrs["long_name"] = "Zonal flow velocity"
     data.u.attrs["units"] = "m s-1"
@@ -192,7 +189,6 @@ def extract_data(filename: str, savename: str = None):
 
     print("Processing meridional flow velocity")
     t0 = time.perf_counter()
-    # data["v"] = (("t", "y", "x"), _regrid_variable_interpolate(v, x, y, x_grid, y_grid))
     data["v"] = (("t", "y", "x"), _regrid_variable_map(v, grid_map))
     data.v.attrs["long_name"] = "Meridional flow velocity"
     data.v.attrs["units"] = "m s-1"
@@ -201,7 +197,6 @@ def extract_data(filename: str, savename: str = None):
 
     print("Processing atmospheric pressure")
     t0 = time.perf_counter()
-    # data["p"] = (("t", "y", "x"), _regrid_variable_interpolate(p, x, y, x_grid, y_grid))
     data["p"] = (("t", "y", "x"), _regrid_variable_map(p, grid_map))
     data.p.attrs["long_name"] = "Atmospheric pressure near surface"
     data.p.attrs["units"] = "N m-2"
