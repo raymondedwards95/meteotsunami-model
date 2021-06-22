@@ -81,9 +81,6 @@ def _regrid_variable_map(var, grid_mapping, index=None):
 
     for k in range(t_size):
         # show progress
-        # if not (k+1) % 1:
-        #     print(f"Step {k+1 : 3.0f}/{t_size : 3.0f}")
-        # progress
         if not (t_size-k-1) % (t_size // progress_factor):
             print(f"Step {k:4.0f} of {t_size:0.0f} ({(k+1)/t_size*100:0.1f}%)")
 
@@ -120,14 +117,15 @@ def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
     var_grid = np.zeros((num_steps, y_grid.size, x_grid.size), dtype=np.float)  # shape: time, y_grid, x_grid
     xy = np.vstack((x, y)).transpose()
     x_grid_mesh, y_grid_mesh = np.meshgrid(x_grid, y_grid)
-    f_progress = np.max([num_steps // 10, 1])
+
+    progress_factor = np.min([5, num_steps])
 
 
     # loop over time
     for i in range(num_steps):
         # show progress
-        if not (i+1) % f_progress:
-            print(f"Step {i+1 : 3.0f}/{num_steps : 3.0f}")
+        if not (num_steps-i-1) % (num_steps // progress_factor):
+            print(f"Step {i:4.0f} of {num_steps:0.0f} ({(i+1)/num_steps*100:0.1f}%)")
 
         temp = scipy.interpolate.griddata(xy, var[i, :], (x_grid_mesh, y_grid_mesh), "linear")
         var_grid[i, :, :] = temp
