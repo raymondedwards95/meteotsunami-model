@@ -85,7 +85,7 @@ def _regrid_variable_map(var, grid_mapping, index=None):
         #     print(f"Step {k+1 : 3.0f}/{t_size : 3.0f}")
         # progress
         if not (t_size-k-1) % (t_size // progress_factor):
-            print(f"Frame {k:4.0f} of {t_size:0.0f} ({(k+1)/t_size*100:0.1f}%)")
+            print(f"Step {k:4.0f} of {t_size:0.0f} ({(k+1)/t_size*100:0.1f}%)")
 
         if __regrid_method == 1:
             for m in range(grid_mapping.shape[0]):  # slow method 1
