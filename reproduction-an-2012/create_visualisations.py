@@ -131,7 +131,7 @@ plt.axvline(color="black", linewidth=1)
 # plt.axvline(100, linestyle="--", color="gray", linewidth=1)
 # plt.axvline(200, linestyle="--", color="gray", linewidth=1)
     
-plt.savefig(figure_dir + "bathymetry_contour.jpg", bbox_inches="tight")
+plt.savefig(figure_dir + "bathymetry_contour", bbox_inches="tight")
 
 
 ### Figure pressure
@@ -161,7 +161,7 @@ for i in range(4):
 #     _ax.axvline(100, linestyle="--", color="gray", linewidth=1)
 #     _ax.axvline(200, linestyle="--", color="gray", linewidth=1)
     
-fig.savefig(figure_dir + "pressure_contours.jpg", bbox_inches="tight")
+fig.savefig(figure_dir + "pressure_contours", bbox_inches="tight")
 
 
 ### Figure sse contours
@@ -190,7 +190,7 @@ for i in range(4):
 #     _ax.axvline(100, linestyle="--", color="gray", linewidth=1)
 #     _ax.axvline(200, linestyle="--", color="gray", linewidth=1)
     
-fig.savefig(figure_dir + "sse_contours.jpg", bbox_inches="tight")
+fig.savefig(figure_dir + "sse_contours", bbox_inches="tight")
 
 
 ### Figure alongshore profiles sse
@@ -217,7 +217,7 @@ for i in range(4):
     _ax.axhline(color="black", linewidth=1)
     _ax.axvline(color="black", linewidth=1)
     
-fig.savefig(figure_dir + "sse_along.jpg", bbox_inches="tight")
+fig.savefig(figure_dir + "sse_along", bbox_inches="tight")
 
 
 ### Figure cross-shore profile sse
@@ -241,7 +241,7 @@ plt.ylim([0, 0.7])
 # plt.axvline(100, linestyle="--", color="gray", linewidth=1)
 # plt.axvline(200, linestyle="--", color="gray", linewidth=1)
     
-plt.savefig(figure_dir + "sse_cross.jpg", bbox_inches="tight")
+plt.savefig(figure_dir + "sse_cross", bbox_inches="tight")
 
 
 ### Figure alongshore profiles
@@ -267,7 +267,7 @@ plt.axvline(7.56e3, linestyle="--", color="gray", linewidth=1)
 plt.xlabel("$y$ [km]")
 plt.ylabel("$SSE$ [m]")
     
-plt.savefig(figure_dir + "sse_along_2.jpg", bbox_inches="tight")
+plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight")
 
 
 ### Animation
