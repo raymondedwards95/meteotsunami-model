@@ -17,7 +17,7 @@ import functions.pressure as fp
 
 ### Parameters
 # generic
-cases = [0, 10, 11, 12, 15, 16, 17, 31, 32, 33]
+cases = [0, 10, 11, 12, 15, 16, 17, 31, 32, 33, 41]
 num_cases = len(cases)
 
 # pressure distribution
@@ -29,7 +29,7 @@ p0 = 2000.  # default: 2000 Pa
 # cross shore (meters)
 x_min = 0.  # default: 0 km
 x_max = 1e6  # default: 1000 km
-x_steps = [1e4, 2e4, 4e4, 0.5e4, 1e4, 1e4, 1e4, 1e4, 1e4, 1e4]  # default: 10 km
+x_steps = [1e4, 2e4, 4e4, 0.5e4, 1e4, 1e4, 1e4, 1e4, 1e4, 1e4, 1e4]  # default: 10 km
 
 # along shore (meters)
 y_min = -1e7  # default: -10000 km
@@ -39,13 +39,14 @@ y_steps = x_steps  # default: 10 km
 # time (seconds)
 t_min = 0  # default: 0
 t_max = 70 * 3600.  # default: 70 hours
-t_steps = list(np.array([1., 1., 1., 1., 2., 1./2., 1./4., 1., 1., 1.]) * 3600.)  # default: 1 hour
+t_steps = list(np.array([1., 1., 1., 1., 2., 1./2., 1./4., 1., 1., 1., 1.]) * 3600.)  # default: 1 hour
 
 # other
 x0_vals = [0.] * num_cases
 x0_vals[7] = 1e5
 x0_vals[8] = 2e5
 x0_vals[9] = 3e5
+x0_vals[10] = 5e5
 
 # check parameters
 assert len(x_steps) == num_cases
