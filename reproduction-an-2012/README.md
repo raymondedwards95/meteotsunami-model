@@ -67,6 +67,6 @@ All different cases are numbered.
 | 38 | Set `alpha` from `1/400` to `1/800` and set `x0_p` from `0` km to `200` km | See 31 and 36 |
 | 39 | Set `alpha` from `1/400` to `1/800` and set `x0_p` from `0` km to `300` km | See 31 and 36 |
 ||||
-| 41 | `alpha` from `1/400` to `0` and `average_depth` to `250` m | Flat bottom |
-| 42 | `alpha` from `1/400` to `0` and `average_depth` to `100` m | See 41 |
-| 43 | `alpha` from `1/400` to `0` and `average_depth` to `500` m | See 41 |
+| 41 | Set `alpha` from `1/400` to `0` and set `average_depth` to `250` m and set `x0_p` from `0` to `300` km | Flat bottom and see 33|
+| 42 | Set `alpha` from `1/400` to `0` and set `average_depth` to `100` m and set `x0_p` from `0` to `300` km | See 41 |
+| 43 | Set `alpha` from `1/400` to `0` and set `average_depth` to `500` m and set `x0_p` from `0` to `300` km | See 41 |
