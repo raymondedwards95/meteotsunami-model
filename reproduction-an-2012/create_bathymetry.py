@@ -12,13 +12,14 @@ import functions.bathymetry as fb
 
 
 ###
-cases = [0, 36]
-slopes = [1./400., 1./800.]
+cases = [0, 36, 41, 42, 43]
+slopes = [1./400., 1./800., 0., 0., 0.]
+depths = [0, 0, 250, 100, 500]
 
 
 ###
-def depth(x, alpha=1/400):
-    return -1. * alpha * x
+def depth(x, alpha=1/400, d0=0.):
+    return -1. * (d0 + alpha * x)
 
 
 ###
@@ -36,9 +37,10 @@ xx, yy = np.meshgrid(x, y)
 for i in range(len(cases)):
     case = cases[i]
     slope = slopes[i]
-    print(f"###\nCreating bathymetry for case {case:02.0f}")
+    depth_0 = depths[i]
+    print(f"###\nCreating bathymetry for {case=:02.0f}, with {slope=} and {depth_0=}")
 
-    zz = depth(xx, slope)
+    zz = depth(xx, slope, depth_0)
     data = fb.convert_to_xarray(x, y, zz)
     fb.write_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}.xyb")
     fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_repr_{case:02.0f}")
