@@ -114,7 +114,7 @@ unit1           = Pa
             #     pass
             # if False:
             #     pass
-            if (i > 0) and np.all(p[i,:,:] == p[i-1,:,:]):
+            if (i > 0) and np.all(p[i,:,:].round(3) == p[i-1,:,:].round(3)):  # round to 3 numbers?
                 print(f"\nSkip writing for hour {t[i]/3600.:0.3f} ({i=})")
 
             # write if there are values other than reference
