@@ -195,7 +195,7 @@ if __name__ == "__main__":
 
     # function for computing 'pressure'
     def f(x, y, t):
-        return np.min([1, t / 5]) * np.sin(x * np.pi) * np.sin(y * np.pi)
+        return np.min([1, t / 5. / 3600.]) * np.sin(x * np.pi) * np.sin(y * np.pi)
 
     t0 = time.perf_counter()
 
