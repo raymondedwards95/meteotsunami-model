@@ -112,8 +112,10 @@ unit1           = Pa
             # put nothing if all values are close to reference
             # if ((i != 0) and (np.all(np.isclose(data.values[i, :, :].round(2), 0.)))):  # maybe set rtol and atol?
             #     pass
-            if False:
-                pass
+            # if False:
+            #     pass
+            if (i > 0) and np.all(p[i,:,:] == p[i-1,:,:]):
+                print(f"\nSkip writing for hour {t[i]/3600.:0.3f} ({i=})")
 
             # write if there are values other than reference
             else:
