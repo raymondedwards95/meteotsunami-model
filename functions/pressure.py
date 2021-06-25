@@ -128,7 +128,10 @@ unit1           = Pa
 
                         # write a value and neglect trailing zeros after decimal point
                         # note: second index for p (i.e. -1*n) to fix coordinate-system
-                        file.write(f"{p[i, -1*n, m]:0.2f} ".replace(".00", ""))
+                        # replacement rules:
+                        # 1.: -0 -> +0
+                        # 2.: 0.00 -> 0
+                        file.write(f"{p[i, -1*n, m]:0.2f} ".replace("-0.00", "0.00").replace(".00", ""))
                     file.write("\n")
     
     print(f"Finished writing to '{filename}'")
