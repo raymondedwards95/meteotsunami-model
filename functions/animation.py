@@ -161,8 +161,8 @@ def animation_contour_uv(dataset, saveloc=None):
     if saveloc.endswith(".mp4"):
         saveloc.replace(".mp4", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + "/anim_contours.mp4"
-    savename_static = saveloc + "/test_anim_contours"
+    savename = saveloc + "/anim_uv_cont.mp4"
+    savename_static = saveloc + "/test_anim_uv_cont"
 
     ## Shortcuts
     x = dataset["x"]
@@ -275,7 +275,7 @@ def animation_contour_uv(dataset, saveloc=None):
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter()
-    print(f"Finished contour-animation in {t1-t0:0.1f} seconds")
+    print(f"Finished uv-contour-animation in {t1-t0:0.1f} seconds")
     print(f"Saved animation as '{savename}'")
     return
 
