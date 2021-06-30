@@ -274,11 +274,12 @@ def animation_contour_uv(dataset, saveloc=None):
         set_plottext(i)
 
         # colorbar
-        plotdata[i].set_clim(limits[i])
-        fig.colorbar(
-            plotdata[i],
-            cax=cax[i]
-        )
+        for j in range(2):
+            plotdata[j].set_clim(limits[j])
+            fig.colorbar(
+                plotdata[j],
+                cax=cax[j]
+            )
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
