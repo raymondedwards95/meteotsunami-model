@@ -120,3 +120,4 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None):
     ax[0].set_ylabel("$SSE$ [m]")
 
     fig.savefig(savename, bbox_inches="tight")
+    print(f"Saved figure {savename}")
