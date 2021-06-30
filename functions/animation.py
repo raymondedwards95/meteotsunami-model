@@ -184,9 +184,9 @@ def animation_contour_uv(dataset, saveloc=None):
     vel_v = dataset["v"]
 
     x = x - x.min()
-    wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
+    wl_max = float(np.max([np.abs([vel_u.max(), vel_u.min()])]))
     wl_min = -1. * wl_max
-    p_max = float(np.max([np.abs([p.max(), p.min()])]))
+    p_max = float(np.max([np.abs([vel_v.max(), vel_v.min()])]))
     p_min = -1. * p_max
 
     limits = [(wl_min, wl_max), (p_min, p_max)]
