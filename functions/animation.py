@@ -43,7 +43,7 @@ def animation_contour(dataset, saveloc=None):
     p_min = -1. * p_max
 
     limits = [(wl_min, wl_max), (p_min, p_max)]
-    cmaps = [cmo.cm.balance, cmo.cm.delta]
+    cmaps = [cmo.cm.balance, cmo.cm.curl]
 
     ## Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
@@ -69,6 +69,141 @@ def animation_contour(dataset, saveloc=None):
             y / 1000,
             x / 1000,
             p.isel(t=i).T,
+            vmin=p_min,
+            vmax=p_max,
+            cmap=cmaps[1],
+            levels=31
+        )
+
+    def set_plottext(i=0):
+        plottext[0] = ax[0].set_title(
+            f"$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
+        )
+
+    set_plotdata()
+    set_plottext()
+
+    ## Subplot layout
+    def initfig():
+        for i in range(2):
+            ax[i].axhline(color="black", linewidth=1)
+            ax[i].axvline(color="black", linewidth=1)
+            ax[i].set_ylabel("$x$ [km]")
+            ax[i].set_ylim([0, 200])
+            ax[i].set_xlim([0, y.max() / 1000.])
+
+            # colorbar
+            plotdata[i].set_clim(limits[i])
+            cbar = fig.colorbar(
+                plotdata[i],
+                ax=ax[i],
+                fraction=0.01,
+                aspect=50
+            )
+
+        ax[0].set_xlabel("$y$ [km]")
+        return tuple(plotdata.flatten()) + tuple(plottext.flatten())
+
+    initfig()
+
+    ## Update data
+    num_frames = t.size
+
+    def update(i):
+        # progress
+        if not (num_frames-i-1) % (num_frames // 5):
+            print(f"Frame {i:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%)")
+
+        # remove data in contour plots
+        for _temp in plotdata[0].collections:
+            _temp.remove()
+        for _temp in plotdata[1].collections:
+            _temp.remove()
+
+        # new data
+        set_plotdata(i)
+        set_plottext(i)
+
+        return tuple(plotdata.flatten()) + tuple(plottext.flatten())
+
+    ## Animation
+    frames = (np.arange(t.size)).astype(np.int)
+    anim = FuncAnimation(
+        fig,
+        update,
+        init_func=initfig,
+        frames=frames,
+        interval=1000/20
+    )
+    print(f"Creating animation '{savename}'")
+    t0 = time.perf_counter()
+    plt.savefig(savename_static)
+    anim.save(savename)
+    t1 = time.perf_counter()
+    print(f"Finished contour-animation in {t1-t0:0.1f} seconds")
+    print(f"Saved animation as '{savename}'")
+    return
+
+
+def animation_contour_uv(dataset, saveloc=None):
+    """ Creates an animation of the top-down view of the water velocity data
+
+    Input:
+        dataset:    Dataset that contains all variables
+    
+    Parameters:
+        saveloc:    Folder to write the animation to
+    """
+    assert isinstance(dataset, xr.Dataset)
+
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".mp4"):
+        saveloc.replace(".mp4", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + "/anim_contours.mp4"
+    savename_static = saveloc + "/test_anim_contours"
+
+    ## Shortcuts
+    x = dataset["x"]
+    y = dataset["y"]
+    t = dataset["t"]
+    vel_u = dataset["u"]
+    vel_v = dataset["v"]
+
+    x = x - x.min()
+    wl_max = np.max([np.abs([vel_u.max(), vel_u.min()])])
+    wl_min = -1. * wl_max
+    p_max = np.max([np.abs([vel_v.max(), vel_v.min()])])
+    p_min = -1. * p_max
+
+    limits = [(wl_min, wl_max), (p_min, p_max)]
+    cmaps = [cmo.cm.delta, cmo.cm.delta]
+
+    ## Figure options
+    fig, ax = plt.subplots(2, 1, sharey=True)
+    fig.set_size_inches(14.4, 7.2)
+    fig.set_dpi(100)
+    fig.set_tight_layout(True)
+
+    ## Initial data
+    plotdata = np.zeros(2, dtype=np.object)
+    plottext = np.zeros(1, dtype=np.object)
+
+    def set_plotdata(i=0):
+        plotdata[0] = ax[0].contourf(
+            y / 1000,
+            x / 1000,
+            vel_u.isel(t=i).T,
+            vmin=wl_min,
+            vmax=wl_max,
+            cmap=cmaps[0],
+            levels=31
+        )
+        plotdata[1] = ax[1].contourf(
+            y / 1000,
+            x / 1000,
+            vel_v.isel(t=i).T,
             vmin=p_min,
             vmax=p_max,
             cmap=cmaps[1],
