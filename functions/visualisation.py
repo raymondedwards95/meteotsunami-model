@@ -113,14 +113,14 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None):
         wl, 
         color="C0", 
         label="Waterlevel"
-        )
+    )
     ax[0].plot(
         x / 1000., 
         wl_model, 
         color="C0", 
         linestyle="--", 
         label=f"Best fit with $1/k0={1./k0/1000.:0.1f}$km"
-        )
+    )
     ax[0].axhline(color="black", linewidth=1)
     ax[0].legend()
     ax[0].set_xlim(0, x.max() / 1000.)
