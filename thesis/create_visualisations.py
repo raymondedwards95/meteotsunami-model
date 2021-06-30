@@ -95,15 +95,18 @@ os.makedirs(figure_dir, exist_ok=True)
 ### Get data
 data = xr.open_dataset(filename_processed)
 
+t_moment = 32 * 3600
+
 
 ### Get optimal coordinates
-y_idx_max = fu.find_peaks_const_t(data, 32*3600, crests=True)
-y_idx_min = fu.find_peaks_const_t(data, 32*3600, crests=False)
+y_idx_max = fu.find_peaks_const_t(data, t_moment, crests=True)
+y_idx_min = fu.find_peaks_const_t(data, t_moment, crests=False)
 
 
 ### Figures
-fv.vis_crossshore(data, y=y_idx_max[0], t=32*3600, saveloc=figure_dir)
-fv.vis_crossshore(data, y=y_idx_min[0], t=32*3600, saveloc=figure_dir)
+for i in range(5):
+    fv.vis_crossshore(data, y=y_idx_max[i], t=t_moment, saveloc=figure_dir)
+    fv.vis_crossshore(data, y=y_idx_min[i], t=t_moment, saveloc=figure_dir)
 
 
 ### Animation
