@@ -15,7 +15,14 @@ import functions.analysis as fa
 import functions.utilities as fu
 
 
-def vis_timeseries(data, x=1e4, y=1e5):
+def vis_timeseries(data, x=1e4, y=1e5, saveloc=None):
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".mp4"):
+        saveloc.replace(".mp4", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + f"/cross_shore_{x/1000:0.0f}_{y/3600:0.0f}"
+
     if np.isscalar(y):
         y = np.array([y])
     if isinstance(y, list):
@@ -71,6 +78,7 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None):
     ax[0].plot(y, wl)
 
     fig.savefig(savename, bbox_inches="tight")
+    print(f"Saved figure {savename}")
 
 
 def vis_crossshore(data, y=1e5, t=3600, saveloc=None):
