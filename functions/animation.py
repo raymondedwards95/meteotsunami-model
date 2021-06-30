@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 from matplotlib.animation import FuncAnimation
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 def animation_contour(dataset, saveloc=None):
@@ -50,6 +51,10 @@ def animation_contour(dataset, saveloc=None):
     fig.set_size_inches(14.4, 7.2)
     fig.set_dpi(100)
     fig.set_tight_layout(True)
+
+    div = np.array([make_axes_locatable(ax[i]) for i in range(2)])
+    cax = np.array([div[i].append_axes("right", "5%", "5%") for i in range(2)])
+
 
     ## Initial data
     plotdata = np.zeros(2, dtype=np.object)
@@ -94,11 +99,9 @@ def animation_contour(dataset, saveloc=None):
 
             # colorbar
             plotdata[i].set_clim(limits[i])
-            cbar = fig.colorbar(
+            fig.colorbar(
                 plotdata[i],
-                ax=ax[i],
-                fraction=0.01,
-                aspect=50
+                cax=cax[i]
             )
 
         ax[0].set_xlabel("$y$ [km]")
@@ -123,6 +126,13 @@ def animation_contour(dataset, saveloc=None):
         # new data
         set_plotdata(i)
         set_plottext(i)
+
+        # colorbar
+        plotdata[i].set_clim(limits[i])
+        fig.colorbar(
+            plotdata[i],
+            cax=cax[i]
+        )
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
@@ -186,6 +196,9 @@ def animation_contour_uv(dataset, saveloc=None):
     fig.set_dpi(100)
     fig.set_tight_layout(True)
 
+    div = np.array([make_axes_locatable(ax[i]) for i in range(2)])
+    cax = np.array([div[i].append_axes("right", "5%", "5%") for i in range(2)])
+
     ## Initial data
     plotdata = np.zeros(2, dtype=np.object)
     plottext = np.zeros(1, dtype=np.object)
@@ -229,11 +242,9 @@ def animation_contour_uv(dataset, saveloc=None):
 
             # colorbar
             plotdata[i].set_clim(limits[i])
-            cbar = fig.colorbar(
+            fig.colorbar(
                 plotdata[i],
-                ax=ax[i],
-                fraction=0.01,
-                aspect=50
+                cax=cax[i]
             )
 
         ax[0].set_xlabel("$y$ [km]")
@@ -258,6 +269,13 @@ def animation_contour_uv(dataset, saveloc=None):
         # new data
         set_plotdata(i)
         set_plottext(i)
+
+        # colorbar
+        plotdata[i].set_clim(limits[i])
+        fig.colorbar(
+            plotdata[i],
+            cax=cax[i]
+        )
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
