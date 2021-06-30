@@ -36,7 +36,7 @@ fb.write_bathymetry(data, filename)
 
 
 ###
-fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_exp_00", xmax=x.max()/5.)
+fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_exp_00", xmax=10e3)
 
 # plt.show()
 print("Finished creating bathymetry-files")
