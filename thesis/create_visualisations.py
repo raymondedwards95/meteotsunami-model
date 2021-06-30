@@ -9,6 +9,7 @@ import os
 import sys
 
 import matplotlib.pyplot as plt
+import numpy as np
 import xarray as xr
 
 # fix for importing functions below
@@ -104,7 +105,7 @@ y_idx_min = fu.find_peaks_const_t(data, t_moment, crests=False)
 
 
 ### Figures
-for i in range(5):
+for i in range(np.min([y_idx_max.size, y_idx_min.size, 5])):
     fv.vis_crossshore(data, y=y_idx_max[i], t=t_moment, saveloc=figure_dir)
     fv.vis_crossshore(data, y=y_idx_min[i], t=t_moment, saveloc=figure_dir)
 
