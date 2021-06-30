@@ -96,10 +96,13 @@ data = xr.open_dataset(filename_processed)
 
 
 ### Get optimal coordinates
-
+y_idx_max = fu.find_peaks_const_t(data, 32*3600, crests=True)
+y_idx_min = fu.find_peaks_const_t(data, 32*3600, crests=False)
 
 
 ### Figures
+fv.vis_crossshore(data, y=y_idx_max[0], t=32*3600)
+fv.vis_crossshore(data, y=y_idx_min[0], t=32*3600)
 
 
 ### Animation
