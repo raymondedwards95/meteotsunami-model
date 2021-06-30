@@ -44,7 +44,14 @@ def vis_timeseries(data, x=1e4, y=1e5):
             ax[j,i].axhline(color="black", linewidth=1)
 
 
-def vis_alongshore(data, t=3600, x=1e4):
+def vis_alongshore(data, t=3600, x=1e4, saveloc=None):
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".mp4"):
+        saveloc.replace(".mp4", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + f"/along_shore_{x/1000:0.0f}_{t/3600:0.0f}"
+
     # if np.isscalar(t):
     #     t = np.array([t])
     if not np.isscalar(x):
@@ -59,6 +66,8 @@ def vis_alongshore(data, t=3600, x=1e4):
     ax = np.ravel(ax)
 
     ax[0].plot(y, wl)
+
+    fig.savefig(savename, bbox_inches="tight")
 
 
 def vis_crossshore(data, y=1e5, t=3600, saveloc=None):
