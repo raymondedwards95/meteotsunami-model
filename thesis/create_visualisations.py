@@ -96,12 +96,13 @@ os.makedirs(figure_dir, exist_ok=True)
 ### Get data
 data = xr.open_dataset(filename_processed)
 
-t_moment = 32 * 3600
+t_moment = 32. * 3600.
+x_moment = 1e4
 
 
 ### Get optimal coordinates
-y_idx_max = fu.find_peaks_const_t(data, t_moment, crests=True)
-y_idx_min = fu.find_peaks_const_t(data, t_moment, crests=False)
+y_idx_max = fu.find_peaks_const_t(data, t_moment, x=x_moment, crests=True)
+y_idx_min = fu.find_peaks_const_t(data, t_moment, x=x_moment, crests=False)
 
 
 ### Figures
