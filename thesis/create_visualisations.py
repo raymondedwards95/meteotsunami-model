@@ -17,6 +17,7 @@ import functions.analysis as fa
 import functions.animation as anim
 import functions.regrid as fr
 import functions.utilities as fu
+import functions.visualisation as fv
 
 
 ### Parameters
@@ -101,8 +102,8 @@ y_idx_min = fu.find_peaks_const_t(data, 32*3600, crests=False)
 
 
 ### Figures
-fv.vis_crossshore(data, y=y_idx_max[0], t=32*3600)
-fv.vis_crossshore(data, y=y_idx_min[0], t=32*3600)
+fv.vis_crossshore(data, y=y_idx_max[0], t=32*3600, saveloc=figure_dir)
+fv.vis_crossshore(data, y=y_idx_min[0], t=32*3600, saveloc=figure_dir)
 
 
 ### Animation
