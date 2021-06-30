@@ -96,7 +96,7 @@ os.makedirs(figure_dir, exist_ok=True)
 ### Get data
 data = xr.open_dataset(filename_processed)
 
-t_moment = 32. * 3600.
+t_moments = np.array([8, 16, 24, 32, 40]) * 3600.
 x_moment = 1e4
 
 
@@ -106,9 +106,13 @@ y_idx_min = fu.find_peaks_const_t(data, t_moment, x=x_moment, crests=False)
 
 
 ### Figures
-for i in range(np.min([y_idx_max.size, y_idx_min.size, 5])):
-    fv.vis_crossshore(data, y=y_idx_max[i], t=t_moment, saveloc=figure_dir)
-    fv.vis_crossshore(data, y=y_idx_min[i], t=t_moment, saveloc=figure_dir)
+for j in range(t_moments.size):
+    t_moment = t_moments[j]
+    for i in range(np.min([y_idx_max.size, y_idx_min.size, 5])):
+        fv.vis_crossshore(data, y=y_idx_max[i], t=t_moment, saveloc=figure_dir)
+        fv.vis_crossshore(data, y=y_idx_min[i], t=t_moment, saveloc=figure_dir)
+
+    fv.vis_alongshore(data, t=t_moment, x=x_moment, saveloc=figure_dir)
 
 
 ### Animation
