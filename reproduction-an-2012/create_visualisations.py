@@ -207,7 +207,7 @@ for i in range(4):
     _ax = ax[i//2, i%2]
     im = _ax.plot(y/1000, wl.interp(t=fu.to_timestr(plot_times[i]), x=10e3))
     _ax.set_xlim(plot_ylims[i])
-    _ax.set_ylim([-0.65, 0.65])
+    _ax.set_ylim([-1, 1])
     _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
     
     if i//2: _ax.set_xlabel("$y$ [km]")
