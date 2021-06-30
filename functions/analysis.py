@@ -25,7 +25,6 @@ def compute_decay_parameter(data, y, t):
         data["x"],  # xdata
         data["wl"].interp(t=fu.to_timestr(t), y=y),  # ydata
         p0=[1./100000., 1.],  # p0
-        bounds=(0., [10., 10.])  # bounds (min, max)
     )
     k0, y0 = popt
     return k0, y0
