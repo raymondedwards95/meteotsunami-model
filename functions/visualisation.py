@@ -75,7 +75,14 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None):
     fig, ax = plt.subplots(1, 1, squeeze=False)
     ax = np.ravel(ax)
 
-    ax[0].plot(y, wl)
+    ax[0].plot(
+        y / 1000., 
+        wl
+    )
+    ax[0].axhline(color="black", linewidth=1)
+    ax[0].set_xlim(0, y.max() / 1000.)
+    ax[0].set_xlabel("$y$ [km]")
+    ax[0].set_ylabel("$SSE$ [m]")
 
     fig.savefig(savename, bbox_inches="tight")
     print(f"Saved figure {savename}")
