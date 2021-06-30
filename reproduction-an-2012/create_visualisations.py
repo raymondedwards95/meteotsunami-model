@@ -274,6 +274,7 @@ plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight")
 if make_ani:
     anim.animation_alongshore(data, saveloc=figure_dir)
     anim.animation_contour(data, saveloc=figure_dir)
+    anim.animation_contour_uv(data, saveloc=figure_dir)
 else:
     print("\nNot creating animations")
 
