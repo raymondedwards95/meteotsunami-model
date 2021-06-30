@@ -130,6 +130,7 @@ def animation_contour(dataset, saveloc=None):
         # colorbar
         for j in range(2):
             plotdata[j].set_clim(limits[j])
+            cax[j].cla()
             fig.colorbar(
                 plotdata[j],
                 cax=cax[j]
@@ -243,6 +244,7 @@ def animation_contour_uv(dataset, saveloc=None):
 
             # colorbar
             plotdata[i].set_clim(limits[i])
+            cax[j].cla()
             fig.colorbar(
                 plotdata[i],
                 cax=cax[i]
