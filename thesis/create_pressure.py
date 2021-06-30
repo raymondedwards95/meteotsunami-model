@@ -43,7 +43,7 @@ y_step = x_step
 
 # time (seconds)
 t_min = 0
-t_max = 96. * 3600.  
+t_max = 50. * 3600.  
 t_step = 3600. / 6.  
 
 ## Convert parameters
