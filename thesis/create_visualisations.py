@@ -98,6 +98,26 @@ data = xr.open_dataset(filename_processed)
 
 t_moments = np.array([8, 16, 24, 32, 40]) * 3600.
 x_moment = 1e4
+y_moment = 500000.
+
+### Compute stuff
+with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
+    file.write(f"\n\nWave Period at y={y_moment} and x={x_moment}:\n")
+    waveperiods = fa.compute_wave_periods(data, y_moment, x=x_moment)
+    for waveperiod in waveperiods:
+        file.write(f"{waveperiod:0.1f}\t")
+    file.write(f"\nMean Wave Period:\n{np.nanmean(waveperiods)}\n")
+
+
+    for j in range(t_moments.size):
+        t_moment = t_moments[j]
+
+        file.write(f"\n\nWave Lengths at t={t_moment} and x={x_moment}:\n")
+        wavelengths = fa.compute_wave_lengths(data, t_moment, x=x_moment)
+        for wavelength in wavelengths:
+            file.write(f"{wavelength:0.1f}\t")
+        file.write(f"\nMean Wave Length:\n{np.nanmean(wavelengths)}")
+        file.write(f"\nMean Wave Speed = Length / Period\n{np.nanmean(wavelengths) / np.nanmean(waveperiods)}\n")
 
 
 ### Figures
