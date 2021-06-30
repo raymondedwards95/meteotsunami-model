@@ -61,7 +61,14 @@ def vis_alongshore(data, t=3600, x=1e4):
     ax[0].plot(y, wl)
 
 
-def vis_crossshore(data, y=1e5, t=3600):
+def vis_crossshore(data, y=1e5, t=3600, saveloc=None):
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".mp4"):
+        saveloc.replace(".mp4", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + f"/cross_shore_{y/1000:0.0f}_{t/3600:0.0f}"
+
     # if np.isscalar(y):
     #     y = np.array([y])
     # if np.isscalar(t):
@@ -83,3 +90,5 @@ def vis_crossshore(data, y=1e5, t=3600):
     ax = np.ravel(ax)
     ax[0].plot(x, wl, color="C0")
     ax[0].plot(x, wl_model, color="C0", linestyle="--")
+
+    fig.savefig(savename, bbox_inches="tight")
