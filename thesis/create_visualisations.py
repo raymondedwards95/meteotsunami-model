@@ -13,8 +13,10 @@ import xarray as xr
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+import functions.analysis as fa
 import functions.animation as anim
 import functions.regrid as fr
+import functions.utilities as fu
 
 
 ### Parameters
