@@ -104,13 +104,16 @@ x_moment = 1e4
 for j in range(t_moments.size):
     t_moment = t_moments[j]
 
+    ## Find best parameters
     y_idx_max = fu.find_peaks_const_t(data, t_moment, x=x_moment, crests=True)
     y_idx_min = fu.find_peaks_const_t(data, t_moment, x=x_moment, crests=False)
 
+    ## Cross-shore
     for i in range(np.min([y_idx_max.size, y_idx_min.size, 5])):
         fv.vis_crossshore(data, y=y_idx_max[i], t=t_moment, saveloc=figure_dir)
         fv.vis_crossshore(data, y=y_idx_min[i], t=t_moment, saveloc=figure_dir)
 
+    ## Along-shore
     fv.vis_alongshore(data, t=t_moment, x=x_moment, saveloc=figure_dir)
 
 
