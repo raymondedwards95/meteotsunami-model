@@ -53,7 +53,6 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
         for j in range(2):
             ax[j,i].axhline(color="black", linewidth=1)
 
-
     if not keep_open:
         plt.close("all")
 
