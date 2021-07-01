@@ -340,8 +340,8 @@ def animation_alongshore(dataset, saveloc=None, xlims=None):
     x = x - x.min()
     wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
     wl_min = -1. * wl_max
-    p_max = float(np.max([np.abs([p.max(), p.min()])]))
-    p_min = -1. * p_max
+    p_max = float(p.max())
+    p_min = float(p.min())
 
     ## Figure options
     fig, ax = plt.subplots(2, 1, sharex=True)
