@@ -136,3 +136,41 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None):
 
     fig.savefig(savename, bbox_inches="tight")
     print(f"Saved figure {savename}")
+
+
+def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None):
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".mp4"):
+        saveloc.replace(".mp4", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_{y/1000:0.0f}"
+
+    if not np.isscalar(x):
+        raise ValueError(f"{x=} is not a number")
+    if not np.isscalar(y):
+        raise ValueError(f"{y=} is not a number")
+
+    ## Compute
+    freqs, power = fa.spectral_analysis_1d(data, y, x=x, variable="wl")
+    # print(freqs)
+    # print(power)
+
+    ## Figure
+    fig, ax = plt.subplots(1, 1, squeeze=False)
+    ax = np.ravel(ax)
+
+    ## Plot
+    ax[0].plot(
+        freqs * 3600.,
+        power / 3600.
+    )
+    ax[0].axhline(color="black", linewidth=1)
+    # ax[0].set_xlim(0, x.max() / 1000.)
+    ax[0].set_ylim(0, None)
+    ax[0].set_xlabel("Frequency [cycles / hour]")
+    ax[0].set_ylabel("Spectral Power [m$^2$ hr]")
+
+    fig.savefig(savename, bbox_inches="tight")
+    print(f"Saved figure {savename}")
+

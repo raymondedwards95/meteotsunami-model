@@ -20,6 +20,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.animation as anim
 import functions.regrid as fr
 import functions.utilities as fu
+import functions.visualisation as fv
 
 
 ### Parameters
@@ -268,6 +269,12 @@ plt.xlabel("$y$ [km]")
 plt.ylabel("$SSE$ [m]")
     
 plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight")
+
+
+### Spectra
+for _y in np.arange(0, 10):
+    _y *= 1e6
+    fv.vis_spectrum_1d(data, x=1e4, y=y, saveloc=figure_dir)
 
 
 ### Animation

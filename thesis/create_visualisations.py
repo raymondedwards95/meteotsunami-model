@@ -147,6 +147,9 @@ for j in range(t_moments.size):
         fv.vis_alongshore(data, t=t_moment, x=x_moment, saveloc=figure_dir)
     except:
         print(f"Error in along-shore visualisation {case=}")
+    
+
+### Spectra
 
 
 ### Animation
