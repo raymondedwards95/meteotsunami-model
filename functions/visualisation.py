@@ -15,7 +15,7 @@ import functions.analysis as fa
 import functions.utilities as fu
 
 
-def vis_timeseries(data, x=1e4, y=1e5, saveloc=None):
+def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -54,7 +54,11 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None):
             ax[j,i].axhline(color="black", linewidth=1)
 
 
-def vis_alongshore(data, t=3600, x=1e4, saveloc=None):
+    if not keep_open:
+        plt.close("all")
+
+
+def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -87,9 +91,11 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None):
 
     fig.savefig(savename, bbox_inches="tight")
     print(f"Saved figure {savename}")
+    if not keep_open:
+        plt.close("all")
 
 
-def vis_crossshore(data, y=1e5, t=3600, saveloc=None):
+def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -138,9 +144,11 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None):
 
     fig.savefig(savename, bbox_inches="tight")
     print(f"Saved figure {savename}")
+    if not keep_open:
+        plt.close("all")
 
 
-def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None):
+def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -176,4 +184,6 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None):
 
     fig.savefig(savename, bbox_inches="tight")
     print(f"Saved figure {savename}")
+    if not keep_open:
+        plt.close("all")
 
