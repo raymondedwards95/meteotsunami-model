@@ -11,7 +11,7 @@ from matplotlib.animation import FuncAnimation
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
-def animation_contour(dataset, saveloc=None):
+def animation_contour(dataset, saveloc=None, xlims=None):
     """ Creates an animation of the top-down view of the water level and surface air pressure data
 
     Input:
@@ -29,6 +29,9 @@ def animation_contour(dataset, saveloc=None):
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + "/anim_contours.mp4"
     savename_static = saveloc + "/test_anim_contours"
+
+    if xlims is None:
+        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
 
     ## Shortcuts
     x = dataset["x"]
@@ -95,7 +98,7 @@ def animation_contour(dataset, saveloc=None):
             ax[i].axvline(color="black", linewidth=1)
             ax[i].set_ylabel("$x$ [km]")
             ax[i].set_ylim([0, 200])
-            ax[i].set_xlim([0, y.max() / 1000.])
+            ax[i].set_xlim(xlims)
 
             # colorbar
             plotdata[i].set_clim(limits[i])
@@ -157,7 +160,7 @@ def animation_contour(dataset, saveloc=None):
     return
 
 
-def animation_contour_uv(dataset, saveloc=None):
+def animation_contour_uv(dataset, saveloc=None, xlims=None):
     """ Creates an animation of the top-down view of the water velocity data
 
     Input:
@@ -175,6 +178,9 @@ def animation_contour_uv(dataset, saveloc=None):
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + "/anim_uv_cont.mp4"
     savename_static = saveloc + "/test_anim_uv_cont"
+
+    if xlims is None:
+        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
 
     ## Shortcuts
     x = dataset["x"]
@@ -240,7 +246,7 @@ def animation_contour_uv(dataset, saveloc=None):
             ax[i].axvline(color="black", linewidth=1)
             ax[i].set_ylabel("$x$ [km]")
             ax[i].set_ylim([0, 200])
-            ax[i].set_xlim([0, y.max() / 1000.])
+            ax[i].set_xlim(xlims)
 
             # colorbar
             plotdata[i].set_clim(limits[i])
@@ -302,7 +308,7 @@ def animation_contour_uv(dataset, saveloc=None):
     return
 
 
-def animation_alongshore(dataset, saveloc=None):
+def animation_alongshore(dataset, saveloc=None, xlims=None):
     """ Creates an animation of an alongshore cross-section of the water level and surface air pressure data
 
     Input:
@@ -321,6 +327,9 @@ def animation_alongshore(dataset, saveloc=None):
     savename = saveloc + "/anim_alongshore.mp4"
     savename_static = saveloc + "/test_anim_alongshore"
 
+    if xlims is None:
+        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
+
     ## Shortcuts
     x = dataset["x"]
     y = dataset["y"]
@@ -331,8 +340,8 @@ def animation_alongshore(dataset, saveloc=None):
     x = x - x.min()
     wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
     wl_min = -1. * wl_max
-    p_max = float(np.max([np.abs([p.max(), p.min()])]))
-    p_min = -1. * p_max
+    p_max = float(p.max())
+    p_min = float(p.min())
 
     ## Figure options
     fig, ax = plt.subplots(2, 1, sharex=True)
@@ -369,7 +378,7 @@ def animation_alongshore(dataset, saveloc=None):
         for i in range(2):
             ax[i].axhline(color="black", linewidth=1)
             ax[i].axvline(color="black", linewidth=1)
-            ax[i].set_xlim([y.min() / 1000. / 10., y.max() / 1000.])
+            ax[i].set_xlim(xlims)
         
         ax[0].set_ylim([wl_min, wl_max])
         ax[1].set_ylim([p_min, p_max])
