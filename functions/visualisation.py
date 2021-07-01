@@ -18,8 +18,8 @@ import functions.utilities as fu
 def vis_timeseries(data, x=1e4, y=1e5, saveloc=None):
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".mp4"):
-        saveloc.replace(".mp4", "")
+    if saveloc.endswith(".jpg"):
+        saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/cross_shore_{x/1000:0.0f}_{y/3600:0.0f}"
 
@@ -57,8 +57,8 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None):
 def vis_alongshore(data, t=3600, x=1e4, saveloc=None):
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".mp4"):
-        saveloc.replace(".mp4", "")
+    if saveloc.endswith(".jpg"):
+        saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/along_shore_{x/1000:0.0f}_{t/3600:0.0f}"
 
@@ -92,8 +92,8 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None):
 def vis_crossshore(data, y=1e5, t=3600, saveloc=None):
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".mp4"):
-        saveloc.replace(".mp4", "")
+    if saveloc.endswith(".jpg"):
+        saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/cross_shore_{y/1000:0.0f}_{t/3600:0.0f}"
 
@@ -143,8 +143,8 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None):
 def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None):
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".mp4"):
-        saveloc.replace(".mp4", "")
+    if saveloc.endswith(".jpg"):
+        saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_{y/1000:0.0f}"
 
