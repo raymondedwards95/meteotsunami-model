@@ -1,46 +1,46 @@
 
 
 Wave Period at y=500000.0 and x=10000.0:
-nan	
+29.8	2.0	
 Mean Wave Period:
-nan
+15.916666666666666
 
 
 Wave Lengths at t=28800.0 and x=10000.0:
-nan	
+754245.8	
 Mean Wave Length:
-nan
+754245.7542457543
 Mean Wave Speed = Length / Period
-nan
+47387.16780601598
 
 
 Wave Lengths at t=57600.0 and x=10000.0:
-nan	
+1553446.6	
 Mean Wave Length:
-nan
+1553446.5534465536
 Mean Wave Speed = Length / Period
-nan
+97598.73634219186
 
 
 Wave Lengths at t=86400.0 and x=10000.0:
-nan	
+2352647.4	
 Mean Wave Length:
-nan
+2352647.352647353
 Mean Wave Speed = Length / Period
-nan
+147810.30487836772
 
 
 Wave Lengths at t=115200.0 and x=10000.0:
-nan	
+3151848.2	
 Mean Wave Length:
-nan
+3151848.151848152
 Mean Wave Speed = Length / Period
-nan
+198021.87341454357
 
 
 Wave Lengths at t=144000.0 and x=10000.0:
-nan	
+1563436.6	884115.9	1523476.5	
 Mean Wave Length:
-nan
+1323676.3236763238
 Mean Wave Speed = Length / Period
-nan
+83162.91038804129
