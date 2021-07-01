@@ -102,39 +102,51 @@ y_moment = 500000.
 
 ### Compute stuff
 with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
-    file.write(f"\n\nWave Period at y={y_moment} and x={x_moment}:\n")
-    waveperiods = fa.compute_wave_periods(data, y_moment, x=x_moment)
-    for waveperiod in waveperiods:
-        file.write(f"{waveperiod:0.1f}\t")
-    file.write(f"\nMean Wave Period:\n{np.nanmean(waveperiods)}\n")
+    try:
+        file.write(f"\n\nWave Period at y={y_moment} and x={x_moment}:\n")
+        waveperiods = fa.compute_wave_periods(data, y_moment, x=x_moment)
+        for waveperiod in waveperiods:
+            file.write(f"{waveperiod:0.1f}\t")
+        file.write(f"\nMean Wave Period:\n{np.nanmean(waveperiods)}\n")
+    except:
+        print(f"Error in computing waveperiod {case=}")
 
 
     for j in range(t_moments.size):
         t_moment = t_moments[j]
 
-        file.write(f"\n\nWave Lengths at t={t_moment} and x={x_moment}:\n")
-        wavelengths = fa.compute_wave_lengths(data, t_moment, x=x_moment)
-        for wavelength in wavelengths:
-            file.write(f"{wavelength:0.1f}\t")
-        file.write(f"\nMean Wave Length:\n{np.nanmean(wavelengths)}")
-        file.write(f"\nMean Wave Speed = Length / Period\n{np.nanmean(wavelengths) / np.nanmean(waveperiods)}\n")
+        try:
+            file.write(f"\n\nWave Lengths at t={t_moment} and x={x_moment}:\n")
+            wavelengths = fa.compute_wave_lengths(data, t_moment, x=x_moment)
+            for wavelength in wavelengths:
+                file.write(f"{wavelength:0.1f}\t")
+            file.write(f"\nMean Wave Length:\n{np.nanmean(wavelengths)}")
+            file.write(f"\nMean Wave Speed = Length / Period\n{np.nanmean(wavelengths) / np.nanmean(waveperiods)}\n")
+        except:
+            print(f"Error in computing wavelength {case=}")
 
 
 ### Figures
 for j in range(t_moments.size):
     t_moment = t_moments[j]
 
-    ## Find best parameters
-    y_idx_max = fu.find_peaks_const_t(data, t_moment, x=x_moment, crests=True)
-    y_idx_min = fu.find_peaks_const_t(data, t_moment, x=x_moment, crests=False)
+    try:
+        ## Find best parameters
+        y_idx_max = fu.find_peaks_const_t(data, t_moment, x=x_moment, crests=True)
+        y_idx_min = fu.find_peaks_const_t(data, t_moment, x=x_moment, crests=False)
 
-    ## Cross-shore
-    for i in range(np.min([y_idx_max.size, y_idx_min.size, 5])):
-        fv.vis_crossshore(data, y=data["y"][y_idx_max[i]].values, t=t_moment, saveloc=figure_dir)
-        fv.vis_crossshore(data, y=data["y"][y_idx_min[i]].values, t=t_moment, saveloc=figure_dir)
+        ## Cross-shore
+        for i in range(np.min([y_idx_max.size, y_idx_min.size, 5])):
+            fv.vis_crossshore(data, y=data["y"][y_idx_max[i]].values, t=t_moment, saveloc=figure_dir)
+            fv.vis_crossshore(data, y=data["y"][y_idx_min[i]].values, t=t_moment, saveloc=figure_dir)
+    except:
+        print(f"Error in cross-shore visualisation {case=}")
 
     ## Along-shore
-    fv.vis_alongshore(data, t=t_moment, x=x_moment, saveloc=figure_dir)
+    try:
+        fv.vis_alongshore(data, t=t_moment, x=x_moment, saveloc=figure_dir)
+    except:
+        print(f"Error in along-shore visualisation {case=}")
 
 
 ### Animation
