@@ -272,6 +272,7 @@ plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight")
 for _y in np.arange(1, 10):
     _y *= 1e5
     fv.vis_spectrum_1d(data, x=1e4, y=_y, saveloc=figure_dir)
+fv.vis_spectrum_2d(data, x=1e4, saveloc=figure_dir)
 
 
 ### Animation
