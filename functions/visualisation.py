@@ -216,7 +216,7 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
         plt.close("all")
     
 
-def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl"):
+def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", xlims=None, ylims=None, autolim=1e-3):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
 
@@ -234,6 +234,16 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl"):
 
     ## Compute spectrum
     wavenumber, freqs, power = fa.spectral_analysis_2d(data, x=x, variable=variable)
+
+    ## Compute plot limits
+    if (xlims is None) or (ylims is None):
+        valid = (power / power.max()) > autolim
+    if xlims is None:
+        i = np.any(valid, axis=0)
+        xlims = [0, 1.5*np.max(np.abs(wavenumber[i]))]
+    if ylims is None:
+        i = np.any(valid, axis=1)
+        ylims = [0, 1.5*np.max(freqs[i])]
 
     ## Figure
     fig, ax = plt.subplots(1, 1, squeeze=False)
@@ -255,8 +265,10 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl"):
             color="black"
         )
     ax[0].axvline(color="black", linewidth=1)
-    ax[0].set_xlim(0, 5e-6)
-    ax[0].set_ylim(0, 2e-4)
+    # ax[0].set_xlim(0, 5e-6)
+    # ax[0].set_ylim(0, 2e-4)
+    ax[0].set_xlim(xlims)
+    ax[0].set_ylim(ylims)
     ax[0].set_xlabel("Wavenumber [1 / meter]")
     ax[0].set_ylabel("Frequency [cycles / second]")
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$km")
