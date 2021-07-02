@@ -1,5 +1,6 @@
+#!/bin/bash
+# Create visualisations for all experiments
 
-# run cases
 python3 ./create_visualisations.py 00 &
 python3 ./create_visualisations.py 01 &
 python3 ./create_visualisations.py 02 &
