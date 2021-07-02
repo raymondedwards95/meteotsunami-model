@@ -1,7 +1,6 @@
 """ Scripts to make figures for help with explaining theory """
 
 import os
-import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
