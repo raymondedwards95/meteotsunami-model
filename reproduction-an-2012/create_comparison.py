@@ -5,6 +5,7 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 import xarray as xr
 
 # fix for importing functions below
@@ -49,6 +50,9 @@ figure_dir = file_dir + "/figures/"
 
 ### Defining Visualisations
 def vis_alongshore(data_list, title, cases, savename):
+    ## Settings
+    sns.set_palette(sns.color_palette("muted"))
+    
     ## Parameters
     savename = savename.replace(".jpg", "") + "/along"
     _ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
@@ -91,6 +95,9 @@ def vis_alongshore(data_list, title, cases, savename):
 
     
 def vis_alongshore_diff(data_list, title, cases, savename):
+    ## Settings
+    sns.set_palette(sns.color_palette("muted"))
+    
     ## Parameters
     savename = savename.replace(".jpg", "") + "/along_diff"
     _ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
@@ -136,6 +143,9 @@ def vis_alongshore_diff(data_list, title, cases, savename):
 
 
 def vis_crossshore(data_list, title, cases, savename):
+    ## Settings
+    sns.set_palette(sns.color_palette("muted"))
+    
     ## Parameters
     savename = savename.replace(".jpg", "") + "/cross"
     _yslices = np.array([7.56]) * 1e6
@@ -196,6 +206,9 @@ def vis_crossshore(data_list, title, cases, savename):
 
 
 def vis_crossshore_diff(data_list, title, cases, savename):
+    ## Settings
+    sns.set_palette(sns.color_palette("muted"))
+    
     ## Parameters
     savename = savename.replace(".jpg", "") + "/cross_diff"
     _yslices = np.array([7.56]) * 1e6
