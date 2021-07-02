@@ -41,6 +41,7 @@ t_min = 0
 t_max = 50. * 3600.  
 t_step = 3600. / 6.  
 
+
 ### Convert parameters
 U_list, a_list, p0_list, x0_list = np.meshgrid(U_list, a_list, p0_list, x0_list, indexing="ij")
 U_list = np.ravel(U_list)
@@ -51,11 +52,13 @@ x0_list = np.ravel(x0_list)
 cases = np.arange(len(U_list))
 num_cases = len(cases)
 
+
 ### Check parameters
 assert len(U_list) == num_cases
 assert len(a_list) == num_cases
 assert len(p0_list) == num_cases
 assert len(x0_list) == num_cases
+
 
 ### Save parameters to file
 print("\nPressure fields for the following cases are computed (case, U, a, p0, x0)")
