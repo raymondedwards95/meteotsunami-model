@@ -16,7 +16,7 @@ slopes = [1./400., 1./800., 0., 0., 0.]
 depths = [0, 0, 250, 100, 500]
 
 
-###
+### Function
 def simple_slope(x, alpha=1/400, d0=0.):
     return -1. * (d0 + alpha * x)
 
