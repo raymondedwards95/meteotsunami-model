@@ -5,6 +5,7 @@ import os
 import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 import xarray as xr
 
 
@@ -147,6 +148,9 @@ def plot_pressure(data, filename=None, x_scales=None):
         filename:   name of figures
         x_scales:   lower and upper limit of x (should be a list of length 2)
     """
+    ## Settings
+    sns.set_palette(sns.color_palette("muted"))
+
     ## prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
