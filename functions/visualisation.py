@@ -261,10 +261,8 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False):
         wavenumber, 
         fa.dispersion_relation(wavenumber, n=0, alpha=1/400))
     ax[0].axvline(color="black", linewidth=1)
-    # ax[0].set_xlim(0, 1e-4)
-    # ax[0].set_ylim(0, 3e-4)
-    ax[0].set_xlim(0, 1e-5)
-    ax[0].set_ylim(0, 1e-4)
+    ax[0].set_xlim(0, 5e-6)
+    ax[0].set_ylim(0, 2e-4)
     ax[0].set_xlabel("Wavenumber [1 / meter]")
     ax[0].set_ylabel("Frequency [cycles / second]")
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$km")
