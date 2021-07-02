@@ -44,4 +44,8 @@ wait
 echo "$(date) - Created figures repr: 37 38 39 41 42 43" 
 echo "$(date) - Created figures repr: 37 38 39 41 42 43" >> last_runs.log
 
+wait
+echo "$(date) - Created all figures repr"
+echo "$(date) - Created all figures repr" >> last_runs.log
+
 exit 0
