@@ -5,6 +5,7 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 import xarray as xr
 
 # fix for importing functions below
@@ -14,6 +15,9 @@ import functions.utilities as fu
 
 
 def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
+    ## Settings
+    sns.set_palette(sns.color_palette("muted"))
+
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -56,6 +60,9 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
 
 
 def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
+    ## Settings
+    sns.set_palette(sns.color_palette("muted"))
+
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -93,6 +100,9 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
 
 
 def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
+    ## Settings
+    sns.set_palette(sns.color_palette("muted"))
+
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -146,6 +156,9 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
 
 
 def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
+    ## Settings
+    sns.set_palette(sns.color_palette("muted"))
+    
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
