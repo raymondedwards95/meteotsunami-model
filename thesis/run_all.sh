@@ -45,7 +45,6 @@ bash ./run_exp.sh 15 &
 bash ./run_exp.sh 16 &
 bash ./run_exp.sh 17 &
 wait
-
 echo "$(date) - Finished all runs!" >> last_runs.log
 
 exit 0
