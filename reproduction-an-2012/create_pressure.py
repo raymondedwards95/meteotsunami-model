@@ -1,13 +1,8 @@
 """ Creates a file for D3D-FM-FLOW with the pressure-field as in the paper An et al. (2012) """
 
-# fix for systems without display
-import matplotlib
-matplotlib.use("Agg")
-
 import os
 import sys
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 # fix for importing functions below
