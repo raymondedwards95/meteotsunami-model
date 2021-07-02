@@ -83,7 +83,7 @@ if not os.path.exists(filename_processed) or reprocess_data:
     print(f"File '{filename_processed}' is not found. Processing data.")
     fr.extract_data(filename_output, savename=filename_processed)
     with open(filename_log, "a+") as _file:
-        _file.write(f"Processed data for case {case}")
+        _file.write(f"Processed data for case {case}\n")
 
 os.makedirs(figure_dir, exist_ok=True)
 
@@ -161,7 +161,7 @@ else:
 
 ### End
 with open(filename_log, "a+") as _file:
-    _file.write(f"Created visualisations for case {case}")
+    _file.write(f"Created visualisations for case {case}\n")
         
 if show_figs: 
     plt.show()
