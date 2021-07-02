@@ -19,7 +19,7 @@ if [ ! -f $INPUT_FILE ]
     exit 1
 fi
 
-echo "Last runs:" > last_runs.log
+echo "$(date) - Starting new runs!" >> last_runs.log
 
 # run cases
 bash ./run_exp.sh 00 &
@@ -45,5 +45,7 @@ bash ./run_exp.sh 15 &
 bash ./run_exp.sh 16 &
 bash ./run_exp.sh 17 &
 wait
+
+echo "$(date) - Finished all runs!" >> last_runs.log
 
 exit 0
