@@ -193,8 +193,6 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
 
     ## Compute spectrum
     freqs, power = fa.spectral_analysis_1d(data, y, x=x, variable=variable)
-    # print(freqs)
-    # print(power)
 
     ## Figure
     fig, ax = plt.subplots(1, 1, squeeze=False)
@@ -205,7 +203,6 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
         power / 3600.
     )
     ax[0].axhline(color="black", linewidth=1)
-    # ax[0].set_xlim(0, x.max() / 1000.)
     ax[0].set_ylim(0, None)
     ax[0].set_xlabel("Frequency [cycles / hour]")
     ax[0].set_ylabel("Spectral Power [m$^2$ hr]")
