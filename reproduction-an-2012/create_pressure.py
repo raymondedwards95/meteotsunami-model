@@ -97,7 +97,7 @@ for case_number in range(num_cases):
     #             p[i,j,k] = pressure(x[k], y[j], t[i], t0, U, a, p0)
 
     tt, yy, xx = np.meshgrid(t, y, x, indexing="ij")
-    p = pressure(xx, yy, tt, t0, U, a, p0, x0)
+    p = pressure(xx, yy, tt, t0, U, a, p0, x0).astype(np.float32)
 
     # remove zero-columns and zero-rows
     ix = np.where(~ np.all(np.isclose(p, 0), axis=(0,1)))[0]
