@@ -248,7 +248,7 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False):
     #     power,
     #     shading="nearest",
     #     cmap=cmo.cm.matter,
-    #     vmin=0
+    #     vmin=5.*power.min()
     # )
     ax[0].contourf(
         np.flip(wavenumber),
@@ -257,9 +257,13 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False):
         cmap=cmo.cm.matter,
         vmin=5.*power.min()
     )
-    ax[0].plot(
-        wavenumber, 
-        fa.dispersion_relation(wavenumber, n=0, alpha=1/400))
+    for i in range(5):
+        ax[0].plot(
+            wavenumber, 
+            fa.dispersion_relation(wavenumber, n=i, alpha=1/400), 
+            linewidth=1, 
+            color="black"
+        )
     ax[0].axvline(color="black", linewidth=1)
     ax[0].set_xlim(0, 5e-6)
     ax[0].set_ylim(0, 2e-4)
