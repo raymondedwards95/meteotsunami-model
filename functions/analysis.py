@@ -12,6 +12,24 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.utilities as fu
 
 
+def dispersion_relation(k, n=0, alpha=1/400):
+    """ Returns the frequency related to the wavenumber 
+    for shallow water waves on a beach of linear slope [Eckart, 1951] 
+    
+    Input:
+        k:      wavenumbers
+    
+    Parameters:
+        n:      mode
+        alpha:  slope of beach
+    
+    Output:
+        f:      frequencies corresponding to wavenumbers
+    """
+    g = 9.81
+    return np.sqrt((g * np.abs(k) / 2. / np.pi) * (2. * n + 1.) * np.tan(alpha))
+
+
 def exp_decay(x, k0, y0):
     """ Returns an exponential decay in x with decay parameter k0 and scale y0 """
     return y0 * np.exp(-k0 * x)
