@@ -162,8 +162,8 @@ def spectral_analysis_2d(data, x=1e4, variable="wl"):
         variable:   name of the variable to use, e.g. "wl" or "p"
     
     Output:
-        freqs:      corresponding frequencies (time-domain)      
         wavenumber: corresponding wavenumbers (space-domain)
+        freqs:      corresponding frequencies (time-domain)      
         power:      power-spectrum
     """
     t = data["t"].values.astype("datetime64[s]").astype(float)
