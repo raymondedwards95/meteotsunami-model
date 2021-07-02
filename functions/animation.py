@@ -30,9 +30,6 @@ def animation_contour(dataset, saveloc=None, xlims=None):
     savename = saveloc + "/anim_contours.mp4"
     savename_static = saveloc + "/test_anim_contours"
 
-    if xlims is None:
-        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
-
     ## Shortcuts
     x = dataset["x"]
     y = dataset["y"]
@@ -48,6 +45,9 @@ def animation_contour(dataset, saveloc=None, xlims=None):
 
     limits = [(wl_min, wl_max), (p_min, p_max)]
     cmaps = [cmo.cm.balance, cmo.cm.curl]
+
+    if xlims is None:
+        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
 
     ## Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
@@ -179,9 +179,6 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None):
     savename = saveloc + "/anim_uv_cont.mp4"
     savename_static = saveloc + "/test_anim_uv_cont"
 
-    if xlims is None:
-        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
-
     ## Shortcuts
     x = dataset["x"]
     y = dataset["y"]
@@ -197,6 +194,9 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None):
 
     limits = [(wl_min, wl_max), (p_min, p_max)]
     cmaps = [cmo.cm.delta, cmo.cm.delta]
+
+    if xlims is None:
+        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
 
     ## Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
@@ -327,9 +327,6 @@ def animation_alongshore(dataset, saveloc=None, xlims=None):
     savename = saveloc + "/anim_alongshore.mp4"
     savename_static = saveloc + "/test_anim_alongshore"
 
-    if xlims is None:
-        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
-
     ## Shortcuts
     x = dataset["x"]
     y = dataset["y"]
@@ -342,6 +339,9 @@ def animation_alongshore(dataset, saveloc=None, xlims=None):
     wl_min = -1. * wl_max
     p_max = float(p.max())
     p_min = float(p.min())
+
+    if xlims is None:
+        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
 
     ## Figure options
     fig, ax = plt.subplots(2, 1, sharex=True)
