@@ -19,10 +19,6 @@ os.makedirs(pressure_dir, exist_ok=True)
 
 
 ### Parameters
-# generic
-# cases = [0, 1]
-# num_cases = len(cases)
-
 # pressure distribution
 t0 = 10000.
 U_list = np.array([5, 15, 25])
@@ -45,7 +41,7 @@ t_min = 0
 t_max = 50. * 3600.  
 t_step = 3600. / 6.  
 
-## Convert parameters
+### Convert parameters
 U_list, a_list, p0_list, x0_list = np.meshgrid(U_list, a_list, p0_list, x0_list, indexing="ij")
 U_list = np.ravel(U_list)
 a_list = np.ravel(a_list)
@@ -55,12 +51,13 @@ x0_list = np.ravel(x0_list)
 cases = np.arange(len(U_list))
 num_cases = len(cases)
 
-# check parameters
+### Check parameters
 assert len(U_list) == num_cases
 assert len(a_list) == num_cases
 assert len(p0_list) == num_cases
 assert len(x0_list) == num_cases
 
+### Save parameters to file
 print("\nPressure fields for the following cases are computed (case, U, a, p0, x0)")
 with open(f"{current_dir}/parameters_pressure.txt", "w") as file:
     for i in range(num_cases):
@@ -97,36 +94,38 @@ def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
     )
 
 
-### Compute field
+### Compute fields
 for case_number in range(num_cases):
+    ## Set parameters
     case = cases[case_number]
     U = U_list[case_number]
     a = a_list[case_number]
     p0 = p0_list[case_number]
     x0 = x0_list[case_number]
 
+    ## Set paths
     filename = f"{pressure_dir}/exp_{case:02.0f}"
     figurename = f"{pressure_dir}/fig_exp_{case:02.0f}"
 
+    ## Compute pressure
     print(f"\nComputing pressure field for {case=} ({U=}, {a=}, {p0=}, {x0=})")
-
     p = pressure(xx, yy, tt, t0, U, a, p0, x0).astype(np.float32)
 
-    # remove zero-columns and zero-rows
+    ## Remove zero-columns and zero-rows
     ix = da.where(~ da.all(da.isclose(p, 0), axis=(0, 1)))[0]
     iy = da.where(~ da.all(da.isclose(p, 0), axis=(0, 2)))[0]
     _x = x[ix]
     _y = y[iy]
     p = p[:, :, ix][:, iy, :]
 
-    ### Write field
+    ## Write field
     data = fp.convert_to_xarray(t, _x, _y, p.compute())
     print(f"Process pressure field for {case=}")
     del _x, _y, p
     print(f"Writing pressure field for {case=}")
     fp.write_pressure(data, filename)
 
-    ### Write forcing file
+    ## Write forcing file
     print(f"Overwriting forcing file for {case=}")
     with open(f"{current_dir}/pressure/forcing_exp_{case:02.0f}.ext", "w") as file:
         file.write("* Meteo forcing \n")
@@ -136,7 +135,7 @@ for case_number in range(num_cases):
         file.write("METHOD   = 1 \n")
         file.write("OPERAND  = O \n")
 
-    ### Visualise field
+    ## Visualise field
     print(f"Plotting pressure field for {case=}")
     fp.plot_pressure(data, filename=figurename)
 
