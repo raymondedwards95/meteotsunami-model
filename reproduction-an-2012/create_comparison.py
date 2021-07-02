@@ -1,16 +1,11 @@
 """ Script to compare different simulations """
 
-# fix for systems without display
-import matplotlib
-matplotlib.use("Agg")
-
+import os
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
-
-import os
-import sys
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
