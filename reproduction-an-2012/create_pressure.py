@@ -89,13 +89,6 @@ for case_number in range(num_cases):
     y = np.linspace(y_min, y_max, y_num)
     t = np.arange(t_min, t_max+1, t_step)
 
-    # loop over all t, y and x
-    # p = np.zeros((t.size, y.size, x.size))
-    # for i in range(t.size):
-    #     for j in range(y.size):
-    #         for k in range(x.size):
-    #             p[i,j,k] = pressure(x[k], y[j], t[i], t0, U, a, p0)
-
     tt, yy, xx = np.meshgrid(t, y, x, indexing="ij")
     p = pressure(xx, yy, tt, t0, U, a, p0, x0).astype(np.float32)
 

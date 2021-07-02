@@ -110,13 +110,6 @@ for case_number in range(num_cases):
 
     print(f"\nComputing pressure field for {case=} ({U=}, {a=}, {p0=}, {x0=})")
 
-    # loop over all t, y and x
-    # p = np.zeros((t.size, y.size, x.size))
-    # for i in range(t.size):
-    #     for j in range(y.size):
-    #         for k in range(x.size):
-    #             p[i,j,k] = pressure(x[k], y[j], t[i], t0, U, a, p0)
-
     p = pressure(xx, yy, tt, t0, U, a, p0, x0).astype(np.float32)
 
     # remove zero-columns and zero-rows
