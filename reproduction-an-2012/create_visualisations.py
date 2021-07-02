@@ -1,19 +1,11 @@
 """ Script for making simple visualisations to compare with paper An et al. (2012) """
-
-# fix for systems without display
-import matplotlib
-matplotlib.use("Agg")
-
 import argparse
 import os
 import sys
-import time
 
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
-
-from matplotlib.animation import FuncAnimation
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))

@@ -1,9 +1,4 @@
 """ Script for making simple visualisations """
-
-# fix for systems without display
-import matplotlib
-matplotlib.use("Agg")
-
 import argparse
 import os
 import sys
