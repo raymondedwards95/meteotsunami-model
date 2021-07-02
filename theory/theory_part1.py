@@ -1,7 +1,6 @@
 """ Scripts to make figures for help with explaining theory """
 
 import os
-import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,15 +13,20 @@ try:
 except:
     create_map = False
 
+
+### Settings
+show_figures = False
 sns.set_palette(sns.color_palette("muted"))
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 
+### Constants
 g = 9.81
 a = np.logspace(2, 6)
 alpha = np.array([1/400, 1/40, 1/4])
 
 
+### Functions
 def u_crit(a, alpha):
     return np.sqrt(g * a * alpha / np.pi)
 
@@ -30,6 +34,7 @@ def wavelength(U, alpha):
     return 2. * np.pi * U * U / g / alpha
 
 
+### Speed
 plt.figure()
 for i in range(alpha.size):
     plt.semilogx(a / 1000., u_crit(a, alpha[i]), label=f"$\\alpha = {alpha[i]}$")
@@ -42,6 +47,7 @@ plt.ylim(0, 80)
 plt.savefig(f"{current_dir}/line_speed_size", bbox_inches="tight")
 
 
+### Wavelength
 plt.figure()
 for i in range(alpha.size):
     plt.plot(a / 1000., wavelength(u_crit(a, alpha[i]), alpha[i]) / 1000., label=f"$\\alpha = {alpha[i]}$")
@@ -54,6 +60,7 @@ plt.grid()
 plt.savefig(f"{current_dir}/line_wavelength_size", bbox_inches="tight")
 
 
+### Map
 if create_map:
     fig = plt.figure()
     ax = fig.add_subplot(projection=ccrs.PlateCarree())
@@ -72,4 +79,6 @@ if create_map:
     plt.savefig(f"{current_dir}/map", bbox_inches="tight")
 
 
-plt.show()
+### End
+if show_figures:
+    plt.show()
