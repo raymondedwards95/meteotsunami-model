@@ -239,18 +239,11 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl"):
     fig, ax = plt.subplots(1, 1, squeeze=False)
     ax = np.ravel(ax)
 
-    # ax[0].pcolormesh(
-    #     np.flip(wavenumber),
-    #     freqs,
-    #     power,
-    #     shading="nearest",
-    #     cmap=cmo.cm.matter,
-    #     vmin=5.*power.min()
-    # )
-    ax[0].contourf(
+    ax[0].pcolormesh(  # note: contourf is an option
         np.flip(wavenumber),
         freqs,
         power,
+        shading="nearest",
         cmap=cmo.cm.matter,
         vmin=5.*power.min()
     )
