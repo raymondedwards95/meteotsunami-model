@@ -3,7 +3,6 @@
 import os
 import sys
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 # fix for importing functions below
