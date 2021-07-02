@@ -35,6 +35,8 @@ def wavelength(U, alpha):
 
 
 ### Speed
+savename = f"{current_dir}/line_speed_size"
+
 plt.figure()
 for i in range(alpha.size):
     plt.semilogx(a / 1000., u_crit(a, alpha[i]), label=f"$\\alpha = {alpha[i]}$")
@@ -44,10 +46,13 @@ plt.xlabel("$a$ [km]")
 plt.ylabel("$U_{crit}$ [m/s]")
 plt.grid()
 plt.ylim(0, 80)
-plt.savefig(f"{current_dir}/line_speed_size", bbox_inches="tight")
+plt.savefig(savename, bbox_inches="tight")
+print(f"Saved figure {savename}")
 
 
 ### Wavelength
+savename = f"{current_dir}/line_wavelength_size"
+
 plt.figure()
 for i in range(alpha.size):
     plt.plot(a / 1000., wavelength(u_crit(a, alpha[i]), alpha[i]) / 1000., label=f"$\\alpha = {alpha[i]}$")
@@ -57,11 +62,14 @@ plt.title("Wavelength of Edge Wave Packet")
 plt.xlabel("$a$ [km]")
 plt.ylabel("$\\lambda$ [km]")
 plt.grid()
-plt.savefig(f"{current_dir}/line_wavelength_size", bbox_inches="tight")
+plt.savefig(savename, bbox_inches="tight")
+print(f"Saved figure {savename}")
 
 
 ### Map
 if create_map:
+    savename = f"{current_dir}/map"
+
     fig = plt.figure()
     ax = fig.add_subplot(projection=ccrs.PlateCarree())
     ax.coastlines("50m")
@@ -76,7 +84,8 @@ if create_map:
     ax.set_ylim([45, 60])
     # plt.xlabel("Longitude")
     # plt.ylabel("Latitude")
-    plt.savefig(f"{current_dir}/map", bbox_inches="tight")
+    plt.savefig(savename, bbox_inches="tight")
+    print(f"Saved figure {savename}")
 
 
 ### End
