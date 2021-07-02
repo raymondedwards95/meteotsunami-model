@@ -19,7 +19,8 @@ if [ ! -f $INPUT_FILE ]
     exit 1
 fi
 
-echo "$(date) - Starting new runs!" >> last_runs.log
+echo "$(date) - Starting new runs exp!"
+echo "$(date) - Starting new runs exp!" >> last_runs.log
 
 # run cases
 bash ./run_exp.sh 00 &
@@ -29,6 +30,8 @@ bash ./run_exp.sh 03 &
 bash ./run_exp.sh 04 &
 bash ./run_exp.sh 05 &
 wait
+echo "$(date) - Finished runs exp set 1"
+echo "$(date) - Finished runs exp set 1" >> last_runs.log
 
 bash ./run_exp.sh 06 &
 bash ./run_exp.sh 07 &
@@ -37,6 +40,8 @@ bash ./run_exp.sh 09 &
 bash ./run_exp.sh 10 &
 bash ./run_exp.sh 11 &
 wait
+echo "$(date) - Finished runs exp set 2"
+echo "$(date) - Finished runs exp set 2" >> last_runs.log
 
 bash ./run_exp.sh 12 &
 bash ./run_exp.sh 13 &
@@ -45,6 +50,11 @@ bash ./run_exp.sh 15 &
 bash ./run_exp.sh 16 &
 bash ./run_exp.sh 17 &
 wait
-echo "$(date) - Finished all runs!" >> last_runs.log
+echo "$(date) - Finished runs exp set 3"
+echo "$(date) - Finished runs exp set 3" >> last_runs.log
+
+wait
+echo "$(date) - Finished all runs exp"
+echo "$(date) - Finished all runs exp" >> last_runs.log
 
 exit 0
