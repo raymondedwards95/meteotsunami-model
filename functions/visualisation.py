@@ -18,6 +18,7 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
 
+    ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -25,15 +26,18 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/cross_shore_{x/1000:0.0f}_{y/3600:0.0f}"
 
+    ## Check input
     if np.isscalar(y):
         y = np.array([y])
     if isinstance(y, list):
         y = np.array(y)
 
+    ## Extract data
     t = data["t"]
     wl = data["wl"].interp(x=x, y=y)
     p = data["p"].interp(x=x, y=y)
 
+    ## Figure TEST
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
     ax = np.ravel(ax)
     ax[0].plot(t, wl)
@@ -41,6 +45,7 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     for i in range(2):
         ax[i].axhline(color="black", linewidth=1)
 
+    ## Figure TEST
     fig, ax = plt.subplots(y.size, 1, sharex=True, squeeze=False)
     ax = np.ravel(ax)
     for i in range(y.size):
@@ -48,6 +53,7 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
         ax[i].plot(t, p[:, i] / 2000.)
         ax[i].axhline(color="black", linewidth=1)
 
+    ## Figure TEST
     fig, ax = plt.subplots(2, y.size, sharex=True, sharey=True, squeeze=False)
     for i in range(y.size):
         ax[0,i].plot(t, wl[:, i])
@@ -55,6 +61,7 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
         for j in range(2):
             ax[j,i].axhline(color="black", linewidth=1)
 
+    ## End
     if not keep_open:
         plt.close("all")
 
@@ -63,6 +70,7 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
 
+    ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -70,6 +78,7 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/along_shore_{x/1000:0.0f}_{t/3600:0.0f}"
 
+    ## Check input
     # if np.isscalar(t):
     #     t = np.array([t])
     if not np.isscalar(x):
@@ -77,9 +86,11 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
 
     # assert t.size == 1
 
+    ## Extract data
     y = data["y"]
     wl = data["wl"].interp(t=fu.to_timestr(t), x=x)
 
+    ## Figure
     fig, ax = plt.subplots(1, 1, squeeze=False)
     ax = np.ravel(ax)
 
@@ -95,6 +106,8 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
 
     fig.savefig(savename, bbox_inches="tight")
     print(f"Saved figure {savename}")
+
+    ## End
     if not keep_open:
         plt.close("all")
 
@@ -103,6 +116,7 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
 
+    ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -110,6 +124,7 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/cross_shore_{y/1000:0.0f}_{t/3600:0.0f}"
 
+    ## Check input
     # if np.isscalar(y):
     #     y = np.array([y])
     # if np.isscalar(t):
@@ -118,11 +133,11 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     # assert y.size == 1
     # assert t.size == 1
 
-    ## Fit
+    ## Make best fit
     k0, y0 = fa.compute_decay_parameter(data, y, t)
     wl_model = fa.exp_decay(data["x"], k0, y0)
 
-    ## Data
+    ## Extract data
     x = data["x"]
     wl = data["wl"].interp(y=y, t=fu.to_timestr(t))
 
@@ -151,6 +166,8 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
 
     fig.savefig(savename, bbox_inches="tight")
     print(f"Saved figure {savename}")
+
+    ## End
     if not keep_open:
         plt.close("all")
 
@@ -158,7 +175,8 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
 def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
-    
+
+    ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -166,12 +184,13 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_{y/1000:0.0f}"
 
+    ## Check inputs
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
     if not np.isscalar(y):
         raise ValueError(f"{y=} is not a number")
 
-    ## Compute
+    ## Compute spectrum
     freqs, power = fa.spectral_analysis_1d(data, y, x=x, variable="wl")
     # print(freqs)
     # print(power)
@@ -180,7 +199,6 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     fig, ax = plt.subplots(1, 1, squeeze=False)
     ax = np.ravel(ax)
 
-    ## Plot
     ax[0].plot(
         freqs * 3600.,
         power / 3600.
@@ -194,6 +212,8 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
 
     fig.savefig(savename, bbox_inches="tight")
     print(f"Saved figure {savename}")
+
+    ## End
     if not keep_open:
         plt.close("all")
 
