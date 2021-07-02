@@ -92,7 +92,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
     Parameters:
         filename:   name of figures
     """
-    ## prepare
+    ## Prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
     if filename is None:
@@ -101,6 +101,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
         filename.replace(".jpg", "")
     print(f"\nVisualizing bathymetry in '{filename}'")
 
+    ## Extract data
     x = data.x.values
     y = data.y.values
     b = data.values
@@ -114,7 +115,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
         xmax = x.max()
     xmax /= 1000
 
-    ## figure 1 - cross-section
+    ## Figure 1 - cross-section
     savename = f"{filename}_cross"
     plt.figure()
     plt.plot(x / 1000., b[i, :])
@@ -125,7 +126,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
     plt.savefig(savename, bbox_inches="tight")
     print(f"Saved figure '{savename}'")
 
-    ## figure 2 - map
+    ## Figure 2 - map
     savename = f"{filename}_contour"
     plt.figure()
     plt.contourf(x / 1000., y / 1000., b, levels=31, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
