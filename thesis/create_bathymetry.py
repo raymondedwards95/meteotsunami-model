@@ -20,7 +20,6 @@ def exponential_shelf(x, h=20, a=1e-5):
 ###
 bathymetry_dir = os.path.dirname(os.path.realpath(__file__)) + "/bathymetry"
 os.makedirs(bathymetry_dir, exist_ok=True)
-filename = f"{bathymetry_dir}/exp_00.xyb"
 
 
 ###
@@ -32,7 +31,7 @@ zz = exponential_shelf(xx, a=5e-4)
 
 ###
 data = fb.convert_to_xarray(x, y, zz)
-fb.write_bathymetry(data, filename)
+fb.write_bathymetry(data, f"{bathymetry_dir}/exp_00.xyb")
 
 
 ###
