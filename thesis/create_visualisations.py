@@ -145,9 +145,13 @@ for j in range(t_moments.size):
     
 
 ### Spectra
+## 1d
 for _y in np.arange(1, 10):
     _y *= 1e5
     fv.vis_spectrum_1d(data, x=x_moment, y=_y, saveloc=figure_dir)
+
+## 2d
+fv.vis_spectrum_2d(data, x=1e4, saveloc=figure_dir)
 
 
 ### Animation
