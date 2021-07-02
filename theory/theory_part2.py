@@ -5,8 +5,9 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
-
+sns.set_palette(sns.color_palette("muted"))
 current_dir = os.path.dirname(os.path.realpath(__file__))
 g = 9.81
 

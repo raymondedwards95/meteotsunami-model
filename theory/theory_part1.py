@@ -7,8 +7,10 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
 
+sns.set_palette(sns.color_palette("muted"))
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 
