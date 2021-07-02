@@ -5,7 +5,6 @@ import sys
 
 import dask.array as da
 import numpy as np
-import seaborn as sns
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
