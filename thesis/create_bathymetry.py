@@ -15,7 +15,7 @@ def exponential_shelf(x, h=20, a=1e-5):
     return -1. * h * (1. - np.exp(- 1. * a * x))
 
 
-### Settings
+### Paths
 bathymetry_dir = os.path.dirname(os.path.realpath(__file__)) + "/bathymetry"
 os.makedirs(bathymetry_dir, exist_ok=True)
 
