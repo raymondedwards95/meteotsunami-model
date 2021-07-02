@@ -219,7 +219,7 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
         plt.close("all")
     
 
-def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False):
+def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl"):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
 
@@ -229,14 +229,14 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False):
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/spectrum_2d_{x/1000:0.0f}"
+    savename = saveloc + f"/spectrum_2d_{x/1000:0.0f}_{variable}"
 
     ## Check inputs
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
 
     ## Compute spectrum
-    wavenumber, freqs, power = fa.spectral_analysis_2d(data, x=x, variable="wl")
+    wavenumber, freqs, power = fa.spectral_analysis_2d(data, x=x, variable=variable)
 
     ## Figure
     fig, ax = plt.subplots(1, 1, squeeze=False)
