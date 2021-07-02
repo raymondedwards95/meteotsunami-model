@@ -3,6 +3,7 @@
 import os
 import sys
 
+import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
@@ -216,4 +217,65 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     ## End
     if not keep_open:
         plt.close("all")
+    
+
+def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False):
+    ## Settings
+    sns.set_palette(sns.color_palette("muted"))
+
+    ## Paths
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".jpg"):
+        saveloc.replace(".jpg", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + f"/spectrum_2d_{x/1000:0.0f}"
+
+    ## Check inputs
+    if not np.isscalar(x):
+        raise ValueError(f"{x=} is not a number")
+
+    ## Compute spectrum
+    wavenumber, freqs, power = fa.spectral_analysis_2d(data, x=x, variable="wl")
+    # print(freqs)
+    # print(power)
+
+    ## Figure
+    fig, ax = plt.subplots(1, 1, squeeze=False)
+    ax = np.ravel(ax)
+
+    # ax[0].pcolormesh(
+    #     np.flip(wavenumber),
+    #     freqs,
+    #     power,
+    #     shading="nearest",
+    #     cmap=cmo.cm.matter,
+    #     vmin=0
+    # )
+    ax[0].contourf(
+        np.flip(wavenumber),
+        freqs,
+        power,
+        cmap=cmo.cm.matter,
+        vmin=5.*power.min()
+    )
+    ax[0].plot(
+        wavenumber, 
+        fa.dispersion_relation(wavenumber, n=0, alpha=1/400))
+    ax[0].axvline(color="black", linewidth=1)
+    # ax[0].set_xlim(0, 1e-4)
+    # ax[0].set_ylim(0, 3e-4)
+    ax[0].set_xlim(0, 1e-5)
+    ax[0].set_ylim(0, 1e-4)
+    ax[0].set_xlabel("Wavenumber [1 / meter]")
+    ax[0].set_ylabel("Frequency [cycles / second]")
+    ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$km")
+
+    fig.savefig(savename, bbox_inches="tight")
+    print(f"Saved figure {savename}")
+
+    ## End
+    if not keep_open:
+        plt.close("all")
+
 
