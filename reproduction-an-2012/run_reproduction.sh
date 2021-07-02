@@ -42,7 +42,8 @@ fi
 
 # start timer
 T_START=$(date +%s)
-echo "$(date) - Start simulation reproduction case $CASE_NUMBER " >> last_runs.log
+echo "$(date) - Start simulation repr case $CASE_NUMBER "
+echo "$(date) - Start simulation repr case $CASE_NUMBER " >> last_runs.log
 
 # run simulation
 $DFLOWFM_BIN_PATH/run_dflowfm.sh $INPUT_FILE
@@ -58,5 +59,6 @@ let TIME_DELTA_HOUR="$TIME_DELTA/3600"
 
 # end script
 echo "Finished simulations and processing and visualising data in $TIME_DELTA seconds ($TIME_DELTA_MINUTE minutes or $TIME_DELTA_HOUR hours)"
-echo "$(date) - End simulation reproduction case $CASE_NUMBER " >> last_runs.log
+echo "$(date) - End simulation repr case $CASE_NUMBER "
+echo "$(date) - End simulation repr case $CASE_NUMBER " >> last_runs.log
 exit 0
