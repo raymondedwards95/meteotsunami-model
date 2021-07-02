@@ -22,6 +22,8 @@ U = np.arange(0, 60+1)
 
 
 ### Critical Velocity
+savename = f"{current_dir}/contour_crit_vel"
+
 plt.figure()
 plt.title("Critical Velocity")
 Ucr = np.zeros((a.size, alpha.size))
@@ -40,10 +42,13 @@ plt.xscale("log")
 for _angle in [1/50, 1/200, 1/1000]:
     plt.text(_angle, 0.01, f"{_angle}", color="red", transform=plt.gca().get_xaxis_transform())
     plt.axvline(_angle, color="red")
-plt.savefig(f"{current_dir}/contour_crit_vel", bbox_inches="tight")
+plt.savefig(savename, bbox_inches="tight")
+print(f"Saved figure {savename}")
 
 
 ### Wavelength fundamental mode
+savename = f"{current_dir}/contour_fundamental_wl"
+
 plt.figure()
 plt.title("Wavelength fundamental mode")
 labda = np.zeros((U.size, alpha.size))
@@ -62,7 +67,8 @@ plt.xscale("log")
 for _angle in [1/50, 1/200, 1/1000]:
     plt.text(_angle, 0.01, f"{_angle}", color="orange", transform=plt.gca().get_xaxis_transform())
     plt.axvline(_angle, color="orange")
-plt.savefig(f"{current_dir}/contour_fundamental_wl", bbox_inches="tight")
+plt.savefig(savename, bbox_inches="tight")
+print(f"Saved figure {savename}")
 
 
 ### End
