@@ -33,7 +33,7 @@ plt.xlabel("$a$ [km]")
 plt.ylabel("$U_{crit}$ [m/s]")
 plt.grid()
 plt.ylim(0, 80)
-plt.savefig(f"{current_dir}/theory_speed_size", bbox_inches="tight")
+plt.savefig(f"{current_dir}/line_speed_size", bbox_inches="tight")
 
 
 plt.figure()
@@ -45,7 +45,7 @@ plt.title("Wavelength of Edge Wave Packet")
 plt.xlabel("$a$ [km]")
 plt.ylabel("$\\lambda$ [km]")
 plt.grid()
-plt.savefig(f"{current_dir}/theory_wavelength_size", bbox_inches="tight")
+plt.savefig(f"{current_dir}/line_wavelength_size", bbox_inches="tight")
 
 
 fig = plt.figure()
