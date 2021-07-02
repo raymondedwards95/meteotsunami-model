@@ -173,7 +173,7 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
         plt.close("all")
 
 
-def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
+def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable="wl"):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
 
@@ -183,7 +183,7 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_{y/1000:0.0f}"
+    savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_{y/1000:0.0f}_{variable}"
 
     ## Check inputs
     if not np.isscalar(x):
@@ -192,7 +192,7 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
         raise ValueError(f"{y=} is not a number")
 
     ## Compute spectrum
-    freqs, power = fa.spectral_analysis_1d(data, y, x=x, variable="wl")
+    freqs, power = fa.spectral_analysis_1d(data, y, x=x, variable=variable)
     # print(freqs)
     # print(power)
 
