@@ -18,7 +18,7 @@ depths = [0, 0, 250, 100, 500]
 
 
 ###
-def depth(x, alpha=1/400, d0=0.):
+def simple_slope(x, alpha=1/400, d0=0.):
     return -1. * (d0 + alpha * x)
 
 
@@ -40,7 +40,7 @@ for i in range(len(cases)):
     depth_0 = depths[i]
     print(f"###\nCreating bathymetry for {case=:02.0f}, with {slope=} and {depth_0=}")
 
-    zz = depth(xx, slope, depth_0)
+    zz = simple_slope(xx, slope, depth_0)
     data = fb.convert_to_xarray(x, y, zz)
     fb.write_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}.xyb")
     fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_repr_{case:02.0f}")
