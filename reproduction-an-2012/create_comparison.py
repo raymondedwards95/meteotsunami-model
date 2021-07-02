@@ -280,4 +280,7 @@ for i in range(num_comparisons):
     print(id)
     make_comparison(cases=cases[i], title=titles[i], id=id)
 
-# make_comparison(cases=[0, 15, 16, 17], title="test", id="test")
+# make_comparison(cases=[0], title="test_1", id="test_1")
+# make_comparison(cases=[0, 15], title="test_2", id="test_2")
+# make_comparison(cases=[0, 15, 16], title="test_3", id="test_3")
+# make_comparison(cases=[0, 15, 16, 17], title="test_4", id="test_4")
