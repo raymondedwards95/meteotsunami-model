@@ -237,8 +237,6 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False):
 
     ## Compute spectrum
     wavenumber, freqs, power = fa.spectral_analysis_2d(data, x=x, variable="wl")
-    # print(freqs)
-    # print(power)
 
     ## Figure
     fig, ax = plt.subplots(1, 1, squeeze=False)
