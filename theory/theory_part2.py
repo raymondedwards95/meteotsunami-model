@@ -6,17 +6,22 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
+
+### Settings
+show_figures = False
 sns.set_palette(sns.color_palette("muted"))
 current_dir = os.path.dirname(os.path.realpath(__file__))
-g = 9.81
 
+
+### Parameters
+g = 9.81
 a = np.arange(0, 301, 50) * 1e3
 a = np.geomspace(1, 301, 50) * 1e3
 alpha = 1. / np.logspace(1.5, 3.1)
 U = np.arange(0, 60+1)
 
 
-# Critical Velocity
+### Critical Velocity
 plt.figure()
 plt.title("Critical Velocity")
 Ucr = np.zeros((a.size, alpha.size))
@@ -38,7 +43,7 @@ for _angle in [1/50, 1/200, 1/1000]:
 plt.savefig(f"{current_dir}/contour_crit_vel", bbox_inches="tight")
 
 
-# Wavelength fundamental mode
+### Wavelength fundamental mode
 plt.figure()
 plt.title("Wavelength fundamental mode")
 labda = np.zeros((U.size, alpha.size))
@@ -59,4 +64,7 @@ for _angle in [1/50, 1/200, 1/1000]:
     plt.axvline(_angle, color="orange")
 plt.savefig(f"{current_dir}/contour_fundamental_wl", bbox_inches="tight")
 
-plt.show()
+
+### End
+if show_figures:
+    plt.show()
