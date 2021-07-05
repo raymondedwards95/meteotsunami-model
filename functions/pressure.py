@@ -1,12 +1,17 @@
 """ Functions to write time and space varying pressure fields for use with Delft3D-FM """
 
 import os
+import sys
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import xarray as xr
+
+# fix for importing functions below
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 
 
 def _find_step(x):
@@ -174,6 +179,8 @@ def plot_pressure(data, filename=None, x_scales=None):
     ## figure
     t_num = 5
     fig, ax = plt.subplots(1, t_num, sharey=True)
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
 
     im = [None] * t_num
@@ -194,7 +201,7 @@ def plot_pressure(data, filename=None, x_scales=None):
     ax[t_num // 2].set_xlabel("$x$ [km]")
     ax[0].set_ylabel("$y$ [km]")
     fig.colorbar(im[-2], ax=ax[-1])  # need to put on new ax?
-    plt.savefig(f"{filename}_field", bbox_inches="tight")
+    fig.savefig(f"{filename}_field", bbox_inches="tight", dpi=FIG_DPI)
 
 
 if __name__ == "__main__":
