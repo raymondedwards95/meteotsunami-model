@@ -10,6 +10,7 @@ import xarray as xr
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 import functions.analysis as fa
 import functions.utilities as fu
 import functions.visualisation as fv
@@ -60,8 +61,8 @@ def comp_alongshore(data_list, title, cases, savename):
 
     ## Figure
     fig, ax = plt.subplots(2, 2, sharex=False, sharey=True)
-    fig.set_size_inches(8, 8)
-    fig.set_dpi(150)
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
     fig.suptitle(f"{title}\nAlong-shore Profile of Sea Surface Elevation")
 
@@ -105,8 +106,8 @@ def comp_alongshore_diff(data_list, title, cases, savename):
 
     ## Figure
     fig, ax = plt.subplots(2, 2, sharex=False, sharey=True)
-    fig.set_size_inches(8, 8)
-    fig.set_dpi(150)
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
     fig.suptitle(f"{title}\nChange in Along-shore Profile")
 
@@ -153,8 +154,8 @@ def comp_crossshore(data_list, title, cases, savename):
 
     ## Figure
     fig, ax = plt.subplots(_yslices.size, 1)
-    fig.set_size_inches(8, 8)
-    fig.set_dpi(150)
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
     fig.suptitle(f"{title}\nCross-shore Profile of Sea Surface Elevation")
     
@@ -216,8 +217,8 @@ def comp_crossshore_diff(data_list, title, cases, savename):
 
     ## Figure
     fig, ax = plt.subplots(_yslices.size, 1)
-    fig.set_size_inches(8, 8)
-    fig.set_dpi(150)
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
     fig.suptitle(f"{title}\nChange in Cross-shore Profile")
     
