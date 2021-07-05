@@ -49,10 +49,16 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     ## Figure TEST
     fig, ax = plt.subplots(y.size, 1, sharex=True, squeeze=False)
     ax = np.ravel(ax)
+    ax2 = np.array([ax[i].twinx() for i in range(ax.size)])
     for i in range(y.size):
-        ax[i].plot(t, wl[:, i])
-        ax[i].plot(t, p[:, i] / 2000.)
+        wl_slice = wl[:, i].values
+        p_slice = p[:, i].values
+        ax[i].plot(t, wl_slice, color="C0")
+        ax2[i].plot(t, p_slice, color="C1")
         ax[i].axhline(color="black", linewidth=1)
+
+        ax[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(wl_slice)))
+        ax2[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(p_slice)))
 
     ## Figure TEST
     fig, ax = plt.subplots(2, y.size, sharex=True, sharey=True, squeeze=False)
