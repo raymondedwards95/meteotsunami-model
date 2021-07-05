@@ -1,6 +1,5 @@
 """ Functions to process output files from Delft3D-FM into arrays """
 
-import os
 import time
 import warnings
 
