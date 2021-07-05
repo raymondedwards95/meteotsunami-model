@@ -253,10 +253,12 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
         valid = (power / power.max()) > autolim
     if xlims is None:
         i = np.any(valid, axis=0)
-        xlims = [0, 1.5*np.max(np.abs(wavenumber[i]))]
+        xmax = np.min([wavenumber.max(), 1.5*np.max(np.abs(wavenumber[i]))])
+        xlims = [0, xmax]
     if ylims is None:
         i = np.any(valid, axis=1)
-        ylims = [0, 1.5*np.max(freqs[i])]
+        ymax = np.min([freqs.max(), 1.5*np.max(freqs[i])])
+        ylims = [0, ymax]
 
     ## Figure
     fig, ax = plt.subplots(1, 1, squeeze=False)
