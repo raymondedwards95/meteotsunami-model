@@ -1,12 +1,17 @@
 """ Functions to write bathymetry data in xyz- or xyb-format """
 
 import os
+import sys
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import xarray as xr
+
+# fix for importing functions below
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 
 
 def _convert_to_xarray_1d(x, y, b):
@@ -121,7 +126,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
 
     ## Figure 1 - cross-section
     savename = f"{filename}_cross"
-    plt.figure()
+    plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
     plt.plot(x / 1000., b[i, :])
     plt.title(f"Bottom Profile Cross-Section at $y={y[i]}$")
     plt.xlim(0, xmax)
@@ -132,7 +137,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
 
     ## Figure 2 - map
     savename = f"{filename}_contour"
-    plt.figure()
+    plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
     plt.contourf(x / 1000., y / 1000., b, levels=31, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
     plt.colorbar()
     # plt.axhline(y[i] / 1000., color="gray", linewidth=1)
