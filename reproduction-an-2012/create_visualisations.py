@@ -10,6 +10,7 @@ import xarray as xr
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 import functions.animation as anim
 import functions.regrid as fr
 import functions.utilities as fu
@@ -112,7 +113,7 @@ x = x - x.min()
 print(f"Creating figures in \n'{figure_dir}'")
 ### Figure bathymetry
 print("Figure: bathymetry")
-plt.figure(figsize=(5, 5), dpi=150)
+plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
 
 plt.contourf(x/1000, y/1000, b)
 plt.colorbar()
@@ -129,7 +130,7 @@ plt.axvline(color="black", linewidth=1)
 # plt.axvline(100, linestyle="--", color="gray", linewidth=1)
 # plt.axvline(200, linestyle="--", color="gray", linewidth=1)
     
-plt.savefig(figure_dir + "bathymetry_contour", bbox_inches="tight")
+plt.savefig(figure_dir + "bathymetry_contour", bbox_inches="tight", dpi=FIG_DPI)
 
 
 ### Figure pressure
@@ -137,8 +138,8 @@ print("Figure: pressure")
 plot_times = [4e4, 8e4, 12e4, 16e4]
 
 fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
-fig.set_size_inches(8, 8)
-fig.set_dpi(150)
+fig.set_size_inches(FIGSIZE_SQUARE)
+fig.set_dpi(FIG_DPI)
 fig.suptitle("Pressure distribution [Pa]")
 fig.set_tight_layout(True)
 
@@ -159,7 +160,7 @@ for i in range(4):
 #     _ax.axvline(100, linestyle="--", color="gray", linewidth=1)
 #     _ax.axvline(200, linestyle="--", color="gray", linewidth=1)
     
-fig.savefig(figure_dir + "pressure_contours", bbox_inches="tight")
+fig.savefig(figure_dir + "pressure_contours", bbox_inches="tight", dpi=FIG_DPI)
 
 
 ### Figure sse contours
@@ -168,8 +169,8 @@ print("Figure: sse contours")
 plot_times = [4e4, 8e4, 12e4, 16e4]
 
 fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
-fig.set_size_inches(8, 8)
-fig.set_dpi(150)
+fig.set_size_inches(FIGSIZE_SQUARE)
+fig.set_dpi(FIG_DPI)
 fig.suptitle("Sea Surface Elevation [m]")
 for i in range(4):
     _ax = ax[i//2, i%2]
@@ -188,7 +189,7 @@ for i in range(4):
 #     _ax.axvline(100, linestyle="--", color="gray", linewidth=1)
 #     _ax.axvline(200, linestyle="--", color="gray", linewidth=1)
     
-fig.savefig(figure_dir + "sse_contours", bbox_inches="tight")
+fig.savefig(figure_dir + "sse_contours", bbox_inches="tight", dpi=FIG_DPI)
 
 
 ### Figure alongshore profiles sse
@@ -198,8 +199,8 @@ plot_times = [4e4, 8e4, 12e4, 16e4]
 plot_ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
 
 fig, ax = plt.subplots(2, 2, sharex=False, sharey=False)
-fig.set_size_inches(8, 8)
-fig.set_dpi(150)
+fig.set_size_inches(FIGSIZE_SQUARE)
+fig.set_dpi(FIG_DPI)
 fig.suptitle("Along-shore profile of Sea Surface Elevation [m]")
 for i in range(4):
     _ax = ax[i//2, i%2]
@@ -215,7 +216,7 @@ for i in range(4):
     _ax.axhline(color="black", linewidth=1)
     _ax.axvline(color="black", linewidth=1)
     
-fig.savefig(figure_dir + "sse_along", bbox_inches="tight")
+fig.savefig(figure_dir + "sse_along", bbox_inches="tight", dpi=FIG_DPI)
 
 
 ### Figure cross-shore profile sse
@@ -223,7 +224,7 @@ fig.savefig(figure_dir + "sse_along", bbox_inches="tight")
 print("Figure: sse cross-shore profile")
 y_slices = np.array([7.56]) * 1e6
 
-plt.figure(figsize=(5, 5), dpi=150)
+plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
 for i in range(len(y_slices)):
     plt.plot(x/1000, wl.interp(t=fu.to_timestr(1.6e5), y=y_slices[i]), label=f"$y={y_slices[i]/1000 : 0.0f}$ km")
 plt.legend()
@@ -239,7 +240,7 @@ plt.ylim([0, 0.7])
 # plt.axvline(100, linestyle="--", color="gray", linewidth=1)
 # plt.axvline(200, linestyle="--", color="gray", linewidth=1)
     
-plt.savefig(figure_dir + "sse_cross", bbox_inches="tight")
+plt.savefig(figure_dir + "sse_cross", bbox_inches="tight", dpi=FIG_DPI)
 
 
 ### Figure alongshore profiles
@@ -248,7 +249,7 @@ print("Figure: sse more alongshore profiles")
 x_slices = np.array([10, 100, 200]) * 1e3
 linestyles = ["-", "--", "--"]
 
-plt.figure(figsize=(5, 5), dpi=150)
+plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
 plt.title("Along-shore profile of Sea Surface Elevation [m]")
 for i in range(len(x_slices)):
     plt.plot(
@@ -265,7 +266,7 @@ plt.axvline(7.56e3, linestyle="--", color="gray", linewidth=1)
 plt.xlabel("$y$ [km]")
 plt.ylabel("$SSE$ [m]")
     
-plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight")
+plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight", dpi=FIG_DPI)
 
 
 ### Spectra
