@@ -273,10 +273,18 @@ def make_comparison(cases, title, id="test"):
         data_list.append(xr.open_dataset(datafile))
     
     # Make figures
-    vis_alongshore(data_list, title, cases, savename)
-    vis_crossshore(data_list, title, cases, savename)
-    vis_alongshore_diff(data_list, title, cases, savename)
-    vis_crossshore_diff(data_list, title, cases, savename)
+    try: vis_alongshore(data_list, title, cases, savename)
+    except: pass
+
+    try: vis_crossshore(data_list, title, cases, savename)
+    except: pass
+
+    try: vis_alongshore_diff(data_list, title, cases, savename)
+    except: pass
+
+    try: vis_crossshore_diff(data_list, title, cases, savename)
+    except: pass
+
 
     return
 
