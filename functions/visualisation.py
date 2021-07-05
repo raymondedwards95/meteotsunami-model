@@ -120,7 +120,7 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
     ax[0].set_ylabel("$SSE$ [m]")
     ax[0].set_title(f"Along-shore profile at $x={x/1000:0.0f}$km and $t={t/3600:0.1f}$hours")
 
-    fig.savefig(savename, bbox_inches="tight")
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}")
 
     ## End
@@ -182,7 +182,7 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     ax[0].set_ylabel("$SSE$ [m]")
     ax[0].set_title(f"Cross-shore profile at $y={y/1000:0.0f}$km and $t={t/3600:0.1f}$hours")
 
-    fig.savefig(savename, bbox_inches="tight")
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}")
 
     ## End
@@ -227,7 +227,7 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
     ax[0].set_ylabel("Spectral Power [m$^2$ hr]")
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$km and $y={y/1000:0.0f}$km")
 
-    fig.savefig(savename, bbox_inches="tight")
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}")
 
     ## End
@@ -296,7 +296,7 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
     ax[0].set_ylabel("Frequency [cycles / second]")
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$km")
 
-    fig.savefig(savename, bbox_inches="tight")
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}")
 
     ## End
