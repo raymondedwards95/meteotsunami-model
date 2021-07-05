@@ -49,7 +49,7 @@ figure_dir = file_dir + "/figures/"
 
 
 ### Defining Visualisations
-def vis_alongshore(data_list, title, cases, savename):
+def comp_alongshore(data_list, title, cases, savename):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
     
@@ -94,7 +94,7 @@ def vis_alongshore(data_list, title, cases, savename):
     return
 
     
-def vis_alongshore_diff(data_list, title, cases, savename):
+def comp_alongshore_diff(data_list, title, cases, savename):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
     
@@ -142,7 +142,7 @@ def vis_alongshore_diff(data_list, title, cases, savename):
     return
 
 
-def vis_crossshore(data_list, title, cases, savename):
+def comp_crossshore(data_list, title, cases, savename):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
     
@@ -205,7 +205,7 @@ def vis_crossshore(data_list, title, cases, savename):
     return
 
 
-def vis_crossshore_diff(data_list, title, cases, savename):
+def comp_crossshore_diff(data_list, title, cases, savename):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
     
@@ -273,16 +273,16 @@ def make_comparison(cases, title, id="test"):
         data_list.append(xr.open_dataset(datafile))
     
     # Make figures
-    try: vis_alongshore(data_list, title, cases, savename)
+    try: comp_alongshore(data_list, title, cases, savename)
     except: pass
 
-    try: vis_crossshore(data_list, title, cases, savename)
+    try: comp_crossshore(data_list, title, cases, savename)
     except: pass
 
-    try: vis_alongshore_diff(data_list, title, cases, savename)
+    try: comp_alongshore_diff(data_list, title, cases, savename)
     except: pass
 
-    try: vis_crossshore_diff(data_list, title, cases, savename)
+    try: comp_crossshore_diff(data_list, title, cases, savename)
     except: pass
 
 
