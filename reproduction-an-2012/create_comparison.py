@@ -90,7 +90,7 @@ def comp_alongshore(data_list, title, cases, savename):
         if i == 0:
             _ax.legend()
         
-    fig.savefig(savename, bbox_inches="tight")
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure as '{savename}'")
     return
 
@@ -138,7 +138,7 @@ def comp_alongshore_diff(data_list, title, cases, savename):
         if i == 0:
             _ax.legend()
         
-    fig.savefig(savename, bbox_inches="tight")
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure as '{savename}'")
     return
 
@@ -201,7 +201,7 @@ def comp_crossshore(data_list, title, cases, savename):
 
         _ax.legend()
 
-    fig.savefig(savename, bbox_inches="tight")
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure as '{savename}'")
     return
 
@@ -253,7 +253,7 @@ def comp_crossshore_diff(data_list, title, cases, savename):
 
         _ax.legend()
 
-    fig.savefig(savename, bbox_inches="tight")
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure as '{savename}'")
     return
 
