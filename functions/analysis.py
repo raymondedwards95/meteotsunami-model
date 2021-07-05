@@ -3,7 +3,6 @@
 import os
 import sys
 
-import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
 
@@ -45,31 +44,6 @@ def compute_decay_parameter(data, y, t):
     )
     k0, y0 = popt
     return k0, y0
-
-
-def _test_compute_decay_parameter(showfig=True):
-    """ Test for computation of decay parameter """
-    k0 = 1./12.
-    y0 = 0.7
-
-    x = np.arange(100)
-    y = exp_decay(x, k0, y0) + np.random.normal(scale=0.01, size=x.size)
-
-    (k0_est, y0_est), _ = curve_fit(
-        exp_decay,
-        x,
-        y
-    )
-
-    if showfig:
-        plt.figure()
-        plt.scatter(x, y)
-        plt.plot(x, exp_decay(x, k0_est, y0_est), "C1", label=f"$1/k_0={1/k0_est:0.1f}$; $y_0={y0_est:0.2f}$")
-        plt.legend()
-        plt.xlabel("$x$")
-        plt.ylabel("$y$")
-        plt.show()
-    return
 
 
 def compute_wave_periods(data, y, x=None, crests=True):
@@ -181,7 +155,3 @@ def spectral_analysis_2d(data, x=1e4, variable="wl"):
     wavenumber = np.fft.fftshift(wavenumber)
 
     return wavenumber, freqs, power
-
-
-if __name__ == "__main__":
-    _test_compute_decay_parameter(showfig=True)
