@@ -11,6 +11,7 @@ import xarray as xr
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 import functions.analysis as fa
 import functions.utilities as fu
 
@@ -40,6 +41,8 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
 
     ## Figure TEST
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
     ax = np.ravel(ax)
     ax[0].plot(t, wl)
     ax[1].plot(t, p)
@@ -48,6 +51,8 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
 
     ## Figure TEST
     fig, ax = plt.subplots(y.size, 1, sharex=True, squeeze=False)
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
     ax = np.ravel(ax)
     ax2 = np.array([ax[i].twinx() for i in range(ax.size)])
     for i in range(y.size):
@@ -62,6 +67,8 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
 
     ## Figure TEST
     fig, ax = plt.subplots(2, y.size, sharex=True, sharey=True, squeeze=False)
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
     for i in range(y.size):
         ax[0,i].plot(t, wl[:, i])
         ax[1,i].plot(t, p[:, i] / 2000.)
