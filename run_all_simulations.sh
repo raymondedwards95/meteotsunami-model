@@ -20,6 +20,7 @@ cd ./reproduction-an-2012
 echo "$(date) --- Create input-files repr"
 echo "$(date) --- Create input-files repr" >> ../last_runs.log
 bash create_all.sh
+
 wait
 echo "$(date) --- Finished creating input-files repr"
 echo "$(date) --- Finished creating input-files repr" >> ../last_runs.log
@@ -27,6 +28,7 @@ echo "$(date) --- Finished creating input-files repr" >> ../last_runs.log
 echo "$(date) --- Start simulations repr"
 echo "$(date) --- Start simulations repr" >> ../last_runs.log
 bash run_all.sh
+
 wait
 echo "$(date) --- Finished simulations repr"
 echo "$(date) --- Finished simulations repr" >> ../last_runs.log
@@ -37,6 +39,7 @@ cd ./thesis
 echo "$(date) --- Create input-files exp"
 echo "$(date) --- Create input-files exp" >> ../last_runs.log
 bash create_all.sh
+
 wait
 echo "$(date) --- Finished creating input-files exp"
 echo "$(date) --- Finished creating input-files exp" >> ../last_runs.log
@@ -44,6 +47,7 @@ echo "$(date) --- Finished creating input-files exp" >> ../last_runs.log
 echo "$(date) --- Start simulations exp"
 echo "$(date) --- Start simulations exp" >> ../last_runs.log
 bash run_all.sh
+
 wait
 echo "$(date) --- Finished simulations exp"
 echo "$(date) --- Finished simulations exp" >> ../last_runs.log
