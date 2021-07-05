@@ -1,10 +1,10 @@
 """ Scripts to make figures for help with explaining theory """
 
 import os
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 
 try:
     import cartopy.crs as ccrs
@@ -13,10 +13,13 @@ try:
 except:
     create_map = False
 
+# fix for importing functions below
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
+
 
 ### Settings
 show_figures = False
-sns.set_palette(sns.color_palette("muted"))
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 
