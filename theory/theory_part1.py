@@ -40,7 +40,7 @@ def wavelength(U, alpha):
 ### Speed
 savename = f"{current_dir}/line_speed_size"
 
-plt.figure()
+plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
 for i in range(alpha.size):
     plt.semilogx(a / 1000., u_crit(a, alpha[i]), label=f"$\\alpha = {alpha[i]}$")
 plt.legend()
@@ -50,14 +50,14 @@ plt.ylabel("$U_{crit}$ [m/s]")
 plt.grid()
 plt.ylim(0, 80)
 plt.xlim(1e-1, 1e3)
-plt.savefig(savename, bbox_inches="tight")
+plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
 print(f"Saved figure {savename}")
 
 
 ### Wavelength
 savename = f"{current_dir}/line_wavelength_size"
 
-plt.figure()
+plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
 for i in range(alpha.size):
     plt.plot(a / 1000., wavelength(u_crit(a, alpha[i]), alpha[i]) / 1000., label=f"$\\alpha = {alpha[i]}$")
 plt.plot(a / 1000., 2. * a / 1000., color="black", linestyle="--", linewidth=1, label="$2a$")
@@ -68,7 +68,7 @@ plt.ylabel("$\\lambda$ [km]")
 plt.xlim(0, 1000)
 plt.ylim(0, None)
 plt.grid()
-plt.savefig(savename, bbox_inches="tight")
+plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
 print(f"Saved figure {savename}")
 
 
@@ -76,7 +76,7 @@ print(f"Saved figure {savename}")
 if create_map:
     savename = f"{current_dir}/map"
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
     ax = fig.add_subplot(projection=ccrs.PlateCarree())
     ax.coastlines("50m")
     ax.add_feature(
@@ -90,7 +90,7 @@ if create_map:
     ax.set_ylim([45, 60])
     # plt.xlabel("Longitude")
     # plt.ylabel("Latitude")
-    plt.savefig(savename, bbox_inches="tight")
+    plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}")
 
 
