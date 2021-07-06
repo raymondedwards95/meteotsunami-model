@@ -93,6 +93,7 @@ data = xr.open_dataset(filename_processed)
 
 t_moments = np.array([8, 16, 24, 32, 40]) * 3600.
 x_moment = 1e4
+x_offset = 5e4
 y_moment = 500000.
 
 ### Compute stuff
@@ -140,6 +141,7 @@ for j in range(t_moments.size):
     ## Along-shore
     try:
         fv.vis_alongshore(data, t=t_moment, x=x_moment, saveloc=figure_dir)
+        fv.vis_alongshore(data, t=t_moment, x=x_moment+x_offset, saveloc=figure_dir)
     except:
         print(f"Error in along-shore visualisation {case=}")
     
@@ -149,9 +151,11 @@ for j in range(t_moments.size):
 for _y in np.arange(1, 10):
     _y *= 1e5
     fv.vis_spectrum_1d(data, x=x_moment, y=_y, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=x_moment+x_offset, y=_y, saveloc=figure_dir)
 
 ## 2d
-fv.vis_spectrum_2d(data, x=1e4, saveloc=figure_dir)
+fv.vis_spectrum_2d(data, x=x_moment, saveloc=figure_dir)
+fv.vis_spectrum_2d(data, x=x_moment+x_offset, saveloc=figure_dir)
 
 
 ### Animation
