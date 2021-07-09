@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import xarray as xr
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -137,17 +138,18 @@ def plot_bathymetry(data, filename=None, xmax=None):
 
     ## Figure 2 - map
     savename = f"{filename}_contour"
-    plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
-    plt.contourf(x / 1000., y / 1000., b, levels=31, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
-    plt.colorbar()
-    # plt.axhline(y[i] / 1000., color="gray", linewidth=1)
-    # plt.axhline(color="black", linewidth=1)
-    # plt.axvline(color="black", linewidth=1)
-    plt.title(f"Bottom Profile")
-    plt.xlim(0, xmax)
-    plt.xlabel("$x$ [km]")
-    plt.ylabel("$y$ [km]")
-    plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig, ax = plt.subplots(1, 1)
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
+    div = make_axes_locatable(ax)
+    cax = div.append_axes("right", "5%", "5%")
+    cont = ax.contourf(x / 1000., y / 1000., b, levels=31, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
+    fig.colorbar(cont, cax=cax)
+    ax.set_title(f"Bottom Profile")
+    ax.set_xlim(0, xmax)
+    ax.set_xlabel("$x$ [km]")
+    ax.set_ylabel("$y$ [km]")
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure '{savename}'")
 
     return
