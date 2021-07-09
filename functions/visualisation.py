@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import xarray as xr
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -282,8 +283,10 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
     ax = np.ravel(ax)
+    div = make_axes_locatable(ax[0])
+    cax = div.append_axes("right", "5%", "5%")
 
-    ax[0].pcolormesh(  # note: contourf is an option
+    im = ax[0].pcolormesh(  # note: contourf is an option
         np.flip(wavenumber),
         freqs,
         power,
@@ -291,6 +294,9 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
         cmap=cmo.cm.matter,
         vmin=5.*power.min()
     )
+    cbar = fig.colorbar(im, cax=cax)
+    cbar.set_label("Spectral Power")
+
     for i in range(5):
         ax[0].plot(
             wavenumber, 
