@@ -270,11 +270,11 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
         valid = (power / power.max()) > autolim
     if xlims is None:
         i = np.any(valid, axis=0)
-        xmax = np.min([wavenumber.max(), 1.5*np.max(np.abs(wavenumber[i]))])
+        xmax = 1e6 * np.min([wavenumber.max(), 1.5*np.max(np.abs(wavenumber[i]))])
         xlims = [0, xmax]
     if ylims is None:
         i = np.any(valid, axis=1)
-        ymax = np.min([freqs.max(), 1.5*np.max(freqs[i])])
+        ymax = 3600. * np.min([freqs.max(), 1.5*np.max(freqs[i])])
         ylims = [0, ymax]
 
     ## Figure
@@ -287,8 +287,8 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
     cax = div.append_axes("right", "5%", "5%")
 
     im = ax[0].pcolormesh(  # note: contourf is an option
-        np.flip(wavenumber),
-        freqs,
+        np.flip(wavenumber) * 1e6,
+        freqs * 3600.,
         power,
         shading="nearest",
         cmap=cmo.cm.matter,
@@ -299,8 +299,8 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
 
     for i in range(5):
         ax[0].plot(
-            wavenumber, 
-            fa.dispersion_relation(wavenumber, n=i, alpha=1/400), 
+            wavenumber * 1e6, 
+            fa.dispersion_relation(wavenumber, n=i, alpha=1/400) * 3600., 
             linewidth=1, 
             color="black"
         )
@@ -309,8 +309,8 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
     # ax[0].set_ylim(0, 2e-4)
     ax[0].set_xlim(xlims)
     ax[0].set_ylim(ylims)
-    ax[0].set_xlabel("Wavenumber [1 / meter]")
-    ax[0].set_ylabel("Frequency [cycles / second]")
+    ax[0].set_xlabel("Wavenumber [1 / 1000km]")
+    ax[0].set_ylabel("Frequency [cycles / hour]")
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$km")
 
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
