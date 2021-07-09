@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import xarray as xr
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -163,7 +164,8 @@ def plot_pressure(data, filename=None, x_scales=None):
         filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/fig_pressure"
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
-    print(f"\nVisualizing pressure field in '{filename}'")
+    savename = f"{filename}_field"
+    print(f"\nVisualizing pressure field in '{savename}'")
 
     x = data.x.values
     y = data.y.values
@@ -178,10 +180,11 @@ def plot_pressure(data, filename=None, x_scales=None):
 
     ## figure
     t_num = 5
-    fig, ax = plt.subplots(1, t_num, sharey=True)
-    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig, ax = plt.subplots(1, t_num+1, sharey=True, squeeze=False, gridspec_kw={"width_ratios": [4]*t_num + [1]})
+    fig.set_size_inches(FIGSIZE_WIDE)
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
+    ax = np.ravel(ax)
 
     im = [None] * t_num
     for i in range(t_num):
@@ -200,8 +203,13 @@ def plot_pressure(data, filename=None, x_scales=None):
     
     ax[t_num // 2].set_xlabel("$x$ [km]")
     ax[0].set_ylabel("$y$ [km]")
-    fig.colorbar(im[-2], ax=ax[-1])  # need to put on new ax?
-    fig.savefig(f"{filename}_field", bbox_inches="tight", dpi=FIG_DPI)
+
+    ax[-1].get_shared_y_axes().remove(ax[-1])
+    cbar = fig.colorbar(im[-2], cax=ax[-1])
+    cbar.set_label("Pressure Disturbance [Pa]")
+
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    print(f"Saved figure as '{savename}'")
 
 
 if __name__ == "__main__":
