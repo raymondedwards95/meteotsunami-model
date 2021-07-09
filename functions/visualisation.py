@@ -43,6 +43,7 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
+    fig.set_tight_layout(True)
     ax = np.ravel(ax)
     ax[0].plot(t, wl)
     ax[1].plot(t, p)
@@ -108,6 +109,7 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
     fig, ax = plt.subplots(1, 1, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
+    fig.set_tight_layout(True)
     ax = np.ravel(ax)
 
     ax[0].plot(
@@ -161,6 +163,7 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     fig, ax = plt.subplots(1, 1, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
+    fig.set_tight_layout(True)
     ax = np.ravel(ax)
     ax[0].plot(
         x / 1000., 
@@ -215,6 +218,7 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
     fig, ax = plt.subplots(1, 1, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
+    fig.set_tight_layout(True)
     ax = np.ravel(ax)
 
     ax[0].plot(
@@ -270,6 +274,7 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
     fig, ax = plt.subplots(1, 1, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
+    fig.set_tight_layout(True)
     ax = np.ravel(ax)
 
     ax[0].pcolormesh(  # note: contourf is an option
