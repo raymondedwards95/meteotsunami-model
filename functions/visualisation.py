@@ -305,8 +305,6 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
             color="black"
         )
     ax[0].axvline(color="black", linewidth=1)
-    # ax[0].set_xlim(0, 5e-6)
-    # ax[0].set_ylim(0, 2e-4)
     ax[0].set_xlim(xlims)
     ax[0].set_ylim(ylims)
     ax[0].set_xlabel("Wavenumber [1 / 1000km]")
