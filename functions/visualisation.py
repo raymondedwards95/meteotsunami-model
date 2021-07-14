@@ -29,7 +29,7 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/cross_shore_{x/1000:0.0f}_{y/3600:0.0f}"
+    savename = saveloc + f"/timeseries"
 
     ## Check input
     if np.isscalar(y):
