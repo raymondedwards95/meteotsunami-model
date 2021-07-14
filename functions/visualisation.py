@@ -56,6 +56,9 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     for i in range(2):
         ax[i].axhline(color="black", linewidth=1)
 
+    fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI)
+    print(f"Saved figure {savename}_a")
+
     ## Figure TEST
     fig, ax = plt.subplots(y.size, 1, sharex=True, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
@@ -72,6 +75,9 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
         ax[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(wl_slice)))
         ax2[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(p_slice)))
 
+    fig.savefig(savename + "_b", bbox_inches="tight", dpi=FIG_DPI)
+    print(f"Saved figure {savename}_b")
+
     ## Figure TEST
     fig, ax = plt.subplots(2, y.size, sharex=True, sharey=True, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
@@ -81,6 +87,9 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
         ax[1,i].plot(t, p[:, i] / 2000.)
         for j in range(2):
             ax[j,i].axhline(color="black", linewidth=1)
+
+    fig.savefig(savename + "_c", bbox_inches="tight", dpi=FIG_DPI)
+    print(f"Saved figure {savename}_c")
 
     ## End
     if not keep_open:
