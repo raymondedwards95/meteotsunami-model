@@ -32,6 +32,9 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     savename = saveloc + f"/timeseries"
 
     ## Check input
+    if not np.isscalar(x):
+        raise ValueError(f"{x=} should be scalar")
+
     if np.isscalar(y):
         y = np.array([y])
     if isinstance(y, list):
