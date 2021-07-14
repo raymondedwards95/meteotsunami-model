@@ -37,6 +37,8 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
 
     if t_max is None:
         t_max = np.inf
+    elif np.isscalar(t_max):
+        t_max /= 3600
 
     if np.isscalar(y):
         y = np.array([y])
@@ -47,7 +49,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     del y
 
     ## Extract data
-    t = data["t"].values.astype("datetime64[s]").astype(float)
+    t = data["t"].values.astype("datetime64[s]").astype(float) / 3600
     wl = data["wl"].interp(x=x, y=y_arr)
     p = data["p"].interp(x=x, y=y_arr)
 
@@ -68,6 +70,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     ax[1].plot(t, p)
     for i in range(2):
         ax[i].axhline(color="black", linewidth=1)
+        ax[i].set_xlim([0, t_max])
     ax[0].legend([f"$x={x/1000:0.0f}$km; $y={y/1000:0.0f}$km" for y in y_arr])
 
     fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI)
@@ -86,6 +89,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax2[i].plot(t, p_slice, color="C1")
         ax[i].axhline(color="black", linewidth=1)
 
+        ax[i].set_xlim([0, t_max])
         ax[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(wl_slice)))
         ax2[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(p_slice)))
 
@@ -101,6 +105,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax[1,i].plot(t, p[:, i] / 2000.)
         for j in range(2):
             ax[j,i].axhline(color="black", linewidth=1)
+            ax[j,i].set_xlim([0, t_max])
 
     fig.savefig(savename + "_c", bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}_c")
