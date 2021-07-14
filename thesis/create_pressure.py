@@ -43,11 +43,11 @@ t_step = 3600. / 6.
 
 
 ### Convert parameters
-U_list, a_list, p0_list, x0_list = np.meshgrid(U_list, a_list, p0_list, x0_list, indexing="ij")
-U_list = np.ravel(U_list)
+x0_list, a_list, p0_list U_list, = np.meshgrid(x0_list, a_list, p0_list, U_list, indexing="ij")
+x0_list = np.ravel(x0_list)
 a_list = np.ravel(a_list)
 p0_list = np.ravel(p0_list)
-x0_list = np.ravel(x0_list)
+U_list = np.ravel(U_list)
 
 cases = np.arange(len(U_list))
 num_cases = len(cases)
