@@ -321,7 +321,7 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
         plt.close("all")
     
 
-def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=None):
+def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=None, ylims=None):
     ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
@@ -362,6 +362,9 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
     if xlims is None:
         xlims = [y.min() / 1000. / 10., y.max() / 1000.]
 
+    if ylims is None:
+        ylims = [0, 200]
+
     ## Figure
     fig, ax = plt.subplots(t_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(FIGSIZE_LONG)
@@ -387,7 +390,7 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
         ax[i].set_ylabel("$x$ [km]")
         ax[i].set_title(f"$t = {t_arr[i] / 3600:0.1f}$h")
         ax[i].set_xlim(xlims)
-        ax[i].set_ylim([0, 200])
+        ax[i].set_ylim(ylims)
     
     ax[-1].set_xlabel("$y$ [km]")
     fig.colorbar(
