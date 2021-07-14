@@ -146,6 +146,7 @@ for j in range(t_moments.size):
         print(f"Error in along-shore visualisation {case=}")
 
 
+### Figures - Contour
 try:
     fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="wl", xlims=[0, 1000])
     fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="u", xlims=[0, 1000])
