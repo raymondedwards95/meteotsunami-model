@@ -24,14 +24,6 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
 
-    ## Paths
-    if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".jpg"):
-        saveloc.replace(".jpg", "")
-    os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/timeseries"
-
     ## Check input
     if not np.isscalar(x):
         raise ValueError(f"{x=} should be scalar")
@@ -48,6 +40,14 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     
     y_arr = y
     del y
+
+    ## Paths
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".jpg"):
+        saveloc.replace(".jpg", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + f"/timeseries_{len(y)}_"
 
     ## Extract data
     t = data["t"].values.astype("datetime64[s]").astype(float) / 3600
