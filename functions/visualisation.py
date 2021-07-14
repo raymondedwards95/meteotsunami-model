@@ -125,6 +125,8 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax[i].tick_params(axis="y", labelcolor=f"C0")
         ax2[i].tick_params(axis="y", labelcolor=f"C1")
 
+        ax[i].grid()
+        
 
     ax[-1].set_ylabel("Water Level [m]")
     ax2[-1].set_ylabel("Surface Pressure [Pa]")
