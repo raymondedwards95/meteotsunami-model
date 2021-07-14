@@ -72,6 +72,8 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax[i].axhline(color="black", linewidth=1)
         ax[i].set_xlim([0, t_max])
     ax[-1].set_xlabel("Time since start [hours]")
+    ax[0].set_ylabel("Sea Surface Elevation [m]")
+    ax[1].set_ylabel("Atmospheric Pressure [Pa]")
     ax[0].legend([f"$x={x/1000:0.0f}$km; $y={y/1000:0.0f}$km" for y in y_arr])
 
     fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI)
