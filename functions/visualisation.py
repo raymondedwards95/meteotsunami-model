@@ -329,6 +329,13 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
     savename = saveloc + f"/contour_{variable}"
 
     ## Check input
+    if variable in ["wl"]:
+        cmap = cmo.cm.balance
+    elif variable in ["u", "v"]:
+        cmap = cmo.cm.delta
+    else:
+        raise ValueError(f"Excpected {variable=} to be 'wl', 'u' or 'v'")
+
     if np.isscalar(t):
         t_arr = np.array([t])
     elif isinstance(t, list):
@@ -368,7 +375,7 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
             x / 1000, 
             var.interp(t=fu.to_timestr(t_arr[i])).T, 
             25,
-            cmap=cmo.cm.delta,
+            cmap=cmap,
             vmin=var_min,
             vmax=var_max    
         )
