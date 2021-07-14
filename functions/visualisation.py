@@ -47,7 +47,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/timeseries_{len(y)}_"
+    savename = saveloc + f"/timeseries_{y_arr.size}_"
 
     ## Extract data
     t = data["t"].values.astype("datetime64[s]").astype(float) / 3600
