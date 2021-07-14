@@ -4,10 +4,12 @@ import os
 import sys
 
 import cmocean as cmo
+import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import xarray as xr
+from matplotlib.colors import Normalize
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # fix for importing functions below
@@ -364,9 +366,11 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
     fig, ax = plt.subplots(t_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(FIGSIZE_LONG)
     fig.set_dpi(FIG_DPI)
-    fig.set_tight_layout(True)
-    fig.suptitle("Sea Surface Elevation [m]")
+    # fig.set_tight_layout(True)
     ax = np.ravel(ax)
+
+    norm = Normalize(var_min, var_max)
+    im = cm.ScalarMappable(norm=norm, cmap=cmap)
 
     ## Subplots
     for i in range(t_num):
@@ -374,8 +378,9 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
             y / 1000, 
             x / 1000, 
             var.interp(t=fu.to_timestr(t_arr[i])).T, 
-            25,
+            100,
             cmap=cmap,
+            norm=norm,
             vmin=var_min,
             vmax=var_max    
         )
@@ -385,6 +390,12 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
         ax[i].set_ylim([0, 200])
     
     ax[-1].set_xlabel("$y$ [km]")
+    fig.colorbar(
+        im, 
+        ax=ax.ravel().tolist(),
+        label="Sea Surface Elevation [m]",
+        aspect=50
+    )
 
     ## Save figure
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
