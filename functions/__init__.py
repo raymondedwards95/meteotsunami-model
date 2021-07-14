@@ -6,9 +6,9 @@ import seaborn as sns
 sns.set_palette(sns.color_palette("muted"))
 
 ### Figure size
-FIGSIZE_NORMAL = (6, 4)
-FIGSIZE_LONG = (6, 8)
-FIGSIZE_WIDE = (6, 3)
+FIGSIZE_NORMAL = (7, 4)
+FIGSIZE_LONG = (7, 9)
+FIGSIZE_WIDE = (7, 3)
 FIGSIZE_SMALL = (3, 2)
 FIGSIZE_SQUARE = (7, 7)
 
