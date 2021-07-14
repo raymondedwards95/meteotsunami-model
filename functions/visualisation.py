@@ -60,6 +60,8 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     y_arr = np.array([y for y in y_arr if y < y_max])
     if y_arr.size < 1:
         raise ValueError("Input 'y' has no values on the domain of data")
+    
+    peaks_idx = [fu.find_peaks_const_y(data, y, x=x, crests=False) for y in y_arr]
 
     ## Figure a
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
