@@ -110,8 +110,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
             ax[j,i].axhline(color="black", linewidth=1)
             ax[j,i].set_xlim([0, t_max])
     
-    for j in range(2):
-        ax[j, -1].set_xlabel("Time since start [hours]")
+        ax[-1,i].set_xlabel("Time since start [hours]")
 
     fig.savefig(savename + "_c", bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}_c")
