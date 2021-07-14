@@ -153,6 +153,14 @@ try:
     fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="v", xlims=[0, 1000], ylims=[0, 120])
 except:
     print(f"Error in contour visualisation {case=}")
+
+
+### Figures - Timeseries
+y_list = 1e5 * np.array([2, 4, 6, 8])
+try:
+    fv.vis_timeseries(data, y=y_list, saveloc=figure_dir)
+except:
+    print(f"Error in timeseries visualisation {case=}")
     
 
 ### Spectra
