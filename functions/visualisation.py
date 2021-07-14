@@ -126,7 +126,8 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax2[i].tick_params(axis="y", labelcolor=f"C1")
 
         ax[i].grid()
-        
+        ax[i].annotate(f"$y={y[i]/1000:0.0f}$km", xy=(0.01, 0.99), xycoords="axes fraction", ha="left", va="top")
+
         try:
             for j in wl_t_idx[i]:
                 ax[i].axvline(t[j], color="C0", alpha=0.5)
