@@ -121,7 +121,10 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(data["wl"].values)))
         ax2[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(data["p"].values)))
         ax[i].xaxis.set_minor_locator(MultipleLocator(1))
-    
+
+        ax[i].tick_params(axis="y", labelcolor=f"C0")
+        ax2[i].tick_params(axis="y", labelcolor=f"C1")
+
     ax[-1].set_xlabel("Time since start [hours]")
 
     fig.savefig(savename + "_b", bbox_inches="tight", dpi=FIG_DPI)
