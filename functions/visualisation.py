@@ -65,9 +65,10 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
 
     ## Figure a
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
-    fig.set_size_inches(FIGSIZE_LONG)
+    fig.set_size_inches(FIGSIZE_WIDE)
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
+
     ax = np.ravel(ax)
     ax[0].plot(t, wl)
     ax[1].plot(t, p)
@@ -76,6 +77,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax[i].set_xlim([0, t_max])
         ax[i].grid()
         ax[i].xaxis.set_minor_locator(MultipleLocator(1))
+
     ax[-1].set_xlabel("Time since start [hours]")
     ax[0].set_ylabel("Sea Surface Elevation [m]")
     ax[1].set_ylabel("Atmospheric Pressure [Pa]")
