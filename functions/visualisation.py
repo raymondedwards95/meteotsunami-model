@@ -56,6 +56,8 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
 
     t_max = np.min([t.max(), t_max])
     y_max = np.max(data["y"].values)
+    wl_max = np.max(np.abs(wl.values))
+    p_max = np.max(np.abs(p.values))
 
     y_arr = np.array([y for y in y_arr if y < y_max])
     if y_arr.size < 1:
@@ -78,13 +80,13 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         try:
             for j in wl_t_idx[i]:
                 ax[0].axvline(t[j], color=f"C{i}", alpha=0.5)
-                ax[0].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="left", va="bottom", color=f"C{i}", rotation=90)
+                ax[0].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], wl_max), ha="left", va="top", color=f"C{i}", rotation=90)
         except:
             pass
         try:
             for j in p_t_idx[i]:
                 ax[1].axvline(t[j], color=f"C{i}", alpha=0.5)
-                ax[1].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="left", va="bottom", color=f"C{i}", rotation=90)
+                ax[1].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], p_max), ha="left", va="top", color=f"C{i}", rotation=90)
         except:
             pass
 
