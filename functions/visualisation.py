@@ -61,7 +61,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     if y_arr.size < 1:
         raise ValueError("Input 'y' has no values on the domain of data")
 
-    ## Figure TEST
+    ## Figure a
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
@@ -82,7 +82,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}_a")
 
-    ## Figure TEST
+    ## Figure b
     fig, ax = plt.subplots(y_arr.size, 1, sharex=True, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
