@@ -129,14 +129,14 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         
         try:
             for j in wl_t_idx[i]:
-                ax[0].axvline(t[j], color=f"C{i}", alpha=0.5)
-                ax[0].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], wl_max), ha="left", va="top", color=f"C{i}", rotation=90)
+                ax[i].axvline(t[j], color="C0", alpha=0.5)
+                ax[i].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], wl_max), ha="left", va="top", color="C0", rotation=90)
         except:
             pass
         try:
             for j in p_t_idx[i]:
-                ax[1].axvline(t[j], color=f"C{i}", alpha=0.5)
-                ax[1].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="left", va="bottom", color=f"C{i}", rotation=90)
+                ax[i].axvline(t[j], color="C1", alpha=0.5)
+                ax[i].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="left", va="bottom", color="C1", rotation=90)
         except:
             pass
 
