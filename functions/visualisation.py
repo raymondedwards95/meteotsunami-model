@@ -71,6 +71,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     for i in range(2):
         ax[i].axhline(color="black", linewidth=1)
         ax[i].set_xlim([0, t_max])
+        ax[i].set_xlabel("Time since start [hours]")
     ax[0].legend([f"$x={x/1000:0.0f}$km; $y={y/1000:0.0f}$km" for y in y_arr])
 
     fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI)
@@ -92,6 +93,8 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax[i].set_xlim([0, t_max])
         ax[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(wl_slice)))
         ax2[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(p_slice)))
+    
+    ax[-1].set_xlabel("Time since start [hours]")
 
     fig.savefig(savename + "_b", bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}_b")
@@ -106,6 +109,9 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         for j in range(2):
             ax[j,i].axhline(color="black", linewidth=1)
             ax[j,i].set_xlim([0, t_max])
+    
+    for j in range(2):
+        ax[j, -1].set_xlabel("Time since start [hours]")
 
     fig.savefig(savename + "_c", bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}_c")
