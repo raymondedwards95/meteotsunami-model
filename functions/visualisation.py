@@ -58,6 +58,7 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     ax[1].plot(t, p)
     for i in range(2):
         ax[i].axhline(color="black", linewidth=1)
+    ax[0].legend([f"$x={x/1000:0.0f}$km; $y={y/1000:0.0f}$km" for y in y_arr])
 
     fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}_a")
