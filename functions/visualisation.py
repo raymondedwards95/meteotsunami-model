@@ -317,5 +317,74 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
     ## End
     if not keep_open:
         plt.close("all")
+    
+
+def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=None):
+    ## Paths
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".jpg"):
+        saveloc.replace(".jpg", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + f"/contour_{variable}"
+
+    ## Check input
+    if np.isscalar(t):
+        t_arr = np.array([t])
+    elif isinstance(t, list):
+        t_arr = np.array(t)
+    elif isinstance(t, (list, np.ndarray)):
+        t_arr = t
+    else:
+        raise ValueError(f"{t=} is not an array, but {type(t)}")
+    
+    t_num = t_arr.size
+    del t
+
+    ## Get parameters
+    x = data["x"]
+    y = data["y"]
+    var = data[variable]
+
+    x = x - x.min()
+    var_max = float(np.max([np.abs([var.max(), var.min()])]))
+    var_min = -1. * var_max
+
+    if xlims is None:
+        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
+
+    ## Figure
+    fig, ax = plt.subplots(t_num, 1, squeeze=False, sharex=True)
+    fig.set_size_inches(FIGSIZE_LONG)
+    fig.set_dpi(FIG_DPI)
+    fig.set_tight_layout(True)
+    fig.suptitle("Sea Surface Elevation [m]")
+    ax = np.ravel(ax)
+
+    ## Subplots
+    for i in range(t_num):
+        ax[i].contourf(
+            y / 1000, 
+            x / 1000, 
+            var.interp(t=fu.to_timestr(t_arr[i])).T, 
+            25,
+            cmap=cmo.cm.delta,
+            vmin=var_min,
+            vmax=var_max    
+        )
+        ax[i].set_ylabel("$x$ [km]")
+        ax[i].set_title(f"$t = {t_arr[i] / 3600:0.1f}$h")
+        ax[i].set_xlim(xlims)
+        ax[i].set_ylim([0, 200])
+    
+    ax[-1].set_xlabel("$y$ [km]")
+
+    ## Save figure
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    print(f"Saved figure {savename}")
+
+    ## End
+    if not keep_open:
+        plt.close("all")
 
 
