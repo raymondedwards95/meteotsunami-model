@@ -148,9 +148,9 @@ for j in range(t_moments.size):
 
 ### Figures - Contour
 try:
-    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="wl", xlims=[0, 1000])
-    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="u", xlims=[0, 1000])
-    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="v", xlims=[0, 1000])
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="wl", xlims=[0, 1000], ylims=[0, 120])
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="u", xlims=[0, 1000], ylims=[0, 120])
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="v", xlims=[0, 1000], ylims=[0, 120])
 except:
     print(f"Error in contour visualisation {case=}")
     
