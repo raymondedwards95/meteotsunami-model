@@ -37,13 +37,16 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
 
     if np.isscalar(y):
         y = np.array([y])
-    if isinstance(y, list):
+    if isinstance(y, (list, np.ndarray)):
         y = np.array(y)
+    
+    y_arr = y
+    del y
 
     ## Extract data
     t = data["t"]
-    wl = data["wl"].interp(x=x, y=y)
-    p = data["p"].interp(x=x, y=y)
+    wl = data["wl"].interp(x=x, y=y_arr)
+    p = data["p"].interp(x=x, y=y_arr)
 
     ## Figure TEST
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
@@ -60,12 +63,12 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     print(f"Saved figure {savename}_a")
 
     ## Figure TEST
-    fig, ax = plt.subplots(y.size, 1, sharex=True, squeeze=False)
+    fig, ax = plt.subplots(y_arr.size, 1, sharex=True, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
     ax = np.ravel(ax)
     ax2 = np.array([ax[i].twinx() for i in range(ax.size)])
-    for i in range(y.size):
+    for i in range(y_arr.size):
         wl_slice = wl[:, i].values
         p_slice = p[:, i].values
         ax[i].plot(t, wl_slice, color="C0")
@@ -79,10 +82,10 @@ def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
     print(f"Saved figure {savename}_b")
 
     ## Figure TEST
-    fig, ax = plt.subplots(2, y.size, sharex=True, sharey=True, squeeze=False)
+    fig, ax = plt.subplots(2, y_arr.size, sharex=True, sharey=True, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
-    for i in range(y.size):
+    for i in range(y_arr.size):
         ax[0,i].plot(t, wl[:, i])
         ax[1,i].plot(t, p[:, i] / 2000.)
         for j in range(2):
