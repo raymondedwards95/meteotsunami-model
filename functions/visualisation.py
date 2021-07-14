@@ -52,7 +52,11 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     p = data["p"].interp(x=x, y=y_arr)
 
     t_max = np.min([t.max(), t_max])
-    print(t_max)
+    y_max = np.max(data["y"].values)
+
+    y_arr = np.array([y for y in y_arr if y < y_max])
+    if y_arr.size < 1:
+        raise ValueError("Input 'y' has no values on the domain of data")
 
     ## Figure TEST
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
