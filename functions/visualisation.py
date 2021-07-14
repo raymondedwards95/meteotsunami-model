@@ -105,23 +105,6 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     fig.savefig(savename + "_b", bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}_b")
 
-    ## Figure TEST
-    fig, ax = plt.subplots(2, y_arr.size, sharex=True, sharey=True, squeeze=False)
-    fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
-    for i in range(y_arr.size):
-        ax[0,i].plot(t, wl[:, i])
-        ax[1,i].plot(t, p[:, i] / 2000.)
-        for j in range(2):
-            ax[j,i].axhline(color="black", linewidth=1)
-            ax[j,i].set_xlim([0, t_max])
-            ax[j,i].xaxis.set_minor_locator(MultipleLocator(1))
-    
-        ax[-1,i].set_xlabel("Time since start [hours]")
-
-    fig.savefig(savename + "_c", bbox_inches="tight", dpi=FIG_DPI)
-    print(f"Saved figure {savename}_c")
-
     ## End
     if not keep_open:
         plt.close("all")
