@@ -19,7 +19,7 @@ import functions.analysis as fa
 import functions.utilities as fu
 
 
-def vis_timeseries(data, y, x=1e4, saveloc=None, keep_open=False):
+def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
 
@@ -35,6 +35,9 @@ def vis_timeseries(data, y, x=1e4, saveloc=None, keep_open=False):
     if not np.isscalar(x):
         raise ValueError(f"{x=} should be scalar")
 
+    if t_max is None:
+        t_max = np.inf
+
     if np.isscalar(y):
         y = np.array([y])
     if isinstance(y, (list, np.ndarray)):
@@ -44,9 +47,12 @@ def vis_timeseries(data, y, x=1e4, saveloc=None, keep_open=False):
     del y
 
     ## Extract data
-    t = data["t"]
+    t = data["t"].values.astype("datetime64[s]").astype(float)
     wl = data["wl"].interp(x=x, y=y_arr)
     p = data["p"].interp(x=x, y=y_arr)
+
+    t_max = np.min([t.max(), t_max])
+    print(t_max)
 
     ## Figure TEST
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
