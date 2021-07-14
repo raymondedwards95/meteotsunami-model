@@ -31,7 +31,7 @@ def to_timestr(seconds):
     return datetime.datetime.fromtimestamp(seconds).strftime("%Y-%m-%d %H:%M:%S")
 
 
-def find_peaks_const_y(data, y, x=None, window=10, crests=True):
+def find_peaks_const_y(data, y, x=None, window=10, crests=True, variable="wl"):
     """ Finds the times at which the local maxima (or minima) of the waves are present for a given y-coordinate
 
     Input:
@@ -42,6 +42,7 @@ def find_peaks_const_y(data, y, x=None, window=10, crests=True):
         x:      x-coordinate
         window: expected width of a peak (default: 10)
         factor: find crests (True) or throughs (False)
+        variable: variable to use, e.g. "wl", "u" or "v"
 
     Output:     
         t_idx:  indices corresponding to the time of the largest maxima
@@ -55,21 +56,24 @@ def find_peaks_const_y(data, y, x=None, window=10, crests=True):
         raise ValueError(f"{x=} is not a number")
     if not isinstance(data, (xr.Dataset)):
         raise ValueError(f"{data=} is not a Dataset")
+
+    if not variable in ["wl", "u", "v", "p"]:
+        raise ValueError(f"Expected {variable=} to be 'wl', 'u', 'v' or 'p'")
     
     # Extract data
-    wl = data["wl"].interp(x=x, y=y)
-    wl_std = np.std(wl)
+    var = data[variable].interp(x=x, y=y)
+    var_std = np.std(var)
 
     # Find largest values
-    wl_idx = wl.argsort().values  # sorts from low to high
+    var_idx = var.argsort().values  # sorts from low to high
     factor = -1
 
     if crests:
-        wl_idx = np.flip(wl_idx)
+        var_idx = np.flip(var_idx)
         factor = 1
 
     # Find distinct peaks
-    t_idx = _filter_peaks(wl, wl_idx, wl_std, window, factor)
+    t_idx = _filter_peaks(var, var_idx, var_std, window, factor)
     return t_idx
 
 
