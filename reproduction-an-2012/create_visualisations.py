@@ -279,6 +279,16 @@ for _y in np.arange(1, 10):
 fv.vis_spectrum_2d(data, x=1e4, saveloc=figure_dir)
 
 
+### Figures - Contour
+t_moments = [4e4, 8e4, 12e4, 16e4]
+try:
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="wl")
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="u")
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="v")
+except:
+    print(f"Error in contour visualisation {case=}")
+
+
 ### Animation
 if make_ani:
     anim.animation_alongshore(data, saveloc=figure_dir)
