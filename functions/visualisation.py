@@ -388,7 +388,14 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
             vmax=var_max    
         )
         ax[i].set_ylabel("$x$ [km]")
-        ax[i].set_title(f"$t = {t_arr[i] / 3600:0.1f}$h")
+        # ax[i].set_title(f"$t = {t_arr[i] / 3600:0.1f}$h")
+        ax[i].annotate(
+            f"$t = {t_arr[i] / 3600:0.1f}$h", 
+            xy=(0.99, 0.98),
+            xycoords="axes fraction",
+            ha="right", 
+            va="top"
+        )
         ax[i].set_xlim(xlims)
         ax[i].set_ylim(ylims)
     
