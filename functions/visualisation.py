@@ -19,7 +19,7 @@ import functions.analysis as fa
 import functions.utilities as fu
 
 
-def vis_timeseries(data, x=1e4, y=1e5, saveloc=None, keep_open=False):
+def vis_timeseries(data, y, x=1e4, saveloc=None, keep_open=False):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
 
