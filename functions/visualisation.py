@@ -66,9 +66,9 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
 
     ## Figure a
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
-    fig.set_size_inches(FIGSIZE_WIDE)
+    fig.set_size_inches(14, 7)
     fig.set_dpi(FIG_DPI)
-    fig.set_tight_layout(True)
+    # fig.set_tight_layout(True)
 
     ax = np.ravel(ax)
     ax[0].plot(t, wl)
