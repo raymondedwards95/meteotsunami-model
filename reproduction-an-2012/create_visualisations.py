@@ -289,6 +289,14 @@ except:
     print(f"Error in contour visualisation {case=}")
 
 
+### Figures - Timeseries
+y_list = 1e6 * np.array([2, 4, 6, 8])
+try:
+    fv.vis_timeseries(data, y=y_list, saveloc=figure_dir)
+except:
+    print(f"Error in timeseries visualisation {case=}")
+
+
 ### Animation
 if make_ani:
     anim.animation_alongshore(data, saveloc=figure_dir)
