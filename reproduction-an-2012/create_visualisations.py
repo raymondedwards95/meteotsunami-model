@@ -282,9 +282,9 @@ fv.vis_spectrum_2d(data, x=1e4, saveloc=figure_dir)
 ### Figures - Contour
 t_moments = [4e4, 8e4, 12e4, 16e4]
 try:
-    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="wl")
-    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="u")
-    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="v")
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="wl", ylims=[0, 300])
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="u", ylims=[0, 300])
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="v", ylims=[0, 300])
 except:
     print(f"Error in contour visualisation {case=}")
 
