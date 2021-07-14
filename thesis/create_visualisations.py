@@ -144,6 +144,14 @@ for j in range(t_moments.size):
         fv.vis_alongshore(data, t=t_moment, x=x_moment+x_offset, saveloc=figure_dir)
     except:
         print(f"Error in along-shore visualisation {case=}")
+
+
+try:
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="wl", xlims=[0, 1000])
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="u", xlims=[0, 1000])
+    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="v", xlims=[0, 1000])
+except:
+    print(f"Error in contour visualisation {case=}")
     
 
 ### Spectra
