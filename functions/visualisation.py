@@ -10,6 +10,7 @@ import numpy as np
 import seaborn as sns
 import xarray as xr
 from matplotlib.colors import Normalize
+from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # fix for importing functions below
@@ -72,6 +73,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax[i].axhline(color="black", linewidth=1)
         ax[i].set_xlim([0, t_max])
         ax[i].grid()
+        ax[i].xaxis.set_minor_locator(MultipleLocator(1))
     ax[-1].set_xlabel("Time since start [hours]")
     ax[0].set_ylabel("Sea Surface Elevation [m]")
     ax[1].set_ylabel("Atmospheric Pressure [Pa]")
@@ -96,6 +98,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax[i].set_xlim([0, t_max])
         ax[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(wl_slice)))
         ax2[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(p_slice)))
+        ax[i].xaxis.set_minor_locator(MultipleLocator(1))
     
     ax[-1].set_xlabel("Time since start [hours]")
 
@@ -112,6 +115,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         for j in range(2):
             ax[j,i].axhline(color="black", linewidth=1)
             ax[j,i].set_xlim([0, t_max])
+            ax[j,i].xaxis.set_minor_locator(MultipleLocator(1))
     
         ax[-1,i].set_xlabel("Time since start [hours]")
 
