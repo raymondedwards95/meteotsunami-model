@@ -61,7 +61,8 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     if y_arr.size < 1:
         raise ValueError("Input 'y' has no values on the domain of data")
     
-    peaks_idx = [fu.find_peaks_const_y(data, y, x=x, crests=False) for y in y_arr]
+    wl_t_idx = [fu.find_peaks_const_y(data, y, x=x, crests=False, variable="wl") for y in y_arr]
+    p_t_idx = [fu.find_peaks_const_y(data, y, x=x, crests=True, variable="p") for y in y_arr]
 
     ## Figure a
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
@@ -72,6 +73,19 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     ax = np.ravel(ax)
     ax[0].plot(t, wl)
     ax[1].plot(t, p)
+
+    for i in range(y_arr.size):
+        try:
+            for j in wl_t_idx[i]:
+                ax[0].axvline(t[j], color=f"C{i}", alpha=0.5)
+        expect:
+            pass
+        try:
+            for j in p_t_idx[i]:
+                ax[1].axvline(t[j], color=f"C{i}", alpha=0.5)
+        expect:
+            pass
+
     for i in range(2):
         ax[i].axhline(color="black", linewidth=1)
         ax[i].set_xlim([0, t_max])
