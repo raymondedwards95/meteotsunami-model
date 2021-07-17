@@ -43,7 +43,7 @@ t_step = 3600. / 6.
 
 
 ### Convert parameters
-x0_list, a_list, p0_list U_list, = np.meshgrid(x0_list, a_list, p0_list, U_list, indexing="ij")
+x0_list, a_list, p0_list, U_list = np.meshgrid(x0_list, a_list, p0_list, U_list, indexing="ij")
 x0_list = np.ravel(x0_list)
 a_list = np.ravel(a_list)
 p0_list = np.ravel(p0_list)
