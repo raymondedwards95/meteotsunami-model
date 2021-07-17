@@ -7,17 +7,17 @@ nan
 
 
 Wave Lengths at t=28800.0 and x=10000.0:
-759240.8	
+nan	
 Mean Wave Length:
-759240.7592407591
+nan
 Mean Wave Speed = Length / Period
 nan
 
 
 Wave Lengths at t=57600.0 and x=10000.0:
-1558441.6	
+nan	
 Mean Wave Length:
-1558441.5584415584
+nan
 Mean Wave Speed = Length / Period
 nan
 
@@ -39,8 +39,8 @@ nan
 
 
 Wave Lengths at t=144000.0 and x=10000.0:
-2457542.5	1518481.5	
+nan	
 Mean Wave Length:
-1988011.988011988
+nan
 Mean Wave Speed = Length / Period
 nan
