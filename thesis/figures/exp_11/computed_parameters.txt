@@ -1,9 +1,9 @@
 
 
 Wave Period at y=500000.0 and x=10000.0:
-1.8	
+1.7	
 Mean Wave Period:
-1.8333333333333333
+1.6666666666666667
 
 
 Wave Lengths at t=28800.0 and x=10000.0:
@@ -31,11 +31,11 @@ nan
 
 
 Wave Lengths at t=115200.0 and x=10000.0:
-nan	
+249750.2	
 Mean Wave Length:
-nan
+249750.24975025002
 Mean Wave Speed = Length / Period
-nan
+149850.14985015002
 
 
 Wave Lengths at t=144000.0 and x=10000.0:

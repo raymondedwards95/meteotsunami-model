@@ -1,9 +1,9 @@
 
 
 Wave Period at y=500000.0 and x=10000.0:
-1.8	
+nan	
 Mean Wave Period:
-1.8333333333333333
+nan
 
 
 Wave Lengths at t=28800.0 and x=10000.0:
