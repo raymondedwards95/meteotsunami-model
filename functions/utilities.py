@@ -1,9 +1,14 @@
 """ Additional functions """
 
 import datetime
+import sys
 
 import numpy as np
 import xarray as xr
+
+# fix for importing functions below
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 
 
 def _filter_peaks(wl, wl_idx, wl_std, window, factor):
