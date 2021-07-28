@@ -1,6 +1,7 @@
 """ Functions for visualising model outputs """
 
 import os
+import sys
 import time
 
 import cmocean as cmo
@@ -9,6 +10,10 @@ import numpy as np
 import xarray as xr
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+
+# fix for importing functions below
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 
 
 def animation_contour(dataset, saveloc=None, xlims=None):
