@@ -7,7 +7,6 @@ import cmocean as cmo
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 import xarray as xr
 from matplotlib.colors import Normalize
 from matplotlib.ticker import MultipleLocator, AutoMinorLocator
@@ -23,7 +22,6 @@ import functions.utilities as fu
 def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
-
     ## Check input
     if not np.isscalar(x):
         raise ValueError(f"{x=} should be scalar")
@@ -156,7 +154,6 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
 def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
-
     ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
@@ -205,7 +202,6 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
 def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
-
     ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
