@@ -1,6 +1,7 @@
 """ Additional functions """
 
 import datetime
+import os
 import sys
 
 import numpy as np
