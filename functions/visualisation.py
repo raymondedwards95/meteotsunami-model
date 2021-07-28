@@ -266,8 +266,34 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
 
 
 def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable="wl"):
-    ## Settings
-    sns.set_palette(sns.color_palette("muted"))
+    ## Check inputs
+    if not np.isscalar(x):
+        raise ValueError(f"{x=} is not a number")
+
+    if np.isscalar(y):
+        figsize = FIGSIZE_NORMAL
+        y_list = np.array([y])
+    elif isinstance(y, (list, np.ndarray)):
+        figsize = FIGSIZE_HIGH
+        y_list = np.array(y)
+    else:
+        raise ValueError(f"{y=} is not a number or list of numbers")
+
+    variable = variable.lower()
+    if variable == "wl":
+        variable_name = "Water Level"
+    elif variable == "u":
+        variable_name = "x-component of velocity"
+    elif variable == "v":
+        variable_name = "y-component of velocity"
+    elif variable == "p":
+        variable_name = "Surface Air Pressure"
+    else:
+        raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+
+    del y
+    y_list = np.ravel(y_list)
+    y_num = y_list.size
 
     ## Paths
     if saveloc is None:
@@ -275,39 +301,46 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_{y/1000:0.0f}_{variable}"
-
-    ## Check inputs
-    if not np.isscalar(x):
-        raise ValueError(f"{x=} is not a number")
-    if not np.isscalar(y):
-        raise ValueError(f"{y=} is not a number")
+    if y_num == 1:
+        savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_{y_list[0]/1000:0.0f}_{variable}"
+    else:
+        savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_n{y_num:0.0f}_{variable}"
 
     ## Compute spectrum
-    freqs, power = fa.spectral_analysis_1d(data, y, x=x, variable=variable)
+    freqs_all = [None] * y_num
+    power_all = [None] * y_num
+    for i in range(y_num):
+        freqs_all[i], power_all[i] = fa.spectral_analysis_1d(data, y_list[i], x=x, variable=variable)
 
     ## Figure
-    fig, ax = plt.subplots(1, 1, squeeze=False)
-    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig, ax = plt.subplots(y_num, 1, squeeze=False, sharex=True)
+    fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
+    fig.suptitle(f"Power Spectrum - {variable_name}", va="top", ha="left", x=0.01)
     ax = np.ravel(ax)
 
-    ax[0].plot(
-        freqs * 3600.,
-        power / 3600.
-    )
-    ax[0].fill_between(
-        freqs * 3600, 
-        power / 3600, 
-        alpha=0.1
-    )
-    ax[0].axhline(color="black", linewidth=1)
-    ax[0].set_ylim(0, None)
-    ax[0].set_xlim(0, 3)
-    ax[0].set_xlabel("Frequency [cycles / hour]")
-    ax[0].set_ylabel("Spectral Power [m$^2$ hr]")
-    ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$km and $y={y/1000:0.0f}$km")
+    for i in range(y_num):
+        ax[i].plot(
+            freqs_all[i] * 3600.,
+            power_all[i] / 3600.,
+            color=f"C{i}"
+        )
+        ax[i].fill_between(
+            freqs_all[i] * 3600, 
+            power_all[i] / 3600, 
+            alpha=0.1,
+            color=f"C{i}"
+        )
+        ax[i].axhline(color="black", linewidth=1)
+        ax[i].set_ylim(0, None)
+        ax[i].set_xlim(0, 2.2)
+        ax[i].set_ylabel("Spectral Power [m$^2$ hr]")
+        ax[i].legend([f"$y = {y_list[i]/1000:0.0f}$km"], loc="upper right")
+        ax[i].ticklabel_format(axis="y", style="sci", scilimits=(0,0))
+        ax[i].xaxis.set_minor_locator(MultipleLocator(0.1))
+        ax[i].grid()
+    ax[-1].set_xlabel("Frequency [cycles / hour]")
 
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}")
