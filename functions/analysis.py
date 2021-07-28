@@ -8,6 +8,7 @@ from scipy.optimize import curve_fit
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 import functions.utilities as fu
 
 
