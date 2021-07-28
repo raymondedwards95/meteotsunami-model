@@ -130,7 +130,7 @@ def spectral_analysis_1d(data, y, x=1e4, variable="wl", demean=False):
     return freqs, power
 
 
-def spectral_analysis_2d(data, x=1e4, variable="wl"):
+def spectral_analysis_2d(data, x=1e4, variable="wl", demean=False):
     """ Apply fourier transform on spatial and temporal varying data 
     
     Input:
@@ -139,6 +139,7 @@ def spectral_analysis_2d(data, x=1e4, variable="wl"):
     Parameters:
         x:          x-coordinate
         variable:   name of the variable to use, e.g. "wl" or "p"
+        demean:     remove mean from signal
     
     Output:
         wavenumber: corresponding wavenumbers (space-domain)
@@ -150,6 +151,9 @@ def spectral_analysis_2d(data, x=1e4, variable="wl"):
     y = data["y"].values
     dy = np.median(np.diff(y))
     var = data[variable].interp(x=x)
+
+    if demean:
+        var -= np.mean(var)
 
     transform = np.fft.rfft2(var, axes=(1, 0))  # first over time, then space
     transform = np.fft.fftshift(transform, axes=1)  # rearrange data, so that wavenumber is in increasing order
