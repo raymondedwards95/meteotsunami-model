@@ -1,11 +1,17 @@
 """ Functions to process output files from Delft3D-FM into arrays """
 
+import os
+import sys
 import time
 import warnings
 
 import numpy as np
 import scipy.interpolate
 import xarray as xr
+
+# fix for importing functions below
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 
 
 # set method for regridding
