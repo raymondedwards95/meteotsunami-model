@@ -6,7 +6,6 @@ import sys
 import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 import xarray as xr
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
@@ -98,10 +97,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
     
     Parameters:
         filename:   name of figures
-    """
-    ## Settings
-    sns.set_palette(sns.color_palette("muted"))
-    
+    """    
     ## Prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
