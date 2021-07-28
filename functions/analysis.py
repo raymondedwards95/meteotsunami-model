@@ -99,7 +99,7 @@ def compute_wave_lengths(data, t, x=None, crests=True):
     return lengths
 
 
-def spectral_analysis_1d(data, y, x=1e4, variable="wl"):
+def spectral_analysis_1d(data, y, x=1e4, variable="wl", demean=False):
     """ Apply fourier transform on timeseries 
     
     Input:
@@ -109,6 +109,7 @@ def spectral_analysis_1d(data, y, x=1e4, variable="wl"):
     Parameters:
         x:          x-coordinate
         variable:   name of the variable to use, e.g. "wl" or "p"
+        demean:     remove mean from signal
     
     Output:
         freqs:      corresponding frequencies (time-domain)      
@@ -117,6 +118,9 @@ def spectral_analysis_1d(data, y, x=1e4, variable="wl"):
     t = data["t"].values.astype("datetime64[s]").astype(float)
     dt = np.median(np.diff(t))
     var = data[variable].interp(x=x, y=y)
+
+    if demean:
+        var -= np.mean(var)
 
     transform = np.fft.rfft(var)
     power = np.power(np.abs(transform), 2.)
