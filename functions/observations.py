@@ -1,6 +1,11 @@
 """ Functions to create observation points and cross sections for D3D-FM """
 
 import os
+import sys
+
+# fix for importing functions below
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 
 
 class ObservationPoint():
