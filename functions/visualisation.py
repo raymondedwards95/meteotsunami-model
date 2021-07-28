@@ -255,7 +255,7 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
         plt.close("all")
 
 
-def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable="wl"):
+def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable="wl", demean=True):
     ## Check inputs
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
@@ -292,15 +292,15 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
     if y_num == 1:
-        savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_{y_list[0]/1000:0.0f}_{variable}"
+        savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_{y_list[0]/1000:0.0f}_{variable}_{int(demean)}"
     else:
-        savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_n{y_num:0.0f}_{variable}"
+        savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_n{y_num:0.0f}_{variable}_{int(demean)}"
 
     ## Compute spectrum
     freqs_all = [None] * y_num
     power_all = [None] * y_num
     for i in range(y_num):
-        freqs_all[i], power_all[i] = fa.spectral_analysis_1d(data, y_list[i], x=x, variable=variable)
+        freqs_all[i], power_all[i] = fa.spectral_analysis_1d(data, y_list[i], x=x, variable=variable, demean=demean)
 
     ## Figure
     fig, ax = plt.subplots(y_num, 1, squeeze=False, sharex=True)
