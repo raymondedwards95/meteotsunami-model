@@ -340,21 +340,21 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
         plt.close("all")
     
 
-def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", xlims=None, ylims=None, autolim=1e-3):
+def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", xlims=None, ylims=None, autolim=1e-3, demean=True):
     ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/spectrum_2d_{x/1000:0.0f}_{variable}"
+    savename = saveloc + f"/spectrum_2d_{x/1000:0.0f}_{variable}_{int(demean)}"
 
     ## Check inputs
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
 
     ## Compute spectrum
-    wavenumber, freqs, power = fa.spectral_analysis_2d(data, x=x, variable=variable)
+    wavenumber, freqs, power = fa.spectral_analysis_2d(data, x=x, variable=variable, demean=demean)
 
     ## Compute plot limits
     if (xlims is None) or (ylims is None):
