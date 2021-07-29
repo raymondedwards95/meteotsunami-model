@@ -216,14 +216,16 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     y_num = y_list.size
     t_num = t_list.size
 
-    if t_num == 1 and y_num == 1:
+    if (t_num == 1) and (y_num == 1):
         figsize = FIGSIZE_NORMAL
-    elif t_num == 1:
+    elif (t_num == 1) and (y_num > 1):
         figsize = FIGSIZE_WIDE
-    elif y_num == 1:
+    elif (t_num > 1) and (y_num == 1):
         figsize = FIGSIZE_HIGH
-    else:
+    elif (t_num > 1) and (y_num > 1):
         figsize = FIGSIZE_SQUARE
+    else:
+        raise ValueError(f"Error in determining figsize for {y_num=} and {t_num=}")
 
     ## Paths
     if saveloc is None:
