@@ -5,7 +5,6 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 import xarray as xr
 
 # fix for importing functions below
@@ -15,10 +14,6 @@ import functions.animation as anim
 import functions.regrid as fr
 import functions.utilities as fu
 import functions.visualisation as fv
-
-
-### Settings
-sns.set_palette(sns.color_palette("muted"))
 
 
 ### Parameters
