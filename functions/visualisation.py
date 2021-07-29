@@ -212,8 +212,9 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
         raise ValueError(f"{t=} is not a number or array_like")
     
     del t, y
-    t = t_list[0]
-    y = y_list[0]
+
+    y_num = y_list.size
+    t_num = t_list.size
 
     ## Paths
     if saveloc is None:
@@ -221,41 +222,59 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/cross_shore_{y/1000:0.0f}_{t/3600:0.0f}"
 
-    ## Make best fit
-    k0, y0 = fa.compute_decay_parameter(data, y, t)
-    wl_model = fa.exp_decay(data["x"], k0, y0)
+    savename = saveloc + "/cross_shore_"
 
-    ## Extract data
-    x = data["x"]
-    wl = data["wl"].interp(y=y, t=fu.to_timestr(t))
-
+    if y_num == 1:
+        savename += f"y{y_list[0]/1000:0.0f}_"
+    else:
+        savename += f"yn{y_num}_"
+    
+    if t_num == 1:
+        savename += f"t{t_list[0]/3600:0.0f}"
+    else:
+        savename += f"tn{t_num}"
+    
     ## Figure
-    fig, ax = plt.subplots(1, 1, squeeze=False)
+    fig, ax = plt.subplots(t_num, y_num, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
-    ax = np.ravel(ax)
-    ax[0].plot(
-        x / 1000., 
-        wl, 
-        color="C0", 
-        label="Waterlevel"
-    )
-    ax[0].plot(
-        x / 1000., 
-        wl_model, 
-        color="C0", 
-        linestyle="--", 
-        label=f"Best fit with $1/k0={1./k0/1000.:0.1f}$km"
-    )
-    ax[0].axhline(color="black", linewidth=1)
-    ax[0].legend()
-    ax[0].set_xlim(0, x.max() / 1000.)
-    ax[0].set_xlabel("$x$ [km]")
-    ax[0].set_ylabel("$SSE$ [m]")
-    ax[0].set_title(f"Cross-shore profile at $y={y/1000:0.0f}$km and $t={t/3600:0.1f}$hours")
+
+    for i in range(t_num):
+        for j in range(y_num):
+            # Make best fit
+            k0, y0 = fa.compute_decay_parameter(data, y_list[j], t_list[i])
+            wl_model = fa.exp_decay(data["x"], k0, y0)
+
+            # Plot data
+            ax[i,j].plot(
+                data["x"] / 1000., 
+                data["wl"].interp(y=y_list[j], t=fu.to_timestr(t_list[i])),
+                color="C0", 
+                label="Waterlevel"
+            )
+
+            # Plot best fit
+            ax[i,j].plot(
+                data["x"] / 1000.,
+                wl_model, 
+                color="C0", 
+                linestyle="--", 
+                label=f"Best fit with $1/k0={1./k0/1000.:0.1f}$km"
+            )
+
+            # 
+            ax[i,j].axhline(color="black", linewidth=1)
+            ax[i,j].legend()
+            ax[i,j].set_xlim(0, data["x"].max() / 1000.)
+            ax[i,j].set_title(f"Cross-shore profile at $y={y_list[j]/1000:0.0f}$km and $t={t_list[i]/3600:0.1f}$hours")
+
+    for i in range(t_num):
+        ax[i,0].set_ylabel("$SSE$ [m]")
+
+    for j in range(y_num):
+        ax[-1,j].set_xlabel("$x$ [km]")
 
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}")
