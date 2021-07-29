@@ -150,42 +150,55 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
 
 
 def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
+    ## Check input
+    if not np.isscalar(x):
+        raise ValueError(f"{x=} is not a number")
+
+    if np.isscalar(t):
+        t_list = np.array([t])
+    elif isinstance(t, (list, np.array)):
+        t_list = np.array(t)
+    else:
+        raise ValueError(f"{t=} is not a number or array_like")
+
+    t_num = t_list.size
+    del t
+
+    if t_num < 3:
+        figsize = FIGSIZE_NORMAL
+    else:
+        figsize = FIGSIZE_HIGH
+
     ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/along_shore_{x/1000:0.0f}_{t/3600:0.0f}"
-
-    ## Check input
-    # if np.isscalar(t):
-    #     t = np.array([t])
-    if not np.isscalar(x):
-        raise ValueError(f"{x=} is not a number")
-
-    # assert t.size == 1
+    savename = saveloc + f"/along_shore_x{x/1000:0.0f}_tn{t_num}"
 
     ## Extract data
     y = data["y"]
-    wl = data["wl"].interp(t=fu.to_timestr(t), x=x)
+    wl = data["wl"].interp(t=fu.to_timestr(t_list), x=x)
 
     ## Figure
-    fig, ax = plt.subplots(1, 1, squeeze=False)
-    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig, ax = plt.subplots(t_num, 1, squeeze=False, sharex=True)
+    fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
     ax = np.ravel(ax)
 
-    ax[0].plot(
-        y / 1000., 
-        wl
-    )
-    ax[0].axhline(color="black", linewidth=1)
-    ax[0].set_xlim(0, y.max() / 1000.)
-    ax[0].set_xlabel("$y$ [km]")
-    ax[0].set_ylabel("$SSE$ [m]")
-    ax[0].set_title(f"Along-shore profile at $x={x/1000:0.0f}$km and $t={t/3600:0.1f}$hours")
+    for i in range(t_num):
+        ax[i].plot(
+            y / 1000., 
+            wl[i]
+        )
+        ax[i].axhline(color="black", linewidth=1)
+        ax[i].set_xlim(0, y.max() / 1000.)
+        ax[i].set_ylabel("$SSE$ [m]")
+        ax[i].set_title(f"$x={x/1000:0.0f}$km and $t={t_list[i]/3600:0.1f}$hours")
+        ax[i].grid()
+    ax[-1].set_xlabel("$y$ [km]")
 
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure {savename}")
@@ -571,7 +584,8 @@ if __name__ == "__main__":
     vis_crossshore(data, y=[1e5, 2e5], t=[3600, 7200], keep_open=True)
 
     vis_alongshore(data, t=3600, x=1e4, keep_open=True)
-    vis_alongshore(data, t=[3600, 7200], x=1e4, keep_open=True)
+    vis_alongshore(data, t=[3000, 7200], x=1e4, keep_open=True)
+    vis_alongshore(data, t=[3600, 7200, 10800], x=1e4, keep_open=True)
     # plt.show()
     plt.close("all")
 
