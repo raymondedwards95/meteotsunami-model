@@ -269,16 +269,6 @@ plt.ylabel("$SSE$ [m]")
 plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight", dpi=FIG_DPI)
 
 
-### Spectra
-## 1d
-for _y in np.arange(1, 10):
-    _y *= 1e5
-    fv.vis_spectrum_1d(data, x=1e4, y=_y, saveloc=figure_dir)
-
-## 2d
-fv.vis_spectrum_2d(data, x=1e4, saveloc=figure_dir)
-
-
 ### Figures - Contour
 t_moments = [4e4, 8e4, 12e4, 16e4]
 try:
@@ -290,11 +280,34 @@ except:
 
 
 ### Figures - Timeseries
+y_list_0 = np.array([4, 8]) * 1e6
+y_list_1 = np.array([2, 4, 6, 8]) * 1e6
 try:
-    fv.vis_timeseries(data, y=1e6*np.array([4, 8]), saveloc=figure_dir)
-    fv.vis_timeseries(data, y=1e6*np.array([2, 4, 6, 8]), saveloc=figure_dir)
+    fv.vis_timeseries(data, y=y_list_0, saveloc=figure_dir)
+    fv.vis_timeseries(data, y=y_list_1, saveloc=figure_dir)
 except:
     print(f"Error in timeseries visualisation {case=}")
+
+
+### Fgures - Spectra 1d
+try:
+    for _y in np.union1d(y_list_0, y_list_1):
+        fv.vis_spectrum_1d(data, x=1e4, y=_y, saveloc=figure_dir)
+except:
+    print(f"Error in spectrum-1d visualisation {case=}")
+    
+try:
+    fv.vis_spectrum_1d(data, x=1e4, y=y_list_0, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=1e4, y=y_list_1, saveloc=figure_dir)
+except:
+    print(f"Error in spectrum-1d visualisation {case=}")
+
+
+### Fgures - Spectra 2d
+try:
+    fv.vis_spectrum_2d(data, x=1e4, saveloc=figure_dir)
+except:
+    print(f"Error in spectrum-1d visualisation {case=}")
 
 
 ### Animation
