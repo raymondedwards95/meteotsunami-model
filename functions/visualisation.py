@@ -196,14 +196,6 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
 
 
 def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
-    ## Paths
-    if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".jpg"):
-        saveloc.replace(".jpg", "")
-    os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/cross_shore_{y/1000:0.0f}_{t/3600:0.0f}"
-
     ## Check input
     if np.isscalar(y):
         y_list = np.array([y])
@@ -222,6 +214,14 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     del t, y
     t = t_list[0]
     y = y_list[0]
+
+    ## Paths
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".jpg"):
+        saveloc.replace(".jpg", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + f"/cross_shore_{y/1000:0.0f}_{t/3600:0.0f}"
 
     ## Make best fit
     k0, y0 = fa.compute_decay_parameter(data, y, t)
