@@ -167,8 +167,8 @@ if __name__ == "__main__":
     t0 = time.perf_counter()
 
     # grid and data
-    x = np.linspace(0., 1e6, 5, dtype=np.float)
-    y = np.linspace(-1e7, +1e7, 5, dtype=np.float)
+    x = np.linspace(0., 1e6, 5, dtype=float)
+    y = np.linspace(-1e7, +1e7, 5, dtype=float)
     xx, yy = np.meshgrid(x, y)
     b = function(xx, yy)
 
