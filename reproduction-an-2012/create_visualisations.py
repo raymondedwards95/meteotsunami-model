@@ -306,7 +306,7 @@ except:
     print(f"Error in timeseries visualisation {case=}")
 
 
-### Fgures - Spectra 1d
+### Figures - Spectra 1d
 try:
     for _y in np.union1d(y_list_0, y_list_1):
         fv.vis_spectrum_1d(data, x=1e4, y=_y, saveloc=figure_dir)
@@ -320,7 +320,7 @@ except:
     print(f"Error in spectrum-1d visualisation {case=}")
 
 
-### Fgures - Spectra 2d
+### Figures - Spectra 2d
 try:
     fv.vis_spectrum_2d(data, x=1e4, saveloc=figure_dir)
 except:
