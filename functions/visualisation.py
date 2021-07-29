@@ -515,3 +515,32 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
         plt.close("all")
 
 
+if __name__ == "__main__":
+    mainpath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    data = xr.open_dataset(
+        f"{mainpath}/reproduction-an-2012/output/data_repr_17.nc"
+    )
+
+    vis_contour(data, t=5*3600, keep_open=True)
+    vis_contour(data, t=[i * 5 * 3600 for i in range(1, 5)], keep_open=True)
+
+    vis_spectrum_2d(data, x=1e4, keep_open=True)
+
+    vis_spectrum_1d(data, x=1e4, y=1e5, keep_open=True)
+    vis_spectrum_1d(data, x=1e4, y=[1e5, 3e5], keep_open=True)
+    vis_spectrum_1d(data, x=1e4, y=[1e5, 2e5, 3e5], keep_open=True)
+    vis_spectrum_1d(data, x=1e4, y=[1e5, 2e5, 3e5, 4e5], keep_open=True)
+
+    vis_timeseries(data, x=1e4, y=1e5, keep_open=True)
+    vis_timeseries(data, x=1e4, y=[i * 10e5 for i in range(1, 5)], keep_open=True, t_max=36*3600)
+
+    vis_crossshore(data, y=1e5, t=3600, keep_open=True)
+    vis_crossshore(data, y=[1e5, 2e5], t=3600, keep_open=True)
+    vis_crossshore(data, y=1e5, t=[3600, 7200], keep_open=True)
+    vis_crossshore(data, y=[1e5, 2e5], t=[3600, 7200], keep_open=True)
+
+    vis_alongshore(data, t=3600, x=1e4, keep_open=True)
+    vis_alongshore(data, t=[3600, 7200], x=1e4, keep_open=True)
+    # plt.show()
+    plt.close("all")
+
