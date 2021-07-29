@@ -296,6 +296,15 @@ except:
     print(f"Error in contour visualisation {case=}")
 
 
+### Figures - Alongshore
+try:
+    fv.vis_alongshore(data, t=t_moments, saveloc=figure_dir)
+    for t_ in t_moments:
+        fv.vis_alongshore(data, t=t_, saveloc=figure_dir)
+except:
+    print(f"Error in alongshore visualisation {case=}")
+
+
 ### Figures - Timeseries
 y_list_0 = np.array([4, 8]) * 1e6
 y_list_1 = np.array([2, 4, 6, 8]) * 1e6
