@@ -1,7 +1,8 @@
 #!/bin/bash
 # Run the 'main' parts of the files containing functions for testing purposes
 
-python3 ./__init__.py
+echo "Running all python-files in this directory $PWD"
+
 python3 ./analysis.py
 python3 ./animation.py
 python3 ./bathymetry.py
