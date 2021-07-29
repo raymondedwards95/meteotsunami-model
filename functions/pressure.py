@@ -221,7 +221,7 @@ if __name__ == "__main__":
     x = np.linspace(-5, 5, 51)
     y = np.linspace(-10, 10, 51)
     t = np.arange(0, 10) * 3600.
-    p = np.zeros((t.size, y.size, x.size), dtype=np.float)
+    p = np.zeros((t.size, y.size, x.size), dtype=float)
 
     # compute and convert data
     for n in range(t.size):
