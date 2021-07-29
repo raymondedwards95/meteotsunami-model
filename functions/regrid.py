@@ -80,7 +80,7 @@ def _regrid_variable_map(var, grid_mapping, index=None):
     else:
         raise NotImplementedError(__regrid_error)
 
-    var_grid = np.full((t_size, y_size, x_size), np.nan, dtype=np.float)
+    var_grid = np.full((t_size, y_size, x_size), np.nan, dtype=float)
 
     progress_factor = np.min([5, t_size])
 
@@ -119,7 +119,7 @@ def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
     else:
         num_steps = 1
 
-    var_grid = np.zeros((num_steps, y_grid.size, x_grid.size), dtype=np.float)  # shape: time, y_grid, x_grid
+    var_grid = np.zeros((num_steps, y_grid.size, x_grid.size), dtype=float)  # shape: time, y_grid, x_grid
     xy = np.vstack((x, y)).transpose()
     x_grid_mesh, y_grid_mesh = np.meshgrid(x_grid, y_grid)
 
