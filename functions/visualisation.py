@@ -561,9 +561,7 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
 
 if __name__ == "__main__":
     mainpath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    data = xr.open_dataset(
-        f"{mainpath}/reproduction-an-2012/output/data_repr_17.nc"
-    )
+    data = xr.open_dataset(f"{mainpath}/reproduction-an-2012/output/data_repr_17.nc")
 
     vis_contour(data, t=5*3600, keep_open=True)
     vis_contour(data, t=[i * 5 * 3600 for i in range(1, 5)], keep_open=True)
@@ -586,6 +584,6 @@ if __name__ == "__main__":
     vis_alongshore(data, t=3600, x=1e4, keep_open=True)
     vis_alongshore(data, t=[3000, 7200], x=1e4, keep_open=True)
     vis_alongshore(data, t=[3600, 7200, 10800], x=1e4, keep_open=True)
-    # plt.show()
+    
     plt.close("all")
 
