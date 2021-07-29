@@ -205,13 +205,23 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     savename = saveloc + f"/cross_shore_{y/1000:0.0f}_{t/3600:0.0f}"
 
     ## Check input
-    # if np.isscalar(y):
-    #     y = np.array([y])
-    # if np.isscalar(t):
-    #     t = np.array([t])
+    if np.isscalar(y):
+        y_list = np.array([y])
+    elif isinstance(y, (list, np.ndarray)):
+        y_list = np.array(y)
+    else:
+        raise ValueError(f"{y=} is not a number or array_like")
 
-    # assert y.size == 1
-    # assert t.size == 1
+    if np.isscalar(t):
+        t_list = np.array([t])
+    elif isinstance(t, (list, np.ndarray)):
+        t_list = np.array(t)
+    else:
+        raise ValueError(f"{t=} is not a number or array_like")
+    
+    del t, y
+    t = t_list[0]
+    y = y_list[0]
 
     ## Make best fit
     k0, y0 = fa.compute_decay_parameter(data, y, t)
