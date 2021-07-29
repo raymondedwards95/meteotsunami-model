@@ -336,6 +336,25 @@ except:
     print(f"Error in spectrum-1d visualisation {case=}")
 
 
+### Figures - Cross-shore
+try:
+    fv.vis_crossshore(data, y=y_list_0, t=t_moments, saveloc=figure_dir)
+    fv.vis_crossshore(data, y=y_list_1, t=t_moments, saveloc=figure_dir)
+
+    for t_ in t_moments:
+        fv.vis_crossshore(data, y=y_list_0, t=t_, saveloc=figure_dir)
+        fv.vis_crossshore(data, y=y_list_1, t=t_, saveloc=figure_dir)
+
+    for y_ in np.union1d(y_list_0, y_list_1):
+        fv.vis_crossshore(data, y=y_, t=t_moments, saveloc=figure_dir)
+
+    for t_ in t_moments:
+        for y_ in y_list_1:
+            fv.vis_crossshore(data, y=y_, t=t_, saveloc=figure_dir)
+except:
+    print(f"Error in cross-shore visualisation {case=}")
+
+
 ### Animation
 if make_ani:
     anim.animation_alongshore(data, saveloc=figure_dir)
