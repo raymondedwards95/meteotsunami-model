@@ -452,14 +452,6 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
     
 
 def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=None, ylims=None):
-    ## Paths
-    if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".jpg"):
-        saveloc.replace(".jpg", "")
-    os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/contour_{variable}"
-
     ## Check input
     if variable in ["wl"]:
         cmap = cmo.cm.balance
@@ -479,6 +471,14 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
     
     t_num = t_arr.size
     del t
+    
+    ## Paths
+    if saveloc is None:
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+    if saveloc.endswith(".jpg"):
+        saveloc.replace(".jpg", "")
+    os.makedirs(saveloc, exist_ok=True)
+    savename = saveloc + f"/contour_{variable}_n{t_num}_{np.mean(t_arr)/3600:0.0f}"
 
     ## Get parameters
     x = data["x"]
