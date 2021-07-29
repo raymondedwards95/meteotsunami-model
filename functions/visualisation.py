@@ -247,7 +247,7 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
         savename += f"tn{t_num}"
     
     ## Figure
-    fig, ax = plt.subplots(t_num, y_num, squeeze=False)
+    fig, ax = plt.subplots(t_num, y_num, squeeze=False, sharex=True, sharey=True)
     fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
@@ -280,6 +280,7 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
             ax[i,j].legend()
             ax[i,j].set_xlim(0, data["x"].max() / 1000.)
             ax[i,j].set_title(f"$y={y_list[j]/1000:0.0f}$km; $t={t_list[i]/3600:0.1f}$hours")
+            ax[i,j].grid()
 
     for i in range(t_num):
         ax[i,0].set_ylabel("$SSE$ [m]")
