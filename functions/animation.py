@@ -120,7 +120,7 @@ def animation_contour(dataset, saveloc=None, xlims=None, __test_i_max=None):
     ## Update data
     num_frames = t.size
     if __test_i_max is not None and isinstance(__test_i_max, int):
-        print(f"Testing function")
+        print(f"* Testing animation function!")
         num_frames = __test_i_max
 
     def update(i):
@@ -272,7 +272,7 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None, __test_i_max=None):
     ## Update data
     num_frames = t.size
     if __test_i_max is not None and isinstance(__test_i_max, int):
-        print(f"Testing function")
+        print(f"* Testing animation function!")
         num_frames = __test_i_max
 
     def update(i):
@@ -403,7 +403,7 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, __test_i_max=None):
     ## Update data
     num_frames = t.size
     if __test_i_max is not None and isinstance(__test_i_max, int):
-        print(f"Testing function")
+        print(f"* Testing animation function!")
         num_frames = __test_i_max
     
     def update(i):
@@ -514,7 +514,7 @@ def animation_crossshore(dataset, saveloc=None, __test_i_max=None):
     ## Update data
     num_frames = t.size
     if __test_i_max is not None and isinstance(__test_i_max, int):
-        print(f"Testing function")
+        print(f"* Testing animation function!")
         num_frames = __test_i_max
 
     def update(i):
