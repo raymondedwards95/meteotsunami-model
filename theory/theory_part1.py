@@ -50,7 +50,7 @@ plt.ylabel("$U_{crit}$ [m/s]")
 plt.grid()
 plt.ylim(0, 80)
 plt.xlim(1e-1, 1e3)
-plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
 print(f"Saved figure {savename}")
 
 
@@ -70,7 +70,7 @@ plt.ylim(0, None)
 plt.xticks(np.arange(0, 1001, 100))
 plt.yticks(np.arange(0, 2001, 200))
 plt.grid()
-plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
 print(f"Saved figure {savename}")
 
 
@@ -92,7 +92,7 @@ if create_map:
     ax.set_ylim([45, 60])
     # plt.xlabel("Longitude")
     # plt.ylabel("Latitude")
-    plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure {savename}")
 
 
