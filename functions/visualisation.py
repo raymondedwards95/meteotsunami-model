@@ -58,10 +58,10 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     wl = data["wl"].interp(x=x, y=y_arr)
     p = data["p"].interp(x=x, y=y_arr)
 
-    t_max = np.min([t.max(), t_max])
-    y_max = np.max(data["y"].values)
-    wl_max = np.max(np.abs(wl.values))
-    p_max = np.max(np.abs(p.values))
+    t_max = np.nanmin([t.max(), t_max])
+    y_max = np.nanmax(data["y"].values)
+    wl_max = np.nanmax(np.abs(wl.values))
+    p_max = np.nanmax(np.abs(p.values))
 
     y_arr = np.array([y for y in y_arr if y < y_max])
     if y_num < 1:
@@ -425,11 +425,11 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
         valid = (power / power.max()) > autolim
     if xlims is None:
         i = np.any(valid, axis=0)
-        xmax = 1e6 * np.min([wavenumber.max(), 1.5*np.max(np.abs(wavenumber[i]))])
+        xmax = 1e6 * np.nanmin([wavenumber.max(), 1.5*np.nanmax(np.abs(wavenumber[i]))])
         xlims = [0, xmax]
     if ylims is None:
         i = np.any(valid, axis=1)
-        ymax = 3600. * np.min([freqs.max(), 1.5*np.max(freqs[i])])
+        ymax = 3600. * np.nanmin([freqs.max(), 1.5*np.nanmax(freqs[i])])
         ylims = [0, ymax]
 
     ## Figure
@@ -509,7 +509,7 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
     var = data[variable]
 
     x = x - x.min()
-    var_max = float(np.max([np.abs([var.max(), var.min()])]))
+    var_max = float(np.nanmax([np.abs([var.max(), var.min()])]))
     var_min = -1. * var_max
 
     if xlims is None:
