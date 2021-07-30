@@ -3,6 +3,7 @@
 import os
 import sys
 
+import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -12,7 +13,7 @@ from functions import *
 
 
 ### Settings
-show_figures = False
+show_figures = True
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -35,7 +36,7 @@ for i in range(a.size):
         Ucr[i, j] = np.sqrt(g * a[i] * alpha[j] / np.pi)
 cl = plt.contour(alpha, a/1e3, Ucr, levels=np.arange(U.min(), U.max()+10, 10), colors="black")
 plt.clabel(cl, fmt="%2.0f")
-plt.contourf(alpha, a/1e3, Ucr, levels=U)
+plt.contourf(alpha, a/1e3, Ucr, levels=U, cmap=cmo.cm.speed)
 cb = plt.colorbar()
 cb.ax.set_title("$U_{cr}$ [m/s]")
 plt.xlabel("$\\alpha$ [-]")
@@ -60,7 +61,7 @@ for i in range(U.size):
         labda[i, j] = 2. * np.pi * U[i] / g / alpha[j]
 cl = plt.contour(alpha, U, labda/1e3, levels=np.arange(0, 4e4+10, 1e4)/1e3, colors="black")
 plt.clabel(cl, fmt="%2.0f")
-plt.contourf(alpha, U, labda/1e3, levels=np.linspace(0, 40000, 51)/1e3)
+plt.contourf(alpha, U, labda/1e3, levels=np.linspace(0, 40000, 51)/1e3, cmap=cmo.cm.amp)
 cb = plt.colorbar()
 cb.ax.set_title("$\\lambda_0$ [km]")
 plt.xlabel("$\\alpha$ [-]")
