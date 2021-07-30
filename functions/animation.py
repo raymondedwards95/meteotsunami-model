@@ -150,7 +150,7 @@ def animation_contour(dataset, saveloc=None, xlims=None, _test_i_max=None):
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
     ## Animation
-    frames = (np.arange(num_frames)).astype(np.int)
+    frames = (np.arange(num_frames)).astype(int)
     anim = FuncAnimation(
         fig,
         update,
@@ -301,7 +301,7 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None):
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
     ## Animation
-    frames = (np.arange(num_frames)).astype(np.int)
+    frames = (np.arange(num_frames)).astype(int)
     anim = FuncAnimation(
         fig,
         update,
@@ -419,7 +419,7 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None):
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
     
     ## Animation
-    frames = (np.arange(num_frames)).astype(np.int)
+    frames = (np.arange(num_frames)).astype(int)
     anim = FuncAnimation(
         fig,
         update,
@@ -530,7 +530,7 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None):
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
     
     ## Animation
-    frames = (np.arange(num_frames)).astype(np.int)
+    frames = (np.arange(num_frames)).astype(int)
     anim = FuncAnimation(
         fig,
         update,
