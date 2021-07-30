@@ -105,6 +105,60 @@ p = data["p"]
 x = x - x.min()
 
 
+### Other parameters
+t_moments = np.array([4e4, 8e4, 12e4, 16e4])
+
+y_list_0 = np.array([4, 8]) * 1e6
+y_list_1 = np.array([2, 4, 6, 8]) * 1e6
+y_moments = np.union1d(y_list_0, y_list_1)
+
+waveperiods = np.zeros(y_moments.size)
+wavelengths = np.zeros(t_moments.size)
+wavespeeds = np.zeros((t_moments.size, y_moments.size))
+
+
+### Compute stuff
+with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
+    ## Waveperiod
+    for i in range(y_moments.size):
+        y_moment = y_moments[i]
+
+        try:
+            local_waveperiods = fa.compute_wave_periods(data, y_moment, x=x_moment)
+            waveperiods[i] = np.nanmean(local_waveperiods)
+
+            file.write(f"\n\nWave Period at y={y_moment/1000:0.0f}km and x={x_moment/1000:0.0f}km: {waveperiods[i]:0.1f}s\n")
+            for waveperiod in local_waveperiods:
+                file.write(f"{waveperiod:0.1f}\t")
+
+        except:
+            print(f"Error in computing waveperiod {case=} and {y_moment=}")
+
+    ## Wavelength
+    for j in range(t_moments.size):
+        t_moment = t_moments[j]
+
+        try:
+            local_wavelengths = fa.compute_wave_lengths(data, t_moment, x=x_moment)
+            wavelengths[j] = np.nanmean(local_wavelengths)
+
+            file.write(f"\n\nWave Lengths at t={t_moment/3600:0.1f}h and x={x_moment/1000:0.0f}km: {wavelengths[j]:0.1f}m")
+            for wavelength in local_wavelengths:
+                file.write(f"{wavelength:0.1f}\t")
+
+        except:
+            print(f"Error in computing wavelength {case=} and {t_moment=}")
+
+    ## Wavespeed
+    for i in range(y_moments.size):
+        for j in range(t_moments.size):
+            try:
+                wavespeeds[j, i] = wavelengths[j] / wavelengths[i]
+                file.write(f"y={y_moments[i]/1000:0.0f}km, t={t_moments[j]/3600:0.1f}h: {wavespeeds[j, i]:0.2f}m/s\n")
+            except:
+                print(f"Error in computing wavespeed for {case=}, {t_moments[j]=} and {y_moments[i]=}")
+
+
 ### Figure bathymetry
 try:
     print(f"Creating figures in \n'{figure_dir}'")
@@ -302,8 +356,6 @@ except:
 
 
 ### Figures - Timeseries
-y_list_0 = np.array([4, 8]) * 1e6
-y_list_1 = np.array([2, 4, 6, 8]) * 1e6
 try:
     fv.vis_timeseries(data, y=y_list_0, saveloc=figure_dir)
     fv.vis_timeseries(data, y=y_list_1, saveloc=figure_dir)
@@ -313,7 +365,7 @@ except:
 
 ### Figures - Spectra 1d
 try:
-    for _y in np.union1d(y_list_0, y_list_1):
+    for _y in y_moments:
         fv.vis_spectrum_1d(data, x=1e4, y=_y, saveloc=figure_dir)
 except:
     print(f"Error in spectrum-1d visualisation {case=}")
@@ -341,7 +393,7 @@ try:
         fv.vis_crossshore(data, y=y_list_0, t=t_, saveloc=figure_dir)
         fv.vis_crossshore(data, y=y_list_1, t=t_, saveloc=figure_dir)
 
-    for y_ in np.union1d(y_list_0, y_list_1):
+    for y_ in y_moments:
         fv.vis_crossshore(data, y=y_, t=t_moments, saveloc=figure_dir)
 
     for t_ in t_moments:
