@@ -149,9 +149,6 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
                 ax[i].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="left", va="bottom", color="C1", rotation=90)
         except:
             pass
-
-    ax[-1].set_ylabel("Water Level [m]")
-    ax2[-1].set_ylabel("Surface Pressure [Pa]")
     ax[-1].set_xlabel("Time since start [hours]")
 
     fig.savefig(savename + "_b", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
