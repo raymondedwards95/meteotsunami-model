@@ -362,6 +362,7 @@ except:
 try:
     fv.vis_timeseries(data, y=y_list_0, saveloc=figure_dir)
     fv.vis_timeseries(data, y=y_list_1, saveloc=figure_dir)
+    fv.vis_timeseries(data, y=y_moments, saveloc=figure_dir)
 except:
     print(f"Error in timeseries visualisation {case=}")
 
