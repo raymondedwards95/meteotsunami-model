@@ -94,32 +94,53 @@ data = xr.open_dataset(filename_processed)
 t_moments = np.array([8, 16, 24, 32, 40]) * 3600.
 x_moment = 1e4
 x_offset = 5e4
-y_moment = 500000.
+y_moments = np.array([2.5, 5, 7.5, 10]) * 1e5
+
+waveperiods = np.zeros(y_moments.size)
+wavelengths = np.zeros(t_moments.size)
+wavespeeds = np.zeros((t_moments.size, y_moments.size))
+
 
 ### Compute stuff
 with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
-    try:
-        file.write(f"\n\nWave Period at y={y_moment} and x={x_moment}:\n")
-        waveperiods = fa.compute_wave_periods(data, y_moment, x=x_moment)
-        for waveperiod in waveperiods:
-            file.write(f"{waveperiod:0.1f}\t")
-        file.write(f"\nMean Wave Period:\n{np.nanmean(waveperiods)}\n")
-    except:
-        print(f"Error in computing waveperiod {case=}")
+    ## Waveperiod
+    for i in range(y_moments.size):
+        y_moment = y_moments[i]
 
+        try:
+            local_waveperiods = fa.compute_wave_periods(data, y_moment, x=x_moment)
+            waveperiods[i] = np.nanmean(local_waveperiods)
 
+            file.write(f"\n\nWave Period at y={y_moment/1000:0.0f}km and x={x_moment/1000:0.0f}km: {waveperiods[i]:0.1f}s\n")
+            for waveperiod in local_waveperiods:
+                file.write(f"{waveperiod:0.1f}\t")
+
+        except:
+            print(f"Error in computing waveperiod {case=} and {y_moment=}")
+
+    ## Wavelength
     for j in range(t_moments.size):
         t_moment = t_moments[j]
 
         try:
-            file.write(f"\n\nWave Lengths at t={t_moment} and x={x_moment}:\n")
-            wavelengths = fa.compute_wave_lengths(data, t_moment, x=x_moment)
-            for wavelength in wavelengths:
+            local_wavelengths = fa.compute_wave_lengths(data, t_moment, x=x_moment)
+            wavelengths[j] = np.nanmean(local_wavelengths)
+
+            file.write(f"\n\nWave Lengths at t={t_moment/3600:0.1f}h and x={x_moment/1000:0.0f}km: {wavelengths[j]:0.1f}m")
+            for wavelength in local_wavelengths:
                 file.write(f"{wavelength:0.1f}\t")
-            file.write(f"\nMean Wave Length:\n{np.nanmean(wavelengths)}")
-            file.write(f"\nMean Wave Speed = Length / Period\n{np.nanmean(wavelengths) / np.nanmean(waveperiods)}\n")
+
         except:
-            print(f"Error in computing wavelength {case=}")
+            print(f"Error in computing wavelength {case=} and {t_moment=}")
+
+    ## Wavespeed
+    for i in range(y_moments.size):
+        for j in range(t_moments.size):
+            try:
+                wavespeeds[j, i] = wavelengths[j] / wavelengths[i]
+                file.write(f"y={y_moments[i]/1000:0.0f}km, t={t_moments[j]/3600:0.1f}h: {wavespeeds[j, i]:0.2f}m/s\n")
+            except:
+                print(f"Error in computing wavespeed for {case=}, {t_moments[j]=} and {y_moments[i]=}")
 
 
 ### Figures
