@@ -135,18 +135,18 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax2[i].set_ylabel("Surface Pressure [Pa]", color="C1")
 
         ax[i].grid()
-        ax[i].annotate(f"$y={y_arr[i]/1000:0.0f}$km", xy=(0.01, 0.99), xycoords="axes fraction", ha="left", va="top", zorder=10)
+        ax[i].annotate(f"$y={y_arr[i]/1000:0.0f}$km", xy=(0.01, 0.99), xycoords="axes fraction", ha="left", va="top")
 
         try:
             for j in wl_t_idx[i]:
                 ax[i].axvline(t[j], color="C0", alpha=0.5)
-                ax[i].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="left", va="bottom", color="C0", rotation=90, zorder=10)
+                ax[i].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="left", va="bottom", color="C0", rotation=90)
         except:
             pass
         try:
             for j in p_t_idx[i]:
                 ax[i].axvline(t[j], color="C1", alpha=0.5)
-                ax[i].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="right", va="top", color="C1", rotation=90, zorder=10)
+                ax[i].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="right", va="top", color="C1", rotation=90)
         except:
             pass
     ax[-1].set_xlabel("Time since start [hours]")
