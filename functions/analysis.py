@@ -47,7 +47,7 @@ def compute_decay_parameter(data, y, t):
     return k0, y0
 
 
-def compute_wave_periods(data, y, x=None, crests=True):
+def compute_wave_periods(data, y, x=None, crests=True, no_result=np.nan):
     """ Computes the wave period at given x,y 
     
     Input:
@@ -66,14 +66,14 @@ def compute_wave_periods(data, y, x=None, crests=True):
 
     if t_idx.size < 2:
         print("No wave period can be computed!")
-        return np.array([np.nan])
+        return np.array([no_result])
 
     periods = data["t"][t_idx].diff(dim="t").values.astype("timedelta64[s]").astype(float) / 3600
 
     return periods
 
 
-def compute_wave_lengths(data, t, x=None, crests=True):
+def compute_wave_lengths(data, t, x=None, crests=True, no_result=np.nan):
     """ Computes the wave length at given x,t 
     
     Input:
@@ -92,7 +92,7 @@ def compute_wave_lengths(data, t, x=None, crests=True):
 
     if y_idx.size < 2:
         print("No wave period can be computed!")
-        return np.array([np.nan])
+        return np.array([no_result])
 
     lengths = data["y"][y_idx].diff(dim="y").values
 
