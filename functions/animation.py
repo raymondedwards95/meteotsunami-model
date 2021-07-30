@@ -553,9 +553,9 @@ if __name__ == "__main__":
     testpath = f"{mainpath}/functions/tests"
     data = xr.open_dataset(f"{mainpath}/reproduction-an-2012/output/data_repr_17.nc")
 
-    animation_alongshore(data, saveloc=testpath, ___test_i_max=25)
-    animation_contour(data, saveloc=testpath, ___test_i_max=25)
-    animation_contour_uv(data, saveloc=testpath, ___test_i_max=25)
-    animation_crossshore(data, saveloc=testpath, ___test_i_max=25)
+    animation_alongshore(data, saveloc=testpath, __test_i_max=25)
+    animation_contour(data, saveloc=testpath, __test_i_max=25)
+    animation_contour_uv(data, saveloc=testpath, __test_i_max=25)
+    animation_crossshore(data, saveloc=testpath, __test_i_max=25)
 
     plt.close("all")
