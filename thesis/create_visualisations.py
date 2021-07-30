@@ -163,13 +163,6 @@ for j in range(t_moments.size):
     except:
         print(f"Error in cross-shore visualisation {case=}")
 
-    ## Along-shore
-    try:
-        fv.vis_alongshore(data, t=t_moment, x=x_moment, saveloc=figure_dir)
-        fv.vis_alongshore(data, t=t_moment, x=x_moment+x_offset, saveloc=figure_dir)
-    except:
-        print(f"Error in along-shore visualisation {case=}")
-
 
 ### Figures - Contour
 try:
@@ -178,6 +171,17 @@ try:
     fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="v", xlims=[0, 1000], ylims=[0, 120])
 except:
     print(f"Error in contour visualisation {case=}")
+
+
+### Figures - Alongshore
+try:
+    fv.vis_alongshore(data, x=x_moment, t=t_moments, saveloc=figure_dir)
+    fv.vis_alongshore(data, x=x_moment+x_offset, t=t_moments, saveloc=figure_dir)
+    for t_ in t_moments:
+        fv.vis_alongshore(data, x=x_moment, t=t_, saveloc=figure_dir)
+        fv.vis_alongshore(data, x=x_moment+x_offset, t=t_, saveloc=figure_dir)
+except:
+    print(f"Error in alongshore visualisation {case=}")
 
 
 ### Figures - Timeseries
