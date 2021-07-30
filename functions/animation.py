@@ -65,8 +65,8 @@ def animation_contour(dataset, saveloc=None, xlims=None, _test_i_max=None):
 
 
     ## Initial data
-    plotdata = np.zeros(2, dtype=np.object)
-    plottext = np.zeros(1, dtype=np.object)
+    plotdata = np.zeros(2, dtype=object)
+    plottext = np.zeros(1, dtype=object)
 
     def set_plotdata(i=0):
         plotdata[0] = ax[0].contourf(
@@ -216,8 +216,8 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None):
     cax = np.array([div[i].append_axes("right", "5%", "5%") for i in range(2)])
 
     ## Initial data
-    plotdata = np.zeros(2, dtype=np.object)
-    plottext = np.zeros(1, dtype=np.object)
+    plotdata = np.zeros(2, dtype=object)
+    plottext = np.zeros(1, dtype=object)
 
     def set_plotdata(i=0):
         plotdata[0] = ax[0].contourf(
@@ -361,8 +361,8 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None):
     fig.set_tight_layout(True)
 
     ## Initial data
-    plotdata = np.zeros(2, dtype=np.object)
-    plottext = np.zeros(1, dtype=np.object)
+    plotdata = np.zeros(2, dtype=object)
+    plottext = np.zeros(1, dtype=object)
 
     def set_plotdata(i=0):
         plotdata[0] = ax[0].plot(
@@ -475,8 +475,8 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None):
     fig.set_tight_layout(True)
 
     ## Initial data
-    plotdata = np.zeros(slices, dtype=np.object)
-    plottext = np.zeros(1, dtype=np.object)
+    plotdata = np.zeros(slices, dtype=object)
+    plottext = np.zeros(1, dtype=object)
     _y = np.arange(slices) * y_max / slices
 
     def set_plotdata(i=0):
