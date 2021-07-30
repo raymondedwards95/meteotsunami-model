@@ -127,7 +127,7 @@ def animation_contour(dataset, saveloc=None, xlims=None, _test_i_max=None):
         # progress
         if not (num_frames-i-1) % (num_frames // 5):
             t0_interval = time.perf_counter()
-            print(f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0-t0_interval)} fps)")
+            print(f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0_interval-t0):0.1f} fps)")
 
         # remove data in contour plots
         for _temp in plotdata[0].collections:
@@ -281,7 +281,7 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None):
         if not (num_frames-i-1) % (num_frames // 5):
             t0_interval = time.perf_counter()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0-t0_interval)} fps)")
+                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0_interval-t0):0.1f} fps)")
 
         # remove data in contour plots
         for _temp in plotdata[0].collections:
@@ -414,7 +414,7 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None):
         if not (num_frames-i-1) % (num_frames // 5):
             t0_interval = time.perf_counter()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0-t0_interval)} fps)")
+                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0_interval-t0):0.1f} fps)")
 
         # new data
         plotdata[0].set_ydata(wl.isel(t=i).interp(x=10000))
@@ -526,7 +526,8 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None):
         # progress
         if not (num_frames-i-1) % (num_frames // 5):
             t0_interval = time.perf_counter()
-            print(f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0-t0_interval)} fps)")
+            print(
+                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0_interval-t0):0.1f} fps)")
 
         # new data
         for j in range(slices):
