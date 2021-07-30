@@ -40,7 +40,7 @@ def compute_decay_parameter(data, y, t):
     popt, _ = curve_fit(
         exp_decay,  # f
         data["x"],  # xdata
-        data["wl"].interp(t=fu.to_timestr(t), y=y),  # ydata
+        np.nan_to_num(data["wl"].interp(t=fu.to_timestr(t), y=y)),  # ydata
         p0=[1./100000., 1.],  # p0
     )
     k0, y0 = popt
