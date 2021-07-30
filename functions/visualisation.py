@@ -35,6 +35,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         y = np.array(y)
     
     y_arr = y
+    y_num = y_arr.size
     del y
 
     ## Paths
@@ -43,7 +44,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/timeseries_{y_arr.size}"
+    savename = saveloc + f"/timeseries_{y_num}"
 
     ## Extract data
     t = data["t"].values.astype("datetime64[s]").astype(float) / 3600
@@ -56,7 +57,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     p_max = np.max(np.abs(p.values))
 
     y_arr = np.array([y for y in y_arr if y < y_max])
-    if y_arr.size < 1:
+    if y_num < 1:
         raise ValueError("Input 'y' has no values on the domain of data")
     
     wl_t_idx = [fu.find_peaks_const_y(data, y, x=x, crests=False, variable="wl") for y in y_arr]
@@ -72,7 +73,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     ax[0].plot(t, wl)
     ax[1].plot(t, p)
 
-    for i in range(y_arr.size):
+    for i in range(y_num):
         try:
             for j in wl_t_idx[i]:
                 ax[0].axvline(t[j], color=f"C{i}", alpha=0.5)
@@ -102,12 +103,12 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     print(f"Saved figure {savename}_a")
 
     ## Figure b
-    fig, ax = plt.subplots(y_arr.size, 1, sharex=True, squeeze=False)
+    fig, ax = plt.subplots(y_num, 1, sharex=True, squeeze=False)
     fig.set_size_inches(FIGSIZE_LONG)
     fig.set_dpi(FIG_DPI)
     ax = np.ravel(ax)
     ax2 = np.array([ax[i].twinx() for i in range(ax.size)])
-    for i in range(y_arr.size):
+    for i in range(y_num):
         wl_slice = wl[:, i].values
         p_slice = p[:, i].values
         ax[i].plot(t, wl_slice, color="C0")
