@@ -196,16 +196,23 @@ except:
     print(f"Error in timeseries visualisation {case=}")
     
 
-### Spectra
-## 1d
-for _y in np.arange(1, 10):
-    _y *= 1e5
-    fv.vis_spectrum_1d(data, x=x_moment, y=_y, saveloc=figure_dir)
-    fv.vis_spectrum_1d(data, x=x_moment+x_offset, y=_y, saveloc=figure_dir)
+### Figures - Spectra 1d
+try:
+    for _y in y_moments:
+        fv.vis_spectrum_1d(data, x=x_moment, y=_y, saveloc=figure_dir)
+        fv.vis_spectrum_1d(data, x=x_moment+x_offset, y=_y, saveloc=figure_dir)
+except:
+    print(f"Error in spectrum-1d visualisation {case=}")
 
-## 2d
-fv.vis_spectrum_2d(data, x=x_moment, saveloc=figure_dir)
-fv.vis_spectrum_2d(data, x=x_moment+x_offset, saveloc=figure_dir)
+try:
+    fv.vis_spectrum_1d(data, x=x_moment, y=y_list_0, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=x_moment, y=y_list_1, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=x_moment, y=y_moments, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=x_moment+x_offset, y=y_list_0, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=x_moment+x_offset, y=y_list_1, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=x_moment+x_offset, y=y_moments, saveloc=figure_dir)
+except:
+    print(f"Error in spectrum-1d visualisation {case=}")
 
 
 ### Animation
