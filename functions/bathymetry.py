@@ -132,7 +132,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
     ax.set_xlim(0, xmax)
     ax.set_xlabel("$x$ [km]")
     ax.set_ylabel("Bed Level [m]")
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure '{savename}'")
 
     ## Figure 2 - map
@@ -150,7 +150,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
     ax.set_xlim(0, xmax)
     ax.set_xlabel("$x$ [km]")
     ax.set_ylabel("$y$ [km]")
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure '{savename}'")
 
     return
