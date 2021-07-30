@@ -404,7 +404,7 @@ try:
         fv.vis_crossshore(data, y=y_, t=t_moments, saveloc=figure_dir)
 
     for t_ in t_moments:
-        for y_ in y_list_1:
+        for y_ in y_moments:
             fv.vis_crossshore(data, y=y_, t=t_, saveloc=figure_dir)
 except:
     print(f"Error in cross-shore visualisation {case=}")
