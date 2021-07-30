@@ -376,6 +376,7 @@ except:
 try:
     fv.vis_spectrum_1d(data, x=1e4, y=y_list_0, saveloc=figure_dir)
     fv.vis_spectrum_1d(data, x=1e4, y=y_list_1, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=1e4, y=y_moments, saveloc=figure_dir)
 except:
     print(f"Error in spectrum-1d visualisation {case=}")
 
