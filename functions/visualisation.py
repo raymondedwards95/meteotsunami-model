@@ -95,6 +95,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     ax[-1].set_xlabel("Time since start [hours]")
     ax[0].set_ylabel("Sea Surface Elevation [m]")
     ax[1].set_ylabel("Atmospheric Pressure [Pa]")
+    ax[0].set_ylim(np.array([-1.1, 1.1]) * wl_max)
     ax[0].legend([f"$y={y/1000:0.0f}$km" for y in y_arr], bbox_to_anchor=(0., 1.02, 1., .102), loc="lower left", ncol=4, mode="expand", borderaxespad=0.)
 
     fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
@@ -114,8 +115,8 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax[i].axhline(color="black", linewidth=1)
 
         ax[i].set_xlim([0, t_max])
-        ax[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(data["wl"].values)))
-        ax2[i].set_ylim(np.array([-1.1, 1.1]) * np.max(np.abs(data["p"].values)))
+        ax[i].set_ylim(np.array([-1.1, 1.1]) * wl_max)
+        ax2[i].set_ylim(np.array([-1.1, 1.1]) * p_max)
         ax[i].xaxis.set_minor_locator(MultipleLocator(1))
 
         ax[i].tick_params(axis="y", labelcolor=f"C0")
