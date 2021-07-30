@@ -41,7 +41,7 @@ def compute_decay_parameter(data, y, t):
         exp_decay,  # f
         data["x"],  # xdata
         np.nan_to_num(data["wl"].interp(t=fu.to_timestr(t), y=y)),  # ydata
-        p0=[1./100000., 1.],  # p0
+        p0=[1./100000., 0.],  # p0
     )
     k0, y0 = popt
     return k0, y0
