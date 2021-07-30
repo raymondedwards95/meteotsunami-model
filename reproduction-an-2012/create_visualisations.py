@@ -393,6 +393,7 @@ except:
 try:
     fv.vis_crossshore(data, y=y_list_0, t=t_moments, saveloc=figure_dir)
     fv.vis_crossshore(data, y=y_list_1, t=t_moments, saveloc=figure_dir)
+    fv.vis_crossshore(data, y=y_moments, t=t_moments, saveloc=figure_dir)
 
     for t_ in t_moments:
         fv.vis_crossshore(data, y=y_list_0, t=t_, saveloc=figure_dir)
