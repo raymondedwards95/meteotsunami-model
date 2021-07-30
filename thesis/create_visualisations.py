@@ -214,6 +214,13 @@ try:
 except:
     print(f"Error in spectrum-1d visualisation {case=}")
 
+### Figures - Spectra 2d
+try:
+    fv.vis_spectrum_2d(data, x=x_moment, saveloc=figure_dir)
+    fv.vis_spectrum_2d(data, x=+x_offset, saveloc=figure_dir)
+except:
+    print(f"Error in spectrum-2d visualisation {case=}")
+
 
 ### Animation
 if make_ani:
