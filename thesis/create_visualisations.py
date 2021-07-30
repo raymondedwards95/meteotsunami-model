@@ -186,8 +186,12 @@ except:
 
 ### Figures - Timeseries
 try:
-    fv.vis_timeseries(data, y=1e5*np.array([4, 8]), saveloc=figure_dir)
-    fv.vis_timeseries(data, y=1e5*np.array([2, 4, 6, 8]), saveloc=figure_dir)
+    fv.vis_timeseries(data, x=x_moment, y=y_list_0, saveloc=figure_dir)
+    fv.vis_timeseries(data, x=x_moment, y=y_list_1, saveloc=figure_dir)
+    fv.vis_timeseries(data, x=x_moment, y=y_moments, saveloc=figure_dir)
+    fv.vis_timeseries(data, x=x_moment+x_offset, y=y_list_0, saveloc=figure_dir)
+    fv.vis_timeseries(data, x=x_moment+x_offset, y=y_list_1, saveloc=figure_dir)
+    fv.vis_timeseries(data, x=x_moment+x_offset, y=y_moments, saveloc=figure_dir)
 except:
     print(f"Error in timeseries visualisation {case=}")
     
