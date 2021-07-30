@@ -104,7 +104,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     ax[0].set_ylabel("Sea Surface Elevation [m]")
     ax[1].set_ylabel("Atmospheric Pressure [Pa]")
     ax[0].set_ylim(np.array([-1.1, 1.1]) * wl_max)
-    ax[0].legend([f"$y={y/1000:0.0f}$km" for y in y_arr], bbox_to_anchor=(0., 1.02, 1., .102), loc="lower left", ncol=4, mode="expand", borderaxespad=0.)
+    ax[0].legend([f"$y={y/1000:0.0f}$ km" for y in y_arr], bbox_to_anchor=(0., 1.02, 1., .102), loc="lower left", ncol=4, mode="expand", borderaxespad=0.)
 
     fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure {savename}_a")
@@ -135,7 +135,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax2[i].set_ylabel("Surface Pressure [Pa]", color="C1")
 
         ax[i].grid()
-        ax[i].annotate(f"$y={y_arr[i]/1000:0.0f}$km", xy=(0.01, 0.99), xycoords="axes fraction", ha="left", va="top")
+        ax[i].annotate(f"$y={y_arr[i]/1000:0.0f}$ km", xy=(0.01, 0.99), xycoords="axes fraction", ha="left", va="top")
 
         try:
             for j in wl_t_idx[i]:
@@ -206,7 +206,7 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
         ax[i].axhline(color="black", linewidth=1)
         ax[i].set_xlim(0, y.max() / 1000.)
         ax[i].set_ylabel("$SSE$ [m]")
-        ax[i].set_title(f"$x={x/1000:0.0f}$km and $t={t_list[i]/3600:0.1f}$hours")
+        ax[i].set_title(f"$x={x/1000:0.0f}$ km and $t={t_list[i]/3600:0.1f}$ hours")
         ax[i].grid()
     ax[-1].set_xlabel("$y$ [km]")
 
@@ -295,14 +295,14 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
                 wl_model, 
                 color="C0", 
                 linestyle="--", 
-                label=f"Best fit with $1/k0={1./k0/1000.:0.1f}$km"
+                label=f"Best fit with $1/k0={1./k0/1000.:0.1f}$ km"
             )
 
             # 
             ax[i,j].axhline(color="black", linewidth=1)
             ax[i,j].legend()
             ax[i,j].set_xlim(0, data["x"].max() / 1000.)
-            ax[i,j].set_title(f"$y={y_list[j]/1000:0.0f}$km; $t={t_list[i]/3600:0.1f}$hours")
+            ax[i,j].set_title(f"$y={y_list[j]/1000:0.0f}$ km; $t={t_list[i]/3600:0.1f}$ hours")
             ax[i,j].grid()
 
     for i in range(t_num):
@@ -390,7 +390,7 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
         ax[i].set_ylim(0, None)
         ax[i].set_xlim(0, 2.2)
         ax[i].set_ylabel("Spectral Power [m$^2$ hr]")
-        ax[i].legend([f"$y = {y_list[i]/1000:0.0f}$km"], loc="upper right")
+        ax[i].legend([f"$y = {y_list[i]/1000:0.0f}$ km"], loc="upper right")
         ax[i].ticklabel_format(axis="y", style="sci", scilimits=(0,0))
         ax[i].xaxis.set_minor_locator(MultipleLocator(0.1))
         ax[i].grid()
@@ -464,7 +464,7 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
     ax[0].set_ylim(ylims)
     ax[0].set_xlabel("Wavenumber [1 / 1000km]")
     ax[0].set_ylabel("Frequency [cycles / hour]")
-    ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$km")
+    ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$ km")
 
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure {savename}")
