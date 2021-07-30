@@ -204,7 +204,7 @@ def plot_pressure(data, filename=None, x_scales=None):
     cbar = fig.colorbar(im[-2], cax=ax[-1])
     cbar.set_label("Pressure Disturbance [Pa]")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure as '{savename}'")
 
 
