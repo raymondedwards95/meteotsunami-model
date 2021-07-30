@@ -16,7 +16,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 
 
-def animation_contour(dataset, saveloc=None, xlims=None):
+def animation_contour(dataset, saveloc=None, xlims=None, __test_i_max=None):
     """ Creates an animation of the top-down view of the water level and surface air pressure data
 
     Input:
@@ -119,6 +119,9 @@ def animation_contour(dataset, saveloc=None, xlims=None):
 
     ## Update data
     num_frames = t.size
+    if __test_i_max is not None and isinstance(__test_i_max, int):
+        print(f"Testing function")
+        num_frames = __test_i_max
 
     def update(i):
         # progress
@@ -165,7 +168,7 @@ def animation_contour(dataset, saveloc=None, xlims=None):
     return
 
 
-def animation_contour_uv(dataset, saveloc=None, xlims=None):
+def animation_contour_uv(dataset, saveloc=None, xlims=None, __test_i_max=None):
     """ Creates an animation of the top-down view of the water velocity data
 
     Input:
@@ -268,6 +271,9 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None):
 
     ## Update data
     num_frames = t.size
+    if __test_i_max is not None and isinstance(__test_i_max, int):
+        print(f"Testing function")
+        num_frames = __test_i_max
 
     def update(i):
         # progress
@@ -313,7 +319,7 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None):
     return
 
 
-def animation_alongshore(dataset, saveloc=None, xlims=None):
+def animation_alongshore(dataset, saveloc=None, xlims=None, __test_i_max=None):
     """ Creates an animation of an alongshore cross-section of the water level and surface air pressure data
 
     Input:
@@ -396,6 +402,10 @@ def animation_alongshore(dataset, saveloc=None, xlims=None):
 
     ## Update data
     num_frames = t.size
+    if __test_i_max is not None and isinstance(__test_i_max, int):
+        print(f"Testing function")
+        num_frames = __test_i_max
+    
     def update(i):
         # progress
         if not (num_frames-i-1) % (num_frames // 5):
@@ -427,7 +437,7 @@ def animation_alongshore(dataset, saveloc=None, xlims=None):
     return
 
 
-def animation_crossshore(dataset, saveloc=None):
+def animation_crossshore(dataset, saveloc=None, __test_i_max=None):
     """ Creates an animation of crossshore cross-sections of the water level and surface air pressure data
 
     Input:
@@ -503,6 +513,10 @@ def animation_crossshore(dataset, saveloc=None):
 
     ## Update data
     num_frames = t.size
+    if __test_i_max is not None and isinstance(__test_i_max, int):
+        print(f"Testing function")
+        num_frames = __test_i_max
+
     def update(i):
         # progress
         if not (num_frames-i-1) % (num_frames // 5):
@@ -532,3 +546,16 @@ def animation_crossshore(dataset, saveloc=None):
     print(f"Finished crossshore-animation in {t1-t0:0.1f} seconds")
     print(f"Saved animation as '{savename}'")
     return
+
+
+if __name__ == "__main__":
+    mainpath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    testpath = f"{mainpath}/functions/tests"
+    data = xr.open_dataset(f"{mainpath}/reproduction-an-2012/output/data_repr_17.nc")
+
+    animation_alongshore(data, saveloc=testpath, ___test_i_max=25)
+    animation_contour(data, saveloc=testpath, ___test_i_max=25)
+    animation_contour_uv(data, saveloc=testpath, ___test_i_max=25)
+    animation_crossshore(data, saveloc=testpath, ___test_i_max=25)
+
+    plt.close("all")
