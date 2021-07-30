@@ -13,7 +13,7 @@ from functions import *
 
 
 ### Settings
-show_figures = True
+show_figures = False
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
 
