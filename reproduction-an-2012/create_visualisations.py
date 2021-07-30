@@ -152,6 +152,7 @@ with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
             print(f"Error in computing wavelength {case=} and {t_moment=}")
 
     ## Wavespeed
+    print("\n\nWavespeeds:\n")
     for i in range(y_moments.size):
         for j in range(t_moments.size):
             try:
