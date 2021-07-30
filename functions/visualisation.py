@@ -38,6 +38,13 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     y_num = y_arr.size
     del y
 
+    if y_num == 1:
+        figsize_a = (14, 7)
+        figsize_b = FIGSIZE_WIDE
+    else:
+        figsize_a = (14, 7)
+        figsize_b = FIGSIZE_LONG
+
     ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
@@ -65,7 +72,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
 
     ## Figure a
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
-    fig.set_size_inches(14, 7)
+    fig.set_size_inches(figsize_a)
     fig.set_dpi(FIG_DPI)
     # fig.set_tight_layout(True)
 
@@ -104,7 +111,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
 
     ## Figure b
     fig, ax = plt.subplots(y_num, 1, sharex=True, squeeze=False)
-    fig.set_size_inches(FIGSIZE_LONG)
+    fig.set_size_inches(figsize_b)
     fig.set_dpi(FIG_DPI)
     ax = np.ravel(ax)
     ax2 = np.array([ax[i].twinx() for i in range(ax.size)])
