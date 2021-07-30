@@ -10,6 +10,7 @@ import xarray as xr
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
+import functions.analysis as fa
 import functions.animation as anim
 import functions.regrid as fr
 import functions.utilities as fu
@@ -107,6 +108,7 @@ x = x - x.min()
 
 ### Other parameters
 t_moments = np.array([4e4, 8e4, 12e4, 16e4])
+x_moment = 1e4
 
 y_list_0 = np.array([4, 8]) * 1e6
 y_list_1 = np.array([2, 4, 6, 8]) * 1e6
