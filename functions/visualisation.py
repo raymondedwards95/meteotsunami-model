@@ -97,7 +97,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     ax[1].set_ylabel("Atmospheric Pressure [Pa]")
     ax[0].legend([f"$y={y/1000:0.0f}$km" for y in y_arr], bbox_to_anchor=(0., 1.02, 1., .102), loc="lower left", ncol=4, mode="expand", borderaxespad=0.)
 
-    fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure {savename}_a")
 
     ## Figure b
@@ -141,7 +141,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     ax2[-1].set_ylabel("Surface Pressure [Pa]")
     ax[-1].set_xlabel("Time since start [hours]")
 
-    fig.savefig(savename + "_b", bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename + "_b", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure {savename}_b")
 
     ## End
@@ -200,7 +200,7 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
         ax[i].grid()
     ax[-1].set_xlabel("$y$ [km]")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure {savename}")
 
     ## End
@@ -301,7 +301,7 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
     for j in range(y_num):
         ax[-1,j].set_xlabel("$x$ [km]")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure {savename}")
 
     ## End
@@ -386,7 +386,7 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
         ax[i].grid()
     ax[-1].set_xlabel("Frequency [cycles / hour]")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure {savename}")
 
     ## End
@@ -456,7 +456,7 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
     ax[0].set_ylabel("Frequency [cycles / hour]")
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$km")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure {savename}")
 
     ## End
@@ -551,7 +551,7 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
     )
 
     ## Save figure
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure {savename}")
 
     ## End
