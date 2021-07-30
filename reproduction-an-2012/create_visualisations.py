@@ -134,7 +134,7 @@ with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
                 file.write(f"{waveperiod:0.1f}\t")
 
         except:
-            print(f"Error in computing waveperiod {case=} and {y_moment=}")
+            print(f"*** Error in computing waveperiod {case=} and {y_moment=}")
 
     ## Wavelength
     for j in range(t_moments.size):
@@ -149,7 +149,7 @@ with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
                 file.write(f"{wavelength:0.1f}\t")
 
         except:
-            print(f"Error in computing wavelength {case=} and {t_moment=}")
+            print(f"*** Error in computing wavelength {case=} and {t_moment=}")
 
     ## Wavespeed
     file.write("\n\nWavespeeds:\n")
@@ -159,7 +159,7 @@ with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
                 wavespeeds[j, i] = wavelengths[j] / wavelengths[i]
                 file.write(f"y={y_moments[i]/1000:0.0f} km, t={t_moments[j]/3600:0.1f}h: {wavespeeds[j, i]:0.2f} m/s\n")
             except:
-                print(f"Error in computing wavespeed for {case=}, {t_moments[j]=} and {y_moments[i]=}")
+                print(f"*** Error in computing wavespeed for {case=}, {t_moments[j]=} and {y_moments[i]=}")
 
 
 ### Figure bathymetry
@@ -186,7 +186,7 @@ try:
         
     plt.savefig(figure_dir + "bathymetry_contour", bbox_inches="tight", dpi=FIG_DPI)
 except:
-    print(f"Error in bottom-profile visualisation {case=}")
+    print(f"*** Error in bottom-profile visualisation {case=}")
 
 
 ### Figure pressure
@@ -219,7 +219,7 @@ try:
         
     fig.savefig(figure_dir + "pressure_contours", bbox_inches="tight", dpi=FIG_DPI)
 except:
-    print(f"Error in pressure visualisation {case=}")
+    print(f"*** Error in pressure visualisation {case=}")
 
 
 ### Figure sse contours
@@ -251,7 +251,7 @@ try:
         
     fig.savefig(figure_dir + "sse_contours", bbox_inches="tight", dpi=FIG_DPI)
 except:
-    print(f"Error in contours visualisation {case=}")
+    print(f"*** Error in contours visualisation {case=}")
 
 ### Figure alongshore profiles sse
 # figure 2
@@ -280,7 +280,7 @@ try:
         
     fig.savefig(figure_dir + "sse_along", bbox_inches="tight", dpi=FIG_DPI)
 except:
-    print(f"Error in alongshore-profile visualisation {case=}")
+    print(f"*** Error in alongshore-profile visualisation {case=}")
 
 
 ### Figure cross-shore profile sse
@@ -307,7 +307,7 @@ try:
         
     plt.savefig(figure_dir + "sse_cross", bbox_inches="tight", dpi=FIG_DPI)
 except:
-    print(f"Error in cross-shore-profile visualisation {case=}")
+    print(f"*** Error in cross-shore-profile visualisation {case=}")
 
 
 ### Figure alongshore profiles
@@ -336,7 +336,7 @@ try:
         
     plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight", dpi=FIG_DPI)
 except:
-    print(f"Error in alongshore-profile 2 visualisation {case=}")
+    print(f"*** Error in alongshore-profile 2 visualisation {case=}")
 
 
 ### Figures - Contour
@@ -345,7 +345,7 @@ try:
     fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="u", ylims=[0, 300])
     fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="v", ylims=[0, 300])
 except:
-    print(f"Error in contour visualisation {case=}")
+    print(f"*** Error in contour visualisation {case=}")
 
 
 ### Figures - Alongshore
@@ -354,7 +354,7 @@ try:
     for t_ in t_moments:
         fv.vis_alongshore(data, t=t_, saveloc=figure_dir)
 except:
-    print(f"Error in alongshore visualisation {case=}")
+    print(f"*** Error in alongshore visualisation {case=}")
 
 
 ### Figures - Timeseries
@@ -363,7 +363,7 @@ try:
     fv.vis_timeseries(data, y=y_list_1, saveloc=figure_dir)
     fv.vis_timeseries(data, y=y_moments, saveloc=figure_dir)
 except:
-    print(f"Error in timeseries visualisation {case=}")
+    print(f"*** Error in timeseries visualisation {case=}")
 
 
 ### Figures - Spectra 1d
@@ -371,21 +371,21 @@ try:
     for _y in y_moments:
         fv.vis_spectrum_1d(data, x=1e4, y=_y, saveloc=figure_dir)
 except:
-    print(f"Error in spectrum-1d visualisation {case=}")
+    print(f"*** Error in spectrum-1d visualisation {case=}")
     
 try:
     fv.vis_spectrum_1d(data, x=1e4, y=y_list_0, saveloc=figure_dir)
     fv.vis_spectrum_1d(data, x=1e4, y=y_list_1, saveloc=figure_dir)
     fv.vis_spectrum_1d(data, x=1e4, y=y_moments, saveloc=figure_dir)
 except:
-    print(f"Error in spectrum-1d visualisation {case=}")
+    print(f"*** Error in spectrum-1d visualisation {case=}")
 
 
 ### Figures - Spectra 2d
 try:
     fv.vis_spectrum_2d(data, x=1e4, saveloc=figure_dir)
 except:
-    print(f"Error in spectrum-2d visualisation {case=}")
+    print(f"*** Error in spectrum-2d visualisation {case=}")
 
 
 ### Figures - Cross-shore
@@ -406,7 +406,7 @@ try:
         for y_ in y_moments:
             fv.vis_crossshore(data, y=y_, t=t_, saveloc=figure_dir)
 except:
-    print(f"Error in cross-shore visualisation {case=}")
+    print(f"*** Error in cross-shore visualisation {case=}")
 
 
 ### Animation
