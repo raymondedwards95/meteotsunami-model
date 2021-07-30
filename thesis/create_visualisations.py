@@ -94,7 +94,10 @@ data = xr.open_dataset(filename_processed)
 t_moments = np.array([8, 16, 24, 32, 40]) * 3600.
 x_moment = 1e4
 x_offset = 5e4
-y_moments = np.array([2.5, 5, 7.5, 10]) * 1e5
+
+y_list_0 = np.array([4, 8]) * 1e6
+y_list_1 = np.array([2, 4, 6, 8]) * 1e6
+y_moments = np.union1d(y_list_0, y_list_1)
 
 waveperiods = np.zeros(y_moments.size)
 wavelengths = np.zeros(t_moments.size)
@@ -199,9 +202,9 @@ fv.vis_spectrum_2d(data, x=x_moment+x_offset, saveloc=figure_dir)
 
 ### Animation
 if make_ani:
+    anim.animation_alongshore(data, saveloc=figure_dir, xlims=[0, 1000])
     anim.animation_contour(data, saveloc=figure_dir, xlims=[0, 1000])
     anim.animation_contour_uv(data, saveloc=figure_dir, xlims=[0, 1000])
-    anim.animation_alongshore(data, saveloc=figure_dir, xlims=[0, 1000])
 else:
     print("\nNot creating animations")
 
