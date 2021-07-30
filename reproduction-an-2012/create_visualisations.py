@@ -386,7 +386,7 @@ except:
 try:
     fv.vis_spectrum_2d(data, x=1e4, saveloc=figure_dir)
 except:
-    print(f"Error in spectrum-1d visualisation {case=}")
+    print(f"Error in spectrum-2d visualisation {case=}")
 
 
 ### Figures - Cross-shore
