@@ -163,7 +163,7 @@ def animation_contour(dataset, saveloc=None, xlims=None, _test_i_max=None):
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter()
-    print(f"Finished contour-animation in {t1-t0:0.1f} seconds")
+    print(f"Finished contour-animation in {t1-t0:0.1f} seconds ({num_frames / (t1-t0):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
     return
 
@@ -314,7 +314,7 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None):
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter()
-    print(f"Finished uv-contour-animation in {t1-t0:0.1f} seconds")
+    print(f"Finished uv-contour-animation in {t1-t0:0.1f} seconds ({num_frames / (t1-t0):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
     return
 
@@ -432,7 +432,7 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None):
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter()
-    print(f"Finished alongshore-animation in {t1-t0:0.1f} seconds")
+    print(f"Finished alongshore-animation in {t1-t0:0.1f} seconds ({num_frames / (t1-t0):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
     return
 
@@ -543,7 +543,7 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None):
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter()
-    print(f"Finished crossshore-animation in {t1-t0:0.1f} seconds")
+    print(f"Finished crossshore-animation in {t1-t0:0.1f} seconds ({num_frames / (t1-t0):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
     return
 
