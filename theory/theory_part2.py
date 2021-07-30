@@ -45,7 +45,7 @@ plt.xscale("log")
 for _angle in [1/50, 1/200, 1/1000]:
     plt.text(_angle, 0.01, f"{_angle}", color="red", transform=plt.gca().get_xaxis_transform())
     plt.axvline(_angle, color="red")
-plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
 print(f"Saved figure {savename}")
 
 
@@ -70,7 +70,7 @@ plt.xscale("log")
 for _angle in [1/50, 1/200, 1/1000]:
     plt.text(_angle, 0.01, f"{_angle}", color="orange", transform=plt.gca().get_xaxis_transform())
     plt.axvline(_angle, color="orange")
-plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
 print(f"Saved figure {savename}")
 
 
