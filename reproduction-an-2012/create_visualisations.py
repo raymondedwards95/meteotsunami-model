@@ -105,6 +105,7 @@ p = data["p"]
 x = x - x.min()
 
 
+### Figure bathymetry
 try:
     print(f"Creating figures in \n'{figure_dir}'")
     ### Figure bathymetry
