@@ -56,7 +56,8 @@ def compute_wave_periods(data, y, x=None, crests=True, no_result=np.nan):
     
     Parameters:
         x:          x-coordinate
-        crests:     find crests (True) or throughs (False)
+        crests:     find crests (True) or throughs (default: False)
+        no_result:  value to return if there is no result (default: np.nan)
     
     Output:
         periods:    list of time-intervals between wave crests
@@ -82,7 +83,8 @@ def compute_wave_lengths(data, t, x=None, crests=True, no_result=np.nan):
     
     Parameters:
         x:          x-coordinate
-        crests:     find crests (True) or throughs (False)
+        crests:     find crests (True) or throughs (default: False)
+        no_result:  value to return if there is no result (default: np.nan)
     
     Output:
         lengths:    list of distances between wave crests
