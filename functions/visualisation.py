@@ -126,9 +126,13 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         ax[i].set_ylim(np.array([-1.1, 1.1]) * wl_max)
         ax2[i].set_ylim(np.array([-1.1, 1.1]) * p_max)
         ax[i].xaxis.set_minor_locator(MultipleLocator(1))
+        ax[i].xaxis.set_tick_params(which="both", top=True)
 
-        ax[i].tick_params(axis="y", labelcolor=f"C0")
-        ax2[i].tick_params(axis="y", labelcolor=f"C1")
+        ax[i].tick_params(axis="y", labelcolor="C0")
+        ax2[i].tick_params(axis="y", labelcolor="C1")
+
+        ax[i].set_ylabel("Water Level [m]", color="C0")
+        ax2[i].set_ylabel("Surface Pressure [Pa]", color="C1")
 
         ax[i].grid()
         ax[i].annotate(f"$y={y_arr[i]/1000:0.0f}$km", xy=(0.01, 0.99), xycoords="axes fraction", ha="left", va="top")
