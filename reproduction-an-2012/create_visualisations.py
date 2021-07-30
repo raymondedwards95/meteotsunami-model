@@ -340,7 +340,6 @@ except:
 
 
 ### Figures - Contour
-t_moments = [4e4, 8e4, 12e4, 16e4]
 try:
     fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="wl", ylims=[0, 300])
     fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="u", ylims=[0, 300])
