@@ -1,0 +1,43 @@
+
+
+Wave Period at y=2000 km and x=10 km: 6.2 s
+6.3	6.0	
+
+Wave Period at y=4000 km and x=10 km: 4.7 s
+5.8	2.2	6.0	
+
+Wave Period at y=6000 km and x=10 km: 4.0 s
+6.0	2.0	
+
+Wave Period at y=8000 km and x=10 km: 2.8 s
+3.8	1.7	
+
+Wave Lengths at t=11.1 h and x=10 km: 719640.2 m
+719640.2	
+
+Wave Lengths at t=22.2 h and x=10 km: 1089455.3 m
+1089455.3	1089455.3	
+
+Wave Lengths at t=33.3 h and x=10 km: 784607.7 m
+499750.1	1069465.3	
+
+Wave Lengths at t=44.4 h and x=10 km: 899550.2 m
+949525.2	499750.1	1079460.3	1069465.3	
+
+Wavespeeds:
+y=2000 km, t=11.1h: 1.00 m/s
+y=2000 km, t=22.2h: 1.51 m/s
+y=2000 km, t=33.3h: 1.09 m/s
+y=2000 km, t=44.4h: 1.25 m/s
+y=4000 km, t=11.1h: 0.66 m/s
+y=4000 km, t=22.2h: 1.00 m/s
+y=4000 km, t=33.3h: 0.72 m/s
+y=4000 km, t=44.4h: 0.83 m/s
+y=6000 km, t=11.1h: 0.92 m/s
+y=6000 km, t=22.2h: 1.39 m/s
+y=6000 km, t=33.3h: 1.00 m/s
+y=6000 km, t=44.4h: 1.15 m/s
+y=8000 km, t=11.1h: 0.80 m/s
+y=8000 km, t=22.2h: 1.21 m/s
+y=8000 km, t=33.3h: 0.87 m/s
+y=8000 km, t=44.4h: 1.00 m/s
