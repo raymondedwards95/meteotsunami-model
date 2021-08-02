@@ -1,46 +1,50 @@
 
 
-Wave Period at y=500000.0 and x=10000.0:
-1.7	
-Mean Wave Period:
-1.6666666666666667
+Wave Period at y=2000 km and x=10 km: 4.0 s
+4.0	
 
-
-Wave Lengths at t=28800.0 and x=10000.0:
+Wave Period at y=4000 km and x=10 km: nan s
 nan	
-Mean Wave Length:
-nan
-Mean Wave Speed = Length / Period
-nan
 
-
-Wave Lengths at t=57600.0 and x=10000.0:
+Wave Period at y=6000 km and x=10 km: nan s
 nan	
-Mean Wave Length:
-nan
-Mean Wave Speed = Length / Period
-nan
 
-
-Wave Lengths at t=86400.0 and x=10000.0:
+Wave Period at y=8000 km and x=10 km: nan s
 nan	
-Mean Wave Length:
-nan
-Mean Wave Speed = Length / Period
-nan
 
+Wave Lengths at t=8.0 h and x=10 km: nan m
+nan	
 
-Wave Lengths at t=115200.0 and x=10000.0:
+Wave Lengths at t=16.0 h and x=10 km: nan m
+nan	
+
+Wave Lengths at t=24.0 h and x=10 km: nan m
+nan	
+
+Wave Lengths at t=32.0 h and x=10 km: 249750.2 m
 249750.2	
-Mean Wave Length:
-249750.24975024955
-Mean Wave Speed = Length / Period
-149850.14985014973
 
-
-Wave Lengths at t=144000.0 and x=10000.0:
+Wave Lengths at t=40.0 h and x=10 km: 284715.3 m
 284715.3	
-Mean Wave Length:
-284715.2847152846
-Mean Wave Speed = Length / Period
-170829.17082917076
+
+Wavespeeds:
+y=2000 km, t=8.0h: nan m/s
+y=2000 km, t=16.0h: nan m/s
+y=2000 km, t=24.0h: nan m/s
+y=2000 km, t=32.0h: nan m/s
+y=2000 km, t=40.0h: nan m/s
+y=4000 km, t=8.0h: nan m/s
+y=4000 km, t=16.0h: nan m/s
+y=4000 km, t=24.0h: nan m/s
+y=4000 km, t=32.0h: nan m/s
+y=4000 km, t=40.0h: nan m/s
+y=6000 km, t=8.0h: nan m/s
+y=6000 km, t=16.0h: nan m/s
+y=6000 km, t=24.0h: nan m/s
+y=6000 km, t=32.0h: nan m/s
+y=6000 km, t=40.0h: nan m/s
+y=8000 km, t=8.0h: nan m/s
+y=8000 km, t=16.0h: nan m/s
+y=8000 km, t=24.0h: nan m/s
+y=8000 km, t=32.0h: 1.00 m/s
+y=8000 km, t=40.0h: 1.14 m/s
