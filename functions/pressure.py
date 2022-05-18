@@ -168,7 +168,7 @@ def plot_pressure(data, filename=None, x_scales=None):
     t = data.t.values
     p = data.values
 
-    p_max = np.max([p.max(), np.abs(p.min())])
+    p_max = np.ceil(np.max([p.max(), np.abs(p.min())]))
     p_min = -1. * p_max
 
     if x_scales is None:
@@ -189,14 +189,13 @@ def plot_pressure(data, filename=None, x_scales=None):
             x / 1000.,
             y / 1000.,
             p[idx, :, :],
-            levels=31,
+            levels=np.linspace(p_min, p_max, 41),
             vmin=p_min,
             vmax=p_max,
             cmap=cmo.cm.curl
         )
         ax[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
         ax[i].set_xlim(x_scales)  # make it automatic?
-        _y_ticks = ax[i].get_yticks()
 
     ax[t_num // 2].set_xlabel("$x$ [km]")
     ax[0].set_ylabel("$y$ [km]")
