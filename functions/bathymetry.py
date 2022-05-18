@@ -71,7 +71,6 @@ def write_bathymetry(data, filename=None):
     y = data.y.values
     b = data.values
 
-
     ## write
     with open(filename, "w") as file:
         file.write("")
@@ -97,6 +96,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
 
     Parameters:
         filename:   name of figures
+        xmax:       upper limit of x
     """
     ## Prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
@@ -143,9 +143,11 @@ def plot_bathymetry(data, filename=None, xmax=None):
     fig.set_tight_layout(True)
     div = make_axes_locatable(ax)
     cax = div.append_axes("right", "5%", "5%")
-    cont = ax.contourf(x / 1000., y / 1000., b, levels=31, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
-    cbar = fig.colorbar(cont, cax=cax, ticks=np.linspace(0, b_min, 11))
+    cont = ax.contourf(x / 1000., y / 1000., b, levels=21, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
+    cbar = fig.colorbar(cont, cax=cax)
     cbar.set_label("Water Depth [m]")
+    cbar.set_ticks(np.linspace(0, b_min, 11))
+    cbar.set_ticklabels([f"{ticklabel:0.0f}" for ticklabel in np.linspace(0, -1. * np.floor(b_min), 11)])
     ax.set_title(f"Bottom Profile")
     ax.set_xlim(0, xmax)
     ax.set_xlabel("$x$ [km]")
