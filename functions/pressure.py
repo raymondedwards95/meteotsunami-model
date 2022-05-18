@@ -5,6 +5,7 @@ import sys
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
+import matplotlib.ticker
 import numpy as np
 import xarray as xr
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -25,14 +26,14 @@ def _find_step(x):
 
 
 def convert_to_xarray(t, x, y, p):
-    """ Function to convert separate numpy arrays for t, x, y and p to a single DataArray for writing to files 
-    
+    """ Function to convert separate numpy arrays for t, x, y and p to a single DataArray for writing to files
+
     Input:
         t:      1d array with time since 1970-01-01 00:00:00 in seconds (shape = M)
         x:      1d array with x coordinates in km (shape = Nx)
         y:      1d array with y coordinates in km (shape = Ny)
         p:      3d array with pressure in Pa (shape = (M, Ny, Nx))
-    
+
     Output:
         data
     """
@@ -54,13 +55,13 @@ def convert_to_xarray(t, x, y, p):
 
 def write_pressure(data, filename=None):
     """ Function to write a pressure field to a `pressure.amp` file for use with Delft3D-FM
-    
+
     Input:
         data:   pressure field and coordinate data
     """
     ## prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
-    
+
     if filename is None:
         filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/pressure"
     if not filename.endswith(".amp"):
@@ -131,24 +132,23 @@ unit1           = Pa
 
                     # loop over x (columns)
                     for m in range(x_num):
-
                         # write a value and neglect trailing zeros after decimal point
                         # note: second index for p (i.e. -1*n) to fix coordinate-system
                         # replacement rules:
-                        # 1.: -0 -> +0
+                        # 1.: -0.00 -> +0.00
                         # 2.: 0.00 -> 0
                         file.write(f"{p[i, -1*n, m]:0.2f} ".replace("-0.00", "0.00").replace(".00", ""))
                     file.write("\n")
-    
+
     print(f"Finished writing to '{filename}'")
 
 
 def plot_pressure(data, filename=None, x_scales=None):
     """ Function to visualize pressure data
-    
+
     Input:
         data:       pressure and coordinate data
-    
+
     Parameters:
         filename:   name of figures
         x_scales:   lower and upper limit of x (should be a list of length 2)
@@ -196,13 +196,19 @@ def plot_pressure(data, filename=None, x_scales=None):
         )
         ax[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
         ax[i].set_xlim(x_scales)  # make it automatic?
-    
+        _y_ticks = ax[i].get_yticks()
+
     ax[t_num // 2].set_xlabel("$x$ [km]")
     ax[0].set_ylabel("$y$ [km]")
 
+    # remove sharey from last subplot for colorbar
     ax[-1].get_shared_y_axes().remove(ax[-1])
+    ax[-1].yaxis.major = matplotlib.axis.Ticker()
+    ax[-1].yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+    ax[-1].yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
     cbar = fig.colorbar(im[-2], cax=ax[-1])
     cbar.set_label("Pressure Disturbance [Pa]")
+    cbar.set_ticks(np.linspace(p_min, p_max, 11))
 
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure as '{savename}'")
@@ -213,13 +219,13 @@ if __name__ == "__main__":
 
     # function for computing 'pressure'
     def f(x, y, t):
-        return np.min([1, t / 5. / 3600.]) * np.sin(x * np.pi) * np.sin(y * np.pi)
+        return np.min([1, t / 5. / 3600.]) * np.sin(x * np.pi / 2000.) * np.sin(y * np.pi / 2000.)
 
     t0 = time.perf_counter()
 
     # grid
-    x = np.linspace(-5, 5, 51)
-    y = np.linspace(-10, 10, 51)
+    x = np.linspace(-5000, 5000, 51)
+    y = np.linspace(-10000, 10000, 51)
     t = np.arange(0, 10) * 3600.
     p = np.zeros((t.size, y.size, x.size), dtype=float)
 
@@ -228,7 +234,7 @@ if __name__ == "__main__":
         for j in range(y.size):
             for i in range(x.size):
                 p[n,j,i] = f(x[i], y[j], t[n])
-    
+
     data = convert_to_xarray(t, x, y, p)
     del t, x, y, p
 
@@ -245,3 +251,5 @@ if __name__ == "__main__":
     # evaluate performance
     t2 = time.perf_counter()
     print(f"Visualized test pressure data in {t2 - t1 :0.2f} seconds.")
+
+    #plt.show()
