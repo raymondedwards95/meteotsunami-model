@@ -23,13 +23,13 @@ def _convert_to_xarray_2d(x, y, b):
 
 
 def convert_to_xarray(x, y, b):
-    """ Function to convert separate numpy arrays for x, y and b to a single DataArray for writing to files 
-    
+    """ Function to convert separate numpy arrays for x, y and b to a single DataArray for writing to files
+
     Input:
         x:      1d array with x coordinates in km (shape = Nx)
         y:      1d array with y coordinates in km (shape = Ny)
         b:      1d or 2d array with bathymetry data in Pa (shape = (Ny * Nx) OR shape = (Ny, Nx))
-    
+
     Output:
         data
     """
@@ -54,7 +54,7 @@ def convert_to_xarray(x, y, b):
 
 def write_bathymetry(data, filename=None):
     """ Function to write bathymetry data to a `bathymetry.xyb` file for use with Delft3D-FM
-    
+
     Input:
         data:   bathymetry and coordinate data
     """
@@ -85,19 +85,19 @@ def write_bathymetry(data, filename=None):
 
                 # write a set of x y b on one line + remove trailing zeros
                 file.write(f"{_x:0.2f} {y[j]:0.2f} {b[j, i]:0.2f}\n".replace(".00", ""))
-    
+
     print(f"Finished writing to '{filename}'")
 
 
 def plot_bathymetry(data, filename=None, xmax=None):
     """ Function to visualize bathymetry data
-    
+
     Input:
-        data:   bathymetry and coordinate data
-    
+        data:       bathymetry and coordinate data
+
     Parameters:
         filename:   name of figures
-    """    
+    """
     ## Prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
@@ -144,7 +144,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
     div = make_axes_locatable(ax)
     cax = div.append_axes("right", "5%", "5%")
     cont = ax.contourf(x / 1000., y / 1000., b, levels=31, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
-    cbar = fig.colorbar(cont, cax=cax)
+    cbar = fig.colorbar(cont, cax=cax, ticks=np.linspace(0, b_min, 11))
     cbar.set_label("Water Depth [m]")
     ax.set_title(f"Bottom Profile")
     ax.set_xlim(0, xmax)
@@ -187,3 +187,5 @@ if __name__ == "__main__":
     # evaluate performance
     t2 = time.perf_counter()
     print(f"Visualized test bathymetry data in {t2 - t1 :0.2f} seconds.")
+
+    #plt.show()
