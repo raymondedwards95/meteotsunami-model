@@ -189,7 +189,7 @@ def plot_pressure(data, filename=None, x_scales=None):
             x / 1000.,
             y / 1000.,
             p[idx, :, :],
-            levels=np.linspace(p_min, p_max, 41),
+            levels=41,
             vmin=p_min,
             vmax=p_max,
             cmap=cmo.cm.curl
@@ -207,7 +207,7 @@ def plot_pressure(data, filename=None, x_scales=None):
     ax[-1].yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
     cbar = fig.colorbar(im[-2], cax=ax[-1])
     cbar.set_label("Pressure Disturbance [Pa]")
-    cbar.set_ticks(np.linspace(p_min, p_max, 11))
+    cbar.set_ticks(np.linspace(np.floor(p.min()), np.ceil(p.max()), 6))
 
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure as '{savename}'")
