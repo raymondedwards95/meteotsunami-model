@@ -51,5 +51,4 @@ for i in range(len(cases)):
     fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_repr_{case:02.0f}")
 
 
-# plt.show()
 print("Finished creating bathymetry-files")
