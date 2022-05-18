@@ -135,6 +135,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
     ax.set_ylim(_ylims)
     ax.set_xlabel("$x$ [km]")
     ax.set_ylabel("Bed Level [m]")
+    ax.grid()
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     print(f"Saved figure '{savename}'")
 
