@@ -11,6 +11,7 @@ try:
     import cartopy.feature as cfeature
     create_map = True
 except:
+    print("Cartopy is not installed!")
     create_map = False
 
 # fix for importing functions below
