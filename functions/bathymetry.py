@@ -112,8 +112,12 @@ def plot_bathymetry(data, filename=None, xmax=None):
     y = data.y.values
     b = data.values
 
-    b_max = np.max(np.abs([b.min(), b.max()]))
-    b_min = -1. * b_max
+    b_max = np.ceil(b.max())
+    b_min = np.floor(b.min())
+
+    # fix b_max and b_min
+    b_max = np.max([1., b_max])
+    b_min = np.min([-1., b_min])
 
     i = y.size // 2
 
@@ -147,11 +151,22 @@ def plot_bathymetry(data, filename=None, xmax=None):
     fig.set_tight_layout(True)
     div = make_axes_locatable(ax)
     cax = div.append_axes("right", "5%", "5%")
-    cont = ax.contourf(x / 1000., y / 1000., b, levels=21, cmap=cmo.cm.topo, vmin=b_min, vmax=b_max)
+    cont = ax.contourf(
+        x / 1000.,
+        y / 1000.,
+        b,
+        levels=np.sort(np.unique(np.concatenate((
+            # np.arange(0, b_max + 51, 100),
+            np.arange(0, b_min - 51, -100),
+        )))),
+        cmap=cmo.tools.crop(cmo.cm.topo, b_min, b_max, 0),
+        vmin=b_min,
+        vmax=b_max,
+    )
     cbar = fig.colorbar(cont, cax=cax)
     cbar.set_label("Water Depth [m]")
-    cbar.set_ticks(np.linspace(0, b_min, 11))
-    cbar.set_ticklabels([f"{ticklabel:0.0f}" for ticklabel in np.linspace(0, -1. * np.floor(b_min), 11)])
+    cbar.set_ticks(np.linspace(0, b_min, 6))
+    cbar.set_ticklabels([f"{ticklabel:0.0f}" for ticklabel in np.linspace(0, -1. * b_min, 6)])
     ax.set_title(f"Bottom Profile")
     ax.set_xlim(0, xmax)
     ax.set_xlabel("$x$ [km]")
