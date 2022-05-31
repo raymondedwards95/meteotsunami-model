@@ -155,10 +155,7 @@ def plot_bathymetry(data, filename=None, xmax=None):
         x / 1000.,
         y / 1000.,
         b,
-        levels=np.sort(np.unique(np.concatenate((
-            # np.arange(0, b_max + 51, 100),
-            np.arange(0, b_min - 51, -100),
-        )))),
+        levels=21,
         cmap=cmo.tools.crop(cmo.cm.topo, b_min, b_max, 0),
         vmin=b_min,
         vmax=b_max,
