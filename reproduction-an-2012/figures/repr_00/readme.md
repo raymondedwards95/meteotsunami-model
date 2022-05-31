@@ -1,3 +1,3 @@
-# Test
+# Reproduction Case 00
 
-https://github.com/raymondedwards95/meteotsunami-model/blob/master/reproduction-an-2012/figures/repr_00/anim_contours.mp4
+https://raw.githubusercontent.com/raymondedwards95/meteotsunami-model/master/reproduction-an-2012/figures/repr_00/anim_contours.mp4
