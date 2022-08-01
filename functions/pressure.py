@@ -143,7 +143,7 @@ unit1           = Pa
     print(f"Finished writing to '{filename}'")
 
 
-def plot_pressure(data, filename=None, x_scales=None):
+def plot_pressure(data, filename=None, x_scales=None, keep_open=False):
     """ Function to visualize pressure data
 
     Input:
@@ -210,6 +210,8 @@ def plot_pressure(data, filename=None, x_scales=None):
     cbar.set_ticks(np.linspace(np.floor(p.min()), np.ceil(p.max()), 6))
 
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    if not keep_open:
+        plt.close(fig)
     print(f"Saved figure as '{savename}'")
 
 
