@@ -88,7 +88,7 @@ def write_bathymetry(data, filename=None):
     print(f"Finished writing to '{filename}'")
 
 
-def plot_bathymetry(data, filename=None, xmax=None):
+def plot_bathymetry(data, filename=None, xmax=None, keep_open=False):
     """ Function to visualize bathymetry data
 
     Input:
@@ -141,6 +141,8 @@ def plot_bathymetry(data, filename=None, xmax=None):
     ax.set_ylabel("Bed Level [m]")
     ax.grid()
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    if not keep_open:
+        plt.close(fig)
     print(f"Saved figure '{savename}'")
 
     ## Figure 2 - map
@@ -169,6 +171,8 @@ def plot_bathymetry(data, filename=None, xmax=None):
     ax.set_xlabel("$x$ [km]")
     ax.set_ylabel("$y$ [km]")
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    if not keep_open:
+        plt.close(fig)
     print(f"Saved figure '{savename}'")
 
     return
