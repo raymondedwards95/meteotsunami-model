@@ -16,12 +16,12 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 
 
-def animation_contour(dataset, saveloc=None, xlims=None, _test_i_max=None):
+def animation_contour(dataset, saveloc=None, xlims=None, _test_i_max=None, close=True):
     """ Creates an animation of the top-down view of the water level and surface air pressure data
 
     Input:
         dataset:    Dataset that contains all variables
-    
+
     Parameters:
         saveloc:    Folder to write the animation to
     """
@@ -166,15 +166,22 @@ def animation_contour(dataset, saveloc=None, xlims=None, _test_i_max=None):
     t1 = time.perf_counter()
     print(f"Finished contour-animation in {t1-t0:0.1f} seconds (average {num_frames / (t1-t0):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
+
+    if close:
+        plt.close(fig)
+        print(f"Figure is closed")
+    else:
+        print(f"Figure is not closed!")
+
     return
 
 
-def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None):
+def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None, close=True):
     """ Creates an animation of the top-down view of the water velocity data
 
     Input:
         dataset:    Dataset that contains all variables
-    
+
     Parameters:
         saveloc:    Folder to write the animation to
     """
@@ -319,15 +326,22 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None):
     t1 = time.perf_counter()
     print(f"Finished uv-contour-animation in {t1-t0:0.1f} seconds (average {num_frames / (t1-t0):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
+
+    if close:
+        plt.close(fig)
+        print(f"Figure is closed")
+    else:
+        print(f"Figure is not closed!")
+
     return
 
 
-def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None):
+def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None, close=True):
     """ Creates an animation of an alongshore cross-section of the water level and surface air pressure data
 
     Input:
         dataset:    Dataset that contains all variables
-    
+
     Parameters:
         saveloc:    Folder to write the animation to
     """
@@ -378,12 +392,12 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None):
             p.isel(t=i).interp(x=10000),
             color="C1"
         )[0]
-    
+
     def set_plottext(i=0):
         plottext[0] = ax[0].set_title(
             f"$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
-    
+
     set_plotdata()
     set_plottext()
 
@@ -393,14 +407,14 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None):
             ax[i].axhline(color="black", linewidth=1)
             ax[i].axvline(color="black", linewidth=1)
             ax[i].set_xlim(xlims)
-        
+
         ax[0].set_ylim([wl_min, wl_max])
         ax[1].set_ylim([p_min, p_max])
         ax[1].set_xlabel("$y$ [km]")
         ax[0].set_ylabel("Sea Surface Elevation [m]")
         ax[1].set_ylabel("Surface Air Pressure [Pa]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
-    
+
     initfig()
 
     ## Update data
@@ -408,7 +422,7 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None):
     if _test_i_max is not None and isinstance(_test_i_max, int):
         print(f"* Testing animation function!")
         num_frames = _test_i_max
-    
+
     def update(i):
         # progress
         if not (num_frames-i-1) % (num_frames // 5):
@@ -422,7 +436,7 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None):
         set_plottext(i)
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
-    
+
     ## Animation
     frames = (np.arange(num_frames)).astype(int)
     anim = FuncAnimation(
@@ -439,15 +453,22 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None):
     t1 = time.perf_counter()
     print(f"Finished alongshore-animation in {t1-t0:0.1f} seconds (average {num_frames / (t1-t0):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
+
+    if close:
+        plt.close(fig)
+        print(f"Figure is closed")
+    else:
+        print(f"Figure is not closed!")
+
     return
 
 
-def animation_crossshore(dataset, saveloc=None, _test_i_max=None):
+def animation_crossshore(dataset, saveloc=None, _test_i_max=None, close=True):
     """ Creates an animation of crossshore cross-sections of the water level and surface air pressure data
 
     Input:
         dataset:    Dataset that contains all variables
-    
+
     Parameters:
         saveloc:    Folder to write the animation to
     """
@@ -492,12 +513,12 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None):
                 color="C0",
                 label=f"$y={_y[j]/1000:0.0f}$ km"
             )[0]
-    
+
     def set_plottext(i=0):
         plottext[0] = ax[0].set_title(
             f"$t={t.isel(t=i).values.tolist()/1e9/3600:0.1f}$ hours since start"
         )
-    
+
     set_plotdata()
     set_plottext()
 
@@ -510,10 +531,10 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None):
             ax[i].set_ylabel("SSE [m]")
             ax[i].set_ylim([wl_min, wl_max])
             ax[i].legend()
-            
+
         ax[-1].set_xlabel("$x$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
-    
+
     initfig()
 
     ## Update data
@@ -535,7 +556,7 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None):
         set_plottext(i)
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
-    
+
     ## Animation
     frames = (np.arange(num_frames)).astype(int)
     anim = FuncAnimation(
@@ -552,6 +573,13 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None):
     t1 = time.perf_counter()
     print(f"Finished crossshore-animation in {t1-t0:0.1f} seconds (average {num_frames / (t1-t0):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
+
+    if close:
+        plt.close(fig)
+        print(f"Figure is closed")
+    else:
+        print(f"Figure is not closed!")
+
     return
 
 
