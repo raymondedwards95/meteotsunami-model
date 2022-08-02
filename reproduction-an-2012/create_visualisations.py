@@ -2,6 +2,8 @@
 import argparse
 import os
 import sys
+import time
+import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -49,12 +51,24 @@ parser.add_argument(
     default=True,
     type=bool
 )
+parser.add_argument(
+    "--delete-original-model-output",
+    help="Delete original model output.",
+    default=False,
+    type=bool
+)
 args = parser.parse_args()
 
 case = f"{args.case:02}"
 reprocess_data = bool(args.reprocess)
 show_figs = bool(args.show)
 make_ani = bool(args.animate)
+delete_original_model_output = bool(args.delete_original_model_output)
+
+if delete_original_model_output:
+    warnings.warn("Original model output will be deleted!")
+    print("Script will process data before deleting original model output!")
+    reprocess_data = True
 
 
 ### Set paths
@@ -86,6 +100,14 @@ if not os.path.exists(filename_processed) or reprocess_data:
     with open(filename_log, "a+") as _file:
         _file.write(f"\tProcessed data for case {case}\n")
 
+# Delete original model output if asked
+if delete_original_model_output:
+    warnings.warn("Removing original model output!")
+    time.sleep(2)
+    os.remove(filename_output)
+    print("Original model output is deleted!")
+
+# Create folder for figures
 os.makedirs(figure_dir, exist_ok=True)
 
 
@@ -183,7 +205,7 @@ try:
     # plt.axvline(10, linestyle="--", color="gray", linewidth=1)
     # plt.axvline(100, linestyle="--", color="gray", linewidth=1)
     # plt.axvline(200, linestyle="--", color="gray", linewidth=1)
-        
+
     plt.savefig(figure_dir + "bathymetry_contour", bbox_inches="tight", dpi=FIG_DPI)
 except:
     print(f"*** Error in bottom-profile visualisation {case=}")
@@ -206,17 +228,17 @@ try:
         _ax.set_xlim([0, 300])
         _ax.set_ylim([0, y.max()/1000])
         _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
-        
+
         if i//2: _ax.set_xlabel("$x$ [km]")
         if not i%2: _ax.set_ylabel("$y$ [km]")
-        
+
         fig.colorbar(im, ax=_ax)
-        
+
     #     _ax.axhline(7.56e3, linestyle="--", color="gray", linewidth=1)
     #     _ax.axvline(10, linestyle="--", color="gray", linewidth=1)
     #     _ax.axvline(100, linestyle="--", color="gray", linewidth=1)
     #     _ax.axvline(200, linestyle="--", color="gray", linewidth=1)
-        
+
     fig.savefig(figure_dir + "pressure_contours", bbox_inches="tight", dpi=FIG_DPI)
 except:
     print(f"*** Error in pressure visualisation {case=}")
@@ -238,17 +260,17 @@ try:
         _ax.set_xlim([0, 300])
         _ax.set_ylim([0, y.max()/1000])
         _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
-        
+
         if i//2: _ax.set_xlabel("$x$ [km]")
         if not i%2: _ax.set_ylabel("$y$ [km]")
-        
+
         fig.colorbar(im, ax=_ax)
-        
+
     #     _ax.axhline(7.56e3, linestyle="--", color="gray", linewidth=1)
     #     _ax.axvline(10, linestyle="--", color="gray", linewidth=1)
     #     _ax.axvline(100, linestyle="--", color="gray", linewidth=1)
     #     _ax.axvline(200, linestyle="--", color="gray", linewidth=1)
-        
+
     fig.savefig(figure_dir + "sse_contours", bbox_inches="tight", dpi=FIG_DPI)
 except:
     print(f"*** Error in contours visualisation {case=}")
@@ -270,14 +292,14 @@ try:
         _ax.set_xlim(plot_ylims[i])
         _ax.set_ylim([-1, 1])
         _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
-        
+
         if i//2: _ax.set_xlabel("$y$ [km]")
         if not i%2: _ax.set_ylabel("$SSE$ [m]")
-            
+
         _ax.axvline(7.56e3, linestyle="--", color="gray", linewidth=1)
         _ax.axhline(color="black", linewidth=1)
         _ax.axvline(color="black", linewidth=1)
-        
+
     fig.savefig(figure_dir + "sse_along", bbox_inches="tight", dpi=FIG_DPI)
 except:
     print(f"*** Error in alongshore-profile visualisation {case=}")
@@ -304,7 +326,7 @@ try:
     # plt.axvline(10, linestyle="--", color="gray", linewidth=1)
     # plt.axvline(100, linestyle="--", color="gray", linewidth=1)
     # plt.axvline(200, linestyle="--", color="gray", linewidth=1)
-        
+
     plt.savefig(figure_dir + "sse_cross", bbox_inches="tight", dpi=FIG_DPI)
 except:
     print(f"*** Error in cross-shore-profile visualisation {case=}")
@@ -321,8 +343,8 @@ try:
     plt.title("Along-shore profile of Sea Surface Elevation [m]")
     for i in range(len(x_slices)):
         plt.plot(
-            y/1000, 
-            wl.interp(t=fu.to_timestr(1.6e5), x=x_slices[i]), 
+            y/1000,
+            wl.interp(t=fu.to_timestr(1.6e5), x=x_slices[i]),
             label=f"$x={x_slices[i]/1000 : 0.0f}$ km",
             linestyle=linestyles[i]
         )
@@ -333,7 +355,7 @@ try:
     plt.axvline(7.56e3, linestyle="--", color="gray", linewidth=1)
     plt.xlabel("$y$ [km]")
     plt.ylabel("$SSE$ [m]")
-        
+
     plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight", dpi=FIG_DPI)
 except:
     print(f"*** Error in alongshore-profile 2 visualisation {case=}")
@@ -372,7 +394,7 @@ try:
         fv.vis_spectrum_1d(data, x=1e4, y=_y, saveloc=figure_dir)
 except:
     print(f"*** Error in spectrum-1d visualisation {case=}")
-    
+
 try:
     fv.vis_spectrum_1d(data, x=1e4, y=y_list_0, saveloc=figure_dir)
     fv.vis_spectrum_1d(data, x=1e4, y=y_list_1, saveloc=figure_dir)
@@ -421,6 +443,6 @@ else:
 ### End
 with open(filename_log, "a+") as _file:
     _file.write(f"\tCreated visualisations for case {case}\n")
-        
-if show_figs: 
+
+if show_figs:
     plt.show()
