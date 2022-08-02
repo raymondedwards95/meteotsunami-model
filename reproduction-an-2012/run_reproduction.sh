@@ -49,7 +49,7 @@ echo "$(date) - Start simulation repr case $CASE_NUMBER " >> last_runs.log
 $DFLOWFM_BIN_PATH/run_dflowfm.sh $INPUT_FILE
 
 # process outputs
-python3 create_visualisations.py $CASE_NUMBER --reprocess 1
+python3 create_visualisations.py $CASE_NUMBER --reprocess 1 --delete-original-model-output 1
 
 # stop timer
 T_END=$(date +%s)
