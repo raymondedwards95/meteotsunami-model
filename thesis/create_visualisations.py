@@ -2,6 +2,8 @@
 import argparse
 import os
 import sys
+import time
+import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -48,12 +50,24 @@ parser.add_argument(
     default=True,
     type=bool
 )
+parser.add_argument(
+    "--delete-original-model-output",
+    help="Delete original model output.",
+    default=False,
+    type=bool
+)
 args = parser.parse_args()
 
 case = f"{args.case:02}"
 reprocess_data = bool(args.reprocess)
 show_figs = bool(args.show)
 make_ani = bool(args.animate)
+delete_original_model_output = bool(args.delete_original_model_output)
+
+if delete_original_model_output:
+    warnings.warn("Original model output will be deleted!")
+    print("Script will process data before deleting original model output!")
+    reprocess_data = True
 
 
 ### Set paths
@@ -85,6 +99,14 @@ if not os.path.exists(filename_processed) or reprocess_data:
     with open(filename_log, "a+") as _file:
         _file.write(f"Processed data for case {case}\n")
 
+# Delete original model output if asked
+if delete_original_model_output:
+    warnings.warn("Removing original model output!")
+    time.sleep(2)
+    os.remove(filename_output)
+    print("Original model output is deleted!")
+
+# Create folder for figures
 os.makedirs(figure_dir, exist_ok=True)
 
 
@@ -194,7 +216,7 @@ try:
     fv.vis_timeseries(data, x=x_moment+x_offset, y=y_moments, saveloc=figure_dir)
 except:
     print(f"*** Error in timeseries visualisation {case=}")
-    
+
 
 ### Figures - Spectra 1d
 try:
@@ -255,6 +277,6 @@ else:
 ### End
 with open(filename_log, "a+") as _file:
     _file.write(f"Created visualisations for case {case}\n")
-        
-if show_figs: 
+
+if show_figs:
     plt.show()
