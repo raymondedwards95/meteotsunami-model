@@ -1,5 +1,6 @@
 """ Functions to process output files from Delft3D-FM into arrays """
 
+import argparse
 import os
 import sys
 import time
@@ -53,7 +54,7 @@ def _create_grid_mapping(x, y, x_grid, y_grid):
             grid_map[n, :] = [j, i]  # fast method 2
         else:
             raise NotImplementedError(__regrid_error)
-    
+
     return grid_map
 
 
@@ -96,10 +97,10 @@ def _regrid_variable_map(var, grid_mapping, index=None):
 
         elif __regrid_method == 2:
             var_grid[k] = var[k, :].reshape(y_size, x_size)[tuple(grid_mapping.T)].reshape(y_size, x_size)  # fast method 2
-        
+
         else:
             raise NotImplementedError(__regrid_error)
-    
+
     return var_grid
 
 
@@ -218,3 +219,59 @@ def extract_data(filename: str, savename: str = None):
         print(f"Data saved to '{savename}'")
 
     return data
+
+
+if __name__ == "__main__":
+    ### Options
+    parser = argparse.ArgumentParser(
+        description="Process and regrid model output"
+    )
+    parser.add_argument(
+        "input",
+        help="Name of the model output file (default file name is 'FlowFM_map.nc')",
+        type=str
+    )
+    parser.add_argument(
+        "output",
+        help="Name of the (new) file to write the processed data",
+        type=str
+    )
+    parser.add_argument(
+        "--delete-original-model-output",
+        help="Delete original model output",
+        default=False,
+        type=bool
+    )
+    args = parser.parse_args()
+
+    ### Filenames
+    filename_original = str(args.input)
+    if not filename_original.endswith(".nc"):
+        filename_original + ".nc"
+    print(f"Input is '{filename_original}'")
+
+    filename_processed = str(args.output)
+    if not filename_processed.endswith(".nc"):
+        filename_processed + ".nc"
+    print(f"Output is '{filename_processed}'")
+
+    delete_original_model_output = bool(args.delete_original_model_output)
+    if delete_original_model_output:
+        warnings.warn(f"Original model output will be deleted! {filename_original}")
+        time.sleep(2)
+
+    ### Convert data
+    print("Processing data")
+    time.sleep(2)
+    extract_data(
+        filename=filename_original,
+        savename=filename_processed
+    )
+    print("Finished processing data")
+
+    ### Clean up data
+    if delete_original_model_output:
+        warnings.warn(f"Original model output will be deleted! {filename_original}")
+        time.sleep(2)
+        os.remove(filename_original)
+        print(f"Original model output is deleted! {filename_original}")
