@@ -106,6 +106,8 @@ if delete_original_model_output:
     time.sleep(2)
     os.remove(filename_output)
     print("Original model output is deleted!")
+    with open(filename_log, "a+") as _file:
+        _file.write(f"\tRemoved original model output for case {case}: {filename_output}\n")
 
 # Create folder for figures
 os.makedirs(figure_dir, exist_ok=True)
