@@ -53,7 +53,6 @@ function func_computations ()
     echo "'$LocalInputFile' ->"
     echo "'$LocalOutputFile' ->"
     echo "'$LocalRegridFile'"
-    sleep 2
 
     # Do computations
     echo "$(date) - Start simulation for '$LocalInputFile'" >> $LogFile
@@ -61,7 +60,7 @@ function func_computations ()
 
     # Regrid data
     echo "$(date) - Start regridding for '$LocalInputFile'" >> $LogFile
-    python3 "$BaseDir/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output" > "${LogFolder}/regrid_${LocalCase}.log"
+    python3 "${BaseDir}/functions/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output" > "${LogFolder}/regrid_${LocalCase}.log"
 
     # End
     echo "$(date) - Finished all for     '$LocalInputFile'" >> $LogFile
@@ -88,12 +87,12 @@ do
     for Case in $CaseNumbers
     do
         # Wait for a bit
-        sleep $(( 10#$Case / 10 ))
+        sleep $(( 10#$Case ))
 
         # Make use of a queue
         while [ $(jobs -p | wc -l) -ge $Ntasks ]
         do
-            sleep 0.1
+            sleep 60
         done
 
         # Prepare
