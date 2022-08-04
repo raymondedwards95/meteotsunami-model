@@ -49,10 +49,10 @@ function func_computations ()
     # Start timer
     Tstart=$(date +%s)
 
-    echo "# Start simulations for case $LocalCase:"
-    echo "'$LocalInputFile' ->"
-    echo "'$LocalOutputFile' ->"
-    echo "'$LocalRegridFile'"
+    echo "# Start simulations for case    $LocalCase"
+    echo "  '$LocalInputFile' ->"
+    echo "  '$LocalOutputFile' ->"
+    echo "  '$LocalRegridFile'"
 
     # Do computations
     echo "$(date) - Start simulation for '$LocalInputFile'" >> $LogFile
@@ -63,6 +63,7 @@ function func_computations ()
     python3 "${BaseDir}/functions/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output" > "${LogFolder}/regrid_${LocalCase}.log"
 
     # End
+    echo "# Finised computations for case $LocalCase"
     echo "$(date) - Finished all for     '$LocalInputFile'" >> $LogFile
 }
 
@@ -106,7 +107,11 @@ do
 
     # Wait for tasks to finish
     wait
+    echo "### Finished simulations in $PWD"
 
     # Return
     cd $BaseDir
 done
+echo
+echo "### Finished all simulations"
+echo
