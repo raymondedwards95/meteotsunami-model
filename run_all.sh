@@ -56,19 +56,19 @@ function func_computations ()
 
     # Do computations
     echo "$(date) - Start simulation for '$LocalInputFile'" >> $LogFile
-    $DFLOWFM_BIN_PATH/run_dflowfm.sh $LocalInputFile > "${LogFolder}/sim_${LocalCase}.log"
+    $DFLOWFM_BIN_PATH/run_dflowfm.sh $LocalInputFile 1> "${LogFolder}/sim_${LocalCase}.log" 2>&1
 
     local TMiddle=$(date +%s)
 
     # Regrid data
     echo "$(date) - Start regridding for '$LocalInputFile'" >> $LogFile
-    python3 ${BaseDir}/functions/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output 1 > "${LogFolder}/regrid_${LocalCase}.log"
+    python3 ${BaseDir}/functions/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output 1 1> "${LogFolder}/regrid_${LocalCase}.log" 2>&1
 
     # End
     local TEnd=$(date +%s)
-    local dTComputation=$(python3 -c "print(($TMiddle - $TStart) / 60)")
-    local dTRegrid=$(python3 -c "print(($TEnd - $TMiddle) / 60)")
-    local dTTotal=$(python3 -c "print(($TEnd - $TStart) / 60)")
+    local dTComputation=$(python3 -c "print(f'{($TMiddle - $TStart) / 60:0.1f}')")
+    local dTRegrid=$(python3 -c "print(f'{($TEnd - $TMiddle) / 60:0.1f}')")
+    local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
     echo "# Finised computations for case $LocalCase"
     echo "# Case $LocalCase Took $dTTotal minutes in total: $dTComputation minutes for D3D and $dTRegrid for regridding"
