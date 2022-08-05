@@ -45,6 +45,7 @@ function func_computations ()
     local LocalInputFile=$2
     local LocalOutputFile=$3
     local LocalRegridFile=$4
+    local LocalIdentifier=$5
 
     # Start timer
     local TStart=$(date +%s)
@@ -56,13 +57,13 @@ function func_computations ()
 
     # Do computations
     echo "$(date) - Start simulation for '$LocalInputFile'" >> $LogFile
-    $DFLOWFM_BIN_PATH/run_dflowfm.sh $LocalInputFile 1> "${LogFolder}/sim_${LocalCase}.log" 2>&1
+    $DFLOWFM_BIN_PATH/run_dflowfm.sh $LocalInputFile 1> "${LogFolder}/sim_${LocalIdentifier}_${LocalCase}.log" 2>&1
 
     local TMiddle=$(date +%s)
 
     # Regrid data
     echo "$(date) - Start regridding for '$LocalInputFile'" >> $LogFile
-    python3 ${BaseDir}/functions/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output 1 1> "${LogFolder}/regrid_${LocalCase}.log" 2>&1
+    python3 ${BaseDir}/functions/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output 1 1> "${LogFolder}/regrid_${LocalIdentifier}_${LocalCase}.log" 2>&1
 
     # End
     local TEnd=$(date +%s)
@@ -110,7 +111,7 @@ do
         RegridName="${PWD}/output/data_${Identifier}_${Case}.nc"
 
         # Do computations
-        func_computations "$Case" "$InputFile" "$OutputName" "$RegridName" &
+        func_computations "$Case" "$InputFile" "$OutputName" "$RegridName" "$Identifier" &
     done
 
     # Wait for tasks to finish
