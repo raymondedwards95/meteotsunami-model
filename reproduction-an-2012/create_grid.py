@@ -1,4 +1,4 @@
-""" Creates a file that contains a grid for D3D-FM-FLOW 
+""" Creates a file that contains a grid for D3D-FM-FLOW
 Note: this script should be run from Delta-Shell
 Note: this script does not work in the console version of Delta-Shell
 best solution for now is to copy the contents of this file into the Delta-Shell gui
@@ -36,7 +36,7 @@ y_length = y_max - y_min
 
 ## Write to file
 for i in range(num_cases):
-    x_num = int(x_length / x_step[i]) + 1    
+    x_num = int(x_length / x_step[i]) + 1
     y_num = int(y_length / y_step[i]) + 1
 
     net_file_path = grid_dir + "/repr_{:02.0f}_net.nc".format(float(case[i]))

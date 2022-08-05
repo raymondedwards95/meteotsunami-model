@@ -53,7 +53,7 @@ figure_dir = file_dir + "/figures/"
 def comp_alongshore(data_list, title, cases, savename):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
-    
+
     ## Parameters
     savename = savename.replace(".jpg", "") + "/along"
     _ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
@@ -86,19 +86,19 @@ def comp_alongshore(data_list, title, cases, savename):
                 color=f"C{j}",
                 label=f"Case {cases[j]:02.0f}"
             )
-        
+
         if i == 0:
             _ax.legend()
-        
+
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure as '{savename}'")
     return
 
-    
+
 def comp_alongshore_diff(data_list, title, cases, savename):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
-    
+
     ## Parameters
     savename = savename.replace(".jpg", "") + "/along_diff"
     _ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
@@ -134,10 +134,10 @@ def comp_alongshore_diff(data_list, title, cases, savename):
                 color=f"C{j}",
                 label=f"Case {cases[j]:02.0f}"
             )
-        
+
         if i == 0:
             _ax.legend()
-        
+
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
     print(f"Saved figure as '{savename}'")
     return
@@ -146,7 +146,7 @@ def comp_alongshore_diff(data_list, title, cases, savename):
 def comp_crossshore(data_list, title, cases, savename):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
-    
+
     ## Parameters
     savename = savename.replace(".jpg", "") + "/cross"
     _yslices = np.array([7.56]) * 1e6
@@ -158,7 +158,7 @@ def comp_crossshore(data_list, title, cases, savename):
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
     fig.suptitle(f"{title}\nCross-shore Profile of Sea Surface Elevation")
-    
+
     if not isinstance(ax, np.ndarray):
         ax = np.array([ax])
 
@@ -209,7 +209,7 @@ def comp_crossshore(data_list, title, cases, savename):
 def comp_crossshore_diff(data_list, title, cases, savename):
     ## Settings
     sns.set_palette(sns.color_palette("muted"))
-    
+
     ## Parameters
     savename = savename.replace(".jpg", "") + "/cross_diff"
     _yslices = np.array([7.56]) * 1e6
@@ -221,7 +221,7 @@ def comp_crossshore_diff(data_list, title, cases, savename):
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
     fig.suptitle(f"{title}\nChange in Cross-shore Profile")
-    
+
     if not isinstance(ax, np.ndarray):
         ax = np.array([ax])
 
@@ -272,7 +272,7 @@ def make_comparison(cases, title, id="test"):
         datafile = f"{output_dir}/data_repr_{case}.nc"
         print(f"Reading data for case {case} ({datafile})")
         data_list.append(xr.open_dataset(datafile))
-    
+
     # Make figures
     try: comp_alongshore(data_list, title, cases, savename)
     except: pass
