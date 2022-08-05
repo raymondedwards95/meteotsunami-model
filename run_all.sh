@@ -62,7 +62,7 @@ function func_computations ()
 
     # Regrid data
     echo "$(date) - Start regridding for '$LocalInputFile'" >> $LogFile
-    python3 ${BaseDir}/functions/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output > "${LogFolder}/regrid_${LocalCase}.log"
+    python3 ${BaseDir}/functions/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output 1 > "${LogFolder}/regrid_${LocalCase}.log"
 
     # End
     local TEnd=$(date +%s)
