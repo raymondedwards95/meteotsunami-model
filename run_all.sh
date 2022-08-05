@@ -66,9 +66,9 @@ function func_computations ()
 
     # End
     local TEnd=$(date +%s)
-    local dTComputation=$(python3 -c print(($TMiddle - $TStart) / 60)))
-    local dTRegrid=$(python3 -c print(($TEnd - $TMiddle) / 60)))
-    local dTTotal=$(python3 -c print(($TEnd - $TStart) / 60)))
+    local dTComputation=$(python3 -c "print(($TMiddle - $TStart) / 60)")
+    local dTRegrid=$(python3 -c "print(($TEnd - $TMiddle) / 60)")
+    local dTTotal=$(python3 -c "print(($TEnd - $TStart) / 60)")
 
     echo "# Finised computations for case $LocalCase"
     echo "# Case $LocalCase Took $dTTotal minutes in total: $dTComputation minutes for D3D and $dTRegrid for regridding"
