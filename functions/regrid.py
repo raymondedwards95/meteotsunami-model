@@ -38,9 +38,9 @@ def _create_grid_mapping(x, y, x_grid, y_grid):
     # assert x.size == x_grid.size * y_grid.size
 
     if __regrid_method == 1:
-        grid_map = np.zeros((x.size, 3), dtype=np.int)  # slow method 1
+        grid_map = np.zeros((x.size, 3), dtype=int)  # slow method 1
     elif __regrid_method == 2:
-        grid_map = np.zeros((x.size, 2), dtype=np.int)  # fast method 2
+        grid_map = np.zeros((x.size, 2), dtype=int)  # fast method 2
     else:
         raise NotImplementedError(__regrid_error)
 
