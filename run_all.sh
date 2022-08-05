@@ -47,7 +47,7 @@ function func_computations ()
     local LocalRegridFile=$4
 
     # Start timer
-    Tstart=$(date +%s)
+    local TStart=$(date +%s)
 
     echo "# Start simulations for case    $LocalCase"
     echo "  '$LocalInputFile' ->"
@@ -58,12 +58,20 @@ function func_computations ()
     echo "$(date) - Start simulation for '$LocalInputFile'" >> $LogFile
     $DFLOWFM_BIN_PATH/run_dflowfm.sh $LocalInputFile > "${LogFolder}/sim_${LocalCase}.log"
 
+    local TMiddle=$(date +%s)
+
     # Regrid data
     echo "$(date) - Start regridding for '$LocalInputFile'" >> $LogFile
     python3 ${BaseDir}/functions/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output > "${LogFolder}/regrid_${LocalCase}.log"
 
     # End
+    local TEnd=$(date +%s)
+    local dTComputation=$(python3 -c print(($TMiddle - $TStart) / 60)))
+    local dTRegrid=$(python3 -c print(($TEnd - $TMiddle) / 60)))
+    local dTTotal=$(python3 -c print(($TEnd - $TStart) / 60)))
+
     echo "# Finised computations for case $LocalCase"
+    echo "# Case $LocalCase Took $dTTotal minutes in total: $dTComputation minutes for D3D and $dTRegrid for regridding"
     echo "$(date) - Finished all for     '$LocalInputFile'" >> $LogFile
 }
 
