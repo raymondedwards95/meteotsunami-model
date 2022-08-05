@@ -38,8 +38,8 @@ y_step = x_step
 
 # time (seconds)
 t_min = 0
-t_max = 50. * 3600.  
-t_step = 3600. / 6.  
+t_max = 50. * 3600.
+t_step = 3600. / 6.
 
 
 ### Convert parameters
@@ -67,7 +67,7 @@ with open(f"{current_dir}/parameters_pressure.txt", "w") as file:
         line = f"{cases[i]:02.0f},{U_list[i]:0.0f},{a_list[i]:0.0f},{p0_list[i]:0.0f},{x0_list[i]:0.0f}"
         print(line.replace(",", "\t"))
         file.write(line + "\n")
-    
+
     del line, i
 
 

@@ -1,4 +1,4 @@
-""" Creates a file that contains a grid for D3D-FM-FLOW 
+""" Creates a file that contains a grid for D3D-FM-FLOW
 Note: this script should be run from Delta-Shell
 Note: this script does not work in the console version of Delta-Shell
 best solution for now is to copy the contents of this file into the Delta-Shell gui
