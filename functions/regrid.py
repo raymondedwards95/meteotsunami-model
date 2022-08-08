@@ -148,16 +148,16 @@ def extract_data(filename: str, savename: str = None):
     print(f"Reading file '{filename}'")
 
     ## Open data file and extract necessary coordinates and variables
-    with xr.open_dataset(filename) as original_data:
+    with xr.open_dataset(filename, chunks="auto") as original_data:
         x = original_data["mesh2d_face_x"]
         y = original_data["mesh2d_face_y"]
         t = original_data["time"]
 
-        # b = original_data["mesh2d_waterdepth"]  # moved to part with '## Regrid variables'
-        # wl = original_data["mesh2d_s1"]
-        # u = original_data["mesh2d_ucx"]
-        # v = original_data["mesh2d_ucy"]
-        # p = original_data["mesh2d_Patm"]
+        b = original_data["mesh2d_waterdepth"]
+        wl = original_data["mesh2d_s1"]
+        u = original_data["mesh2d_ucx"]
+        v = original_data["mesh2d_ucy"]
+        p = original_data["mesh2d_Patm"]
 
     ## Make regular grid
     x_grid = _convert_coordinate_to_regular_grid(x)[0]
@@ -176,8 +176,8 @@ def extract_data(filename: str, savename: str = None):
     ## Regrid variables
     print("\nProcessing bathymetry")
     t0 = time.perf_counter()
-    with xr.open_dataset(filename) as original_data:
-        b = original_data["mesh2d_waterdepth"]
+    # with xr.open_dataset(filename) as original_data:
+    #     b = original_data["mesh2d_waterdepth"]
     data["b"] = (("y", "x"), _regrid_variable_map(b, grid_map, index=1)[0, :, :])
     data.b.attrs["long_name"] = "Water depth"
     data.b.attrs["units"] = "m"
@@ -187,8 +187,8 @@ def extract_data(filename: str, savename: str = None):
 
     print("\nProcessing water levels")
     t0 = time.perf_counter()
-    with xr.open_dataset(filename) as original_data:
-        wl = original_data["mesh2d_s1"]
+    # with xr.open_dataset(filename) as original_data:
+    #     wl = original_data["mesh2d_s1"]
     data["wl"] = (("t", "y", "x"), _regrid_variable_map(wl, grid_map))
     data.wl.attrs["long_name"] = "Water level"
     data.wl.attrs["units"] = "m"
@@ -198,8 +198,8 @@ def extract_data(filename: str, savename: str = None):
 
     print("\nProcessing zonal flow velocity")
     t0 = time.perf_counter()
-    with xr.open_dataset(filename) as original_data:
-        u = original_data["mesh2d_ucx"]
+    # with xr.open_dataset(filename) as original_data:
+    #     u = original_data["mesh2d_ucx"]
     data["u"] = (("t", "y", "x"), _regrid_variable_map(u, grid_map))
     data.u.attrs["long_name"] = "Zonal flow velocity"
     data.u.attrs["units"] = "m s-1"
@@ -209,8 +209,8 @@ def extract_data(filename: str, savename: str = None):
 
     print("\nProcessing meridional flow velocity")
     t0 = time.perf_counter()
-    with xr.open_dataset(filename) as original_data:
-        v = original_data["mesh2d_ucy"]
+    # with xr.open_dataset(filename) as original_data:
+    #     v = original_data["mesh2d_ucy"]
     data["v"] = (("t", "y", "x"), _regrid_variable_map(v, grid_map))
     data.v.attrs["long_name"] = "Meridional flow velocity"
     data.v.attrs["units"] = "m s-1"
@@ -220,8 +220,8 @@ def extract_data(filename: str, savename: str = None):
 
     print("\nProcessing atmospheric pressure")
     t0 = time.perf_counter()
-    with xr.open_dataset(filename) as original_data:
-        p = original_data["mesh2d_Patm"]
+    # with xr.open_dataset(filename) as original_data:
+    #     p = original_data["mesh2d_Patm"]
     data["p"] = (("t", "y", "x"), _regrid_variable_map(p, grid_map))
     data.p.attrs["long_name"] = "Atmospheric pressure near surface"
     data.p.attrs["units"] = "N m-2"
@@ -233,7 +233,7 @@ def extract_data(filename: str, savename: str = None):
 
     if savename is not None:
         t0 = time.perf_counter()
-        encoding = {var: {"zlib": True, "complevel": 1, "least_significant_digit": 9} for var in data}
+        encoding = {var: {"zlib": True, "complevel": 1, "least_significant_digit": 6} for var in data}
         data.to_netcdf(savename, encoding=encoding)
         t1 = time.perf_counter()
         print(f"Data saved to '{savename}' in {t1 - t0:0.0f} seconds")
