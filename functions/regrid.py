@@ -140,6 +140,8 @@ def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
 
 
 def extract_data(filename: str, savename: str = None):
+    t_start = time.perf_counter()
+
     if not filename.endswith(".nc"):
         filename += ".nc"
     print("\nStart processing data")
@@ -231,10 +233,14 @@ def extract_data(filename: str, savename: str = None):
 
     if savename is not None:
         t0 = time.perf_counter()
-        encoding = {var: {"zlib": True, "complevel": 1} for var in data}
+        encoding = {var: {"zlib": True, "complevel": 1, "least_significant_digit": 9} for var in data}
         data.to_netcdf(savename, encoding=encoding)
         t1 = time.perf_counter()
         print(f"Data saved to '{savename}' in {t1 - t0:0.0f} seconds")
+
+    t_end = time.perf_counter()
+    t_total = t_end - t_start
+    print(f"Finished regridding in {t_total:0.0f} seconds ({t_total/60:0.0f} minutes)")
 
     return data
 
