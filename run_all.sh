@@ -9,10 +9,10 @@ Ntasks=5
 FolderList=("./reproduction-an-2012 ./thesis")
 
 # Global settings
-if [ ! -f ../settings.sh ]
+if [ ! -f ./settings.sh ]
   then
-    echo "../settings.sh does not exist. Creating file... Probably it needs to be adjusted manually."
-    cp ../setup/settings.sh.template ../settings.sh
+    echo "./settings.sh does not exist. Creating file... Probably it needs to be adjusted manually."
+    cp ./setup/settings.sh.template ./settings.sh
     exit 1
 fi
 
