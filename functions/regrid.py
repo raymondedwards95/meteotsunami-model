@@ -246,6 +246,9 @@ def extract_data(filename: str, savename: str = None):
 
 
 if __name__ == "__main__":
+    ### Start
+    print(f"Current time: {time.strftime("%Y-%m-%d %H:%M:%S")}")
+
     ### Options
     parser = argparse.ArgumentParser(
         description="Process and regrid model output"
