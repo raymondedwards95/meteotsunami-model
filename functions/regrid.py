@@ -247,7 +247,7 @@ def extract_data(filename: str, savename: str = None):
 
 if __name__ == "__main__":
     ### Start
-    print(f"Current time: {time.strftime("%Y-%m-%d %H:%M:%S")}")
+    print(f"Current time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
 
     ### Options
     parser = argparse.ArgumentParser(
@@ -302,3 +302,6 @@ if __name__ == "__main__":
         time.sleep(2)
         os.remove(filename_original)
         print(f"Original model output is deleted! {filename_original}")
+
+    ### End
+    print(f"Finish time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
