@@ -8,11 +8,14 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker
 import numpy as np
 import xarray as xr
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
+
+
+# make dir for tests
+os.makedirs(f"{os.path.dirname(os.path.realpath(__file__))}/tests", exist_ok=True)
 
 
 def _find_step(x):
@@ -25,17 +28,20 @@ def _find_step(x):
     return np.mean(dx)
 
 
-def convert_to_xarray(t, x, y, p):
+def convert_to_xarray(t, x, y, p, savename=None, close=False):
     """ Function to convert separate numpy arrays for t, x, y and p to a single DataArray for writing to files
 
     Input:
-        t:      1d array with time since 1970-01-01 00:00:00 in seconds (shape = M)
-        x:      1d array with x coordinates in km (shape = Nx)
-        y:      1d array with y coordinates in km (shape = Ny)
-        p:      3d array with pressure in Pa (shape = (M, Ny, Nx))
+        t:          1d array with time since 1970-01-01 00:00:00 in seconds (shape = M)
+        x:          1d array with x coordinates in km (shape = Nx)
+        y:          1d array with y coordinates in km (shape = Ny)
+        p:          3d array with pressure in Pa (shape = (M, Ny, Nx))
+
+    Options:
+        savename:   saves data as an .nc file
 
     Output:
-        data
+        data:       xarray containing data; if 'close=True' then data is None
     """
     data = xr.DataArray(p, dims=list("tyx"), coords={"x": x, "y": y, "t": t})
 
@@ -50,6 +56,20 @@ def convert_to_xarray(t, x, y, p):
     data.t.attrs["long_name"] = "seconds since 1970-01-01 00:00:00"
     data.t.attrs["units"] = "s"
 
+    if savename is not None:
+        if not savename.endswith(".nc"):
+            savename += ".nc"
+        data.to_netcdf(
+            savename,
+            encoding={"__xarray_dataarray_variable__": {
+                "zlib": True,
+                "complevel": 1,
+                "least_significant_digit": 3
+            }}
+        )
+
+    if close:
+        return
     return data
 
 
@@ -227,7 +247,7 @@ if __name__ == "__main__":
     # grid
     x = np.linspace(-5000, 5000, 51)
     y = np.linspace(-10000, 10000, 51)
-    t = np.arange(0, 10) * 3600.
+    t = np.linspace(0, 10, 15) * 3600.
     p = np.zeros((t.size, y.size, x.size), dtype=float)
 
     # compute and convert data
@@ -236,11 +256,22 @@ if __name__ == "__main__":
             for i in range(x.size):
                 p[n,j,i] = f(x[i], y[j], t[n])
 
-    data = convert_to_xarray(t, x, y, p)
-    del t, x, y, p
+    nc_file = f"{os.path.dirname(os.path.realpath(__file__))}/tests/pressure.nc"
+    data = convert_to_xarray(t, x, y, p, savename=nc_file, close=True)
+    del t, x, y, p, data
+
+    # re-read data from .nc-file
+    data = xr.open_dataarray(
+        nc_file,
+        chunks={
+            "t": 1,
+            "x": -1,
+            "y": -1}
+    )
 
     # write data to .amp-file
     write_pressure(data)
+    data.close()
 
     # evaluate performance
     t1 = time.perf_counter()
