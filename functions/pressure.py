@@ -41,7 +41,7 @@ def convert_to_xarray(t, x, y, p, savename=None, close=False):
         savename:   saves data as an .nc file
 
     Output:
-        data:       xarray containing data; if 'close=True' then data is None
+        data:       data-array containing data; if 'close=True' then data is None
     """
     data = xr.DataArray(p, dims=list("tyx"), coords={"x": x, "y": y, "t": t})
 
@@ -67,6 +67,7 @@ def convert_to_xarray(t, x, y, p, savename=None, close=False):
                 "least_significant_digit": 3
             }}
         )
+        print(f"Saved data-array as {savename}")
 
     if close:
         return
