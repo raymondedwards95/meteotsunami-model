@@ -134,7 +134,8 @@ unit1           = Pa
                 print(f"Step {i+1:4.0f} of {t_num:0.0f} ({(i+1)/t_num*100:0.1f}%)")
 
             file.write(
-                f"TIME = {t[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n")
+                f"TIME = {t[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n".replace(".000000", ".0")
+                )
 
             # put nothing if all values are close to reference
             # if ((i != 0) and (np.all(np.isclose(data.values[i, :, :].round(2), 0.)))):  # maybe set rtol and atol?
@@ -153,10 +154,11 @@ unit1           = Pa
                     # loop over x (columns)
                     for m in range(x_num):
                         # write a value and neglect trailing zeros after decimal point
-                        # note: second index for p (i.e. -1*n) to fix coordinate-system
+                        # NOTE: second index for p (i.e. -1*n) to fix coordinate-system
                         # replacement rules:
-                        # 1.: -0.00 -> +0.00
-                        # 2.: 0.00 -> 0
+                        # 0.: values are rounded to two digits
+                        # 1.: -0.00 -> 0.00 (remove minus)
+                        # 2.: 0.00 -> 0 (remove .00)
                         file.write(f"{p[i, -1*n, m]:0.2f} ".replace("-0.00", "0.00").replace(".00", ""))
                     file.write("\n")
 
