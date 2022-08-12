@@ -21,7 +21,7 @@ os.makedirs(bathymetry_dir, exist_ok=True)
 
 
 ### Compute bathymetry
-x = np.concatenate(([0], np.logspace(0, 6, 51)))
+x = np.concatenate(([0], np.logspace(0, 6, 101)))
 y = np.linspace(-2e6, +3e6, 5)
 xx, yy = np.meshgrid(x, y)
 zz = exponential_shelf(xx, a=5e-4)
