@@ -138,11 +138,11 @@ unit1           = Pa
 
             # put nothing if all values are close to reference
             # if ((i != 0) and (np.all(np.isclose(data.values[i, :, :].round(2), 0.)))):  # maybe set rtol and atol?
-            #     pass
-            # if False:
-            #     pass
-            if (i > 0) and np.all(p[i,:,:].round(3) == p[i-1,:,:].round(3)):  # round to 3 numbers?
+            # if (i > 0) and np.all(p[i,:,:].round(3) == p[i-1,:,:].round(3)):  # round to 3 numbers?
+            # NOTE: it does seem it doesn't always work in d3dfm, so for now just write all data, even if it is all zeros
+            if False:
                 print(f"\nSkip writing for hour {t[i]/3600.:0.3f} ({i=})")
+                pass
 
             # write if there are values other than reference
             else:
