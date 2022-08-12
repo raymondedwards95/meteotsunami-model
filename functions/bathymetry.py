@@ -22,16 +22,19 @@ def _convert_to_xarray_2d(x, y, b):
     return xr.DataArray(b, dims=list("yx"), coords={"x": x, "y": y})
 
 
-def convert_to_xarray(x, y, b):
+def convert_to_xarray(x, y, b, savename=None, close=False):
     """ Function to convert separate numpy arrays for x, y and b to a single DataArray for writing to files
 
     Input:
-        x:      1d array with x coordinates in km (shape = Nx)
-        y:      1d array with y coordinates in km (shape = Ny)
-        b:      1d or 2d array with bathymetry data in Pa (shape = (Ny * Nx) OR shape = (Ny, Nx))
+        x:          1d array with x coordinates in km (shape = Nx)
+        y:          1d array with y coordinates in km (shape = Ny)
+        b:          1d or 2d array with bathymetry data in Pa (shape = (Ny * Nx) OR shape = (Ny, Nx))
+
+    Options:
+        savename:   saves data as an .nc file
 
     Output:
-        data
+        data:       data-array containing data; if 'close=True' then data is None
     """
     if b.ndim == 1:
         data = _convert_to_xarray_1d(x, y, b)
@@ -49,6 +52,21 @@ def convert_to_xarray(x, y, b):
     data.y.attrs["long_name"] = "y coordinate"
     data.y.attrs["units"] = "km"
 
+    if savename is not None:
+        if not savename.endswith(".nc"):
+            savename += ".nc"
+        data.to_netcdf(
+            savename,
+            encoding={"__xarray_dataarray_variable__": {
+                "zlib": True,
+                "complevel": 1,
+                "least_significant_digit": 3
+            }}
+        )
+        print(f"Saved data-array as {savename}")
+
+    if close:
+        return
     return data
 
 
