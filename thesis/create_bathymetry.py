@@ -28,7 +28,7 @@ zz = exponential_shelf(xx, a=5e-4)
 
 
 ### Write to file
-data = fb.convert_to_xarray(x, y, zz)
+data = fb.convert_to_xarray(x, y, zz, savename=f"{bathymetry_dir}/exp_00.nc")
 fb.write_bathymetry(data, f"{bathymetry_dir}/exp_00.xyb")
 
 
