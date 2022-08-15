@@ -16,7 +16,8 @@ def exponential_shelf(x, h=20, a=1e-5):
 
 
 ### Paths
-bathymetry_dir = os.path.dirname(os.path.realpath(__file__)) + "/bathymetry"
+script_dir = os.path.dirname(os.path.realpath(__file__))
+bathymetry_dir = f"{script_dir}/bathymetry"
 os.makedirs(bathymetry_dir, exist_ok=True)
 
 

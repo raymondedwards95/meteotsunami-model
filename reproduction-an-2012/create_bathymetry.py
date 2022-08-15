@@ -22,7 +22,8 @@ def simple_slope(x, alpha=1/400, d0=0.):
 
 
 ### Paths
-bathymetry_dir = os.path.dirname(os.path.realpath(__file__)) + "/bathymetry"
+script_dir = os.path.dirname(os.path.realpath(__file__))
+bathymetry_dir = f"{script_dir}/bathymetry"
 os.makedirs(bathymetry_dir, exist_ok=True)
 
 
@@ -44,7 +45,7 @@ for i in range(len(cases)):
     zz = simple_slope(xx, slope, depth_0)
 
     ## Write to file
-    data = fb.convert_to_xarray(x, y, zz)
+    data = fb.convert_to_xarray(x, y, zz, savename=f"{bathymetry_dir}/repr_{case:02.0f}.nc")
     fb.write_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}.xyb")
 
     ## Visualize
