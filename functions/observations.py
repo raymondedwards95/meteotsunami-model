@@ -5,6 +5,7 @@ import sys
 
 import matplotlib.axes as mpa
 import matplotlib.pyplot as plt
+import numpy as np
 import numpy.typing as npt
 
 # fix for importing functions below
@@ -16,23 +17,24 @@ class ObservationPoint():
     """ Single point for observation
 
     Attributes:
-        x:      x-coordinate
-        y:      y-coordinate
+        x:      x-coordinate (in meters)
+        y:      y-coordinate (in meters)
         name:   (unique) name
     """
 
-    def __init__(self, x: Numeric, y: Numeric, name: str = "") -> None:
+    def __init__(self, x: Numeric, y: Numeric, name: str = "", scale: Numeric=1) -> None:
         """ Create an observation point
 
         Input:
-            x:      x-coordinate
-            y:      y-coordinate
+            x:      x-coordinate (in meters)
+            y:      y-coordinate (in meters)
 
         Options:
             name:   (unique) name
+            scale:  value to multiply x and y with (default=1)
         """
-        self.x = x
-        self.y = y
+        self.x = scale * x
+        self.y = scale * y
         self.name = name
 
     def __str__(self):
@@ -44,7 +46,13 @@ class ObservationPoint():
         Input:
             ax:     existing Axes object
         """
-        ax.plot(self.x, self.y, "o", markersize=5, label=self.name)
+        ax.plot(
+            self.x / 1000.,
+            self.y / 1000.,
+            "o",
+            markersize=5,
+            label=self.name
+        )
         return ax
 
 
@@ -52,32 +60,35 @@ class ObservationCrossSection():
     """ Lines for observation consisting of two or more points
 
     Attributes:
-        x:      x-coordinates of connecting points
-        y:      y-coordinates of connecting points
+        x:      x-coordinates of connecting points (in meters)
+        y:      y-coordinates of connecting points (in meters)
         name:   (unique) name
         n:      number of points
     """
 
-    def __init__(self, x: npt.ArrayLike, y: npt.ArrayLike, name: str = "") -> None:
+    def __init__(self, x: npt.ArrayLike, y: npt.ArrayLike, name: str="", scale: Numeric=1) -> None:
         """ Create an observation point
 
         Input:
-            x:      array of x-coordinates
-            y:      array of y-coordinates
+            x:      array of x-coordinates (in meters)
+            y:      array of y-coordinates (in meters)
 
         Options:
             name:   (unique) name
+            scale:  value to multiply x and y with (default=1)
         """
-        self.x = list(x)
-        self.y = list(y)
-        self.n = len(x)
+        self.x = scale * np.array(x)
+        self.y = scale * np.array(y)
+        self.n = np.size(x)
         self.name = name
 
-        assert len(x) > 1
-        assert len(x) == len(y)
+        assert np.size(x) > 1
+        assert np.size(x) == np.size(y)
+        assert np.ndim(x) == 1
+        assert np.ndim(x) == np.ndim(y)
 
     def __str__(self):
-        return f"Observation cross-section '{self.name}' between points p_start=({self.x[0]:.0e}, {self.y[0]:.0e}) and p_end=({self.x[-1]:.0e}, {self.y[-1]:.0e})".replace("e+00", "")
+        return f"Observation cross-section '{self.name}' with {self.n} points between p_start=({self.x[0]:.0e}, {self.y[0]:.0e}) and p_end=({self.x[-1]:.0e}, {self.y[-1]:.0e})".replace("e+00", "")
 
     def plot(self, ax: mpa.Axes) -> mpa.Axes:
         """ Plot lines on an existing Axes object
@@ -85,7 +96,13 @@ class ObservationCrossSection():
         Input:
             ax:     existing Axes object
         """
-        ax.plot(self.x, self.y, "-o", markersize=5, label=self.name)
+        ax.plot(
+            self.x / 1000.,
+            self.y / 1000.,
+            "-o",
+            markersize=5,
+            label=self.name
+        )
         return ax
 
 
@@ -148,7 +165,7 @@ def write_observations(data: npt.ArrayLike, filename: str) -> None:
     return
 
 
-def plot_observations(data: npt.ArrayLike, savename: str=None, keep_open: bool=False) -> plt.Figure:
+def plot_observations(data: npt.ArrayLike, savename: str, keep_open: bool=False) -> plt.Figure:
     """ Visualise observation points and lines
 
     Input:
@@ -180,8 +197,8 @@ def plot_observations(data: npt.ArrayLike, savename: str=None, keep_open: bool=F
     ## Layout part 2
     ax.grid()
     ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
-    ax.set_xlabel("$x$ [m]")
-    ax.set_ylabel("$y$ [m]")
+    ax.set_xlabel("$x$ [km]")
+    ax.set_ylabel("$y$ [km]")
 
     ## End
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
@@ -196,12 +213,12 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.realpath(__file__))
     obs_dir = f"{script_dir}/tests/obs"
 
-    obs_0 = ObservationPoint(name="Center", x=0, y=0)
-    obs_1 = ObservationPoint(name="Point", x=1, y=1)
-    obs_2 = ObservationCrossSection(name="Line", x=[-3, 3], y=[3, 3])
-    obs_3 = ObservationCrossSection(name="Diagonal", x=[-2, 3], y=[-4, 1])
-    obs_4 = ObservationCrossSection(name="Curve", x=[-2, 0, -1], y=[-3, 1, 2])
-    obs_5 = ObservationCrossSection(name="Square", x=[-4, -4 ,4, 4], y=[-4, 4, 4, -4])
+    obs_0 = ObservationPoint(name="Center", x=0, y=0, scale=1e3)
+    obs_1 = ObservationPoint(name="Point", x=1, y=1, scale=1e3)
+    obs_2 = ObservationCrossSection(name="Line", x=[-3, 3], y=[3, 3], scale=1e3)
+    obs_3 = ObservationCrossSection(name="Diagonal", x=[-2, 3], y=[-4, 1], scale=1e3)
+    obs_4 = ObservationCrossSection(name="Curve", x=[-2, 0, -1], y=[-3, 1, 2], scale=1e3)
+    obs_5 = ObservationCrossSection(name="Square", x=[-4, -4 ,4, 4], y=[-4, 4, 4, -4], scale=1e3)
 
     data = [obs_0, obs_1, obs_2, obs_3, obs_4, obs_5]
 
