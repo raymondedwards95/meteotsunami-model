@@ -3,42 +3,77 @@
 import os
 import sys
 
+import numpy.typing as npt
+
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 
 
 class ObservationPoint():
-    def __init__(self, name: str="", x: float=0, y: float=0):
-        self.name = name
+    """ Single point for observation
+
+    Attributes:
+        x:      x-coordinate
+        y:      y-coordinate
+        name:   (unique) name
+    """
+
+    def __init__(self, x: Numeric, y: Numeric, name: str = "") -> None:
+        """ Create an observation point
+
+        Input:
+            x:      x-coordinate
+            y:      y-coordinate
+
+        Options:
+            name:   (unique) name
+        """
         self.x = x
         self.y = y
+        self.name = name
 
     def __str__(self):
         return f"Observation point '{self.name}'' at x={self.x:.0e} and y={self.y:.0e}".replace("e+00", "")
 
 
 class ObservationCrossSection():
-    def __init__(self, name: str="", x: list=[0, 1], y: list=[0, 1]):
-        assert isinstance(x, list)
-        assert isinstance(y, list)
+    """ Lines for observation consisting of two or more points
+
+    Attributes:
+        x:      x-coordinates of connecting points
+        y:      y-coordinates of connecting points
+        name:   (unique) name
+        n:      number of points
+    """
+
+    def __init__(self, x: npt.ArrayLike, y: npt.ArrayLike, name: str = "") -> None:
+        """ Create an observation point
+
+        Input:
+            x:      array of x-coordinates
+            y:      array of y-coordinates
+
+        Options:
+            name:   (unique) name
+        """
+        self.x = list(x)
+        self.y = list(y)
+        self.n = len(x)
+        self.name = name
+
         assert len(x) > 1
         assert len(x) == len(y)
-
-        self.name = name
-        self.x = x
-        self.y = y
-        self.n = len(x)
 
     def __str__(self):
         return f"Observation cross-section '{self.name}' between points p_start=({self.x[0]:.0e}, {self.y[0]:.0e}) and p_end=({self.x[-1]:.0e}, {self.y[-1]:.0e})".replace("e+00", "")
 
 
-def write_observations(data: list, filename: str):
+def write_observations(data: npt.ArrayLike, filename: str) -> None:
     """ Write observation points and observation cross sections to files
     Input:
-        data:       List of observation points and observation cross sections
-        filename:   Name of file to write (extensions are added automatically)
+        data:       list of observation points and observation cross sections
+        filename:   name of file to write (extensions are added automatically)
     """
     print("\nWriting observation points and cross-sections")
 
@@ -51,9 +86,9 @@ def write_observations(data: list, filename: str):
     filename_points = filename + ".xyn"
     filename_sections = filename + "_crs.pli"
 
-    assert isinstance(data, list)
-
     # Sort points and cross sections
+    data = list(data)
+
     points = []
     sections = []
 
@@ -94,7 +129,7 @@ def write_observations(data: list, filename: str):
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    obs_dir = f"{script_dir}/obs"
+    obs_dir = f"{script_dir}/tests/obs"
 
     obs_0 = ObservationPoint(name="Center", x=0, y=0)
     obs_1 = ObservationPoint(name="Point", x=1, y=1)
