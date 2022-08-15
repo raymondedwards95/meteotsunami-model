@@ -15,7 +15,8 @@ x_max = 1e6
 y_min = -1e7
 y_max = +1e7
 
-obs_dir = f"{os.path.dirname(os.path.realpath(__file__))}/obs"
+script_dir = os.path.dirname(os.path.realpath(__file__))
+obs_dir = f"{script_dir}/obs"
 os.makedirs(obs_dir, exist_ok=True)
 
 
