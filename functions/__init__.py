@@ -1,6 +1,5 @@
 """ Global options """
 from typing import TypeAlias, Union
-import numpy.typing as npt
 import numpy as np
 import seaborn as sns
 

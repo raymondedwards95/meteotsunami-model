@@ -2,7 +2,6 @@
 
 import os
 import sys
-from typing import Union
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
