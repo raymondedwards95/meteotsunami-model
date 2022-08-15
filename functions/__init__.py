@@ -16,5 +16,8 @@ FIGSIZE_SQUARE = (7, 7)
 
 FIG_DPI = 300
 
+### Figure save options
+FIG_PIL_KWARGS = {"optimize": True, "compress_level": 9}
+
 ### Type Hints
 Numeric: TypeAlias = Union[int, float, np.integer, np.floating]

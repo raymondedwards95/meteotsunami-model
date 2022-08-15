@@ -2,6 +2,7 @@
 
 import os
 import sys
+from typing import Tuple
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
@@ -119,7 +120,7 @@ def write_bathymetry(data: xr.DataArray, filename) -> None:
     print(f"Finished writing to '{filename}'")
 
 
-def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, keep_open: bool=False) -> None:
+def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, keep_open: bool=False) -> Tuple[plt.Figure]:
     """ Function to visualize bathymetry data
 
     Input:
@@ -159,33 +160,33 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
 
     ## Figure 1 - cross-section
     savename = f"{filename}_cross"
-    fig, ax = plt.subplots(1, 1)
-    fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
-    fig.set_tight_layout(True)
-    ax.plot(x / 1000., b[i, :])
-    _ylims = ax.get_ylim()
-    ax.fill_between(x / 1000., _ylims[0], b[i, :], alpha=0.1)
-    ax.set_title(f"Bottom Profile Cross-Section at $y={y[i]}$")
-    ax.set_xlim(0, xmax)
-    ax.set_ylim(_ylims)
-    ax.set_xlabel("$x$ [km]")
-    ax.set_ylabel("Bed Level [m]")
-    ax.grid()
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    fig_1, ax_1 = plt.subplots(1, 1)
+    fig_1.set_size_inches(FIGSIZE_NORMAL)
+    fig_1.set_dpi(FIG_DPI)
+    fig_1.set_tight_layout(True)
+    ax_1.plot(x / 1000., b[i, :])
+    _ylims = ax_1.get_ylim()
+    ax_1.fill_between(x / 1000., _ylims[0], b[i, :], alpha=0.1)
+    ax_1.set_title(f"Bottom Profile Cross-Section at $y={y[i]}$")
+    ax_1.set_xlim(0, xmax)
+    ax_1.set_ylim(_ylims)
+    ax_1.set_xlabel("$x$ [km]")
+    ax_1.set_ylabel("Bed Level [m]")
+    ax_1.grid()
+    fig_1.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     if not keep_open:
-        plt.close(fig)
+        plt.close(fig_1)
     print(f"Saved figure '{savename}'")
 
     ## Figure 2 - map
     savename = f"{filename}_contour"
-    fig, ax = plt.subplots(1, 1)
-    fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
-    fig.set_tight_layout(True)
-    div = make_axes_locatable(ax)
+    fig_2, ax_2 = plt.subplots(1, 1)
+    fig_2.set_size_inches(FIGSIZE_NORMAL)
+    fig_2.set_dpi(FIG_DPI)
+    fig_2.set_tight_layout(True)
+    div = make_axes_locatable(ax_2)
     cax = div.append_axes("right", "5%", "5%")
-    cont = ax.contourf(
+    cont = ax_2.contourf(
         x / 1000.,
         y / 1000.,
         b,
@@ -194,20 +195,20 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
         vmin=b_min,
         vmax=b_max,
     )
-    cbar = fig.colorbar(cont, cax=cax)
+    cbar = fig_2.colorbar(cont, cax=cax)
     cbar.set_label("Water Depth [m]")
     cbar.set_ticks(np.linspace(0, b_min, 6))
     cbar.set_ticklabels([f"{ticklabel:0.0f}" for ticklabel in np.linspace(0, -1. * b_min, 6)])
-    ax.set_title(f"Bottom Profile")
-    ax.set_xlim(0, xmax)
-    ax.set_xlabel("$x$ [km]")
-    ax.set_ylabel("$y$ [km]")
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    ax_2.set_title(f"Bottom Profile")
+    ax_2.set_xlim(0, xmax)
+    ax_2.set_xlabel("$x$ [km]")
+    ax_2.set_ylabel("$y$ [km]")
+    fig_2.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     if not keep_open:
-        plt.close(fig)
+        plt.close(fig_2)
     print(f"Saved figure '{savename}'")
 
-    return
+    return (fig_1, fig_2)
 
 
 if __name__ == "__main__":
