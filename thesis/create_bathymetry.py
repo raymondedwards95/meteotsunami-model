@@ -2,12 +2,16 @@
 
 import os
 import sys
+import time
 
 import numpy as np
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.bathymetry as fb
+
+t0 = time.perf_counter()
+print(f"\nStart creating bathymetry-files for exp")
 
 
 ### Function
@@ -34,6 +38,9 @@ fb.write_bathymetry(data, f"{bathymetry_dir}/exp_00.xyb")
 
 
 ### Visualize
-fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_exp_00", xmax=10e3)
+fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_exp_00", xmax=10e3, keep_open=False)
 
-print("Finished creating bathymetry-files")
+
+### End
+t1 = time.perf_counter()
+print(f"\nFinished creating bathymetry-files for exp in {t1-t0:0.1f} seconds")
