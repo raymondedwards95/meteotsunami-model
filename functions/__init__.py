@@ -1,5 +1,7 @@
 """ Global options """
-
+from typing import TypeAlias, Union
+import numpy.typing as npt
+import numpy as np
 import seaborn as sns
 
 ### Colors
@@ -14,3 +16,6 @@ FIGSIZE_SMALL = (3, 2)
 FIGSIZE_SQUARE = (7, 7)
 
 FIG_DPI = 300
+
+### Type Hints
+Numeric: TypeAlias = Union[int, float, np.integer, np.floating]

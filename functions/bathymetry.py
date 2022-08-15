@@ -2,10 +2,12 @@
 
 import os
 import sys
+from typing import Union
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.typing as npt
 import xarray as xr
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
@@ -14,24 +16,37 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 
 
-def _convert_to_xarray_1d(x, y, b):
+def _convert_to_xarray_1d(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike) -> xr.DataArray:
+    if np.ndim(x) != 1:
+        raise ValueError(f"'x' should be 1-dimensional, instead of {np.ndim(x)}")
+    if np.ndim(y) != 1:
+        raise ValueError(f"'y' should be 1-dimensional, instead of {np.ndim(x)}")
+    if np.ndim(b) != 1:
+        raise ValueError(f"'b' should be 1-dimensional, instead of {np.ndim(x)}")
     raise NotImplementedError()
 
 
-def _convert_to_xarray_2d(x, y, b):
+def _convert_to_xarray_2d(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike) -> xr.DataArray:
+    if np.ndim(x) != 1:
+        raise ValueError(f"'x' should be 1-dimensional, instead of {np.ndim(x)}")
+    if np.ndim(y) != 1:
+        raise ValueError(f"'y' should be 1-dimensional, instead of {np.ndim(x)}")
+    if np.ndim(b) != 2:
+        raise ValueError(f"'b' should be 2-dimensional, instead of {np.ndim(x)}")
     return xr.DataArray(b, dims=list("yx"), coords={"x": x, "y": y})
 
 
-def convert_to_xarray(x, y, b, savename=None, close=False):
+def convert_to_xarray(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike, savename: str=None, close: bool=False) -> xr.DataArray | None:
     """ Function to convert separate numpy arrays for x, y and b to a single DataArray for writing to files
 
     Input:
         x:          1d array with x coordinates in km (shape = Nx)
         y:          1d array with y coordinates in km (shape = Ny)
-        b:          1d or 2d array with bathymetry data in Pa (shape = (Ny * Nx) OR shape = (Ny, Nx))
+        b:          1d or 2d array with bathymetry data in m (shape = (Ny * Nx) OR shape = (Ny, Nx))
 
     Options:
         savename:   saves data as an .nc file
+        close:      closes data, if 'close=False', then data will be returned
 
     Output:
         data:       data-array containing data; if 'close=True' then data is None
@@ -41,7 +56,7 @@ def convert_to_xarray(x, y, b, savename=None, close=False):
     elif b.ndim == 2:
         data = _convert_to_xarray_2d(x, y, b)
     else:
-        raise ValueError(f"{b.ndim} dimensions is not supported (max dim is 2")
+        raise ValueError(f"{b.ndim} dimensions is not supported for 'b' (max dim is 2")
 
     data.attrs["long_name"] = "bed level"
     data.attrs["units"] = "m"
@@ -70,17 +85,16 @@ def convert_to_xarray(x, y, b, savename=None, close=False):
     return data
 
 
-def write_bathymetry(data, filename=None):
+def write_bathymetry(data: xr.DataArray, filename) -> None:
     """ Function to write bathymetry data to a `bathymetry.xyb` file for use with Delft3D-FM
 
     Input:
-        data:   bathymetry and coordinate data
+        data:       bathymetry and coordinate data
+        filename:   .xyb file name
     """
     ## prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
-    if filename is None:
-        filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/bathymetry"
     if not filename.endswith(".xyb"):
         filename += ".xyb"
     print(f"Writing bathymetry data to '{filename}'")
@@ -106,15 +120,16 @@ def write_bathymetry(data, filename=None):
     print(f"Finished writing to '{filename}'")
 
 
-def plot_bathymetry(data, filename=None, xmax=None, keep_open=False):
+def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, keep_open: bool=False) -> None:
     """ Function to visualize bathymetry data
 
     Input:
         data:       bathymetry and coordinate data
 
-    Parameters:
+    Options:
         filename:   name of figures
         xmax:       upper limit of x
+        keep_open:  keep figures open after finishing
     """
     ## Prepare
     assert type(data) == xr.DataArray, "Input is not a DataArray"
@@ -199,9 +214,13 @@ def plot_bathymetry(data, filename=None, xmax=None, keep_open=False):
 if __name__ == "__main__":
     import time
 
+    # Paths
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    bathymetry_dir = f"{script_dir}/tests/bathymetry"
+
     # function for computing 'bathymetry'
     @np.vectorize
-    def function(x, y):
+    def function(x: Numeric, y: Numeric) -> Numeric:
         return -1. * np.min([x / 1000., 200.])
 
     t0 = time.perf_counter()
@@ -212,17 +231,17 @@ if __name__ == "__main__":
     xx, yy = np.meshgrid(x, y)
     b = function(xx, yy)
 
-    data = convert_to_xarray(x, y, b)
+    data = convert_to_xarray(x, y, b, savename=bathymetry_dir)
     del x, y, b
 
     # write data to .xyb-file
-    write_bathymetry(data)
+    write_bathymetry(data, filename=bathymetry_dir)
 
     # evaluate performance
     t1 = time.perf_counter()
     print(f"Created test bathymetry data in {t1 - t0 :0.2f} seconds.")
 
-    plot_bathymetry(data)
+    plot_bathymetry(data, filename=bathymetry_dir)
 
     # evaluate performance
     t2 = time.perf_counter()
