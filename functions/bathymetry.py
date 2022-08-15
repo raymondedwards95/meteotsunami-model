@@ -83,7 +83,7 @@ def write_bathymetry(data, filename=None):
         filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/bathymetry"
     if not filename.endswith(".xyb"):
         filename += ".xyb"
-    print(f"\nWriting bathymetry data to '{filename}'")
+    print(f"Writing bathymetry data to '{filename}'")
 
     x = data.x.values
     y = data.y.values
@@ -123,7 +123,7 @@ def plot_bathymetry(data, filename=None, xmax=None, keep_open=False):
         filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/fig_bathymetry"
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
-    print(f"\nVisualizing bathymetry in '{filename}'")
+    print(f"Visualizing bathymetry in '{filename}'")
 
     ## Extract data
     x = data.x.values
