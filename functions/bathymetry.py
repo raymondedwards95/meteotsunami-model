@@ -20,9 +20,9 @@ def _convert_to_xarray_1d(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike) 
     if np.ndim(x) != 1:
         raise ValueError(f"'x' should be 1-dimensional, instead of {np.ndim(x)}")
     if np.ndim(y) != 1:
-        raise ValueError(f"'y' should be 1-dimensional, instead of {np.ndim(x)}")
+        raise ValueError(f"'y' should be 1-dimensional, instead of {np.ndim(y)}")
     if np.ndim(b) != 1:
-        raise ValueError(f"'b' should be 1-dimensional, instead of {np.ndim(x)}")
+        raise ValueError(f"'b' should be 1-dimensional, instead of {np.ndim(b)}")
     raise NotImplementedError()
 
 
@@ -30,9 +30,9 @@ def _convert_to_xarray_2d(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike) 
     if np.ndim(x) != 1:
         raise ValueError(f"'x' should be 1-dimensional, instead of {np.ndim(x)}")
     if np.ndim(y) != 1:
-        raise ValueError(f"'y' should be 1-dimensional, instead of {np.ndim(x)}")
+        raise ValueError(f"'y' should be 1-dimensional, instead of {np.ndim(y)}")
     if np.ndim(b) != 2:
-        raise ValueError(f"'b' should be 2-dimensional, instead of {np.ndim(x)}")
+        raise ValueError(f"'b' should be 2-dimensional, instead of {np.ndim(b)}")
     return xr.DataArray(b, dims=list("yx"), coords={"x": x, "y": y})
 
 
