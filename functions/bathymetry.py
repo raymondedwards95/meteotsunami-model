@@ -2,6 +2,7 @@
 
 import os
 import sys
+import time
 from typing import Tuple
 
 import cmocean as cmo
@@ -51,6 +52,8 @@ def convert_to_xarray(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike, save
     Output:
         data:       data-array containing data; if 'close=True' then data is None
     """
+    t0 = time.perf_counter_ns()
+
     if b.ndim == 1:
         data = _convert_to_xarray_1d(x, y, b)
     elif b.ndim == 2:
@@ -80,6 +83,9 @@ def convert_to_xarray(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike, save
         )
         print(f"Saved data-array as {savename}")
 
+    t1 = time.perf_counter_ns()
+    print(f"Finished converting bathymetry data to a data-array in {(t1-t0)*1e-9:0.3f} seconds")
+
     if close:
         return
     return data
@@ -93,6 +99,7 @@ def write_bathymetry(data: xr.DataArray, filename) -> None:
         filename:   .xyb file name
     """
     ## prepare
+    t0 = time.perf_counter_ns()
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
     if not filename.endswith(".xyb"):
@@ -117,7 +124,8 @@ def write_bathymetry(data: xr.DataArray, filename) -> None:
                 # write a set of x y b on one line + remove trailing zeros
                 file.write(f"{_x:0.2f} {y[j]:0.2f} {b[j, i]:0.2f}\n".replace(".00", ""))
 
-    print(f"Finished writing to '{filename}'")
+    t1 = time.perf_counter_ns()
+    print(f"Finished writing to '{filename}' in {(t1-t0)*1e-9:0.3f} seconds")
 
 
 def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, keep_open: bool=False) -> Tuple[plt.Figure]:
@@ -132,6 +140,7 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
         keep_open:  keep figures open after finishing
     """
     ## Prepare
+    t0 = time.perf_counter_ns()
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
     if filename is None:
@@ -208,24 +217,23 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
         plt.close(fig_2)
     print(f"Saved figure '{savename}'")
 
+    t1 = time.perf_counter_ns()
+    print(f"Finished visualising in {(t1-t0)*1e-9:0.3f} seconds")
+
     return (fig_1, fig_2)
 
 
 if __name__ == "__main__":
-    import time
-
-    # Paths
+    # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
     bathymetry_dir = f"{script_dir}/tests/bathymetry"
 
-    # function for computing 'bathymetry'
+    # Define function for computing 'bathymetry'
     @np.vectorize
     def function(x: Numeric, y: Numeric) -> Numeric:
         return -1. * np.min([x / 1000., 200.])
 
-    t0 = time.perf_counter()
-
-    # grid and data
+    # Create grid and compute data
     x = np.linspace(0., 1e6, 5, dtype=float)
     y = np.linspace(-1e7, +1e7, 5, dtype=float)
     xx, yy = np.meshgrid(x, y)
@@ -234,17 +242,8 @@ if __name__ == "__main__":
     data = convert_to_xarray(x, y, b, savename=bathymetry_dir)
     del x, y, b
 
-    # write data to .xyb-file
+    # Write data to .xyb-file
     write_bathymetry(data, filename=bathymetry_dir)
 
-    # evaluate performance
-    t1 = time.perf_counter()
-    print(f"Created test bathymetry data in {t1 - t0 :0.2f} seconds.")
-
+    # Visualise data
     plot_bathymetry(data, filename=bathymetry_dir)
-
-    # evaluate performance
-    t2 = time.perf_counter()
-    print(f"Visualized test bathymetry data in {t2 - t1 :0.2f} seconds.")
-
-    #plt.show()
