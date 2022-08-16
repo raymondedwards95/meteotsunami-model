@@ -4,7 +4,6 @@ import os
 import sys
 import time
 
-import matplotlib.axes as mpa
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
@@ -41,7 +40,7 @@ class ObservationPoint():
     def __str__(self):
         return f"Observation point '{self.name}'' at x={self.x:.0e} and y={self.y:.0e}".replace("e+00", "")
 
-    def plot(self, ax: mpa.Axes) -> mpa.Axes:
+    def plot(self, ax: plt.Axes) -> plt.Axes:
         """ Plot point on an existing Axes object
 
         Input:
@@ -91,7 +90,7 @@ class ObservationCrossSection():
     def __str__(self):
         return f"Observation cross-section '{self.name}' with {self.n} points between p_start=({self.x[0]:.0e}, {self.y[0]:.0e}) and p_end=({self.x[-1]:.0e}, {self.y[-1]:.0e})".replace("e+00", "")
 
-    def plot(self, ax: mpa.Axes) -> mpa.Axes:
+    def plot(self, ax: plt.Axes) -> plt.Axes:
         """ Plot lines on an existing Axes object
 
         Input:
@@ -221,8 +220,6 @@ def plot_observations(data: npt.ArrayLike, savename: str, keep_open: bool=False)
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.realpath(__file__))
     obs_dir = f"{script_dir}/tests/obs"
-
-    os.makedirs(obs_dir, exist_ok=True)
 
     obs_0 = ObservationPoint(name="Center", x=0, y=0, scale=1e3)
     obs_1 = ObservationPoint(name="Point", x=1, y=1, scale=1e3)
