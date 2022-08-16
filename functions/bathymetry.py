@@ -81,10 +81,10 @@ def convert_to_xarray(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike, save
                 "least_significant_digit": 3
             }}
         )
-        print(f"Saved data-array as {savename}")
+        print(f"# Saved data-array as {savename}")
 
     t1 = time.perf_counter_ns()
-    print(f"Finished converting bathymetry data to a data-array in {(t1-t0)*1e-9:0.3f} seconds")
+    print(f"# Finished converting bathymetry data to a data-array in {(t1-t0)*1e-9:0.3f} seconds")
 
     if close:
         return
@@ -104,7 +104,7 @@ def write_bathymetry(data: xr.DataArray, filename) -> None:
 
     if not filename.endswith(".xyb"):
         filename += ".xyb"
-    print(f"Writing bathymetry data to '{filename}'")
+    print(f"# Writing bathymetry data to '{filename}'")
 
     x = data.x.values
     y = data.y.values
@@ -125,7 +125,7 @@ def write_bathymetry(data: xr.DataArray, filename) -> None:
                 file.write(f"{_x:0.2f} {y[j]:0.2f} {b[j, i]:0.2f}\n".replace(".00", ""))
 
     t1 = time.perf_counter_ns()
-    print(f"Finished writing to '{filename}' in {(t1-t0)*1e-9:0.3f} seconds")
+    print(f"# Finished writing to '{filename}' in {(t1-t0)*1e-9:0.3f} seconds")
 
 
 def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, keep_open: bool=False) -> Tuple[plt.Figure]:
@@ -147,7 +147,7 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
         filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/fig_bathymetry"
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
-    print(f"Visualizing bathymetry in '{filename}'")
+    print(f"# Visualizing bathymetry in '{filename}'")
 
     ## Extract data
     x = data.x.values
@@ -185,7 +185,7 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
     fig_1.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     if not keep_open:
         plt.close(fig_1)
-    print(f"Saved figure '{savename}'")
+    print(f"# Saved figure '{savename}'")
 
     ## Figure 2 - map
     savename = f"{filename}_contour"
@@ -215,10 +215,10 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
     fig_2.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     if not keep_open:
         plt.close(fig_2)
-    print(f"Saved figure '{savename}'")
+    print(f"# Saved figure '{savename}'")
 
     t1 = time.perf_counter_ns()
-    print(f"Finished visualising in {(t1-t0)*1e-9:0.3f} seconds")
+    print(f"# Finished visualising in {(t1-t0)*1e-9:0.3f} seconds")
 
     return (fig_1, fig_2)
 
