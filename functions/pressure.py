@@ -16,10 +16,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 
 
-# make dir for tests
-os.makedirs(f"{os.path.dirname(os.path.realpath(__file__))}/tests", exist_ok=True)
-
-
 def _find_step(x: npt.ArrayLike):
     """ Find the step between two values in an array """
     dx = np.gradient(x)
@@ -258,7 +254,9 @@ def plot_pressure(data, filename=None, x_scales=None, keep_open=False):
 if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    bathymetry_dir = f"{script_dir}/tests/pressure"
+    pressure_dir = f"{script_dir}/tests/pressure"
+
+    os.makedirs(pressure_dir, exist_ok=True)
 
     # function for computing 'pressure'
     def f(x, y, t):
@@ -276,7 +274,7 @@ if __name__ == "__main__":
             for i in range(x.size):
                 p[n,j,i] = f(x[i], y[j], t[n])
 
-    data = convert_to_xarray(t, x, y, p, savename=bathymetry_dir)
+    data = convert_to_xarray(t, x, y, p, savename=pressure_dir)
     del t, x, y, p
 
     # write data to .amp-file
