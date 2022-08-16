@@ -222,6 +222,8 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.realpath(__file__))
     obs_dir = f"{script_dir}/tests/obs"
 
+    os.makedirs(obs_dir, exist_ok=True)
+
     obs_0 = ObservationPoint(name="Center", x=0, y=0, scale=1e3)
     obs_1 = ObservationPoint(name="Point", x=1, y=1, scale=1e3)
     obs_2 = ObservationCrossSection(name="Line", x=[-3, 3], y=[3, 3], scale=1e3)
