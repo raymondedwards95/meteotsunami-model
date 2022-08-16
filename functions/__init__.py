@@ -1,12 +1,14 @@
 """ Global options """
+import os
 from typing import TypeAlias, Union
+
 import numpy as np
 import seaborn as sns
 
-### Colors
+# Colors
 sns.set_palette(sns.color_palette("muted"))
 
-### Figure size
+# Figure size
 FIGSIZE_NORMAL = (7, 4)
 FIGSIZE_LONG = (7, 9)
 FIGSIZE_HIGH = (7, 6)
@@ -16,8 +18,13 @@ FIGSIZE_SQUARE = (7, 7)
 
 FIG_DPI = 300
 
-### Figure save options
+# Figure save options
 FIG_PIL_KWARGS = {"optimize": True, "compress_level": 9}
 
-### Type Hints
+# Type Hints
 Numeric: TypeAlias = Union[int, float, np.integer, np.floating]
+
+# Paths
+functions_dir = os.path.dirname(os.path.realpath(__file__))
+test_results_dir = f"{functions_dir}/tests"
+os.makedirs(test_results_dir, exist_ok=True)

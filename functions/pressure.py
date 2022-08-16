@@ -16,7 +16,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 
 
-def _find_step(x: npt.ArrayLike):
+def _find_step(x: npt.ArrayLike) -> Numeric:
     """ Find the step between two values in an array """
     dx = np.gradient(x)
 
@@ -26,7 +26,7 @@ def _find_step(x: npt.ArrayLike):
     return np.mean(dx)
 
 
-def convert_to_xarray(t, x, y, p, savename=None, close=False):
+def convert_to_xarray(t: npt.ArrayLike, x: npt.ArrayLike, y: npt.ArrayLike, p: npt.ArrayLike, savename: str=None, close: bool=False) -> xr.DataArray | None:
     """ Function to convert separate numpy arrays for t, x, y and p to a single DataArray for writing to files
 
     Input:
@@ -37,6 +37,7 @@ def convert_to_xarray(t, x, y, p, savename=None, close=False):
 
     Options:
         savename:   saves data as an .nc file
+        close:      closes data-array
 
     Output:
         data:       data-array containing data; if 'close=True' then data is None
@@ -77,18 +78,17 @@ def convert_to_xarray(t, x, y, p, savename=None, close=False):
     return data
 
 
-def write_pressure(data, filename=None):
+def write_pressure(data: xr.DataArray, filename: str) -> None:
     """ Function to write a pressure field to a `pressure.amp` file for use with Delft3D-FM
 
     Input:
-        data:   pressure field and coordinate data
+        data:       pressure field and coordinate data
+        filename:   name of .amp file
     """
     ## prepare
     t0 = time.perf_counter_ns()
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
-    if filename is None:
-        filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/pressure"
     if not filename.endswith(".amp"):
         filename += ".amp"
     print(f"# Writing pressure data to '{filename}'")
@@ -171,16 +171,19 @@ unit1           = Pa
     t1 = time.perf_counter_ns()
     print(f"# Finished writing to '{filename}' in {(t1-t0)*1e-9:0.3f} seconds")
 
+    return
 
-def plot_pressure(data, filename=None, x_scales=None, keep_open=False):
+
+def plot_pressure(data: xr.DataArray, filename: str=None, x_scales: Numeric=None, keep_open: bool=False) -> plt.Figure:
     """ Function to visualize pressure data
 
     Input:
         data:       pressure and coordinate data
 
-    Parameters:
+    Options:
         filename:   name of figures
         x_scales:   lower and upper limit of x (should be a list of length 2)
+        keep_open:  keep figures open after finishing
     """
     ## prepare
     t0 = time.perf_counter_ns()
@@ -256,19 +259,17 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.realpath(__file__))
     pressure_dir = f"{script_dir}/tests/pressure"
 
-    os.makedirs(pressure_dir, exist_ok=True)
-
-    # function for computing 'pressure'
+    # Define function for computing 'pressure'
     def f(x, y, t):
         return np.min([1, t / 5. / 3600.]) * np.sin(x * np.pi / 2000.) * np.sin(y * np.pi / 2000.)
 
-    # grid
+    # Define grid
     x = np.linspace(-5000, 5000, 51)
     y = np.linspace(-10000, 10000, 51)
     t = np.linspace(0, 10, 15) * 3600.
     p = np.zeros((t.size, y.size, x.size), dtype=float)
 
-    # compute and convert data
+    # Compute and convert data
     for n in range(t.size):
         for j in range(y.size):
             for i in range(x.size):
@@ -277,8 +278,8 @@ if __name__ == "__main__":
     data = convert_to_xarray(t, x, y, p, savename=pressure_dir)
     del t, x, y, p
 
-    # write data to .amp-file
-    write_pressure(data)
+    # Write data to .amp-file
+    write_pressure(data, filename=pressure_dir)
 
-    # visualise data
-    plot_pressure(data)
+    # Visualise data
+    plot_pressure(data, filename=pressure_dir)
