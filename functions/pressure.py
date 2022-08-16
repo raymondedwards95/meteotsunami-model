@@ -2,11 +2,13 @@
 
 import os
 import sys
+import time
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
 import matplotlib.ticker
 import numpy as np
+import numpy.typing as npt
 import xarray as xr
 
 # fix for importing functions below
@@ -18,12 +20,12 @@ from functions import *
 os.makedirs(f"{os.path.dirname(os.path.realpath(__file__))}/tests", exist_ok=True)
 
 
-def _find_step(x):
+def _find_step(x: npt.ArrayLike):
     """ Find the step between two values in an array """
     dx = np.gradient(x)
 
     if not np.all(np.isclose(np.mean(dx), dx)):
-        print(f"WARNING: Values are not equally spaced (mean: {np.mean(x)}; sd: {np.std(x)})")
+        print(f"# Values are not equally spaced (mean: {np.mean(x)}; sd: {np.std(x)})")
 
     return np.mean(dx)
 
@@ -43,6 +45,8 @@ def convert_to_xarray(t, x, y, p, savename=None, close=False):
     Output:
         data:       data-array containing data; if 'close=True' then data is None
     """
+    print(f"# Converting pressure data to a data-array")
+    t0 = time.perf_counter_ns()
     data = xr.DataArray(p, dims=list("tyx"), coords={"x": x, "y": y, "t": t})
 
     data.attrs["long_name"] = "atmospheric pressure"
@@ -67,7 +71,10 @@ def convert_to_xarray(t, x, y, p, savename=None, close=False):
                 "least_significant_digit": 3
             }}
         )
-        print(f"Saved data-array as {savename}")
+        print(f"# Saved data-array as {savename}")
+
+    t1 = time.perf_counter_ns()
+    print(f"# Finished converting pressure data to a data-array in {(t1-t0)*1e-9:0.3f} seconds")
 
     if close:
         return
@@ -81,13 +88,14 @@ def write_pressure(data, filename=None):
         data:   pressure field and coordinate data
     """
     ## prepare
+    t0 = time.perf_counter_ns()
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
     if filename is None:
         filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/pressure"
     if not filename.endswith(".amp"):
         filename += ".amp"
-    print(f"Writing pressure data to '{filename}'")
+    print(f"# Writing pressure data to '{filename}'")
 
     x_num = data.x.values.size
     y_num = data.y.values.size
@@ -132,7 +140,7 @@ unit1           = Pa
         for i in range(t_num):
             # progress
             if not (t_num-i-1) % (t_num // t_factor):
-                print(f"Step {i+1:4.0f} of {t_num:0.0f} ({(i+1)/t_num*100:0.1f}%)")
+                print(f"# Step {i+1:4.0f} of {t_num:0.0f} ({(i+1)/t_num*100:0.1f}%)")
 
             file.write(
                 f"TIME = {t[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n".replace(".000000", ".0")
@@ -143,7 +151,7 @@ unit1           = Pa
             # if (i > 0) and np.all(p[i,:,:].round(3) == p[i-1,:,:].round(3)):  # round to 3 numbers?
             # NOTE: it does seem it doesn't always work in d3dfm, so for now just write all data, even if it is all zeros
             if False:
-                print(f"\nSkip writing for hour {t[i]/3600.:0.3f} ({i=})")
+                print(f"# \nSkip writing for hour {t[i]/3600.:0.3f} ({i=})")
                 pass
 
             # write if there are values other than reference
@@ -163,7 +171,9 @@ unit1           = Pa
                         file.write(f"{p[i, -1*n, m]:0.2f} ".replace("-0.00", "0.00").replace(".00", ""))
                     file.write("\n")
 
-    print(f"Finished writing to '{filename}'")
+    ## End
+    t1 = time.perf_counter_ns()
+    print(f"# Finished writing to '{filename}' in {(t1-t0)*1e-9:0.3f} seconds")
 
 
 def plot_pressure(data, filename=None, x_scales=None, keep_open=False):
@@ -177,6 +187,7 @@ def plot_pressure(data, filename=None, x_scales=None, keep_open=False):
         x_scales:   lower and upper limit of x (should be a list of length 2)
     """
     ## prepare
+    t0 = time.perf_counter_ns()
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
     if filename is None:
@@ -184,7 +195,7 @@ def plot_pressure(data, filename=None, x_scales=None, keep_open=False):
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
     savename = f"{filename}_field"
-    print(f"Visualizing pressure field in '{savename}'")
+    print(f"# Visualizing pressure field in '{savename}'")
 
     x = data.x.values
     y = data.y.values
@@ -235,17 +246,23 @@ def plot_pressure(data, filename=None, x_scales=None, keep_open=False):
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
     if not keep_open:
         plt.close(fig)
-    print(f"Saved figure as '{savename}'")
+    print(f"# Saved figure as '{savename}'")
+
+    ## End
+    t1 = time.perf_counter_ns()
+    print(f"# Finished visualising in {(t1-t0)*1e-9:0.3f} seconds")
+
+    return fig
 
 
 if __name__ == "__main__":
-    import time
+    # Define paths
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    bathymetry_dir = f"{script_dir}/tests/pressure"
 
     # function for computing 'pressure'
     def f(x, y, t):
         return np.min([1, t / 5. / 3600.]) * np.sin(x * np.pi / 2000.) * np.sin(y * np.pi / 2000.)
-
-    t0 = time.perf_counter()
 
     # grid
     x = np.linspace(-5000, 5000, 51)
@@ -259,32 +276,11 @@ if __name__ == "__main__":
             for i in range(x.size):
                 p[n,j,i] = f(x[i], y[j], t[n])
 
-    nc_file = f"{os.path.dirname(os.path.realpath(__file__))}/tests/pressure.nc"
-    data = convert_to_xarray(t, x, y, p, savename=nc_file, close=True)
-    del t, x, y, p, data
-
-    # re-read data from .nc-file
-    data = xr.open_dataarray(
-        nc_file,
-        chunks={
-            "t": 1,
-            "x": -1,
-            "y": -1}
-    )
+    data = convert_to_xarray(t, x, y, p, savename=bathymetry_dir)
+    del t, x, y, p
 
     # write data to .amp-file
     write_pressure(data)
-    data.close()
-
-    # evaluate performance
-    t1 = time.perf_counter()
-    print(f"Created test pressure data in {t1 - t0 :0.2f} seconds.")
 
     # visualise data
     plot_pressure(data)
-
-    # evaluate performance
-    t2 = time.perf_counter()
-    print(f"Visualized test pressure data in {t2 - t1 :0.2f} seconds.")
-
-    #plt.show()
