@@ -113,7 +113,7 @@ def write_observations(data: npt.ArrayLike, filename: str) -> None:
         data:       list of observation points and observation cross sections
         filename:   name of file to write (extensions are added automatically)
     """
-    print("\nWriting observation points and cross-sections")
+    print("Writing observation points and cross-sections")
 
     # Path and filenames
     if filename.endswith(".xyn"):

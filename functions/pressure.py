@@ -87,7 +87,7 @@ def write_pressure(data, filename=None):
         filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/pressure"
     if not filename.endswith(".amp"):
         filename += ".amp"
-    print(f"\nWriting pressure data to '{filename}'")
+    print(f"Writing pressure data to '{filename}'")
 
     x_num = data.x.values.size
     y_num = data.y.values.size
@@ -184,7 +184,7 @@ def plot_pressure(data, filename=None, x_scales=None, keep_open=False):
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
     savename = f"{filename}_field"
-    print(f"\nVisualizing pressure field in '{savename}'")
+    print(f"Visualizing pressure field in '{savename}'")
 
     x = data.x.values
     y = data.y.values
