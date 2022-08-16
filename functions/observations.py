@@ -2,6 +2,7 @@
 
 import os
 import sys
+import time
 
 import matplotlib.axes as mpa
 import matplotlib.pyplot as plt
@@ -113,7 +114,8 @@ def write_observations(data: npt.ArrayLike, filename: str) -> None:
         data:       list of observation points and observation cross sections
         filename:   name of file to write (extensions are added automatically)
     """
-    print("Writing observation points and cross-sections")
+    t0 = time.perf_counter_ns()
+    print(f"# Writing observation points and cross-sections")
 
     # Path and filenames
     if filename.endswith(".xyn"):
@@ -136,23 +138,23 @@ def write_observations(data: npt.ArrayLike, filename: str) -> None:
         elif isinstance(element, ObservationCrossSection):
             sections.append(element)
         else:
-            print(f"'{element}' is not an ObservationPoint or ObservationCrossSection")
+            print(f"# '{element}' is not an ObservationPoint or ObservationCrossSection")
 
     # Process points
     if len(points) > 0:
         with open(filename_points, "w") as file:
             for element in points:
-                print(f"* {element}")
+                print(f"# * {element}")
                 _name = element.name.replace("\'", "")
                 file.write(f"{element.x} \t{element.y} \t'{_name}'\n")
 
-    print(f"Finished writing points to '{filename_points}'")
+    print(f"# Finished writing points to '{filename_points}'")
 
     # Process cross sections
     if len(sections) > 0:
         with open(filename_sections, "w") as file:
             for element in sections:
-                print(f"* {element}")
+                print(f"# * {element}")
                 _name = element.name.replace("\'", "")
                 file.write(f"{_name}\n")
                 file.write(f"{element.n} \t2\n")
@@ -160,8 +162,11 @@ def write_observations(data: npt.ArrayLike, filename: str) -> None:
                     file.write(f"\t{element.x[i]} \t{element.y[i]} \n")
                 file.write(f"\n")
 
-    print(f"Finished writing cross-sections to '{filename_sections}'")
+    print(f"# Finished writing cross-sections to '{filename_sections}'")
 
+    # End
+    t1 = time.perf_counter_ns()
+    print(f"# Finished writing observation points and cross-sections in {(t1-t0)*1e-9:0.3f} seconds")
     return
 
 
@@ -175,6 +180,8 @@ def plot_observations(data: npt.ArrayLike, savename: str, keep_open: bool=False)
         savename:   name of figure
         keep_open:  keep figures open after finishing
     """
+    t0 = time.perf_counter_ns()
+
     ## Filename
     if not savename.endswith(".png"):
         savename += "_plot.png"
@@ -202,10 +209,12 @@ def plot_observations(data: npt.ArrayLike, savename: str, keep_open: bool=False)
 
     ## End
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
-    print(f"Saved figure {savename}")
+    print(f"# Saved figure {savename}")
     if not keep_open:
         plt.close("all")
 
+    t1 = time.perf_counter_ns()
+    print(f"# Finished visualising in {(t1-t0)*1e-9:0.3f} seconds")
     return fig
 
 
