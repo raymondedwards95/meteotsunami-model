@@ -52,6 +52,7 @@ def convert_to_xarray(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike, save
     Output:
         data:       data-array containing data; if 'close=True' then data is None
     """
+    print(f"# Converting bathymetry data to a data-array")
     t0 = time.perf_counter_ns()
 
     if b.ndim == 1:
