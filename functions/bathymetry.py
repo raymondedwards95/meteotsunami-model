@@ -230,6 +230,8 @@ if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.realpath(__file__))
     bathymetry_dir = f"{script_dir}/tests/bathymetry"
 
+    os.makedirs(bathymetry_dir, exist_ok=True)
+
     # Define function for computing 'bathymetry'
     @np.vectorize
     def function(x: Numeric, y: Numeric) -> Numeric:
