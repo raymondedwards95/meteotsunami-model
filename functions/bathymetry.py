@@ -218,6 +218,7 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
         plt.close(fig_2)
     print(f"# Saved figure '{savename}'")
 
+    ## End
     t1 = time.perf_counter_ns()
     print(f"# Finished visualising in {(t1-t0)*1e-9:0.3f} seconds")
 
