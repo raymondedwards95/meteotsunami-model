@@ -1,8 +1,10 @@
-""" Creates a file with atmospheric pressure """
+""" Creates files to describe atmospheric pressure for D3D-FM-FLOW for the experiments """
 
 import os
 import sys
+import time
 
+import dask
 import dask.array as da
 import numpy as np
 
@@ -11,11 +13,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.pressure as fp
 
 
-### Directories
-current_dir = os.path.dirname(os.path.realpath(__file__))
-pressure_dir = f"{current_dir}/pressure"
-
-os.makedirs(pressure_dir, exist_ok=True)
+### Start
+t0 = time.perf_counter()
+print(f"\nStart creating bathymetry-files for exp")
 
 
 ### Parameters
@@ -42,6 +42,13 @@ t_max = 50. * 3600.
 t_step = 3600. / 6.
 
 
+### Directories
+current_dir = os.path.dirname(os.path.realpath(__file__))
+pressure_dir = f"{current_dir}/pressure"
+
+os.makedirs(pressure_dir, exist_ok=True)
+
+
 ### Convert parameters
 x0_list, a_list, p0_list, U_list = np.meshgrid(x0_list, a_list, p0_list, U_list, indexing="ij")
 x0_list = np.ravel(x0_list)
@@ -50,19 +57,19 @@ p0_list = np.ravel(p0_list)
 U_list = np.ravel(U_list)
 
 cases = np.arange(len(U_list))
-num_cases = len(cases)
+num_cases = np.size(cases)
 
 
 ### Check parameters
-assert len(U_list) == num_cases
-assert len(a_list) == num_cases
-assert len(p0_list) == num_cases
-assert len(x0_list) == num_cases
+assert np.size(U_list) == num_cases
+assert np.size(a_list) == num_cases
+assert np.size(p0_list) == num_cases
+assert np.size(x0_list) == num_cases
 
 
 ### Save parameters to file
 print("\nPressure fields for the following cases are computed (case, U, a, p0, x0)")
-with open(f"{current_dir}/parameters_pressure.txt", "w") as file:
+with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
     for i in range(num_cases):
         line = f"{cases[i]:02.0f},{U_list[i]:0.0f},{a_list[i]:0.0f},{p0_list[i]:0.0f},{x0_list[i]:0.0f}"
         print(line.replace(",", "\t"))
@@ -75,9 +82,9 @@ with open(f"{current_dir}/parameters_pressure.txt", "w") as file:
 x_num = int((x_max - x_min) / x_step + 1)
 y_num = int((y_max - y_min) / y_step + 1)
 
-x = da.linspace(x_min, x_max, x_num, chunks=256)
-y = da.linspace(y_min, y_max, y_num, chunks=1024)
-t = da.arange(t_min, t_max+1, t_step, chunks=128)
+x = da.linspace(x_min, x_max, x_num, chunks="auto")
+y = da.linspace(y_min, y_max, y_num, chunks="auto")
+t = da.arange(t_min, t_max+1, t_step, chunks=20)
 
 t_num = t.size
 
@@ -87,9 +94,25 @@ print("Grid parameters:")
 print(f"{x.size=}\t\t{y.size=}\t\t{t.size=}")
 print(f"{x.chunksize=}\t{y.chunksize=}\t{t.chunksize=}")
 
-
 ### Function
 def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
+    """ Pressure disturbance distribution used for experiments
+
+    Input:
+        x:  array of x-coordinates
+        y:  array of y-coordinates
+        t:  array of time-coordinates
+
+    Options:
+        t0: growth-timescale factor
+        U:  travel velocity of pressure disturbance
+        a:  size of pressure disturbance
+        p0: magnitude of pressure disturbance
+        x0: x-coordinate of the center of the pressure disturbance
+
+    Output:
+        p:  pressure
+    """
     return (
         p0
         * (1. - da.exp(-t / t0))
@@ -130,7 +153,7 @@ for case_number in range(num_cases):
 
     ## Write forcing file
     print(f"Overwriting forcing file for {case=}")
-    with open(f"{current_dir}/pressure/forcing_exp_{case:02.0f}.ext", "w") as file:
+    with open(f"{pressure_dir}/forcing_exp_{case:02.0f}.ext", "w") as file:
         file.write("* Meteo forcing \n")
         file.write("QUANTITY = atmosphericpressure \n")
         file.write(f"FILENAME = exp_{case:02.0f}.amp \n")
@@ -144,4 +167,5 @@ for case_number in range(num_cases):
 
 
 # plt.show()
-print("Finished creating pressure-files")
+t1 = time.perf_counter()
+print(f"\nFinished creating pressure-files for exp in {t1-t0:0.1f} seconds")
