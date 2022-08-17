@@ -22,6 +22,8 @@ FIG_DPI = 300
 FIG_PIL_KWARGS = {"optimize": True, "compress_level": 9}
 
 # Type Hints
+Integer: TypeAlias = Union[int, np.integer]
+Floating: TypeAlias = Union[float, np.floating]
 Numeric: TypeAlias = Union[int, float, np.integer, np.floating]
 
 # Paths
