@@ -20,7 +20,7 @@ print(f"\nStart creating bathymetry-files for exp")
 
 ### Parameters
 # pressure distribution
-t0 = 10000.
+t0_value = 10000.
 U_list = np.array([5, 15, 25])
 a_list = np.array([10000, 20000, 30000])
 p0_list = np.array([2000])
@@ -135,7 +135,7 @@ for case_number in range(num_cases):
 
     ## Compute pressure
     print(f"\nComputing pressure field for {case=} ({U=}, {a=}, {p0=}, {x0=})")
-    p = pressure(xx, yy, tt, t0, U, a, p0, x0).astype(np.float32)
+    p = pressure(xx, yy, tt, t0_value, U, a, p0, x0).astype(np.float32)
 
     ## Remove zero-columns and zero-rows
     ix = da.where(~ da.all(da.isclose(p, 0), axis=(0, 1)))[0]
