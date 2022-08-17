@@ -332,6 +332,7 @@ def extract_data(filename: str, savename: str, close: bool=False) -> xr.DataSet 
 
 if __name__ == "__main__":
     ### Start
+    t0 = time.perf_counter_ns()
     print(f"\nStart time: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
 
     ### Options
@@ -389,4 +390,6 @@ if __name__ == "__main__":
         print(f"Original model output is deleted! {filename_original}")
 
     ### End
+    t1 = time.perf_counter_ns()
+    print(f"Finished regridding in {(t1-t0)*1e-9:0.3f} seconds")
     print(f"\nFinish time: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
