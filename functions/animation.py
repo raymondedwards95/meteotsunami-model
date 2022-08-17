@@ -3,6 +3,7 @@
 import os
 import sys
 import time
+import warnings
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
@@ -122,7 +123,7 @@ def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test
     ## Update data
     num_frames = t.size
     if _test_i_max is not None and isinstance(_test_i_max, int):
-        print(f"* Testing animation function!")
+        warnings.warn("Parameter _test_i_max is set for testing animation function!")
         num_frames = _test_i_max
 
     def update(i):
@@ -284,7 +285,7 @@ def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     ## Update data
     num_frames = t.size
     if _test_i_max is not None and isinstance(_test_i_max, int):
-        print(f"* Testing animation function!")
+        warnings.warn("Parameter _test_i_max is set for testing animation function!")
         num_frames = _test_i_max
 
     def update(i):
@@ -426,7 +427,7 @@ def animation_alongshore(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     ## Update data
     num_frames = t.size
     if _test_i_max is not None and isinstance(_test_i_max, int):
-        print(f"* Testing animation function!")
+        warnings.warn("Parameter _test_i_max is set for testing animation function!")
         num_frames = _test_i_max
 
     def update(i):
@@ -547,7 +548,7 @@ def animation_crossshore(data: xr.Dataset, savedir: str, _test_i_max: Integer=No
     ## Update data
     num_frames = t.size
     if _test_i_max is not None and isinstance(_test_i_max, int):
-        print(f"* Testing animation function!")
+        warnings.warn("Parameter _test_i_max is set for testing animation function!")
         num_frames = _test_i_max
 
     def update(i):
