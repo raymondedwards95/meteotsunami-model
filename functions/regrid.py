@@ -315,7 +315,7 @@ def extract_data(filename: str, savename: str, close: bool=False) -> xr.Dataset 
     data.to_netcdf(savename, encoding=encoding)
     data.close()
     tb = time.perf_counter_ns()
-    print(f"# Data saved to '{savename}' in {(t1-t0)*1e-9:0.3f} seconds")
+    print(f"# Data saved to '{savename}' in {(tb-ta)*1e-9:0.3f} seconds")
 
     ## End
     t1 = time.perf_counter_ns()
