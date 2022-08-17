@@ -221,7 +221,6 @@ def extract_data(filename: str, savename: str, close: bool=False) -> xr.Dataset 
     if not savename.endswith(".nc"):
         savename += ".nc"
 
-    print(f"#")
     print(f"# Start processing data")
     print(f"# Reading file '{filename}'")
 
@@ -323,7 +322,6 @@ def extract_data(filename: str, savename: str, close: bool=False) -> xr.Dataset 
     t_total = (t1 - t0) * 1e-9
     print(f"#")
     print(f"# Finished regridding in {t_total:0.3f} seconds ({t_total/60:0.1f} minutes)")
-    print(f"#")
 
     if close:
         return
