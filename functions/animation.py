@@ -178,31 +178,33 @@ def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test
     return
 
 
-def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None, close=True):
+def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test_i_max: Integer=None, close: bool=True) -> None:
     """ Creates an animation of the top-down view of the water velocity data
 
     Input:
-        dataset:    Dataset that contains all variables
+        data:       Dataset that contains all variables
+        savedir:    Folder to write the animation to
 
-    Parameters:
-        saveloc:    Folder to write the animation to
+    Options:
+        xlims:      x-limits for the figure
+        close:      close figure after finishing
     """
-    assert isinstance(dataset, xr.Dataset)
+    ## Check inputs
+    if not isinstance(data, xr.Dataset):
+        raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
-    if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".mp4"):
-        saveloc.replace(".mp4", "")
-    os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + "/anim_uv_cont.mp4"
-    savename_static = saveloc + "/test_anim_uv_cont"
+    if savedir.endswith(".mp4"):
+        savedir.replace(".mp4", "")
+    os.makedirs(savedir, exist_ok=True)
+    savename = f"{savedir}/anim_uv_cont.mp4"
+    savename_static = f"{savedir}/static_uv_cont.png"
 
     ## Shortcuts
-    x = dataset["x"]
-    y = dataset["y"]
-    t = dataset["t"]
-    vel_u = dataset["u"]
-    vel_v = dataset["v"]
+    x = data["x"]
+    y = data["y"]
+    t = data["t"]
+    vel_u = data["u"]
+    vel_v = data["v"]
 
     x = x - x.min()
     wl_max = float(np.max([np.abs([vel_u.max(), vel_u.min()])]))
@@ -338,31 +340,33 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None, cl
     return
 
 
-def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None, close=True):
+def animation_alongshore(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test_i_max: Integer=None, close: bool=True) -> None:
     """ Creates an animation of an alongshore cross-section of the water level and surface air pressure data
 
     Input:
-        dataset:    Dataset that contains all variables
+        data:       Dataset that contains all variables
+        savedir:    Folder to write the animation to
 
-    Parameters:
-        saveloc:    Folder to write the animation to
+    Options:
+        xlims:      x-limits for the figure
+        close:      close figure after finishing
     """
-    assert isinstance(dataset, xr.Dataset)
+    ## Check inputs
+    if not isinstance(data, xr.Dataset):
+        raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
-    if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".mp4"):
-        saveloc.replace(".mp4", "")
-    os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + "/anim_alongshore.mp4"
-    savename_static = saveloc + "/test_anim_alongshore"
+    if savedir.endswith(".mp4"):
+        savedir.replace(".mp4", "")
+    os.makedirs(savedir, exist_ok=True)
+    savename = f"{savedir}/anim_alongshore.mp4"
+    savename_static = f"{savedir}/static_alongshore.png"
 
     ## Shortcuts
-    x = dataset["x"]
-    y = dataset["y"]
-    t = dataset["t"]
-    wl = dataset["wl"]
-    p = dataset["p"]
+    x = data["x"]
+    y = data["y"]
+    t = data["t"]
+    wl = data["wl"]
+    p = data["p"]
 
     x = x - x.min()
     wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
@@ -465,30 +469,31 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None, cl
     return
 
 
-def animation_crossshore(dataset, saveloc=None, _test_i_max=None, close=True):
+def animation_crossshore(data: xr.Dataset, savedir: str, _test_i_max: Integer=None, close: bool=True) -> None:
     """ Creates an animation of crossshore cross-sections of the water level and surface air pressure data
 
     Input:
-        dataset:    Dataset that contains all variables
+        data:       Dataset that contains all variables
+        savedir:    Folder to write the animation to
 
-    Parameters:
-        saveloc:    Folder to write the animation to
+    Options:
+        close:      close figure after finishing
     """
-    assert isinstance(dataset, xr.Dataset)
+    ## Check inputs
+    if not isinstance(data, xr.Dataset):
+        raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
-    if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".mp4"):
-        saveloc.replace(".mp4", "")
-    os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + "/anim_crossshore.mp4"
-    savename_static = saveloc + "/test_anim_crossshore"
+    if savedir.endswith(".mp4"):
+        savedir.replace(".mp4", "")
+    os.makedirs(savedir, exist_ok=True)
+    savename = f"{savedir}/anim_crossshore.mp4"
+    savename_static = f"{savedir}/static_crossshore.png"
 
     ## Shortcuts
-    x = dataset["x"]
-    y = dataset["y"]
-    t = dataset["t"]
-    wl = dataset["wl"]
+    x = data["x"]
+    y = data["y"]
+    t = data["t"]
+    wl = data["wl"]
 
     x = x - x.min()
     wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
@@ -594,10 +599,10 @@ if __name__ == "__main__":
     data = xr.open_dataset(f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc")
 
     # Make animations
-    animation_alongshore(data, saveloc=anim_dir, _test_i_max=25)
+    animation_alongshore(data, savedir=anim_dir, _test_i_max=25)
     animation_contour(data, savedir=anim_dir, _test_i_max=25)
-    animation_contour_uv(data, saveloc=anim_dir, _test_i_max=25)
-    animation_crossshore(data, saveloc=anim_dir, _test_i_max=25)
+    animation_contour_uv(data, savedir=anim_dir, _test_i_max=25)
+    animation_crossshore(data, savedir=anim_dir, _test_i_max=25)
 
     # End
     plt.close("all")
