@@ -16,31 +16,33 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 
 
-def animation_contour(dataset, saveloc=None, xlims=None, _test_i_max=None, close=True):
+def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test_i_max: Integer=None, close: bool=True) -> None:
     """ Creates an animation of the top-down view of the water level and surface air pressure data
 
     Input:
-        dataset:    Dataset that contains all variables
+        data:       Dataset that contains all variables
+        savedir:    Folder to write the animation to
 
-    Parameters:
-        saveloc:    Folder to write the animation to
+    Options:
+        xlims:      x-limits for the figure
+        close:      close figure after finishing
     """
-    assert isinstance(dataset, xr.Dataset)
+    ## Check inputs
+    if not isinstance(data, xr.Dataset):
+        raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
-    if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
-    if saveloc.endswith(".mp4"):
-        saveloc.replace(".mp4", "")
-    os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + "/anim_contours.mp4"
-    savename_static = saveloc + "/test_anim_contours"
+    if savedir.endswith(".mp4"):
+        savedir.replace(".mp4", "")
+    os.makedirs(savedir, exist_ok=True)
+    savename = f"{savedir}/anim_contours.mp4"
+    savename_static = f"{savedir}/static_contours.png"
 
     ## Shortcuts
-    x = dataset["x"]
-    y = dataset["y"]
-    t = dataset["t"]
-    wl = dataset["wl"]
-    p = dataset["p"]
+    x = data["x"]
+    y = data["y"]
+    t = data["t"]
+    wl = data["wl"]
+    p = data["p"]
 
     x = x - x.min()
     wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
@@ -126,8 +128,8 @@ def animation_contour(dataset, saveloc=None, xlims=None, _test_i_max=None, close
     def update(i):
         # progress
         if not (num_frames-i-1) % (num_frames // 5):
-            t0_interval = time.perf_counter()
-            print(f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0_interval-t0):0.1f} fps)")
+            t0_interval = time.perf_counter_ns()
+            print(f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)")
 
         # remove data in contour plots
         for _temp in plotdata[0].collections:
@@ -160,11 +162,11 @@ def animation_contour(dataset, saveloc=None, xlims=None, _test_i_max=None, close
         interval=1000/20
     )
     print(f"Creating animation '{savename}'")
-    t0 = time.perf_counter()
+    t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
-    t1 = time.perf_counter()
-    print(f"Finished contour-animation in {t1-t0:0.1f} seconds (average {num_frames / (t1-t0):0.1f} frames per second)")
+    t1 = time.perf_counter_ns()
+    print(f"Finished contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
 
     if close:
@@ -286,9 +288,9 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None, cl
     def update(i):
         # progress
         if not (num_frames-i-1) % (num_frames // 5):
-            t0_interval = time.perf_counter()
+            t0_interval = time.perf_counter_ns()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0_interval-t0):0.1f} fps)")
+                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)")
 
         # remove data in contour plots
         for _temp in plotdata[0].collections:
@@ -320,11 +322,11 @@ def animation_contour_uv(dataset, saveloc=None, xlims=None, _test_i_max=None, cl
         interval=1000/20
     )
     print(f"Creating animation '{savename}'")
-    t0 = time.perf_counter()
+    t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
-    t1 = time.perf_counter()
-    print(f"Finished uv-contour-animation in {t1-t0:0.1f} seconds (average {num_frames / (t1-t0):0.1f} frames per second)")
+    t1 = time.perf_counter_ns()
+    print(f"Finished uv-contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
 
     if close:
@@ -426,9 +428,9 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None, cl
     def update(i):
         # progress
         if not (num_frames-i-1) % (num_frames // 5):
-            t0_interval = time.perf_counter()
+            t0_interval = time.perf_counter_ns()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0_interval-t0):0.1f} fps)")
+                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)")
 
         # new data
         plotdata[0].set_ydata(wl.isel(t=i).interp(x=10000))
@@ -447,11 +449,11 @@ def animation_alongshore(dataset, saveloc=None, xlims=None, _test_i_max=None, cl
         interval=1000/20
     )
     print(f"Creating animation '{savename}'")
-    t0 = time.perf_counter()
+    t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
-    t1 = time.perf_counter()
-    print(f"Finished alongshore-animation in {t1-t0:0.1f} seconds (average {num_frames / (t1-t0):0.1f} frames per second)")
+    t1 = time.perf_counter_ns()
+    print(f"Finished alongshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
 
     if close:
@@ -546,9 +548,9 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None, close=True):
     def update(i):
         # progress
         if not (num_frames-i-1) % (num_frames // 5):
-            t0_interval = time.perf_counter()
+            t0_interval = time.perf_counter_ns()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / (t0_interval-t0):0.1f} fps)")
+                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)")
 
         # new data
         for j in range(slices):
@@ -567,11 +569,11 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None, close=True):
         interval=1000/20
     )
     print(f"Creating animation '{savename}'")
-    t0 = time.perf_counter()
+    t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
-    t1 = time.perf_counter()
-    print(f"Finished crossshore-animation in {t1-t0:0.1f} seconds (average {num_frames / (t1-t0):0.1f} frames per second)")
+    t1 = time.perf_counter_ns()
+    print(f"Finished crossshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)")
     print(f"Saved animation as '{savename}'")
 
     if close:
@@ -584,13 +586,19 @@ def animation_crossshore(dataset, saveloc=None, _test_i_max=None, close=True):
 
 
 if __name__ == "__main__":
-    mainpath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    testpath = f"{mainpath}/functions/tests"
-    data = xr.open_dataset(f"{mainpath}/reproduction-an-2012/output/data_repr_17.nc")
+    # Define paths
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    anim_dir = f"{script_dir}/tests/anim"
 
-    animation_alongshore(data, saveloc=testpath, _test_i_max=25)
-    animation_contour(data, saveloc=testpath, _test_i_max=25)
-    animation_contour_uv(data, saveloc=testpath, _test_i_max=25)
-    animation_crossshore(data, saveloc=testpath, _test_i_max=25)
+    # Read data
+    data = xr.open_dataset(f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc")
 
+    # Make animations
+    animation_alongshore(data, saveloc=anim_dir, _test_i_max=25)
+    animation_contour(data, savedir=anim_dir, _test_i_max=25)
+    animation_contour_uv(data, saveloc=anim_dir, _test_i_max=25)
+    animation_crossshore(data, saveloc=anim_dir, _test_i_max=25)
+
+    # End
     plt.close("all")
+    data.close()
