@@ -201,7 +201,7 @@ def _regrid_variable_interpolate(var: Union[xr.DataArray, npt.ArrayLike], x: Uni
     return var_grid
 
 
-def extract_data(filename: str, savename: str, close: bool=False) -> xr.DataSet | None:
+def extract_data(filename: str, savename: str, close: bool=False) -> xr.Dataset | None:
     """ Extracts unstructured data from the output of D3D-FLOW-FM and convert it to a structured dataset
 
     Input:
