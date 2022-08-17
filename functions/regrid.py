@@ -5,8 +5,10 @@ import os
 import sys
 import time
 import warnings
+from typing import Union, Tuple
 
 import numpy as np
+import numpy.typing as npt
 import scipy.interpolate
 import xarray as xr
 
@@ -22,13 +24,37 @@ __regrid_method = 1
 __regrid_error = f"Set '__regrid_method' in file 'regrid.py' to '1'! Now it is {__regrid_method}"
 
 
-def _convert_coordinate_to_regular_grid(coordinate, numsteps=None):
+def _convert_coordinate_to_regular_grid(coordinate: npt.ArrayLike, numsteps: Integer=None) -> Tuple[np.ndarray, Numeric]:
+    """ Creates an equally spaced array of coordinates
+
+    Input:
+        coordinate: array with coordinates
+
+    Options:
+        numsteps:   number of coordinates
+
+    Output:
+        grid:       array of gridded coordinates
+        step:       value of spacing in coordinates
+    """
     if numsteps is None:
         numsteps = np.unique(coordinate).size
-    return np.linspace(np.min(coordinate), np.max(coordinate), numsteps, retstep=True)
+    grid, step = np.linspace(np.min(coordinate), np.max(coordinate), numsteps, retstep=True)
+    return (grid, step)
 
 
-def _create_grid_mapping(x, y, x_grid, y_grid):
+def _create_grid_mapping(x: Union[xr.DataArray, npt.ArrayLike], y: Union[xr.DataArray, npt.ArrayLike], x_grid: npt.ArrayLike, y_grid: npt.ArrayLike) -> np.ndarray:
+    """ Find a mapping to convert data in unstructured data to gridded data
+
+    Input:
+        x:          1-d array of unstructured x-coordinates
+        y:          1-d array of corresponding y-coordinates
+        x_grid:     1-d array of x-coordinates of a grid
+        y_grid:     1-d array of y-coordinates of a grid
+
+    Output:
+        grid_map:   map that maps the unstructered coordinates to gridded coordinates
+    """
     if type(x) is xr.DataArray:
         x = x.values
     if type(y) is xr.DataArray:
@@ -58,11 +84,23 @@ def _create_grid_mapping(x, y, x_grid, y_grid):
     return grid_map
 
 
-def _regrid_variable_map(var, grid_mapping, index=None):
+def _regrid_variable_map(var: Union[xr.DataArray, npt.ArrayLike], grid_map: npt.ArrayLike, index: Integer=None) -> np.ndarray:
+    """ Regrids unstructured data using a pre-defined mapping
+
+    Input:
+        var:        unstructured data
+        grid_map:   map that maps the unstructered coordinates to gridded coordinates
+
+    Options:
+        index:      only regrid a specific slice
+
+    Output:
+        var_grid:   regridded data
+    """
     if type(var) is xr.DataArray:
         var = var.values
     assert var.ndim == 2
-    assert grid_mapping.ndim == 2
+    assert grid_map.ndim == 2
 
     # t
     t_size = var.shape[0]
@@ -71,13 +109,13 @@ def _regrid_variable_map(var, grid_mapping, index=None):
         t_size = 1
 
     # x
-    x_size = np.max(grid_mapping[:, 1]) + 1
+    x_size = np.max(grid_map[:, 1]) + 1
 
     # y
     if __regrid_method == 1:
-        y_size = np.max(grid_mapping[:, 2]) + 1  # slow method 1
+        y_size = np.max(grid_map[:, 2]) + 1  # slow method 1
     elif __regrid_method == 2:
-        y_size = np.max(grid_mapping[:, 0]) + 1  # fast method 2
+        y_size = np.max(grid_map[:, 0]) + 1  # fast method 2
     else:
         raise NotImplementedError(__regrid_error)
 
@@ -91,12 +129,12 @@ def _regrid_variable_map(var, grid_mapping, index=None):
             print(f"Step {k:4.0f} of {t_size:0.0f} ({(k+1)/t_size*100:0.1f}%)")
 
         if __regrid_method == 1:
-            for m in range(grid_mapping.shape[0]):  # slow method 1
-                n, i, j = grid_mapping[m, :]
+            for m in range(grid_map.shape[0]):  # slow method 1
+                n, i, j = grid_map[m, :]
                 var_grid[k, j, i] = var[k, n]
 
         elif __regrid_method == 2:
-            var_grid[k] = var[k, :].reshape(y_size, x_size)[tuple(grid_mapping.T)].reshape(y_size, x_size)  # fast method 2
+            var_grid[k] = var[k, :].reshape(y_size, x_size)[tuple(grid_map.T)].reshape(y_size, x_size)  # fast method 2
 
         else:
             raise NotImplementedError(__regrid_error)
@@ -104,7 +142,22 @@ def _regrid_variable_map(var, grid_mapping, index=None):
     return var_grid
 
 
-def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
+def _regrid_variable_interpolate(var: Union[xr.DataArray, npt.ArrayLike], x: Union[xr.DataArray, npt.ArrayLike], y: Union[xr.DataArray, npt.ArrayLike], x_grid: npt.ArrayLike, y_grid: npt.ArrayLike, index: Integer=None) -> np.ndarray:
+    """ Regrids unstructured data using interpolation
+
+    Input:
+        var:        unstructured data
+        x:          1-d array of unstructured x-coordinates
+        y:          1-d array of corresponding y-coordinates
+        x_grid:     1-d array of x-coordinates of a grid
+        y_grid:     1-d array of y-coordinates of a grid
+
+    Options:
+        index:      only regrid a specific slice
+
+    Output:
+        var_grid:   regridded data
+    """
     warnings.warn("Warning: Using interpolation as regridding tool!")
 
     if type(x) is xr.DataArray:
@@ -139,11 +192,26 @@ def _regrid_variable_interpolate(var, x, y, x_grid, y_grid, index=None):
     return var_grid
 
 
-def extract_data(filename: str, savename: str = None):
+def extract_data(filename: str, savename: str, close: bool=False) -> xr.DataSet | None:
+    """ Extracts unstructured data from the output of D3D-FLOW-FM and convert it to a structured dataset
+
+    Input:
+        filename    name of the output file from D3D-FLOW-FM
+        savename    name of the new dataset
+
+    Options:
+        close:      close dataset after finishing
+
+    Output:
+        data:       data array with structured data; if `close=False` then data is `None`
+    """
     t_start = time.perf_counter()
 
     if not filename.endswith(".nc"):
         filename += ".nc"
+    if not savename.endswith(".nc"):
+        savename += ".nc"
+
     print("\nStart processing data")
     print(f"Reading file '{filename}'")
 
