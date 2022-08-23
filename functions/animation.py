@@ -595,6 +595,7 @@ if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
     anim_dir = f"{script_dir}/tests/anim"
+    os.makedirs(anim_dir, exist_ok=True)
 
     # Read data
     data = xr.open_dataset(f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc")
