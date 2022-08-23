@@ -257,7 +257,9 @@ def plot_pressure(data: xr.DataArray, filename: str=None, x_scales: Numeric=None
 if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    pressure_dir = f"{script_dir}/tests/pressure"
+    pressure_dir = f"{script_dir}/tests/pres"
+    pressure_file = f"{pressure_dir}/pressure"
+    os.makedirs(pressure_dir, exist_ok=True)
 
     # Define function for computing 'pressure'
     def f(x, y, t):
@@ -275,11 +277,11 @@ if __name__ == "__main__":
             for i in range(x.size):
                 p[n,j,i] = f(x[i], y[j], t[n])
 
-    data = convert_to_xarray(t, x, y, p, savename=pressure_dir)
+    data = convert_to_xarray(t, x, y, p, savename=pressure_file)
     del t, x, y, p
 
     # Write data to .amp-file
-    write_pressure(data, filename=pressure_dir)
+    write_pressure(data, filename=pressure_file)
 
     # Visualise data
-    plot_pressure(data, filename=pressure_dir)
+    plot_pressure(data, filename=pressure_file)
