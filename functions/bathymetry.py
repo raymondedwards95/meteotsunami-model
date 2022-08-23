@@ -228,7 +228,8 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
 if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    bathymetry_dir = f"{script_dir}/tests/bathymetry"
+    bathymetry_dir = f"{script_dir}/tests/bath/bathymetry"
+    os.makedirs(bathymetry_dir, exist_ok=True)
 
     # Define function for computing 'bathymetry'
     @np.vectorize
