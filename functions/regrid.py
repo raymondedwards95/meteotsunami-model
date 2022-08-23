@@ -329,9 +329,6 @@ def extract_data(filename: str, savename: str, close: bool=False) -> xr.Dataset 
 
 
 if __name__ == "__main__":
-    ### Start
-    print(f"\nStart time: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-
     ### Options
     parser = argparse.ArgumentParser(
         description="Process and regrid model output"
@@ -353,6 +350,9 @@ if __name__ == "__main__":
         type=bool
     )
     args = parser.parse_args()
+
+    ### Start
+    print(f"\nStart time: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
 
     ### Filenames
     filename_original = str(args.input)
