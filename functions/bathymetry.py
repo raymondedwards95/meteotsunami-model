@@ -228,7 +228,8 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
 if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    bathymetry_dir = f"{script_dir}/tests/bath/bathymetry"
+    bathymetry_dir = f"{script_dir}/tests/bath"
+    bathymetry_file = f"{bathymetry_dir}/bathymetry"
     os.makedirs(bathymetry_dir, exist_ok=True)
 
     # Define function for computing 'bathymetry'
@@ -242,11 +243,11 @@ if __name__ == "__main__":
     xx, yy = np.meshgrid(x, y)
     b = function(xx, yy)
 
-    data = convert_to_xarray(x, y, b, savename=bathymetry_dir)
+    data = convert_to_xarray(x, y, b, savename=bathymetry_file)
     del x, y, b
 
     # Write data to .xyb-file
-    write_bathymetry(data, filename=bathymetry_dir)
+    write_bathymetry(data, filename=bathymetry_file)
 
     # Visualise data
-    plot_bathymetry(data, filename=bathymetry_dir)
+    plot_bathymetry(data, filename=bathymetry_file)
