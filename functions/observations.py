@@ -220,6 +220,8 @@ def plot_observations(data: npt.ArrayLike, savename: str, keep_open: bool=False)
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.realpath(__file__))
     obs_dir = f"{script_dir}/tests/obs"
+    obs_file = f"{bathymetry_dir}/observations"
+    os.makedirs(obs_dir, exist_ok=True)
 
     obs_0 = ObservationPoint(name="Center", x=0, y=0, scale=1e3)
     obs_1 = ObservationPoint(name="Point", x=1, y=1, scale=1e3)
@@ -230,5 +232,5 @@ if __name__ == "__main__":
 
     data = [obs_0, obs_1, obs_2, obs_3, obs_4, obs_5]
 
-    write_observations(data, filename=obs_dir)
-    plot_observations(data, savename=obs_dir)
+    write_observations(data, filename=obs_file)
+    plot_observations(data, savename=obs_file)
