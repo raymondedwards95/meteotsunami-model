@@ -1,4 +1,11 @@
-""" Functions for visualising model outputs """
+""" Functions for visualising model outputs
+
+Main functions:
+    animation_contour
+    animation_contour_uv
+    animation_alongshore
+    animation_crossshore
+"""
 
 import os
 import sys
