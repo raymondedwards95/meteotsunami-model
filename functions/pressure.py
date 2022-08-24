@@ -1,4 +1,10 @@
-""" Functions to write time and space varying pressure fields for use with Delft3D-FM """
+""" Functions to write time and space varying pressure fields for use with Delft3D-FM
+
+Main functions:
+    convert_to_xarray
+    write_pressure
+    plot_pressure
+"""
 
 import os
 import sys
