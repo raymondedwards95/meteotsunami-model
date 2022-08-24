@@ -4,7 +4,6 @@ import os
 import sys
 import time
 
-import dask
 import dask.array as da
 import numpy as np
 
