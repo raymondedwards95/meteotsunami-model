@@ -11,6 +11,7 @@ import os
 import sys
 
 import numpy as np
+import numpy.typing as npt
 import xarray as xr
 
 # fix for importing functions below
@@ -18,7 +19,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 
 
-def _filter_peaks(wl, wl_idx, wl_std, window, factor):
+def _filter_peaks(wl: npt.ArrayLike, wl_idx: npt.ArrayLike, wl_std: Numeric, window: Integer, factor: Numeric) -> np.ndarray:
     """ Find the largest values, remove large values when they are close """
     idx = []  # list of indices corresponding to maxima
     for i in wl_idx:
@@ -34,30 +35,31 @@ def _filter_peaks(wl, wl_idx, wl_std, window, factor):
                 # check if peak is large enough
                 if wl[i] * factor > wl_std:
                     idx.append(i)
+
     return np.array(idx)
 
 
 @np.vectorize
-def to_timestr(seconds):
+def to_timestr(seconds: Numeric) -> str:
     """ Converts time in seconds since reference to a date-string """
     return datetime.datetime.fromtimestamp(seconds).strftime("%Y-%m-%d %H:%M:%S")
 
 
-def find_peaks_const_y(data, y, x=None, window=10, crests=True, variable="wl"):
+def find_peaks_const_y(data: xr.Dataset, y: Numeric, x: Numeric=None, window: Integer=10, crests: bool=True, variable: str="wl") -> np.ndarray:
     """ Finds the times at which the local maxima (or minima) of the waves are present for a given y-coordinate
 
     Input:
-        data:   Dataset that contains coordinates and data
-        y:      y-coordinate
+        data:       Dataset that contains coordinates and data
+        y:          y-coordinate
+        x:          x-coordinate
 
-    Parameters:
-        x:      x-coordinate
-        window: expected width of a peak (default: 10)
-        factor: find crests (True) or throughs (False)
-        variable: variable to use, e.g. "wl", "u" or "v"
+    Options:
+        window:     expected width of a peak (default: 10)
+        factor:     find crests (True) or throughs (False)
+        variable:   variable to use, e.g. "wl", "u" or "v"
 
     Output:
-        t_idx:  indices corresponding to the time of the largest maxima
+        t_idx:      indices corresponding to the time of the largest maxima
     """
     if x is None:
         x = data["x"].max().values / 50.  # random scaling? close to shore
@@ -86,23 +88,25 @@ def find_peaks_const_y(data, y, x=None, window=10, crests=True, variable="wl"):
 
     # Find distinct peaks
     t_idx = _filter_peaks(var, var_idx, var_std, window, factor)
+
+    # End
     return t_idx
 
 
-def find_peaks_const_t(data, t, x=None, window=50, crests=True):
+def find_peaks_const_t(data: xr.Dataset, t: Numeric, x: Numeric=None, window: Integer=50, crests: bool=True) -> np.ndarray:
     """ Finds the y-coordinates of the maxima in water level at a given time
 
     Input:
-        data:   Dataset that contains coordinates and data
-        t:      t-coordinate
+        data:       Dataset that contains coordinates and data
+        t:          t-coordinate
+        x:          x-coordinate
 
-    Parameters:
-        x:      x-coordinate
-        window: expected width of a peak (default: 50)
-        crests: find crests (True) or throughs (False)
+    Options:
+        window:     expected width of a peak (default: 50)
+        crests:     find crests (True) or throughs (False)
 
     Output:
-        y_idx:  indices corresponding to the y-coordinates of the largest maxima
+        y_idx:      indices corresponding to the y-coordinates of the largest maxima
     """
     if x is None:
         x = data["x"].max().values / 50.  # random scaling? close to shore
