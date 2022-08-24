@@ -66,10 +66,11 @@ assert len(x0_vals) == num_cases
 
 print("\nPressure fields for the following cases are computed: \ncase \tx_step \ty_step \tt_step \tx0")
 with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
+    file.write(f"case,x_step,y_step,t_step,x0\n")
     for i in range(num_cases):
         line = f"{cases[i]:02.0f},{x_steps[i]:0.0f},{y_steps[i]:0.0f},{t_steps[i]:0.0f},{x0_vals[i]:0.0f}"
         print(line.replace(",", "\t"))
-        file.write(line + "\n")
+        file.write(f"{line}\n")
 
     del line, i
 
