@@ -31,6 +31,19 @@ bathymetry_dir = f"{script_dir}/bathymetry"
 os.makedirs(bathymetry_dir, exist_ok=True)
 
 
+### Save parameters to file
+print("\nBathymetries for the following cases are computed: \ncase \tslope \tdepth")
+with open(f"{bathymetry_dir}/parameters_bathymetry.txt", "w") as file:
+    file.write(f"case,slope,depth\n")
+    for i in range(len(cases)):
+        line = f"{cases[i]:02.0f},{slopes[i]:0.2e},{depths[i]:0.0f}"
+        line = line.replace("0.00e+00", "0")
+        print(line.replace(",", "\t"))
+        file.write(f"{line}\n")
+
+    del line, i
+
+
 ### Grid
 x = np.linspace(0, 1e6, 5)
 y = np.linspace(-1e7, 1e7, 5)
