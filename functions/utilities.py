@@ -1,4 +1,4 @@
-""" Additional functions
+""" Helper functions for analysis and visualisation
 
 Main functions:
     to_timestr
