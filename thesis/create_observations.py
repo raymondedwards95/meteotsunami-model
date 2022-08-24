@@ -23,7 +23,11 @@ os.makedirs(obs_dir, exist_ok=True)
 ## Observation Points and Cross Sections
 obs = []
 obs.append(
-    fo.ObservationPoint("Test Point", x=10e3, y=x_max/2.)
+    fo.ObservationPoint(
+        name="Test Point",
+        x=10e3,
+        y=x_max/2.,
+    )
 )
 
 for i in range(4):
@@ -32,7 +36,7 @@ for i in range(4):
         fo.ObservationCrossSection(
             name=f"Along Shore x={_x/1000 :0.0f}km",
             x=[_x, _x],
-            y=[y_min, y_max]
+            y=[y_min, y_max],
         )
     )
 
@@ -42,7 +46,7 @@ for i in range(5):
         fo.ObservationCrossSection(
             name=f"Cross Shore y={_y/1000:0.0f}km",
             x=[x_min, x_max],
-            y=[_y, _y]
+            y=[_y, _y],
         )
     )
 
