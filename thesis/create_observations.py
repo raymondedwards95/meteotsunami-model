@@ -51,4 +51,5 @@ for i in range(5):
     )
 
 fo.write_observations(obs, filename=f"{obs_dir}/exp_00")
+fo.plot_observations(obs, savename=f"{obs_dir}/exp_00")
 print("Finished creating observation-files")
