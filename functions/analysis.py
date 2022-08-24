@@ -1,4 +1,12 @@
-""" Additional analysis of waterlevel data """
+""" Additional analysis of waterlevel data
+
+Main functions:
+    compute_decay_parameter
+    compute_wave_periods
+    compute_wave_lengths
+    spectral_analysis_1d
+    spectral_analysis_2d
+"""
 
 import os
 import sys
@@ -13,16 +21,16 @@ import functions.utilities as fu
 
 
 def dispersion_relation(k, n=0, alpha=1/400):
-    """ Returns the frequency related to the wavenumber 
-    for shallow water waves on a beach of linear slope [Eckart, 1951] 
-    
+    """ Returns the frequency related to the wavenumber
+    for shallow water waves on a beach of linear slope [Eckart, 1951]
+
     Input:
         k:      wavenumbers
-    
+
     Parameters:
         n:      mode
         alpha:  slope of beach
-    
+
     Output:
         f:      frequencies corresponding to wavenumbers
     """
@@ -52,17 +60,17 @@ def compute_decay_parameter(data, y, t):
 
 
 def compute_wave_periods(data, y, x=None, crests=True, no_result=np.nan):
-    """ Computes the wave period at given x,y 
-    
+    """ Computes the wave period at given x,y
+
     Input:
         data:       dataset containing all data
         y:          y-coordinate
-    
+
     Parameters:
         x:          x-coordinate
         crests:     find crests (True) or throughs (default: False)
         no_result:  value to return if there is no result (default: np.nan)
-    
+
     Output:
         periods:    list of time-intervals between wave crests
     """
@@ -79,17 +87,17 @@ def compute_wave_periods(data, y, x=None, crests=True, no_result=np.nan):
 
 
 def compute_wave_lengths(data, t, x=None, crests=True, no_result=np.nan):
-    """ Computes the wave length at given x,t 
-    
+    """ Computes the wave length at given x,t
+
     Input:
         data:       dataset containing all data
         t:          t-coordinate
-    
+
     Parameters:
         x:          x-coordinate
         crests:     find crests (True) or throughs (default: False)
         no_result:  value to return if there is no result (default: np.nan)
-    
+
     Output:
         lengths:    list of distances between wave crests
     """
@@ -106,19 +114,19 @@ def compute_wave_lengths(data, t, x=None, crests=True, no_result=np.nan):
 
 
 def spectral_analysis_1d(data, y, x=1e4, variable="wl", demean=False):
-    """ Apply fourier transform on timeseries 
-    
+    """ Apply fourier transform on timeseries
+
     Input:
         data:       Dataset containing all data and coordinates
         y:          y-coordinate
-    
+
     Parameters:
         x:          x-coordinate
         variable:   name of the variable to use, e.g. "wl" or "p"
         demean:     remove mean from signal
-    
+
     Output:
-        freqs:      corresponding frequencies (time-domain)      
+        freqs:      corresponding frequencies (time-domain)
         power:      power-spectrum
     """
     t = data["t"].values.astype("datetime64[s]").astype(float)
@@ -137,19 +145,19 @@ def spectral_analysis_1d(data, y, x=1e4, variable="wl", demean=False):
 
 
 def spectral_analysis_2d(data, x=1e4, variable="wl", demean=False):
-    """ Apply fourier transform on spatial and temporal varying data 
-    
+    """ Apply fourier transform on spatial and temporal varying data
+
     Input:
         data:       Dataset containing all data and coordinates
-    
+
     Parameters:
         x:          x-coordinate
         variable:   name of the variable to use, e.g. "wl" or "p"
         demean:     remove mean from signal
-    
+
     Output:
         wavenumber: corresponding wavenumbers (space-domain)
-        freqs:      corresponding frequencies (time-domain)      
+        freqs:      corresponding frequencies (time-domain)
         power:      power-spectrum
     """
     t = data["t"].values.astype("datetime64[s]").astype(float)
