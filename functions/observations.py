@@ -1,4 +1,13 @@
-""" Functions to create observation points and cross sections for D3D-FM """
+""" Functions to create observation points and cross sections for D3D-FM
+
+Main classes:
+    ObservationPoint
+    ObservationCrossSection
+
+Main Functions:
+    write_observations
+    plot_observations
+"""
 
 import os
 import sys
