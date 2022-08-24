@@ -1,4 +1,10 @@
-""" Additional functions """
+""" Additional functions
+
+Main functions:
+    to_timestr
+    find_peaks_const_y
+    find_peaks_const_t
+"""
 
 import datetime
 import os
@@ -20,7 +26,7 @@ def _filter_peaks(wl, wl_idx, wl_std, window, factor):
             # list is empty
             idx.append(i)
         else:
-            for j in idx:  
+            for j in idx:
                 # check if it is neighbour of previous
                 if np.abs(i-j) < window:
                     break
@@ -43,14 +49,14 @@ def find_peaks_const_y(data, y, x=None, window=10, crests=True, variable="wl"):
     Input:
         data:   Dataset that contains coordinates and data
         y:      y-coordinate
-    
+
     Parameters:
         x:      x-coordinate
         window: expected width of a peak (default: 10)
         factor: find crests (True) or throughs (False)
         variable: variable to use, e.g. "wl", "u" or "v"
 
-    Output:     
+    Output:
         t_idx:  indices corresponding to the time of the largest maxima
     """
     if x is None:
@@ -65,7 +71,7 @@ def find_peaks_const_y(data, y, x=None, window=10, crests=True, variable="wl"):
 
     if not variable in ["wl", "u", "v", "p"]:
         raise ValueError(f"Expected {variable=} to be 'wl', 'u', 'v' or 'p'")
-    
+
     # Extract data
     var = data[variable].interp(x=x, y=y)
     var_std = np.std(var)
@@ -89,13 +95,13 @@ def find_peaks_const_t(data, t, x=None, window=50, crests=True):
     Input:
         data:   Dataset that contains coordinates and data
         t:      t-coordinate
-    
+
     Parameters:
         x:      x-coordinate
         window: expected width of a peak (default: 50)
         crests: find crests (True) or throughs (False)
 
-    Output:     
+    Output:
         y_idx:  indices corresponding to the y-coordinates of the largest maxima
     """
     if x is None:
@@ -107,7 +113,7 @@ def find_peaks_const_t(data, t, x=None, window=50, crests=True):
         raise ValueError(f"{x=} is not a number")
     if not isinstance(data, (xr.Dataset)):
         raise ValueError(f"{data=} is not a Dataset")
-    
+
     # Extract data
     wl = data["wl"].interp(x=x, t=t)
     wl_std = np.std(wl)
