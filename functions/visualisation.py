@@ -1,4 +1,13 @@
-""" Functions for visualising model outputs """
+""" Functions for visualising model outputs
+
+Main functions:
+    vis_timeseries
+    vis_alongshore
+    vis_crossshore
+    vis_spectrum_1d
+    vis_spectrum_2d
+    vis_contour
+"""
 
 import os
 import sys
@@ -9,7 +18,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 from matplotlib.colors import Normalize
-from matplotlib.ticker import MultipleLocator, AutoMinorLocator
+from matplotlib.ticker import MultipleLocator
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # fix for importing functions below
@@ -33,7 +42,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
         y = np.array([y])
     if isinstance(y, (list, np.ndarray)):
         y = np.array(y)
-    
+
     y_arr = y
     y_num = y_arr.size
     del y
@@ -66,7 +75,7 @@ def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
     y_arr = np.array([y for y in y_arr if y < y_max])
     if y_num < 1:
         raise ValueError("Input 'y' has no values on the domain of data")
-    
+
     wl_t_idx = [fu.find_peaks_const_y(data, y, x=x, crests=False, variable="wl") for y in y_arr]
     p_t_idx = [fu.find_peaks_const_y(data, y, x=x, crests=True, variable="p") for y in y_arr]
 
@@ -200,7 +209,7 @@ def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
 
     for i in range(t_num):
         ax[i].plot(
-            y / 1000., 
+            y / 1000.,
             wl[i]
         )
         ax[i].axhline(color="black", linewidth=1)
@@ -233,7 +242,7 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
         t_list = np.array(t)
     else:
         raise ValueError(f"{t=} is not a number or array_like")
-    
+
     del t, y
 
     y_num = y_list.size
@@ -263,12 +272,12 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
         savename += f"y{y_list[0]/1000:0.0f}_"
     else:
         savename += f"yn{y_num}_"
-    
+
     if t_num == 1:
         savename += f"t{t_list[0]/3600:0.0f}"
     else:
         savename += f"tn{t_num}"
-    
+
     ## Figure
     fig, ax = plt.subplots(t_num, y_num, squeeze=False, sharex=True, sharey=True)
     fig.set_size_inches(figsize)
@@ -283,22 +292,22 @@ def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
 
             # Plot data
             ax[i,j].plot(
-                data["x"] / 1000., 
+                data["x"] / 1000.,
                 data["wl"].interp(y=y_list[j], t=fu.to_timestr(t_list[i])),
-                color="C0", 
+                color="C0",
                 label="Waterlevel"
             )
 
             # Plot best fit
             ax[i,j].plot(
                 data["x"] / 1000.,
-                wl_model, 
-                color="C0", 
-                linestyle="--", 
+                wl_model,
+                color="C0",
+                linestyle="--",
                 label=f"Best fit with $1/k0={1./k0/1000.:0.1f}$ km"
             )
 
-            # 
+            #
             ax[i,j].axhline(color="black", linewidth=1)
             ax[i,j].legend()
             ax[i,j].set_xlim(0, data["x"].max() / 1000.)
@@ -381,8 +390,8 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
             color=f"C{i}"
         )
         ax[i].fill_between(
-            freqs_all[i] * 3600, 
-            power_all[i] / 3600, 
+            freqs_all[i] * 3600,
+            power_all[i] / 3600,
             alpha=0.1,
             color=f"C{i}"
         )
@@ -402,7 +411,7 @@ def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable=
     ## End
     if not keep_open:
         plt.close("all")
-    
+
 
 def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", xlims=None, ylims=None, autolim=1e-3, demean=True):
     ## Paths
@@ -454,9 +463,9 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
 
     for i in range(5):
         ax[0].plot(
-            wavenumber * 1e6, 
-            fa.dispersion_relation(wavenumber, n=i, alpha=1/400) * 3600., 
-            linewidth=1, 
+            wavenumber * 1e6,
+            fa.dispersion_relation(wavenumber, n=i, alpha=1/400) * 3600.,
+            linewidth=1,
             color="black"
         )
     ax[0].axvline(color="black", linewidth=1)
@@ -472,7 +481,7 @@ def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", x
     ## End
     if not keep_open:
         plt.close("all")
-    
+
 
 def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=None, ylims=None):
     ## Check input
@@ -491,10 +500,10 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
         t_arr = t
     else:
         raise ValueError(f"{t=} is not an array, but {type(t)}")
-    
+
     t_num = t_arr.size
     del t
-    
+
     ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
@@ -531,30 +540,30 @@ def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=Non
     ## Subplots
     for i in range(t_num):
         ax[i].contourf(
-            y / 1000, 
-            x / 1000, 
-            var.interp(t=fu.to_timestr(t_arr[i])).T, 
+            y / 1000,
+            x / 1000,
+            var.interp(t=fu.to_timestr(t_arr[i])).T,
             100,
             cmap=cmap,
             norm=norm,
             vmin=var_min,
-            vmax=var_max    
+            vmax=var_max
         )
         ax[i].set_ylabel("$x$ [km]")
         # ax[i].set_title(f"$t = {t_arr[i] / 3600:0.1f}$h")
         ax[i].annotate(
-            f"$t = {t_arr[i] / 3600:0.1f}$h", 
+            f"$t = {t_arr[i] / 3600:0.1f}$h",
             xy=(0.99, 0.98),
             xycoords="axes fraction",
-            ha="right", 
+            ha="right",
             va="top"
         )
         ax[i].set_xlim(xlims)
         ax[i].set_ylim(ylims)
-    
+
     ax[-1].set_xlabel("$y$ [km]")
     fig.colorbar(
-        im, 
+        im,
         ax=ax.ravel().tolist(),
         label="Sea Surface Elevation [m]",
         aspect=50
@@ -594,6 +603,6 @@ if __name__ == "__main__":
     vis_alongshore(data, t=3600, x=1e4, keep_open=True)
     vis_alongshore(data, t=[3000, 7200], x=1e4, keep_open=True)
     vis_alongshore(data, t=[3600, 7200, 10800], x=1e4, keep_open=True)
-    
+
     plt.close("all")
 
