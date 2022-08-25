@@ -5,6 +5,7 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.constants
 
 try:
     import cartopy.crs as ccrs
@@ -22,24 +23,31 @@ from functions import *
 ### Settings
 show_figures = False
 current_dir = os.path.dirname(os.path.realpath(__file__))
+figure_dir = f"{current_dir}/figures"
+
+os.makedirs(figure_dir, exist_ok=True)
 
 
 ### Constants
-g = 9.81
+g = scipy.constants.g
+assert np.abs(g - 9.81) < 1e-2
+
 a = np.logspace(2, 6)
 alpha = np.array([1/400, 1/40, 1/4])
 
 
 ### Functions
 def u_crit(a, alpha):
+    """ Computes critical velocity of pressure perturbation for given size `a` and bottom slope `alpha` """
     return np.sqrt(g * a * alpha / np.pi)
 
 def wavelength(U, alpha):
+    """ Computes wavelength for given velocity `U` and bottom slope `alpha` """
     return 2. * np.pi * U * U / g / alpha
 
 
 ### Speed
-savename = f"{current_dir}/line_speed_size"
+savename = f"{figure_dir}/line_speed_size"
 
 plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
 for i in range(alpha.size):
@@ -56,7 +64,7 @@ print(f"Saved figure {savename}")
 
 
 ### Wavelength
-savename = f"{current_dir}/line_wavelength_size"
+savename = f"{figure_dir}/line_wavelength_size"
 
 plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
 for i in range(alpha.size):
@@ -77,7 +85,7 @@ print(f"Saved figure {savename}")
 
 ### Map
 if create_map:
-    savename = f"{current_dir}/map"
+    savename = f"{figure_dir}/map"
 
     fig = plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
     ax = fig.add_subplot(projection=ccrs.PlateCarree())

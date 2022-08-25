@@ -6,6 +6,7 @@ import sys
 import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.constants
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -15,10 +16,15 @@ from functions import *
 ### Settings
 show_figures = False
 current_dir = os.path.dirname(os.path.realpath(__file__))
+figure_dir = f"{current_dir}/figures"
+
+os.makedirs(figure_dir, exist_ok=True)
 
 
 ### Parameters
-g = 9.81
+g = scipy.constants.g
+assert np.abs(g - 9.81) < 1e-2
+
 a = np.arange(0, 301, 50) * 1e3
 a = np.geomspace(1, 301, 50) * 1e3
 alpha = 1. / np.logspace(1.5, 3.1)
@@ -26,7 +32,7 @@ U = np.arange(0, 60+1)
 
 
 ### Critical Velocity
-savename = f"{current_dir}/contour_crit_vel"
+savename = f"{figure_dir}/contour_crit_vel"
 
 plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
 plt.title("Critical Velocity")
@@ -51,7 +57,7 @@ print(f"Saved figure {savename}")
 
 
 ### Wavelength fundamental mode
-savename = f"{current_dir}/contour_fundamental_wl"
+savename = f"{figure_dir}/contour_fundamental_wl"
 
 plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
 plt.title("Wavelength fundamental mode")
