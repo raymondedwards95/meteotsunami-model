@@ -33,6 +33,14 @@ def wavelength(U, alpha):
 
 ### Speed
 def theory_figure_speed_vs_size(a: npt.ArrayLike, savename: str=None) -> None:
+    """ Plots the relation between critical velocity and pressure disturbance size
+
+    Input:
+        a:          array with pressure disturbance size
+
+    Options:
+        savename    figure name
+    """
     if savename is None:
         savename = f"{figure_dir}/line_speed_size"
 
@@ -53,7 +61,15 @@ def theory_figure_speed_vs_size(a: npt.ArrayLike, savename: str=None) -> None:
 
 
 ### Wavelength
-def theory_figure_wavelength_vs_size(a: npt.ArrayLike, savename:str=None) -> None:
+def theory_figure_wavelength_vs_size(a: npt.ArrayLike, savename: str = None) -> None:
+    """ Plots the relation between wavelength and pressure disturbance size
+
+    Input:
+        a:          array with pressure disturbance size
+
+    Options:
+        savename    figure name
+    """
     if savename is None:
         savename = f"{figure_dir}/line_wavelength_size"
 
@@ -77,7 +93,12 @@ def theory_figure_wavelength_vs_size(a: npt.ArrayLike, savename:str=None) -> Non
 
 
 ### Map
-def theory_figure_map(savename: str=None) -> None:
+def theory_figure_map(savename: str = None) -> None:
+    """ Create figure of the area of interest
+
+    Options:
+        savename    figure name
+    """
     if savename is None:
         savename = f"{figure_dir}/map"
 
@@ -106,9 +127,7 @@ if __name__ == "__main__":
     show_figures = False
     current_dir = os.path.dirname(os.path.realpath(__file__))
     figure_dir = f"{current_dir}/figures"
-
     os.makedirs(figure_dir, exist_ok=True)
-
 
     # Constants
     g = scipy.constants.g
@@ -117,13 +136,11 @@ if __name__ == "__main__":
     a = np.logspace(2, 6)
     alpha = np.array([1/400, 1/40, 1/4])
 
-
     # Figures
     theory_figure_speed_vs_size(a)
     theory_figure_wavelength_vs_size(a)
     if create_map:
         theory_figure_map()
-
 
     # End
     if show_figures:
