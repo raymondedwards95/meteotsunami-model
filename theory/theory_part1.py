@@ -61,7 +61,7 @@ def theory_figure_speed_vs_size(a: npt.ArrayLike, savename: str=None) -> None:
 
 
 ### Wavelength
-def theory_figure_wavelength_vs_size(a: npt.ArrayLike, savename: str = None) -> None:
+def theory_figure_wavelength_vs_size(a: npt.ArrayLike, savename: str=None) -> None:
     """ Plots the relation between wavelength and pressure disturbance size
 
     Input:
@@ -93,7 +93,7 @@ def theory_figure_wavelength_vs_size(a: npt.ArrayLike, savename: str = None) -> 
 
 
 ### Map
-def theory_figure_map(savename: str = None) -> None:
+def theory_figure_map(savename: str=None) -> None:
     """ Create figure of the area of interest
 
     Options:
@@ -133,6 +133,7 @@ if __name__ == "__main__":
     g = scipy.constants.g
     assert np.abs(g - 9.81) < 1e-2
 
+    # Parameters
     a = np.logspace(2, 6)
     alpha = np.array([1/400, 1/40, 1/4])
 
