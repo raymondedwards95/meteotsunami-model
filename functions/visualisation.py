@@ -257,7 +257,7 @@ def vis_alongshore(data: xr.Dataset, t: Union[Numeric, npt.ArrayLike]=3600, x: N
 
 def vis_crossshore(data, y: Union[Numeric, npt.ArrayLike]=1e5, t: Union[Numeric, npt.ArrayLike]=3600, saveloc: str=None, keep_open: bool=False) -> None:
     """ Make cross-shore plots of water level for given y and t
-    Plots water level vs time and pressure vs time
+    Plots water level vs cross-shore coordinate x
 
     Input:
         data        dataset containing processed model output
@@ -368,7 +368,20 @@ def vis_crossshore(data, y: Union[Numeric, npt.ArrayLike]=1e5, t: Union[Numeric,
         plt.close("all")
 
 
-def vis_spectrum_1d(data, x=1e4, y=1e5, saveloc=None, keep_open=False, variable="wl", demean=True):
+def vis_spectrum_1d(data: xr.Dataset, x: Numeric=1e4, y: Union[Numeric, npt.ArrayLike]=1e5, saveloc: str=None, keep_open: bool=False, variable: str="wl", demean: bool=True):
+    """ Make plots of the pewer-frequency spectrum of a variable at given x and y
+    Plots water level vs time and pressure vs time
+
+    Input:
+        data        dataset containing processed model output
+        x           x-coordinate
+        y           list of y-coordinates
+
+    Options:
+        variable    name of variable, e.g. 'wl', 'u', 'v' or 'p'
+        saveloc     filename
+        keep_open   keep figure open if True
+    """
     ## Check inputs
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
