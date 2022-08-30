@@ -183,7 +183,19 @@ def vis_timeseries(data: xr.Dataset, y: Union[Numeric, npt.ArrayLike], x: Numeri
         plt.close("all")
 
 
-def vis_alongshore(data, t=3600, x=1e4, saveloc=None, keep_open=False):
+def vis_alongshore(data: xr.Dataset, t: Union[Numeric, npt.ArrayLike]=3600, x: Numeric=1e4, saveloc: str=None, keep_open: bool=False):
+    """ Make along-shore plots of water level x and t
+    Plots water level vs along-shore coordinate y
+
+    Input:
+        data        dataset containing processed model output
+        t           list of t-coordinates
+        x           x-coordinate
+
+    Options:
+        saveloc     filename
+        keep_open   keep figure open if True
+    """
     ## Check input
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
