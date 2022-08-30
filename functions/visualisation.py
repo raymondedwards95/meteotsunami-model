@@ -368,9 +368,9 @@ def vis_crossshore(data, y: Union[Numeric, npt.ArrayLike]=1e5, t: Union[Numeric,
         plt.close("all")
 
 
-def vis_spectrum_1d(data: xr.Dataset, x: Numeric=1e4, y: Union[Numeric, npt.ArrayLike]=1e5, saveloc: str=None, keep_open: bool=False, variable: str="wl", demean: bool=True):
+def vis_spectrum_1d(data: xr.Dataset, x: Numeric=1e4, y: Union[Numeric, npt.ArrayLike]=1e5, saveloc: str=None, keep_open: bool=False, variable: str="wl", demean: bool=True) -> None:
     """ Make plots of the pewer-frequency spectrum of a variable at given x and y
-    Plots water level vs time and pressure vs time
+    Plots power vs frequency
 
     Input:
         data        dataset containing processed model output
@@ -379,6 +379,7 @@ def vis_spectrum_1d(data: xr.Dataset, x: Numeric=1e4, y: Union[Numeric, npt.Arra
 
     Options:
         variable    name of variable, e.g. 'wl', 'u', 'v' or 'p'
+        demean      remove mean from data if True
         saveloc     filename
         keep_open   keep figure open if True
     """
@@ -466,7 +467,20 @@ def vis_spectrum_1d(data: xr.Dataset, x: Numeric=1e4, y: Union[Numeric, npt.Arra
         plt.close("all")
 
 
-def vis_spectrum_2d(data, x=1e4, saveloc=None, keep_open=False, variable="wl", xlims=None, ylims=None, autolim=1e-3, demean=True):
+def vis_spectrum_2d(data: xr.Dataset, x: Numeric=1e4, saveloc: str=None, keep_open: bool=False, variable: str="wl", xlims: Numeric=None, ylims: Numeric=None, autolim: Numeric=1e-3, demean: bool=True) -> None:
+    """ Make a plot of the 2d power spectrum for a given x
+    Plots power as a function of frequency and wavenumber
+
+    Input:
+        data        dataset containing processed model output
+        x           x-coordinate
+
+    Options:
+        variable    name of variable, e.g. 'wl', 'u', 'v' or 'p'
+        demean      remove mean from data if True
+        saveloc     filename
+        keep_open   keep figure open if True
+    """
     ## Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
