@@ -11,11 +11,13 @@ Main functions:
 
 import os
 import sys
+from typing import Union
 
 import cmocean as cmo
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.typing as npt
 import xarray as xr
 from matplotlib.colors import Normalize
 from matplotlib.ticker import MultipleLocator
@@ -28,7 +30,20 @@ import functions.analysis as fa
 import functions.utilities as fu
 
 
-def vis_timeseries(data, y, x=1e4, t_max=None, saveloc=None, keep_open=False):
+def vis_timeseries(data: xr.Dataset, y: Union[Numeric, npt.ArrayLike], x: Numeric=1e4, t_max: Numeric=None, saveloc: str=None, keep_open: bool=False) -> None:
+    """ Make timeseries plots of water level and pressure for given x and y
+    Plots water level vs time and pressure vs time
+
+    Input:
+        data        dataset containing processed model output
+        y           list of y-coordinates
+        x           x-coordinate
+
+    Options:
+        t_max       maximum time to plot
+        saveloc     filename
+        keep_open   keep figure open if True
+    """
     ## Check input
     if not np.isscalar(x):
         raise ValueError(f"{x=} should be scalar")
