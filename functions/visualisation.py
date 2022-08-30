@@ -9,7 +9,6 @@ Main functions:
     vis_contour
 """
 
-from ast import Num
 import os
 import sys
 from typing import Union
@@ -31,19 +30,26 @@ import functions.analysis as fa
 import functions.utilities as fu
 
 
-def vis_timeseries(data: xr.Dataset, y: Union[Numeric, npt.ArrayLike], x: Numeric=1e4, t_max: Numeric=None, saveloc: str=None, keep_open: bool=False) -> None:
+def vis_timeseries(
+    data: xr.Dataset,
+    y: Union[Numeric, npt.ArrayLike],
+    x: Numeric = 1e4,
+    t_max: Numeric = None,
+    saveloc: str = None,
+    keep_open: bool = False,
+) -> None:
     """ Make timeseries plots of water level and pressure for given x and y
     Plots water level vs time and pressure vs time
 
     Input:
-        data        dataset containing processed model output
-        y           list of y-coordinates
-        x           x-coordinate
+        data:       dataset containing processed model output
+        y:          list of y-coordinates
+        x:          x-coordinate
 
     Options:
-        t_max       maximum time to plot
-        saveloc     filename
-        keep_open   keep figure open if True
+        t_max:      maximum time to plot
+        saveloc:    filename
+        keep_open:  keep figure open if True
     """
     ## Check input
     if not np.isscalar(x):
@@ -184,18 +190,24 @@ def vis_timeseries(data: xr.Dataset, y: Union[Numeric, npt.ArrayLike], x: Numeri
         plt.close("all")
 
 
-def vis_alongshore(data: xr.Dataset, t: Union[Numeric, npt.ArrayLike]=3600, x: Numeric=1e4, saveloc: str=None, keep_open: bool=False) -> None:
+def vis_alongshore(
+    data: xr.Dataset,
+    t: Union[Numeric, npt.ArrayLike] = 3600,
+    x: Numeric = 1e4,
+    saveloc: str = None,
+    keep_open: bool = False,
+) -> None:
     """ Make along-shore plots of water level x and t
     Plots water level vs along-shore coordinate y
 
     Input:
-        data        dataset containing processed model output
-        t           list of t-coordinates
-        x           x-coordinate
+        data:       dataset containing processed model output
+        t:          list of t-coordinates
+        x:          x-coordinate
 
     Options:
-        saveloc     filename
-        keep_open   keep figure open if True
+        saveloc:    filename
+        keep_open:  keep figure open if True
     """
     ## Check input
     if not np.isscalar(x):
@@ -255,18 +267,24 @@ def vis_alongshore(data: xr.Dataset, t: Union[Numeric, npt.ArrayLike]=3600, x: N
         plt.close("all")
 
 
-def vis_crossshore(data, y: Union[Numeric, npt.ArrayLike]=1e5, t: Union[Numeric, npt.ArrayLike]=3600, saveloc: str=None, keep_open: bool=False) -> None:
+def vis_crossshore(
+    data,
+    y: Union[Numeric, npt.ArrayLike] = 1e5,
+    t: Union[Numeric, npt.ArrayLike] = 3600,
+    saveloc: str = None,
+    keep_open: bool = False,
+) -> None:
     """ Make cross-shore plots of water level for given y and t
     Plots water level vs cross-shore coordinate x
 
     Input:
-        data        dataset containing processed model output
-        y           list of y-coordinates
-        t           list of t-coordinates
+        data:       dataset containing processed model output
+        y:          list of y-coordinates
+        t:          list of t-coordinates
 
     Options:
-        saveloc     filename
-        keep_open   keep figure open if True
+        saveloc:    filename
+        keep_open:  keep figure open if True
     """
     ## Check input
     if np.isscalar(y):
@@ -368,20 +386,28 @@ def vis_crossshore(data, y: Union[Numeric, npt.ArrayLike]=1e5, t: Union[Numeric,
         plt.close("all")
 
 
-def vis_spectrum_1d(data: xr.Dataset, x: Numeric=1e4, y: Union[Numeric, npt.ArrayLike]=1e5, saveloc: str=None, keep_open: bool=False, variable: str="wl", demean: bool=True) -> None:
+def vis_spectrum_1d(
+    data: xr.Dataset,
+    x: Numeric = 1e4,
+    y: Union[Numeric, npt.ArrayLike] = 1e5,
+    saveloc: str = None,
+    keep_open: bool = False,
+    variable: str = "wl",
+    demean: bool = True,
+) -> None:
     """ Make plots of the pewer-frequency spectrum of a variable at given x and y
     Plots power vs frequency
 
     Input:
-        data        dataset containing processed model output
-        x           x-coordinate
-        y           list of y-coordinates
+        data:       dataset containing processed model output
+        x:          x-coordinate
+        y:          list of y-coordinates
 
     Options:
-        variable    name of variable, e.g. 'wl', 'u', 'v' or 'p'
-        demean      remove mean from data if True
-        saveloc     filename
-        keep_open   keep figure open if True
+        variable:   name of variable, e.g. 'wl', 'u', 'v' or 'p'
+        demean:     remove mean from data if True
+        saveloc:    filename
+        keep_open:  keep figure open if True
     """
     ## Check inputs
     if not np.isscalar(x):
@@ -467,19 +493,29 @@ def vis_spectrum_1d(data: xr.Dataset, x: Numeric=1e4, y: Union[Numeric, npt.Arra
         plt.close("all")
 
 
-def vis_spectrum_2d(data: xr.Dataset, x: Numeric=1e4, saveloc: str=None, keep_open: bool=False, variable: str="wl", xlims: Numeric=None, ylims: Numeric=None, autolim: Numeric=1e-3, demean: bool=True) -> None:
+def vis_spectrum_2d(
+    data: xr.Dataset,
+    x: Numeric = 1e4,
+    saveloc: str = None,
+    keep_open: bool = False,
+    variable: str = "wl",
+    xlims: Numeric = None,
+    ylims: Numeric = None,
+    autolim: Numeric = 1e-3,
+    demean: bool = True,
+) -> None:
     """ Make a plot of the 2d power spectrum for a given x
     Plots power as a function of frequency and wavenumber
 
     Input:
-        data        dataset containing processed model output
-        x           x-coordinate
+        data:       dataset containing processed model output
+        x:          x-coordinate
 
     Options:
-        variable    name of variable, e.g. 'wl', 'u', 'v' or 'p'
-        demean      remove mean from data if True
-        saveloc     filename
-        keep_open   keep figure open if True
+        variable:   name of variable, e.g. 'wl', 'u', 'v' or 'p'
+        demean:     remove mean from data if True
+        saveloc:    filename
+        keep_open:  keep figure open if True
     """
     ## Paths
     if saveloc is None:
@@ -550,18 +586,26 @@ def vis_spectrum_2d(data: xr.Dataset, x: Numeric=1e4, saveloc: str=None, keep_op
         plt.close("all")
 
 
-def vis_contour(data: xr.Dataset, t: Union[Numeric, npt.ArrayLike], saveloc: str=None, keep_open: bool=False, variable: str="wl", xlims: Numeric=None, ylims: Numeric=None) -> None:
+def vis_contour(
+    data: xr.Dataset,
+    t: Union[Numeric, npt.ArrayLike],
+    saveloc: str = None,
+    keep_open: bool = False,
+    variable: str = "wl",
+    xlims: Numeric = None,
+    ylims: Numeric = None,
+) -> None:
     """ Make a contour plot of a given variable at a given time t
     Plots power as a function of frequency and wavenumber
 
     Input:
-        data        dataset containing processed model output
-        t           list of t-coordinates
+        data:       dataset containing processed model output
+        t:          list of t-coordinates
 
     Options:
-        variable    name of variable, e.g. 'wl', 'u', 'v' or 'p'
-        demean      remove mean from data if True
-        saveloc     filename
+        variable:   name of variable, e.g. 'wl', 'u', 'v' or 'p'
+        demean:     remove mean from data if True
+        saveloc:    filename
     """
     ## Check input
     if variable in ["wl"]:
@@ -684,4 +728,3 @@ if __name__ == "__main__":
     vis_alongshore(data, t=[3600, 7200, 10800], x=1e4, keep_open=True)
 
     plt.close("all")
-
