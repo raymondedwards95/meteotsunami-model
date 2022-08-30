@@ -550,7 +550,19 @@ def vis_spectrum_2d(data: xr.Dataset, x: Numeric=1e4, saveloc: str=None, keep_op
         plt.close("all")
 
 
-def vis_contour(data, t, saveloc=None, keep_open=False, variable="wl", xlims=None, ylims=None):
+def vis_contour(data: xr.Dataset, t: Union[Numeric, npt.ArrayLike], saveloc: str=None, keep_open: bool=False, variable: str="wl", xlims: Numeric=None, ylims: Numeric=None) -> None:
+    """ Make a contour plot of a given variable at a given time t
+    Plots power as a function of frequency and wavenumber
+
+    Input:
+        data        dataset containing processed model output
+        t           list of t-coordinates
+
+    Options:
+        variable    name of variable, e.g. 'wl', 'u', 'v' or 'p'
+        demean      remove mean from data if True
+        saveloc     filename
+    """
     ## Check input
     if variable in ["wl"]:
         cmap = cmo.cm.balance
