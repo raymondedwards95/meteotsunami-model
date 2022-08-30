@@ -9,6 +9,7 @@ Main functions:
     vis_contour
 """
 
+from ast import Num
 import os
 import sys
 from typing import Union
@@ -183,7 +184,7 @@ def vis_timeseries(data: xr.Dataset, y: Union[Numeric, npt.ArrayLike], x: Numeri
         plt.close("all")
 
 
-def vis_alongshore(data: xr.Dataset, t: Union[Numeric, npt.ArrayLike]=3600, x: Numeric=1e4, saveloc: str=None, keep_open: bool=False):
+def vis_alongshore(data: xr.Dataset, t: Union[Numeric, npt.ArrayLike]=3600, x: Numeric=1e4, saveloc: str=None, keep_open: bool=False) -> None:
     """ Make along-shore plots of water level x and t
     Plots water level vs along-shore coordinate y
 
@@ -254,7 +255,19 @@ def vis_alongshore(data: xr.Dataset, t: Union[Numeric, npt.ArrayLike]=3600, x: N
         plt.close("all")
 
 
-def vis_crossshore(data, y=1e5, t=3600, saveloc=None, keep_open=False):
+def vis_crossshore(data, y: Union[Numeric, npt.ArrayLike]=1e5, t: Union[Numeric, npt.ArrayLike]=3600, saveloc: str=None, keep_open: bool=False) -> None:
+    """ Make cross-shore plots of water level for given y and t
+    Plots water level vs time and pressure vs time
+
+    Input:
+        data        dataset containing processed model output
+        y           list of y-coordinates
+        t           list of t-coordinates
+
+    Options:
+        saveloc     filename
+        keep_open   keep figure open if True
+    """
     ## Check input
     if np.isscalar(y):
         y_list = np.array([y])
