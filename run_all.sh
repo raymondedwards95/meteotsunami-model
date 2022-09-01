@@ -71,9 +71,9 @@ function func_computations ()
     local dTRegrid=$(python3 -c "print(f'{($TEnd - $TMiddle) / 60:0.1f}')")
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
-    echo "# Finised computations for case $LocalCase"
-    echo "# Case $LocalCase Took $dTTotal minutes in total: $dTComputation minutes for D3D and $dTRegrid for regridding"
-    echo "$(date) - Finished all for     '$LocalInputFile'" >> $LogFile
+    echo "# Finished computations for $LocalIdentifier case $LocalCase"
+    echo "# Case $LocalIdentifier $LocalCase took $dTTotal minutes in total: $dTComputation minutes for D3D and $dTRegrid minutes for regridding"
+    echo "$(date) - Finished all for '$LocalInputFile'" >> $LogFile
 }
 
 # Loop over all folders
