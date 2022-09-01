@@ -50,18 +50,19 @@ function func_computations ()
     # Start timer
     local TStart=$(date +%s)
 
-    echo "# Start simulations for case    $LocalCase"
     echo "  '$LocalInputFile' ->"
     echo "  '$LocalOutputFile' ->"
     echo "  '$LocalRegridFile'"
 
     # Do computations
+    echo "# Start simulations for $LocalIdentifier case $LocalCase"
     echo "$(date) - Start simulation for '$LocalInputFile'" >> $LogFile
     $DFLOWFM_BIN_PATH/run_dflowfm.sh $LocalInputFile 1> "${LogFolder}/sim_${LocalIdentifier}_${LocalCase}.log" 2>&1
 
     local TMiddle=$(date +%s)
 
     # Regrid data
+    echo "# Start Regridding for $LocalIdentifier case $LocalCase"
     echo "$(date) - Start regridding for '$LocalInputFile'" >> $LogFile
     python3 ${BaseDir}/functions/regrid.py $LocalOutputFile $LocalRegridFile --delete-original-model-output 1 1> "${LogFolder}/regrid_${LocalIdentifier}_${LocalCase}.log" 2>&1
 
