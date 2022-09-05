@@ -22,7 +22,7 @@ LogFolder="${PWD}/logs"
 
 mkdir -p "${LogFolder}"
 
-echo
+echo ""
 echo "### Prepare simulations"
 echo "## Reading './settings.sh'"
 source ./settings.sh
@@ -122,6 +122,7 @@ do
     # Return
     cd $BaseDir
 done
-echo
+
+echo ""
 echo "### Finished all simulations"
-echo
+echo ""
