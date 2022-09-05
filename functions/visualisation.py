@@ -137,7 +137,7 @@ def vis_timeseries(
     ax[0].set_ylim(np.array([-1.1, 1.1]) * wl_max)
     ax[0].legend([f"$y={y/1000:0.0f}$ km" for y in y_arr], bbox_to_anchor=(0., 1.02, 1., .102), loc="lower left", ncol=4, mode="expand", borderaxespad=0.)
 
-    fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}_a")
 
     ## Figure b
@@ -182,7 +182,7 @@ def vis_timeseries(
             pass
     ax[-1].set_xlabel("Time since start [hours]")
 
-    fig.savefig(savename + "_b", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    fig.savefig(savename + "_b", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}_b")
 
     ## End
@@ -259,7 +259,7 @@ def vis_alongshore(
         ax[i].grid()
     ax[-1].set_xlabel("$y$ [km]")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     ## End
@@ -378,7 +378,7 @@ def vis_crossshore(
     for j in range(y_num):
         ax[-1,j].set_xlabel("$x$ [km]")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     ## End
@@ -485,7 +485,7 @@ def vis_spectrum_1d(
         ax[i].grid()
     ax[-1].set_xlabel("Frequency [cycles / hour]")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     ## End
@@ -578,7 +578,7 @@ def vis_spectrum_2d(
     ax[0].set_ylabel("Frequency [cycles / hour]")
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$ km")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     ## End
@@ -693,7 +693,7 @@ def vis_contour(
     )
 
     ## Save figure
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     ## End
