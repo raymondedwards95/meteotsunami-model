@@ -230,6 +230,12 @@ def extract_data(filename: str, savename: str, close: bool=False) -> xr.Dataset 
     print(f"# Start processing data")
     print(f"# Reading file '{filename}'")
 
+    ## Name and Description
+    identifier = savename.split("/")[-1].strip(".nc").strip("data_").replace("_", " ")
+    dataset_name = f"Case {identifier}"
+    dataset_desc = f"Gridded output data from simulation case {identifier}."
+    del identifier
+
     ## Open data file and extract necessary coordinates and variables
     with xr.open_dataset(filename, chunks="auto") as original_data:
         x = original_data["mesh2d_face_x"]
@@ -246,7 +252,10 @@ def extract_data(filename: str, savename: str, close: bool=False) -> xr.Dataset 
     x_grid = _convert_coordinate_to_regular_grid(x)[0]
     y_grid = _convert_coordinate_to_regular_grid(y)[0]
 
-    data = xr.Dataset(coords={"t": t.values, "x": x_grid, "y": y_grid})
+    data = xr.Dataset(
+        coords={"t": t.values, "x": x_grid, "y": y_grid},
+        attrs={"name": dataset_name, "description": dataset_desc}
+        )
     data.x.attrs["long_name"] = "x coordinate"
     data.x.attrs["units"] = "m"
     data.y.attrs["long_name"] = "y coordinate"
