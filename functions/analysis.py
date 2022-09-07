@@ -18,13 +18,15 @@ import scipy.constants
 import xarray as xr
 from scipy.optimize import curve_fit
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 import functions.utilities as fu
+# fmt: on
 
 
-def dispersion_relation(k: Union[npt.ArrayLike, Numeric], n: Integer=0, alpha: Numeric=1/400) -> np.ndarray | Numeric:
+def dispersion_relation(k: Union[npt.ArrayLike, Numeric], n: Integer = 0, alpha: Numeric = 1/400) -> np.ndarray | Numeric:
     """ Returns the frequency related to the wavenumber
     for shallow water waves on a beach of linear slope [Eckart, 1951]
 
@@ -79,7 +81,7 @@ def compute_decay_parameter(data: xr.Dataset, y: Numeric, t: Numeric) -> Tuple[N
     return (k0, y0)
 
 
-def compute_wave_periods(data: xr.Dataset, y: Numeric, x: Numeric=None, crests: bool=True, no_result: Numeric=np.nan) -> List[Numeric]:
+def compute_wave_periods(data: xr.Dataset, y: Numeric, x: Numeric = None, crests: bool = True, no_result: Numeric = np.nan) -> List[Numeric]:
     """ Computes the wave period at given x,y
 
     Input:
@@ -101,12 +103,17 @@ def compute_wave_periods(data: xr.Dataset, y: Numeric, x: Numeric=None, crests: 
         print("No wave period can be computed!")
         return np.array([no_result])
 
-    periods = data["t"][t_idx].diff(dim="t").values.astype("timedelta64[s]").astype(float) / 3600
+    periods = \
+        data["t"][t_idx] \
+        .diff(dim="t") \
+        .values \
+        .astype("timedelta64[s]") \
+        .astype(float) / 3600.
 
     return periods
 
 
-def compute_wave_lengths(data: xr.Dataset, t: Numeric, x: Numeric=None, crests: bool=True, no_result: Numeric=np.nan) -> List[Numeric]:
+def compute_wave_lengths(data: xr.Dataset, t: Numeric, x: Numeric = None, crests: bool = True, no_result: Numeric = np.nan) -> List[Numeric]:
     """ Computes the wave length at given x,t
 
     Input:
@@ -133,7 +140,7 @@ def compute_wave_lengths(data: xr.Dataset, t: Numeric, x: Numeric=None, crests: 
     return lengths
 
 
-def spectral_analysis_1d(data: xr.Dataset, y: Numeric, x: Numeric=1e4, variable: str="wl", demean: bool=False) -> Tuple[np.ndarray]:
+def spectral_analysis_1d(data: xr.Dataset, y: Numeric, x: Numeric = 1e4, variable: str = "wl", demean: bool = False) -> Tuple[np.ndarray]:
     """ Apply fourier transform on timeseries
 
     Input:
@@ -164,7 +171,7 @@ def spectral_analysis_1d(data: xr.Dataset, y: Numeric, x: Numeric=1e4, variable:
     return (freqs, power)
 
 
-def spectral_analysis_2d(data: xr.Dataset, x: Numeric=1e4, variable: str="wl", demean: bool=False) -> Tuple[np.ndarray]:
+def spectral_analysis_2d(data: xr.Dataset, x: Numeric = 1e4, variable: str = "wl", demean: bool = False) -> Tuple[np.ndarray]:
     """ Apply fourier transform on spatial and temporal varying data
 
     Input:
@@ -189,8 +196,10 @@ def spectral_analysis_2d(data: xr.Dataset, x: Numeric=1e4, variable: str="wl", d
     if demean:
         var -= np.mean(var)
 
-    transform = np.fft.rfft2(var, axes=(1, 0))  # first over time, then space
-    transform = np.fft.fftshift(transform, axes=1)  # rearrange data, so that wavenumber is in increasing order
+    # transform first over time, then space
+    transform = np.fft.rfft2(var, axes=(1, 0))
+    # rearrange data, so that wavenumber is in increasing order
+    transform = np.fft.fftshift(transform, axes=1)
     power = np.power(np.abs(transform), 2.)
 
     freqs = np.fft.rfftfreq(var.shape[0], dt)
