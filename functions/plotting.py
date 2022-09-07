@@ -31,7 +31,14 @@ class plot_spectrum_1d():
         variable: str,
         demean: bool = True,
     ):
-        """ Create and setup a figure for the 1d spectrum """
+        """ Create and setup a figure for the 1d spectrum
+
+        Input:
+            variable:   name of variable, i.e. "wl", "u", "v" or "p"
+
+        Options:
+            demean:     remove mean from data
+        """
         self.figsize = FIGSIZE_NORMAL
         self.demean = demean
 
@@ -54,11 +61,13 @@ class plot_spectrum_1d():
                 self.variable_name = "Surface air pressure"
             case _:
                 raise ValueError(
-                    f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+                    f"{variable=} should be 'wl', 'u', 'v' or 'p'"
+                )
 
     def _setup_figure(
         self,
     ):
+        """ Figure setup """
         self.fig.set_size_inches(self.figsize)
         self.fig.set_dpi(FIG_DPI)
         self.fig.set_tight_layout(True)
@@ -68,11 +77,24 @@ class plot_spectrum_1d():
     def _setup_plot(
         self,
     ):
+        """ Plot setup """
+        # General
         self.ax.axhline(color="black", linewidth=1)
-        self.ax.set_ylim(0, None)
-        self.ax.set_xlim(0, 2.2)
-        self.ax.set_ylabel("Spectral Power [m$^2$ hr]")
         self.ax.legend(loc="upper right")
+        self.ax.grid()
+
+        # x-axis
+        self.ax.set_xlabel("Frequency [cycles per hour]")
+        self.ax.set_xlim(0, 2.2)
+        self.ax.xaxis.set_ticks(np.arange(0, 2.2, 0.2))
+        self.ax.xaxis.set_ticks(np.arange(0, 2.2, 0.1), minor=True)
+
+        # y-axis
+        self.ax.set_ylabel("Spectral Power [m$^2$ hr]")
+        self.ax.set_ylim(0, None)
+        self.ax.ticklabel_format(axis="y", style="sci", scilimits=(0, 0), useMathText=True)
+
+        # end
         return
 
     def add_plot(
@@ -82,6 +104,16 @@ class plot_spectrum_1d():
         y: Numeric,
         label: str = "",
     ):
+        """ Adds data to a plot
+
+        Input:
+            dataset:    dataset containing model output
+            x:          x-coordinate
+            y:          y-coordinate
+
+        Options:
+            label:      label for plot
+        """
         # Compute spectrum
         freqs, power = fa.spectral_analysis_1d(
             data=dataset,
@@ -107,20 +139,18 @@ class plot_spectrum_1d():
         )
         return self
 
-    def add_subplot(
-        self,
-        dataset: xr.Dataset,
-        x: Numeric,
-        y: Numeric,
-    ):
-        return self.add_plot(dataset, x, y)
-
     def save(
         self,
         saveloc: str,
     ):
+        """ Saves the figure
+
+        Input:
+            saveloc:    location where the figure should be saved
+        """
         savename = f"{saveloc}_spectrum_1d"
 
+        self._setup_figure()
         self._setup_plot()
         self.fig.savefig(
             savename,
@@ -152,10 +182,9 @@ if __name__ == "__main__":
     def test_spectrum_1d():
         x = 1e4
         y = 1e5
-        var = "wl"
-        plot_spectrum_1d() \
-            .add_plot(data_a, var, x, y, label="a") \
-            .add_plot(data_b, var, x, y, label="b") \
-            .add_plot(data_c, var, x, y, label="c") \
+        plot_spectrum_1d(variable="wl", demean=False) \
+            .add_plot(data_a, x, y, label="a") \
+            .add_plot(data_b, x, y, label="b") \
+            .add_plot(data_c, x, y, label="c") \
             .save(figure_file)
     test_spectrum_1d()
