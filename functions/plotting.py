@@ -64,6 +64,10 @@ class plot_spectrum_1d():
                     f"{variable=} should be 'wl', 'u', 'v' or 'p'"
                 )
 
+        print(
+            f"\n# Initiated figure for spectrum_1d with variable '{self.variable}' ({self.variable_name.lower()})"
+        )
+
     def _setup_figure(
         self,
     ):
@@ -130,6 +134,7 @@ class plot_spectrum_1d():
         freqs *= 3600.
         power /= 3600.
 
+        # Plot
         self.ax.plot(
             freqs,
             power,
@@ -139,6 +144,16 @@ class plot_spectrum_1d():
             freqs,
             power,
             alpha=0.1,
+        )
+
+        # Log
+        dataset_name: str
+        try:
+            dataset_name = dataset.attrs["name"]
+        except KeyError:
+            dataset_name = "'unnamed'"
+        print(
+            f"# Added data from {dataset_name} for {x=} and {y=}, labeled by {label=}"
         )
         return self
 
@@ -161,6 +176,7 @@ class plot_spectrum_1d():
             dpi=FIG_DPI,
             pil_kwargs=FIG_PIL_KWARGS,
         )
+        print(f"# Saved 1d-spectrum figure as {savename}")
         return
 
 
