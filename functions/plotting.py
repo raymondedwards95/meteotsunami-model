@@ -72,7 +72,8 @@ class plot_spectrum_1d():
         self.fig.set_dpi(FIG_DPI)
         self.fig.set_tight_layout(True)
         self.fig.suptitle(
-            f"Power Spectrum - {self.variable_name}", va="top", ha="left", x=0.01)
+            f"Power Spectrum - {self.variable_name}", va="top", ha="left", x=0.01
+        )
 
     def _setup_plot(
         self,
@@ -92,7 +93,9 @@ class plot_spectrum_1d():
         # y-axis
         self.ax.set_ylabel("Spectral Power [m$^2$ hr]")
         self.ax.set_ylim(0, None)
-        self.ax.ticklabel_format(axis="y", style="sci", scilimits=(0, 0), useMathText=True)
+        self.ax.ticklabel_format(
+            axis="y", style="sci", scilimits=(0, 0), useMathText=True,
+        )
 
         # end
         return
@@ -130,7 +133,7 @@ class plot_spectrum_1d():
         self.ax.plot(
             freqs,
             power,
-            label=label
+            label=label,
         )
         self.ax.fill_between(
             freqs,
