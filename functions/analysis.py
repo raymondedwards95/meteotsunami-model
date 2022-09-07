@@ -26,7 +26,11 @@ import functions.utilities as fu
 # fmt: on
 
 
-def dispersion_relation(k: Union[npt.ArrayLike, Numeric], n: Integer = 0, alpha: Numeric = 1/400) -> np.ndarray | Numeric:
+def dispersion_relation(
+    k: Union[npt.ArrayLike, Numeric],
+    n: Integer = 0,
+    alpha: Numeric = 1/400,
+) -> np.ndarray | Numeric:
     """ Returns the frequency related to the wavenumber
     for shallow water waves on a beach of linear slope [Eckart, 1951]
 
@@ -45,7 +49,11 @@ def dispersion_relation(k: Union[npt.ArrayLike, Numeric], n: Integer = 0, alpha:
     return np.sqrt((g * np.abs(k) / 2. / np.pi) * (2. * n + 1.) * np.tan(alpha))
 
 
-def exp_decay(x: npt.ArrayLike, k0: Numeric, y0: Numeric) -> np.ndarray:
+def exp_decay(
+    x: npt.ArrayLike,
+    k0: Numeric,
+    y0: Numeric,
+) -> np.ndarray:
     """ Returns an exponential decay in x with decay parameter k0 and scale y0
 
     Input:
@@ -59,7 +67,11 @@ def exp_decay(x: npt.ArrayLike, k0: Numeric, y0: Numeric) -> np.ndarray:
     return y0 * np.exp(-k0 * x)
 
 
-def compute_decay_parameter(data: xr.Dataset, y: Numeric, t: Numeric) -> Tuple[Numeric]:
+def compute_decay_parameter(
+    data: xr.Dataset,
+    y: Numeric,
+    t: Numeric,
+) -> Tuple[Numeric]:
     """ Computes the decay parameter and scaling parameter for data at given y and t
 
     Input:
@@ -81,7 +93,13 @@ def compute_decay_parameter(data: xr.Dataset, y: Numeric, t: Numeric) -> Tuple[N
     return (k0, y0)
 
 
-def compute_wave_periods(data: xr.Dataset, y: Numeric, x: Numeric = None, crests: bool = True, no_result: Numeric = np.nan) -> List[Numeric]:
+def compute_wave_periods(
+    data: xr.Dataset,
+    y: Numeric,
+    x: Numeric = None,
+    crests: bool = True,
+    no_result: Numeric = np.nan,
+) -> List[Numeric]:
     """ Computes the wave period at given x,y
 
     Input:
@@ -113,7 +131,13 @@ def compute_wave_periods(data: xr.Dataset, y: Numeric, x: Numeric = None, crests
     return periods
 
 
-def compute_wave_lengths(data: xr.Dataset, t: Numeric, x: Numeric = None, crests: bool = True, no_result: Numeric = np.nan) -> List[Numeric]:
+def compute_wave_lengths(
+    data: xr.Dataset,
+    t: Numeric,
+    x: Numeric = None,
+    crests: bool = True,
+    no_result: Numeric = np.nan,
+) -> List[Numeric]:
     """ Computes the wave length at given x,t
 
     Input:
@@ -140,7 +164,13 @@ def compute_wave_lengths(data: xr.Dataset, t: Numeric, x: Numeric = None, crests
     return lengths
 
 
-def spectral_analysis_1d(data: xr.Dataset, y: Numeric, x: Numeric = 1e4, variable: str = "wl", demean: bool = False) -> Tuple[np.ndarray]:
+def spectral_analysis_1d(
+    data: xr.Dataset,
+    y: Numeric,
+    x: Numeric = 1e4,
+    variable: str = "wl",
+    demean: bool = False,
+) -> Tuple[np.ndarray]:
     """ Apply fourier transform on timeseries
 
     Input:
@@ -171,13 +201,18 @@ def spectral_analysis_1d(data: xr.Dataset, y: Numeric, x: Numeric = 1e4, variabl
     return (freqs, power)
 
 
-def spectral_analysis_2d(data: xr.Dataset, x: Numeric = 1e4, variable: str = "wl", demean: bool = False) -> Tuple[np.ndarray]:
+def spectral_analysis_2d(
+    data: xr.Dataset,
+    x: Numeric = 1e4,
+    variable: str = "wl",
+    demean: bool = False,
+) -> Tuple[np.ndarray]:
     """ Apply fourier transform on spatial and temporal varying data
 
     Input:
         data:       Dataset containing all data and coordinates
 
-    Parameters:
+    Options:
         x:          x-coordinate
         variable:   name of the variable to use, e.g. "wl" or "p", default="wl"
         demean:     remove mean from signal, default=False
