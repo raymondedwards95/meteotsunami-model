@@ -19,12 +19,20 @@ import xarray as xr
 from matplotlib.animation import FuncAnimation
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
+# fmt: on
 
 
-def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test_i_max: Integer=None, close: bool=True) -> None:
+def animation_contour(
+    data: xr.Dataset,
+    savedir: str,
+    xlims: Numeric = None,
+    _test_i_max: Integer = None,
+    close: bool = True,
+) -> None:
     """ Creates an animation of the top-down view of the water level and surface air pressure data
 
     Input:
@@ -35,7 +43,7 @@ def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test
         xlims:      x-limits for the figure
         close:      close figure after finishing
     """
-    ## Check inputs
+    # Check inputs
     if not isinstance(data, xr.Dataset):
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
@@ -45,7 +53,7 @@ def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test
     savename = f"{savedir}/anim_contours.mp4"
     savename_static = f"{savedir}/static_contours.png"
 
-    ## Shortcuts
+    # Shortcuts
     x = data["x"]
     y = data["y"]
     t = data["t"]
@@ -64,7 +72,7 @@ def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test
     if xlims is None:
         xlims = [y.min() / 1000. / 10., y.max() / 1000.]
 
-    ## Figure options
+    # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
     fig.set_size_inches(14.4, 7.2)
     fig.set_dpi(100)
@@ -73,8 +81,7 @@ def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test
     div = np.array([make_axes_locatable(ax[i]) for i in range(2)])
     cax = np.array([div[i].append_axes("right", "5%", "5%") for i in range(2)])
 
-
-    ## Initial data
+    # Initial data
     plotdata = np.zeros(2, dtype=object)
     plottext = np.zeros(1, dtype=object)
 
@@ -106,7 +113,7 @@ def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test
     set_plotdata()
     set_plottext()
 
-    ## Subplot layout
+    # Subplot layout
     def initfig():
         for i in range(2):
             ax[i].axhline(color="black", linewidth=1)
@@ -127,7 +134,7 @@ def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test
 
     initfig()
 
-    ## Update data
+    # Update data
     num_frames = t.size
     if _test_i_max is not None and isinstance(_test_i_max, int):
         warnings.warn("Parameter _test_i_max is set for testing animation function!")
@@ -160,7 +167,7 @@ def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
-    ## Animation
+    # Animation
     frames = (np.arange(num_frames)).astype(int)
     anim = FuncAnimation(
         fig,
@@ -186,7 +193,13 @@ def animation_contour(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test
     return
 
 
-def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test_i_max: Integer=None, close: bool=True) -> None:
+def animation_contour_uv(
+    data: xr.Dataset,
+    savedir: str,
+    xlims: Numeric = None,
+    _test_i_max: Integer = None,
+    close: bool = True,
+) -> None:
     """ Creates an animation of the top-down view of the water velocity data
 
     Input:
@@ -197,7 +210,7 @@ def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
         xlims:      x-limits for the figure
         close:      close figure after finishing
     """
-    ## Check inputs
+    # Check inputs
     if not isinstance(data, xr.Dataset):
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
@@ -207,7 +220,7 @@ def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     savename = f"{savedir}/anim_uv_cont.mp4"
     savename_static = f"{savedir}/static_uv_cont.png"
 
-    ## Shortcuts
+    # Shortcuts
     x = data["x"]
     y = data["y"]
     t = data["t"]
@@ -226,7 +239,7 @@ def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     if xlims is None:
         xlims = [y.min() / 1000. / 10., y.max() / 1000.]
 
-    ## Figure options
+    # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
     fig.set_size_inches(14.4, 7.2)
     fig.set_dpi(100)
@@ -235,7 +248,7 @@ def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     div = np.array([make_axes_locatable(ax[i]) for i in range(2)])
     cax = np.array([div[i].append_axes("right", "5%", "5%") for i in range(2)])
 
-    ## Initial data
+    # Initial data
     plotdata = np.zeros(2, dtype=object)
     plottext = np.zeros(1, dtype=object)
 
@@ -267,7 +280,7 @@ def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     set_plotdata()
     set_plottext()
 
-    ## Subplot layout
+    # Subplot layout
     def initfig():
         for i in range(2):
             ax[i].axhline(color="black", linewidth=1)
@@ -289,7 +302,7 @@ def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
 
     initfig()
 
-    ## Update data
+    # Update data
     num_frames = t.size
     if _test_i_max is not None and isinstance(_test_i_max, int):
         warnings.warn("Parameter _test_i_max is set for testing animation function!")
@@ -322,7 +335,7 @@ def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
-    ## Animation
+    # Animation
     frames = (np.arange(num_frames)).astype(int)
     anim = FuncAnimation(
         fig,
@@ -348,7 +361,13 @@ def animation_contour_uv(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     return
 
 
-def animation_alongshore(data: xr.Dataset, savedir: str, xlims: Numeric=None, _test_i_max: Integer=None, close: bool=True) -> None:
+def animation_alongshore(
+    data: xr.Dataset,
+    savedir: str,
+    xlims: Numeric = None,
+    _test_i_max: Integer = None,
+    close: bool = True,
+) -> None:
     """ Creates an animation of an alongshore cross-section of the water level and surface air pressure data
 
     Input:
@@ -359,7 +378,7 @@ def animation_alongshore(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
         xlims:      x-limits for the figure
         close:      close figure after finishing
     """
-    ## Check inputs
+    # Check inputs
     if not isinstance(data, xr.Dataset):
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
@@ -369,7 +388,7 @@ def animation_alongshore(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     savename = f"{savedir}/anim_alongshore.mp4"
     savename_static = f"{savedir}/static_alongshore.png"
 
-    ## Shortcuts
+    # Shortcuts
     x = data["x"]
     y = data["y"]
     t = data["t"]
@@ -385,13 +404,13 @@ def animation_alongshore(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     if xlims is None:
         xlims = [y.min() / 1000. / 10., y.max() / 1000.]
 
-    ## Figure options
+    # Figure options
     fig, ax = plt.subplots(2, 1, sharex=True)
     fig.set_size_inches(14.4, 7.2)
     fig.set_dpi(100)
     fig.set_tight_layout(True)
 
-    ## Initial data
+    # Initial data
     plotdata = np.zeros(2, dtype=object)
     plottext = np.zeros(1, dtype=object)
 
@@ -415,7 +434,7 @@ def animation_alongshore(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     set_plotdata()
     set_plottext()
 
-    ## Subplot layout
+    # Subplot layout
     def initfig():
         for i in range(2):
             ax[i].axhline(color="black", linewidth=1)
@@ -431,7 +450,7 @@ def animation_alongshore(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
 
     initfig()
 
-    ## Update data
+    # Update data
     num_frames = t.size
     if _test_i_max is not None and isinstance(_test_i_max, int):
         warnings.warn("Parameter _test_i_max is set for testing animation function!")
@@ -451,7 +470,7 @@ def animation_alongshore(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
-    ## Animation
+    # Animation
     frames = (np.arange(num_frames)).astype(int)
     anim = FuncAnimation(
         fig,
@@ -477,7 +496,12 @@ def animation_alongshore(data: xr.Dataset, savedir: str, xlims: Numeric=None, _t
     return
 
 
-def animation_crossshore(data: xr.Dataset, savedir: str, _test_i_max: Integer=None, close: bool=True) -> None:
+def animation_crossshore(
+    data: xr.Dataset,
+    savedir: str,
+    _test_i_max: Integer = None,
+    close: bool = True,
+) -> None:
     """ Creates an animation of crossshore cross-sections of the water level and surface air pressure data
 
     Input:
@@ -487,7 +511,7 @@ def animation_crossshore(data: xr.Dataset, savedir: str, _test_i_max: Integer=No
     Options:
         close:      close figure after finishing
     """
-    ## Check inputs
+    # Check inputs
     if not isinstance(data, xr.Dataset):
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
@@ -497,7 +521,7 @@ def animation_crossshore(data: xr.Dataset, savedir: str, _test_i_max: Integer=No
     savename = f"{savedir}/anim_crossshore.mp4"
     savename_static = f"{savedir}/static_crossshore.png"
 
-    ## Shortcuts
+    # Shortcuts
     x = data["x"]
     y = data["y"]
     t = data["t"]
@@ -508,14 +532,14 @@ def animation_crossshore(data: xr.Dataset, savedir: str, _test_i_max: Integer=No
     wl_min = -1. * wl_max
     y_max = float(y.max())
 
-    ## Figure options
+    # Figure options
     slices = 5
     fig, ax = plt.subplots(slices, 1, sharex=True)
     fig.set_size_inches(14.4, 7.2)
     fig.set_dpi(100)
     fig.set_tight_layout(True)
 
-    ## Initial data
+    # Initial data
     plotdata = np.zeros(slices, dtype=object)
     plottext = np.zeros(1, dtype=object)
     _y = np.arange(slices) * y_max / slices
@@ -537,7 +561,7 @@ def animation_crossshore(data: xr.Dataset, savedir: str, _test_i_max: Integer=No
     set_plotdata()
     set_plottext()
 
-    ## Subplot layout
+    # Subplot layout
     def initfig():
         for i in range(slices):
             ax[i].axhline(color="black", linewidth=1)
@@ -552,7 +576,7 @@ def animation_crossshore(data: xr.Dataset, savedir: str, _test_i_max: Integer=No
 
     initfig()
 
-    ## Update data
+    # Update data
     num_frames = t.size
     if _test_i_max is not None and isinstance(_test_i_max, int):
         warnings.warn("Parameter _test_i_max is set for testing animation function!")
@@ -572,7 +596,7 @@ def animation_crossshore(data: xr.Dataset, savedir: str, _test_i_max: Integer=No
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
-    ## Animation
+    # Animation
     frames = (np.arange(num_frames)).astype(int)
     anim = FuncAnimation(
         fig,
