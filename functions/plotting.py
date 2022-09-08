@@ -41,6 +41,8 @@ class plot_spectrum_1d():
         """
         self.figsize = FIGSIZE_NORMAL
         self.demean = demean
+        self.closed = False
+        self._check_if_closed()
 
         self.fig, self.ax = plt.subplots(1, 1)
 
@@ -68,13 +70,26 @@ class plot_spectrum_1d():
             f"\n# Initiated figure for spectrum_1d with variable '{self.variable}' ({self.variable_name.lower()})"
         )
 
+    def _check_if_closed(
+        self,
+    ):
+        """ Raises an error if the figure is supposed to be closed """
+        if self.closed:
+            raise TypeError(f"Figure is cleared and closed: it can not be edited")
+
     def _setup_figure(
         self,
     ):
         """ Figure setup """
+        # Checks
+        self._check_if_closed()
+
+        # General
         self.fig.set_size_inches(self.figsize)
         self.fig.set_dpi(FIG_DPI)
         self.fig.set_tight_layout(True)
+
+        # Figure specific
         self.fig.suptitle(
             f"Power Spectrum - {self.variable_name}", va="top", ha="left", x=0.01
         )
@@ -83,6 +98,9 @@ class plot_spectrum_1d():
         self,
     ):
         """ Plot setup """
+        # Checks
+        self._check_if_closed()
+
         # General
         self.ax.axhline(color="black", linewidth=1)
         self.ax.legend(loc="upper right")
@@ -121,6 +139,9 @@ class plot_spectrum_1d():
         Options:
             label:      label for plot
         """
+        # Checks
+        self._check_if_closed()
+
         # Compute spectrum
         freqs, power = fa.spectral_analysis_1d(
             data=dataset,
@@ -160,23 +181,46 @@ class plot_spectrum_1d():
     def save(
         self,
         saveloc: str,
+        close: bool = True,
     ):
         """ Saves the figure
 
         Input:
             saveloc:    location where the figure should be saved
+
+        Options:
+            close:      close figure
         """
+        # Checks
+        self._check_if_closed()
         savename = f"{saveloc}_spectrum_1d"
 
+        # Setup
         self._setup_figure()
         self._setup_plot()
+
+        # Save
         self.fig.savefig(
             savename,
             bbox_inches="tight",
             dpi=FIG_DPI,
             pil_kwargs=FIG_PIL_KWARGS,
         )
+
+        # End
         print(f"# Saved 1d-spectrum figure as {savename}")
+        if close:
+            self.close()
+        return
+
+    def close(
+        self,
+    ):
+        """ Close the figure """
+        self.closed = True
+        self.fig.clear()
+        plt.close(self.fig)
+        print(f"# Figure 1d-spectrum is closed")
         return
 
 
