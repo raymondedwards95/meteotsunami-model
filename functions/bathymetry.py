@@ -18,32 +18,60 @@ import numpy.typing as npt
 import xarray as xr
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
+# fmt: on
 
 
-def _convert_to_xarray_1d(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike) -> xr.DataArray:
+def _convert_to_xarray_1d(
+    x: npt.ArrayLike,
+    y: npt.ArrayLike,
+    b: npt.ArrayLike,
+) -> xr.DataArray:
     if np.ndim(x) != 1:
-        raise ValueError(f"'x' should be 1-dimensional, instead of {np.ndim(x)}")
+        raise ValueError(
+            f"'x' should be 1-dimensional, instead of {np.ndim(x)}"
+        )
     if np.ndim(y) != 1:
-        raise ValueError(f"'y' should be 1-dimensional, instead of {np.ndim(y)}")
+        raise ValueError(
+            f"'y' should be 1-dimensional, instead of {np.ndim(y)}"
+        )
     if np.ndim(b) != 1:
-        raise ValueError(f"'b' should be 1-dimensional, instead of {np.ndim(b)}")
+        raise ValueError(
+            f"'b' should be 1-dimensional, instead of {np.ndim(b)}"
+        )
     raise NotImplementedError()
 
 
-def _convert_to_xarray_2d(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike) -> xr.DataArray:
+def _convert_to_xarray_2d(
+    x: npt.ArrayLike,
+    y: npt.ArrayLike,
+    b: npt.ArrayLike,
+) -> xr.DataArray:
     if np.ndim(x) != 1:
-        raise ValueError(f"'x' should be 1-dimensional, instead of {np.ndim(x)}")
+        raise ValueError(
+            f"'x' should be 1-dimensional, instead of {np.ndim(x)}"
+        )
     if np.ndim(y) != 1:
-        raise ValueError(f"'y' should be 1-dimensional, instead of {np.ndim(y)}")
+        raise ValueError(
+            f"'y' should be 1-dimensional, instead of {np.ndim(y)}"
+        )
     if np.ndim(b) != 2:
-        raise ValueError(f"'b' should be 2-dimensional, instead of {np.ndim(b)}")
+        raise ValueError(
+            f"'b' should be 2-dimensional, instead of {np.ndim(b)}"
+        )
     return xr.DataArray(b, dims=list("yx"), coords={"x": x, "y": y})
 
 
-def convert_to_xarray(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike, savename: str=None, close: bool=False) -> xr.DataArray | None:
+def convert_to_xarray(
+    x: npt.ArrayLike,
+    y: npt.ArrayLike,
+    b: npt.ArrayLike,
+    savename: str = None,
+    close: bool = False,
+) -> xr.DataArray | None:
     """ Function to convert separate numpy arrays for x, y and b to a single DataArray for writing to files
 
     Input:
@@ -66,7 +94,9 @@ def convert_to_xarray(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike, save
     elif b.ndim == 2:
         data = _convert_to_xarray_2d(x, y, b)
     else:
-        raise ValueError(f"{b.ndim} dimensions is not supported for 'b' (max dim is 2")
+        raise ValueError(
+            f"{b.ndim} dimensions is not supported for 'b' (max dim is 2"
+        )
 
     data.attrs["long_name"] = "bed level"
     data.attrs["units"] = "m"
@@ -91,21 +121,26 @@ def convert_to_xarray(x: npt.ArrayLike, y: npt.ArrayLike, b: npt.ArrayLike, save
         print(f"# Saved data-array as {savename}")
 
     t1 = time.perf_counter_ns()
-    print(f"# Finished converting bathymetry data to a data-array in {(t1-t0)*1e-9:0.3f} seconds")
+    print(
+        f"# Finished converting bathymetry data to a data-array in {(t1-t0)*1e-9:0.3f} seconds"
+    )
 
     if close:
         return
     return data
 
 
-def write_bathymetry(data: xr.DataArray, filename) -> None:
+def write_bathymetry(
+    data: xr.DataArray,
+    filename: str,
+) -> None:
     """ Function to write bathymetry data to a `bathymetry.xyb` file for use with Delft3D-FM
 
     Input:
         data:       bathymetry and coordinate data
         filename:   .xyb file name
     """
-    ## prepare
+    # prepare
     t0 = time.perf_counter_ns()
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
@@ -117,7 +152,7 @@ def write_bathymetry(data: xr.DataArray, filename) -> None:
     y = data.y.values
     b = data.values
 
-    ## write
+    # write
     with open(filename, "w") as file:
         file.write("")
 
@@ -129,13 +164,21 @@ def write_bathymetry(data: xr.DataArray, filename) -> None:
             for j in range(y.size):
 
                 # write a set of x y b on one line + remove trailing zeros
-                file.write(f"{_x:0.2f} {y[j]:0.2f} {b[j, i]:0.2f}\n".replace(".00", ""))
+                file.write(
+                    f"{_x:0.2f} {y[j]:0.2f} {b[j, i]:0.2f}\n".replace(
+                        ".00", "")
+                )
 
     t1 = time.perf_counter_ns()
     print(f"# Finished writing to '{filename}' in {(t1-t0)*1e-9:0.3f} seconds")
 
 
-def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, keep_open: bool=False) -> Tuple[plt.Figure]:
+def plot_bathymetry(
+    data: xr.DataArray,
+    filename: str = None,
+    xmax: Numeric = None,
+    keep_open: bool = False,
+) -> Tuple[plt.Figure]:
     """ Function to visualize bathymetry data
 
     Input:
@@ -146,17 +189,18 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
         xmax:       upper limit of x
         keep_open:  keep figures open after finishing
     """
-    ## Prepare
+    # Prepare
     t0 = time.perf_counter_ns()
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
     if filename is None:
-        filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/fig_bathymetry"
+        script_path = os.path.dirname(os.path.realpath(__file__))
+        filename = f"{script_path}/tests/fig_bathymetry"
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
     print(f"# Visualizing bathymetry in '{filename}'")
 
-    ## Extract data
+    # Extract data
     x = data.x.values
     y = data.y.values
     b = data.values
@@ -174,7 +218,7 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
         xmax = x.max()
     xmax /= 1000
 
-    ## Figure 1 - cross-section
+    # Figure 1 - cross-section
     savename = f"{filename}_cross"
     fig_1, ax_1 = plt.subplots(1, 1)
     fig_1.set_size_inches(FIGSIZE_NORMAL)
@@ -189,12 +233,13 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
     ax_1.set_xlabel("$x$ [km]")
     ax_1.set_ylabel("Bed Level [m]")
     ax_1.grid()
-    fig_1.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig_1.savefig(savename, bbox_inches="tight",
+                  dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     if not keep_open:
         plt.close(fig_1)
     print(f"# Saved figure '{savename}'")
 
-    ## Figure 2 - map
+    # Figure 2 - map
     savename = f"{filename}_contour"
     fig_2, ax_2 = plt.subplots(1, 1)
     fig_2.set_size_inches(FIGSIZE_NORMAL)
@@ -214,17 +259,19 @@ def plot_bathymetry(data: xr.DataArray, filename: str=None, xmax: Numeric=None, 
     cbar = fig_2.colorbar(cont, cax=cax)
     cbar.set_label("Water Depth [m]")
     cbar.set_ticks(np.linspace(0, b_min, 6))
-    cbar.set_ticklabels([f"{ticklabel:0.0f}" for ticklabel in np.linspace(0, -1. * b_min, 6)])
+    cbar.set_ticklabels(
+        [f"{ticklabel:0.0f}" for ticklabel in np.linspace(0, -1. * b_min, 6)])
     ax_2.set_title(f"Bottom Profile")
     ax_2.set_xlim(0, xmax)
     ax_2.set_xlabel("$x$ [km]")
     ax_2.set_ylabel("$y$ [km]")
-    fig_2.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig_2.savefig(savename, bbox_inches="tight",
+                  dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     if not keep_open:
         plt.close(fig_2)
     print(f"# Saved figure '{savename}'")
 
-    ## End
+    # End
     t1 = time.perf_counter_ns()
     print(f"# Finished visualising in {(t1-t0)*1e-9:0.3f} seconds")
 
