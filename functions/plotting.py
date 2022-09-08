@@ -75,7 +75,8 @@ class plot_spectrum_1d():
     ):
         """ Raises an error if the figure is supposed to be closed """
         if self.closed:
-            raise TypeError(f"Figure is cleared and closed: it can not be edited")
+            raise TypeError(
+                f"Figure is cleared and closed: it can not be edited")
 
     def _setup_figure(
         self,
