@@ -17,22 +17,34 @@ import numpy as np
 import numpy.typing as npt
 import xarray as xr
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
+# fmt: on
 
 
-def _find_step(x: npt.ArrayLike) -> Numeric:
+def _find_step(
+    x: npt.ArrayLike,
+) -> Numeric:
     """ Find the step between two values in an array """
     dx = np.gradient(x)
 
     if not np.all(np.isclose(np.mean(dx), dx)):
-        print(f"# Values are not equally spaced (mean: {np.mean(x)}; sd: {np.std(x)})")
+        print(
+            f"# Values are not equally spaced (mean: {np.mean(x)}; sd: {np.std(x)})")
 
     return np.mean(dx)
 
 
-def convert_to_xarray(t: npt.ArrayLike, x: npt.ArrayLike, y: npt.ArrayLike, p: npt.ArrayLike, savename: str=None, close: bool=False) -> xr.DataArray | None:
+def convert_to_xarray(
+    t: npt.ArrayLike,
+    x: npt.ArrayLike,
+    y: npt.ArrayLike,
+    p: npt.ArrayLike,
+    savename: str = None,
+    close: bool = False,
+) -> xr.DataArray | None:
     """ Function to convert separate numpy arrays for t, x, y and p to a single DataArray for writing to files
 
     Input:
@@ -77,21 +89,25 @@ def convert_to_xarray(t: npt.ArrayLike, x: npt.ArrayLike, y: npt.ArrayLike, p: n
         print(f"# Saved data-array as {savename}")
 
     t1 = time.perf_counter_ns()
-    print(f"# Finished converting pressure data to a data-array in {(t1-t0)*1e-9:0.3f} seconds")
+    print(
+        f"# Finished converting pressure data to a data-array in {(t1-t0)*1e-9:0.3f} seconds")
 
     if close:
         return
     return data
 
 
-def write_pressure(data: xr.DataArray, filename: str) -> None:
+def write_pressure(
+    data: xr.DataArray,
+    filename: str,
+) -> None:
     """ Function to write a pressure field to a `pressure.amp` file for use with Delft3D-FM
 
     Input:
         data:       pressure field and coordinate data
         filename:   name of .amp file
     """
-    ## prepare
+    # prepare
     t0 = time.perf_counter_ns()
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
@@ -112,8 +128,8 @@ def write_pressure(data: xr.DataArray, filename: str) -> None:
     t = data.t.values
     p = data.values
 
-
-    ## header
+    # header
+    # fmt: off
     header = f"""### START OF HEADER
 FileVersion     = 1.03
 filetype        = meteo_on_equidistant_grid
@@ -130,9 +146,9 @@ quantity1       = ap
 unit1           = Pa
 ### END OF HEADER
 """
+    # fmt: on
 
-
-    ## write
+    # write
     t_factor = np.min([t_num, 10])
 
     with open(filename, "w") as file:
@@ -140,13 +156,15 @@ unit1           = Pa
 
         # loop over time
         for i in range(t_num):
+            # fmt: off
             # progress
             if not (t_num-i-1) % (t_num // t_factor):
                 print(f"# Step {i+1:4.0f} of {t_num:0.0f} ({(i+1)/t_num*100:0.1f}%)")
 
             file.write(
                 f"TIME = {t[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n".replace(".000000", ".0")
-                )
+            )
+            # fmt: on
 
             # put nothing if all values are close to reference
             # if ((i != 0) and (np.all(np.isclose(data.values[i, :, :].round(2), 0.)))):  # maybe set rtol and atol?
@@ -170,17 +188,24 @@ unit1           = Pa
                         # 0.: values are rounded to two digits
                         # 1.: -0.00 -> 0.00 (remove minus)
                         # 2.: 0.00 -> 0 (remove .00)
+                        # fmt: off
                         file.write(f"{p[i, -1*n, m]:0.2f} ".replace("-0.00", "0.00").replace(".00", ""))
+                        # fmt: on
                     file.write("\n")
 
-    ## End
+    # End
     t1 = time.perf_counter_ns()
     print(f"# Finished writing to '{filename}' in {(t1-t0)*1e-9:0.3f} seconds")
 
     return
 
 
-def plot_pressure(data: xr.DataArray, filename: str=None, x_scales: Numeric=None, keep_open: bool=False) -> plt.Figure:
+def plot_pressure(
+    data: xr.DataArray,
+    filename: str = None,
+    x_scales: Numeric = None,
+    keep_open: bool = False,
+) -> plt.Figure:
     """ Function to visualize pressure data
 
     Input:
@@ -191,12 +216,12 @@ def plot_pressure(data: xr.DataArray, filename: str=None, x_scales: Numeric=None
         x_scales:   lower and upper limit of x (should be a list of length 2)
         keep_open:  keep figures open after finishing
     """
-    ## prepare
+    # prepare
     t0 = time.perf_counter_ns()
     assert type(data) == xr.DataArray, "Input is not a DataArray"
 
     if filename is None:
-        filename = os.path.dirname(os.path.realpath(__file__)) + "/tests/fig_pressure"
+        filename = f"{os.path.dirname(os.path.realpath(__file__))}/tests/fig_pressure"
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
     savename = f"{filename}_field"
@@ -213,9 +238,10 @@ def plot_pressure(data: xr.DataArray, filename: str=None, x_scales: Numeric=None
     if x_scales is None:
         x_scales = [x.min() / 1000., x.max() / 1000.]
 
-    ## figure
+    # figure
     t_num = 5
-    fig, ax = plt.subplots(1, t_num+1, sharey=True, squeeze=False, gridspec_kw={"width_ratios": [4]*t_num + [1]})
+    fig, ax = plt.subplots(1, t_num+1, sharey=True, squeeze=False,
+                           gridspec_kw={"width_ratios": [4]*t_num + [1]})
     fig.set_size_inches(FIGSIZE_WIDE)
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
@@ -248,12 +274,13 @@ def plot_pressure(data: xr.DataArray, filename: str=None, x_scales: Numeric=None
     cbar.set_label("Pressure Disturbance [Pa]")
     cbar.set_ticks(np.linspace(np.floor(p.min()), np.ceil(p.max()), 6))
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs={"optimize": True, "compress_level": 9})
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI,
+                pil_kwargs={"optimize": True, "compress_level": 9})
     if not keep_open:
         plt.close(fig)
     print(f"# Saved figure as '{savename}'")
 
-    ## End
+    # End
     t1 = time.perf_counter_ns()
     print(f"# Finished visualising in {(t1-t0)*1e-9:0.3f} seconds")
 
@@ -281,7 +308,7 @@ if __name__ == "__main__":
     for n in range(t.size):
         for j in range(y.size):
             for i in range(x.size):
-                p[n,j,i] = f(x[i], y[j], t[n])
+                p[n, j, i] = f(x[i], y[j], t[n])
 
     data = convert_to_xarray(t, x, y, p, savename=pressure_file)
     del t, x, y, p
