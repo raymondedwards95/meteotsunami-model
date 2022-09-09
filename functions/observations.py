@@ -17,9 +17,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
+# fmt: on
 
 
 class ObservationPoint():
@@ -31,7 +33,12 @@ class ObservationPoint():
         name:   (unique) name
     """
 
-    def __init__(self, x: Numeric, y: Numeric, name: str = "", scale: Numeric=1) -> None:
+    def __init__(
+        self, x: Numeric,
+        y: Numeric,
+        name: str = "",
+        scale: Numeric = 1,
+    ) -> None:
         """ Create an observation point
 
         Input:
@@ -46,10 +53,15 @@ class ObservationPoint():
         self.y = scale * y
         self.name = name
 
-    def __str__(self):
+    def __str__(
+        self,
+    ):
         return f"Observation point '{self.name}'' at x={self.x:.0e} and y={self.y:.0e}".replace("e+00", "")
 
-    def plot(self, ax: plt.Axes) -> plt.Axes:
+    def plot(
+        self,
+        ax: plt.Axes,
+    ) -> plt.Axes:
         """ Plot point on an existing Axes object
 
         Input:
@@ -75,7 +87,13 @@ class ObservationCrossSection():
         n:      number of points
     """
 
-    def __init__(self, x: npt.ArrayLike, y: npt.ArrayLike, name: str="", scale: Numeric=1) -> None:
+    def __init__(
+        self,
+        x: npt.ArrayLike,
+        y: npt.ArrayLike,
+        name: str = "",
+        scale: Numeric = 1,
+    ) -> None:
         """ Create an observation point
 
         Input:
@@ -96,10 +114,15 @@ class ObservationCrossSection():
         assert np.ndim(x) == 1
         assert np.ndim(x) == np.ndim(y)
 
-    def __str__(self):
+    def __str__(
+        self,
+    ):
         return f"Observation cross-section '{self.name}' with {self.n} points between p_start=({self.x[0]:.0e}, {self.y[0]:.0e}) and p_end=({self.x[-1]:.0e}, {self.y[-1]:.0e})".replace("e+00", "")
 
-    def plot(self, ax: plt.Axes) -> plt.Axes:
+    def plot(
+        self,
+        ax: plt.Axes,
+    ) -> plt.Axes:
         """ Plot lines on an existing Axes object
 
         Input:
@@ -115,7 +138,10 @@ class ObservationCrossSection():
         return ax
 
 
-def write_observations(data: npt.ArrayLike, filename: str) -> None:
+def write_observations(
+    data: npt.ArrayLike,
+    filename: str,
+) -> None:
     """ Write observation points and observation cross sections to files
 
     Input:
@@ -146,7 +172,8 @@ def write_observations(data: npt.ArrayLike, filename: str) -> None:
         elif isinstance(element, ObservationCrossSection):
             sections.append(element)
         else:
-            print(f"# '{element}' is not an ObservationPoint or ObservationCrossSection")
+            print(
+                f"# '{element}' is not an ObservationPoint or ObservationCrossSection")
 
     # Process points
     if len(points) > 0:
@@ -174,11 +201,16 @@ def write_observations(data: npt.ArrayLike, filename: str) -> None:
 
     # End
     t1 = time.perf_counter_ns()
-    print(f"# Finished writing observation points and cross-sections in {(t1-t0)*1e-9:0.3f} seconds")
+    print(
+        f"# Finished writing observation points and cross-sections in {(t1-t0)*1e-9:0.3f} seconds")
     return
 
 
-def plot_observations(data: npt.ArrayLike, savename: str, keep_open: bool=False) -> plt.Figure:
+def plot_observations(
+    data: npt.ArrayLike,
+    savename: str,
+    keep_open: bool = False,
+) -> plt.Figure:
     """ Visualise observation points and lines
 
     Input:
@@ -190,17 +222,17 @@ def plot_observations(data: npt.ArrayLike, savename: str, keep_open: bool=False)
     """
     t0 = time.perf_counter_ns()
 
-    ## Filename
+    # Filename
     if not savename.endswith(".png"):
         savename += "_plot.png"
 
-    ## Figure
+    # Figure
     fig, ax = plt.subplots(1, 1)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
 
-    ## Layout
+    # Layout
     ax.set_title("Observation Points and Lines")
     ax.axhline(color="black", linewidth=1)
     ax.axvline(color="black", linewidth=1)
@@ -209,14 +241,15 @@ def plot_observations(data: npt.ArrayLike, savename: str, keep_open: bool=False)
     for element in data:
         ax = element.plot(ax)
 
-    ## Layout part 2
+    # Layout part 2
     ax.grid()
     ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
     ax.set_xlabel("$x$ [km]")
     ax.set_ylabel("$y$ [km]")
 
-    ## End
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    # End
+    fig.savefig(savename, bbox_inches="tight",
+                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"# Saved figure {savename}")
     if not keep_open:
         plt.close("all")
@@ -232,12 +265,14 @@ if __name__ == "__main__":
     obs_file = f"{obs_dir}/observations"
     os.makedirs(obs_dir, exist_ok=True)
 
+    # fmt: off
     obs_0 = ObservationPoint(name="Center", x=0, y=0, scale=1e3)
     obs_1 = ObservationPoint(name="Point", x=1, y=1, scale=1e3)
     obs_2 = ObservationCrossSection(name="Line", x=[-3, 3], y=[3, 3], scale=1e3)
     obs_3 = ObservationCrossSection(name="Diagonal", x=[-2, 3], y=[-4, 1], scale=1e3)
     obs_4 = ObservationCrossSection(name="Curve", x=[-2, 0, -1], y=[-3, 1, 2], scale=1e3)
-    obs_5 = ObservationCrossSection(name="Square", x=[-4, -4 ,4, 4], y=[-4, 4, 4, -4], scale=1e3)
+    obs_5 = ObservationCrossSection(name="Square", x=[-4, -4, 4, 4], y=[-4, 4, 4, -4], scale=1e3)
+    # fmt: on
 
     data = [obs_0, obs_1, obs_2, obs_3, obs_4, obs_5]
 
