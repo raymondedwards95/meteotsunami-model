@@ -1,25 +1,20 @@
-""" Functions for visualising model outputs
+""" Functions for visualising spectra from model output
 
 Main functions:
 """
 
 import os
 import sys
-import time
-from typing import Union
 
-import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
-import numpy.typing as npt
 import xarray as xr
 
 # fmt: off
 # fix for importing functions below
-sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from functions import *
 import functions.analysis as fa
-import functions.utilities as fu
 # fmt: on
 
 
@@ -70,17 +65,13 @@ class plot_spectrum_1d():
             f"\n# Initiated figure for spectrum_1d with variable '{self.variable}' ({self.variable_name.lower()})"
         )
 
-    def _check_if_closed(
-        self,
-    ):
+    def _check_if_closed(self):
         """ Raises an error if the figure is supposed to be closed """
         if self.closed:
             raise TypeError(
                 f"Figure is cleared and closed: it can not be edited")
 
-    def _setup_figure(
-        self,
-    ):
+    def _setup_figure(self):
         """ Figure setup """
         # Checks
         self._check_if_closed()
@@ -95,9 +86,7 @@ class plot_spectrum_1d():
             f"Power Spectrum - {self.variable_name}", va="top", ha="left", x=0.01
         )
 
-    def _setup_plot(
-        self,
-    ):
+    def _setup_plot(self):
         """ Plot setup """
         # Checks
         self._check_if_closed()
@@ -214,9 +203,7 @@ class plot_spectrum_1d():
             self.close()
         return
 
-    def close(
-        self,
-    ):
+    def close(self):
         """ Close the figure """
         self.closed = True
         self.fig.clear()
@@ -227,7 +214,7 @@ class plot_spectrum_1d():
 
 if __name__ == "__main__":
     # Define paths
-    script_dir = os.path.dirname(os.path.realpath(__file__))
+    script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     figure_dir = f"{script_dir}/tests/figures"
     figure_file = f"{figure_dir}/figure"
     os.makedirs(figure_dir, exist_ok=True)
