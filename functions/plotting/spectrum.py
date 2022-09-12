@@ -109,9 +109,6 @@ class plot_spectrum_1d():
             axis="y", style="sci", scilimits=(0, 0), useMathText=True,
         )
 
-        # end
-        return
-
     def add_plot(
         self,
         dataset: xr.Dataset,
@@ -230,6 +227,7 @@ if __name__ == "__main__":
     data_c = xr.open_dataset(data_c, chunks="auto")
 
     # Make figures
+    # fmt: off
     def test_spectrum_1d():
         x = 1e4
         y = 1e5
@@ -238,4 +236,5 @@ if __name__ == "__main__":
             .add_plot(data_b, x, y, label="b") \
             .add_plot(data_c, x, y, label="c") \
             .save(figure_file)
+    # fmt: on
     test_spectrum_1d()
