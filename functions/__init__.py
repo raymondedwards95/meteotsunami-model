@@ -28,5 +28,9 @@ Numeric: TypeAlias = Union[int, float, np.integer, np.floating]
 
 # Paths
 functions_dir = os.path.dirname(os.path.realpath(__file__))
+main_dir = os.path.dirname(functions_dir)
 test_results_dir = f"{functions_dir}/tests"
 os.makedirs(test_results_dir, exist_ok=True)
+
+assert functions_dir.endswith("functions")
+assert test_results_dir.endswith("tests")
