@@ -20,6 +20,7 @@ import functions.analysis as fa
 
 class plot_spectrum_1d():
     """ Methods to create a visualisation of the 1d spectrum """
+    number = 0
 
     def __init__(
         self,
@@ -34,6 +35,8 @@ class plot_spectrum_1d():
         Options:
             demean:     remove mean from data
         """
+        plot_spectrum_1d.number += 1
+
         self.figsize = FIGSIZE_NORMAL
         self.demean = demean
         self.closed = False
@@ -180,7 +183,8 @@ class plot_spectrum_1d():
         """
         # Checks
         self._check_if_closed()
-        savename = f"{saveloc}_spectrum_1d"
+        savename = f"{saveloc}/spectrum_1d_{plot_spectrum_1d.number:02.0f}" \
+            .replace("//", "/")
 
         # Setup
         self._setup_figure()
@@ -212,8 +216,7 @@ class plot_spectrum_1d():
 if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    figure_dir = f"{script_dir}/tests/figures"
-    figure_file = f"{figure_dir}/figure"
+    figure_dir = f"{script_dir}/tests/figures/"
     os.makedirs(figure_dir, exist_ok=True)
 
     # Get data
@@ -230,11 +233,18 @@ if __name__ == "__main__":
     # fmt: off
     def test_spectrum_1d():
         x = 1e4
-        y = 1e5
+        y = 1e6
         plot_spectrum_1d(variable="wl", demean=False) \
             .add_plot(data_a, x, y, label="a") \
             .add_plot(data_b, x, y, label="b") \
             .add_plot(data_c, x, y, label="c") \
-            .save(figure_file)
+            .save(figure_dir)
+
+        plot_spectrum_1d(variable="wl", demean=False) \
+            .add_plot(data_a, x, y, label=f"y={y}") \
+            .add_plot(data_a, x, y*2, label=f"y={y*2}") \
+            .add_plot(data_a, x, y*3, label=f"y={y*3}") \
+            .save(figure_dir)
+
     # fmt: on
     test_spectrum_1d()
