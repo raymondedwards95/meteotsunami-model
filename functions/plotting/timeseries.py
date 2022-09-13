@@ -26,7 +26,7 @@ class plot_timeseries():
 
     def __init__(
         self,
-        title: str=None,
+        title: str = None,
     ):
         """ Create and setup a figure for time-series
 
@@ -39,7 +39,7 @@ class plot_timeseries():
         self.closed = False
         self.lines = np.array([0, 0, 0, 0])
 
-        self.fig, self.axes = plt.subplots(4, 1, sharex=True)
+        self.fig, self.axes = plt.subplots(4, 1)
         self.title = title
 
         print(
@@ -49,7 +49,8 @@ class plot_timeseries():
     def _check_if_closed(self):
         """ Raises an error if the figure is supposed to be closed """
         if self.closed:
-            raise TypeError(f"Figure is cleared and closed: it can not be edited")
+            raise TypeError(
+                f"Figure is cleared and closed: it can not be edited")
 
     def _setup_figure(self):
         """ Figure setup """
@@ -80,7 +81,9 @@ class plot_timeseries():
             ax.grid()
 
             max_lim = np.max(np.abs(ax.get_ylim()))
-            ax.set_ylim(-1.* max_lim, max_lim)
+            ax.set_ylim(-1. * max_lim, max_lim)
+            ax.set_xlim(0, None)
+            ax.set_xlabel("Time [hours]")
 
         # wl
         ax = self.axes[0].set_ylabel("$wl$ [m]")
@@ -108,7 +111,7 @@ class plot_timeseries():
             case _:
                 raise ValueError(
                     f"{variable=} should be 'wl', 'u', 'v' or 'p'"
-                    )
+                )
 
     def add_plot(
         self,
@@ -116,7 +119,7 @@ class plot_timeseries():
         variable: str,
         x: Numeric,
         y: Numeric,
-        label: str=None,
+        label: str = None,
     ):
         """ Adds data to a plot
 
@@ -195,6 +198,13 @@ class plot_timeseries():
         for ax_idx, ax in enumerate(self.axes):
             ax.set_subplotspec(gs[ax_idx])
 
+        # update x-ticks
+        self.axes[0].get_shared_x_axes() \
+            .join(self.axes[0], *self.axes[1:])
+        for ax in self.axes[:-1]:
+            ax.set_xlabel("")
+            ax.set_xticklabels([])
+
         # Save
         self.fig.execute_constrained_layout()
         self.fig.draw_without_rendering()
@@ -253,5 +263,15 @@ if __name__ == "__main__":
             .add_plot(data_a, "p", x=x, y=y, label=f"y={y}") \
             .add_plot(data_a, "p", x=x, y=5*y, label=f"y={5*y}") \
             .save(figure_dir)
+
+        plot_timeseries() \
+            .add_plot(data_a, "wl", x=x, y=y, label=f"y={y}") \
+            .add_plot(data_a, "wl", x=x, y=5*y, label=f"y={5*y}") \
+            .add_plot(data_a, "u", x=x, y=y, label=f"y={y}") \
+            .add_plot(data_a, "u", x=x, y=5*y, label=f"y={5*y}") \
+            .add_plot(data_a, "v", x=x, y=y, label=f"y={y}") \
+            .add_plot(data_a, "v", x=x, y=5*y, label=f"y={5*y}") \
+            .save(figure_dir)
+
     # fmt: on
     test_timeseries()
