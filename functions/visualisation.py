@@ -23,11 +23,13 @@ from matplotlib.colors import Normalize
 from matplotlib.ticker import MultipleLocator
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 import functions.analysis as fa
 import functions.utilities as fu
+# fmt: on
 
 
 def vis_timeseries(
@@ -51,7 +53,7 @@ def vis_timeseries(
         saveloc:    filename
         keep_open:  keep figure open if True
     """
-    ## Check input
+    # Check input
     if not np.isscalar(x):
         raise ValueError(f"{x=} should be scalar")
 
@@ -76,7 +78,7 @@ def vis_timeseries(
         figsize_a = (14, 7)
         figsize_b = FIGSIZE_LONG
 
-    ## Paths
+    # Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -84,7 +86,7 @@ def vis_timeseries(
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/timeseries_x{x/1000:0.0f}_yn{y_num}"
 
-    ## Extract data
+    # Extract data
     t = data["t"].values.astype("datetime64[s]").astype(float) / 3600
     wl = data["wl"].interp(x=x, y=y_arr)
     p = data["p"].interp(x=x, y=y_arr)
@@ -98,10 +100,12 @@ def vis_timeseries(
     if y_num < 1:
         raise ValueError("Input 'y' has no values on the domain of data")
 
-    wl_t_idx = [fu.find_peaks_const_y(data, y, x=x, crests=False, variable="wl") for y in y_arr]
-    p_t_idx = [fu.find_peaks_const_y(data, y, x=x, crests=True, variable="p") for y in y_arr]
+    wl_t_idx = [fu.find_peaks_const_y(
+        data, y, x=x, crests=False, variable="wl") for y in y_arr]
+    p_t_idx = [fu.find_peaks_const_y(
+        data, y, x=x, crests=True, variable="p") for y in y_arr]
 
-    ## Figure a
+    # Figure a
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
     fig.set_size_inches(figsize_a)
     fig.set_dpi(FIG_DPI)
@@ -115,13 +119,27 @@ def vis_timeseries(
         try:
             for j in wl_t_idx[i]:
                 ax[0].axvline(t[j], color=f"C{i}", alpha=0.5)
-                ax[0].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], wl_max), ha="left", va="top", color=f"C{i}", rotation=90)
+                ax[0].annotate(
+                    f"$t={t[j]:0.1f}$h",
+                    xy=(t[j], wl_max),
+                    ha="left",
+                    va="top",
+                    color=f"C{i}",
+                    rotation=90
+                )
         except:
             pass
         try:
             for j in p_t_idx[i]:
                 ax[1].axvline(t[j], color=f"C{i}", alpha=0.5)
-                ax[1].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="left", va="bottom", color=f"C{i}", rotation=90)
+                ax[1].annotate(
+                    f"$t={t[j]:0.1f}$h",
+                    xy=(t[j], 0),
+                    ha="left",
+                    va="bottom",
+                    color=f"C{i}",
+                    rotation=90
+                )
         except:
             pass
 
@@ -135,12 +153,20 @@ def vis_timeseries(
     ax[0].set_ylabel("Sea Surface Elevation [m]")
     ax[1].set_ylabel("Atmospheric Pressure [Pa]")
     ax[0].set_ylim(np.array([-1.1, 1.1]) * wl_max)
-    ax[0].legend([f"$y={y/1000:0.0f}$ km" for y in y_arr], bbox_to_anchor=(0., 1.02, 1., .102), loc="lower left", ncol=4, mode="expand", borderaxespad=0.)
+    ax[0].legend(
+        [f"$y={y/1000:0.0f}$ km" for y in y_arr],
+        bbox_to_anchor=(0., 1.02, 1., .102),
+        loc="lower left",
+        ncol=4,
+        mode="expand",
+        borderaxespad=0.
+    )
 
-    fig.savefig(savename + "_a", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename + "_a", bbox_inches="tight",
+                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}_a")
 
-    ## Figure b
+    # Figure b
     fig, ax = plt.subplots(y_num, 1, sharex=True, squeeze=False)
     fig.set_size_inches(figsize_b)
     fig.set_dpi(FIG_DPI)
@@ -166,26 +192,47 @@ def vis_timeseries(
         ax2[i].set_ylabel("Surface Pressure [Pa]", color="C1")
 
         ax[i].grid()
-        ax[i].annotate(f"$y={y_arr[i]/1000:0.0f}$ km", xy=(0.01, 0.99), xycoords="axes fraction", ha="left", va="top")
+        ax[i].annotate(
+            f"$y={y_arr[i]/1000:0.0f}$ km",
+            xy=(0.01, 0.99),
+            xycoords="axes fraction",
+            ha="left",
+            va="top"
+        )
 
         try:
             for j in wl_t_idx[i]:
                 ax[i].axvline(t[j], color="C0", alpha=0.5)
-                ax[i].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="left", va="bottom", color="C0", rotation=90)
+                ax[i].annotate(
+                    f"$t={t[j]:0.1f}$h",
+                    xy=(t[j], 0),
+                    ha="left",
+                    va="bottom",
+                    color="C0",
+                    rotation=90
+                )
         except:
             pass
         try:
             for j in p_t_idx[i]:
                 ax[i].axvline(t[j], color="C1", alpha=0.5)
-                ax[i].annotate(f"$t={t[j]:0.1f}$h", xy=(t[j], 0), ha="right", va="top", color="C1", rotation=90)
+                ax[i].annotate(
+                    f"$t={t[j]:0.1f}$h",
+                    xy=(t[j], 0),
+                    ha="right",
+                    va="top",
+                    color="C1",
+                    rotation=90
+                )
         except:
             pass
     ax[-1].set_xlabel("Time since start [hours]")
 
-    fig.savefig(savename + "_b", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename + "_b", bbox_inches="tight",
+                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}_b")
 
-    ## End
+    # End
     if not keep_open:
         plt.close("all")
 
@@ -209,7 +256,7 @@ def vis_alongshore(
         saveloc:    filename
         keep_open:  keep figure open if True
     """
-    ## Check input
+    # Check input
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
 
@@ -228,7 +275,7 @@ def vis_alongshore(
     else:
         figsize = FIGSIZE_HIGH
 
-    ## Paths
+    # Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -236,11 +283,11 @@ def vis_alongshore(
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/along_shore_x{x/1000:0.0f}_tn{t_num}"
 
-    ## Extract data
+    # Extract data
     y = data["y"]
     wl = data["wl"].interp(t=fu.to_timestr(t_list), x=x)
 
-    ## Figure
+    # Figure
     fig, ax = plt.subplots(t_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
@@ -255,14 +302,16 @@ def vis_alongshore(
         ax[i].axhline(color="black", linewidth=1)
         ax[i].set_xlim(0, y.max() / 1000.)
         ax[i].set_ylabel("$SSE$ [m]")
-        ax[i].set_title(f"$x={x/1000:0.0f}$ km and $t={t_list[i]/3600:0.1f}$ hours")
+        ax[i].set_title(
+            f"$x={x/1000:0.0f}$ km and $t={t_list[i]/3600:0.1f}$ hours")
         ax[i].grid()
     ax[-1].set_xlabel("$y$ [km]")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight",
+                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
-    ## End
+    # End
     if not keep_open:
         plt.close("all")
 
@@ -286,7 +335,7 @@ def vis_crossshore(
         saveloc:    filename
         keep_open:  keep figure open if True
     """
-    ## Check input
+    # Check input
     if np.isscalar(y):
         y_list = np.array([y])
     elif isinstance(y, (list, np.ndarray)):
@@ -315,9 +364,10 @@ def vis_crossshore(
     elif (t_num > 1) and (y_num > 1):
         figsize = FIGSIZE_SQUARE
     else:
-        raise ValueError(f"Error in determining figsize for {y_num=} and {t_num=}")
+        raise ValueError(
+            f"Error in determining figsize for {y_num=} and {t_num=}")
 
-    ## Paths
+    # Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -336,8 +386,9 @@ def vis_crossshore(
     else:
         savename += f"tn{t_num}"
 
-    ## Figure
-    fig, ax = plt.subplots(t_num, y_num, squeeze=False, sharex=True, sharey=True)
+    # Figure
+    fig, ax = plt.subplots(t_num, y_num, squeeze=False,
+                           sharex=True, sharey=True)
     fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
@@ -349,7 +400,7 @@ def vis_crossshore(
             wl_model = fa.exp_decay(data["x"], k0, y0)
 
             # Plot data
-            ax[i,j].plot(
+            ax[i, j].plot(
                 data["x"] / 1000.,
                 data["wl"].interp(y=y_list[j], t=fu.to_timestr(t_list[i])),
                 color="C0",
@@ -357,7 +408,7 @@ def vis_crossshore(
             )
 
             # Plot best fit
-            ax[i,j].plot(
+            ax[i, j].plot(
                 data["x"] / 1000.,
                 wl_model,
                 color="C0",
@@ -366,22 +417,24 @@ def vis_crossshore(
             )
 
             #
-            ax[i,j].axhline(color="black", linewidth=1)
-            ax[i,j].legend()
-            ax[i,j].set_xlim(0, data["x"].max() / 1000.)
-            ax[i,j].set_title(f"$y={y_list[j]/1000:0.0f}$ km; $t={t_list[i]/3600:0.1f}$ hours")
-            ax[i,j].grid()
+            ax[i, j].axhline(color="black", linewidth=1)
+            ax[i, j].legend()
+            ax[i, j].set_xlim(0, data["x"].max() / 1000.)
+            ax[i, j].set_title(
+                f"$y={y_list[j]/1000:0.0f}$ km; $t={t_list[i]/3600:0.1f}$ hours")
+            ax[i, j].grid()
 
     for i in range(t_num):
-        ax[i,0].set_ylabel("$SSE$ [m]")
+        ax[i, 0].set_ylabel("$SSE$ [m]")
 
     for j in range(y_num):
-        ax[-1,j].set_xlabel("$x$ [km]")
+        ax[-1, j].set_xlabel("$x$ [km]")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight",
+                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
-    ## End
+    # End
     if not keep_open:
         plt.close("all")
 
@@ -409,7 +462,7 @@ def vis_spectrum_1d(
         saveloc:    filename
         keep_open:  keep figure open if True
     """
-    ## Check inputs
+    # Check inputs
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
 
@@ -438,29 +491,35 @@ def vis_spectrum_1d(
     y_list = np.ravel(y_list)
     y_num = y_list.size
 
-    ## Paths
+    # Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
     if y_num == 1:
-        savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_{y_list[0]/1000:0.0f}_{variable}_{int(demean)}"
+        savename = f"{saveloc}/spectrum_1d_{x/1000:0.0f}_{y_list[0]/1000:0.0f}_{variable}_{int(demean)}"
     else:
-        savename = saveloc + f"/spectrum_1d_{x/1000:0.0f}_n{y_num:0.0f}_{variable}_{int(demean)}"
+        savename = f"{saveloc}/spectrum_1d_{x/1000:0.0f}_n{y_num:0.0f}_{variable}_{int(demean)}"
 
-    ## Compute spectrum
+    # Compute spectrum
     freqs_all = [None] * y_num
     power_all = [None] * y_num
     for i in range(y_num):
-        freqs_all[i], power_all[i] = fa.spectral_analysis_1d(data, y_list[i], x=x, variable=variable, demean=demean)
+        freqs_all[i], power_all[i] = fa.spectral_analysis_1d(
+            data, y_list[i], x=x, variable=variable, demean=demean)
 
-    ## Figure
+    # Figure
     fig, ax = plt.subplots(y_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
     fig.set_tight_layout(True)
-    fig.suptitle(f"Power Spectrum - {variable_name}", va="top", ha="left", x=0.01)
+    fig.suptitle(
+        f"Power Spectrum - {variable_name}",
+        va="top",
+        ha="left",
+        x=0.01
+    )
     ax = np.ravel(ax)
 
     for i in range(y_num):
@@ -480,15 +539,16 @@ def vis_spectrum_1d(
         ax[i].set_xlim(0, 2.2)
         ax[i].set_ylabel("Spectral Power [m$^2$ hr]")
         ax[i].legend([f"$y = {y_list[i]/1000:0.0f}$ km"], loc="upper right")
-        ax[i].ticklabel_format(axis="y", style="sci", scilimits=(0,0))
+        ax[i].ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
         ax[i].xaxis.set_minor_locator(MultipleLocator(0.1))
         ax[i].grid()
     ax[-1].set_xlabel("Frequency [cycles / hour]")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight",
+                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
-    ## End
+    # End
     if not keep_open:
         plt.close("all")
 
@@ -517,7 +577,7 @@ def vis_spectrum_2d(
         saveloc:    filename
         keep_open:  keep figure open if True
     """
-    ## Paths
+    # Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
@@ -525,26 +585,29 @@ def vis_spectrum_2d(
     os.makedirs(saveloc, exist_ok=True)
     savename = saveloc + f"/spectrum_2d_{x/1000:0.0f}_{variable}_{int(demean)}"
 
-    ## Check inputs
+    # Check inputs
     if not np.isscalar(x):
         raise ValueError(f"{x=} is not a number")
 
-    ## Compute spectrum
-    wavenumber, freqs, power = fa.spectral_analysis_2d(data, x=x, variable=variable, demean=demean)
+    # Compute spectrum
+    wavenumber, freqs, power = fa.spectral_analysis_2d(
+        data, x=x, variable=variable, demean=demean)
 
-    ## Compute plot limits
+    # Compute plot limits
     if (xlims is None) or (ylims is None):
         valid = (power / power.max()) > autolim
     if xlims is None:
         i = np.any(valid, axis=0)
-        xmax = 1e6 * np.nanmin([wavenumber.max(), 1.5*np.nanmax(np.abs(wavenumber[i]))])
+        xmax = 1e6 * np.nanmin(
+            [wavenumber.max(), 1.5 * np.nanmax(np.abs(wavenumber[i]))]
+        )
         xlims = [0, xmax]
     if ylims is None:
         i = np.any(valid, axis=1)
         ymax = 3600. * np.nanmin([freqs.max(), 1.5*np.nanmax(freqs[i])])
         ylims = [0, ymax]
 
-    ## Figure
+    # Figure
     fig, ax = plt.subplots(1, 1, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
@@ -578,10 +641,11 @@ def vis_spectrum_2d(
     ax[0].set_ylabel("Frequency [cycles / hour]")
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$ km")
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight",
+                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
-    ## End
+    # End
     if not keep_open:
         plt.close("all")
 
@@ -607,7 +671,7 @@ def vis_contour(
         demean:     remove mean from data if True
         saveloc:    filename
     """
-    ## Check input
+    # Check input
     if variable in ["wl"]:
         cmap = cmo.cm.balance
     elif variable in ["u", "v"]:
@@ -627,15 +691,15 @@ def vis_contour(
     t_num = t_arr.size
     del t
 
-    ## Paths
+    # Paths
     if saveloc is None:
         saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/contour_{variable}_n{t_num}_{np.mean(t_arr)/3600:0.0f}"
+    savename = f"{saveloc}/contour_{variable}_n{t_num}_{np.mean(t_arr)/3600:0.0f}"
 
-    ## Get parameters
+    # Get parameters
     x = data["x"]
     y = data["y"]
     var = data[variable]
@@ -650,7 +714,7 @@ def vis_contour(
     if ylims is None:
         ylims = [0, 200]
 
-    ## Figure
+    # Figure
     fig, ax = plt.subplots(t_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(FIGSIZE_LONG)
     fig.set_dpi(FIG_DPI)
@@ -660,7 +724,7 @@ def vis_contour(
     norm = Normalize(var_min, var_max)
     im = cm.ScalarMappable(norm=norm, cmap=cmap)
 
-    ## Subplots
+    # Subplots
     for i in range(t_num):
         ax[i].contourf(
             y / 1000,
@@ -692,19 +756,23 @@ def vis_contour(
         aspect=50
     )
 
-    ## Save figure
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    # Save figure
+    fig.savefig(savename, bbox_inches="tight",
+                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
-    ## End
+    # End
     if not keep_open:
         plt.close("all")
 
 
 if __name__ == "__main__":
     mainpath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    data = xr.open_dataset(f"{mainpath}/reproduction-an-2012/output/data_repr_17.nc")
+    data = xr.open_dataset(
+        f"{mainpath}/reproduction-an-2012/output/data_repr_17.nc"
+    )
 
+    # fmt: off
     vis_contour(data, t=5*3600, keep_open=True)
     vis_contour(data, t=[i * 5 * 3600 for i in range(1, 5)], keep_open=True)
 
@@ -727,4 +795,5 @@ if __name__ == "__main__":
     vis_alongshore(data, t=[3000, 7200], x=1e4, keep_open=True)
     vis_alongshore(data, t=[3600, 7200, 10800], x=1e4, keep_open=True)
 
+    # fmt: on
     plt.close("all")
