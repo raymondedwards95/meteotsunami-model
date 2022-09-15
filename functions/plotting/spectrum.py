@@ -224,6 +224,8 @@ class plot_spectrum_2d():
         variable: str,
         demean: bool = True,
         label: str = "",
+        k_max: Numeric = None,
+        f_max: Numeric = None,
     ):
         """ Create and setup a figure for the 2d spectrum
 
@@ -233,13 +235,14 @@ class plot_spectrum_2d():
         Options:
             demean:     remove mean from data
             label:      label for plot
+            k_max:      upper limit for wavenumber k
+            f_max:      upper limit for frequency f
         """
         plot_spectrum_2d.number += 1
         self.x_scale = 1e6
         self.y_scale = 3600.
 
         self.figsize = FIGSIZE_NORMAL
-        self.demean = demean
         self.closed = False
         self.filled = False
         self._check_if_closed()
@@ -247,6 +250,9 @@ class plot_spectrum_2d():
         self.fig, self.ax = plt.subplots(1, 1)
         self._setup_cax()
 
+        self.demean = demean
+        self.k_max = k_max
+        self.f_max = f_max
         self.x = 0.
 
         self.data_label = label
@@ -317,10 +323,11 @@ class plot_spectrum_2d():
 
         # x-axis
         self.ax.set_xlabel("Wavenumber [1 / (1000 km)]")
+        self.ax.set_xlim(0, np.round(self.k_max * self.x_scale, 1))
 
         # y-axis
         self.ax.set_ylabel("Frequency [cycles / hour]")
-        # self.ax.set_ylim(0, None)
+        self.ax.set_ylim(0, np.round(self.f_max * self.y_scale, 1))
 
     def _setup_cax(self):
         """ Colorbar location setup
@@ -344,6 +351,8 @@ class plot_spectrum_2d():
         dataset: xr.Dataset,
         x: Numeric,
         label: str = "",
+        k_max: Numeric = None,
+        f_max: Numeric = None,
     ):
         """ Adds data to a plot
 
@@ -353,25 +362,33 @@ class plot_spectrum_2d():
 
         Options:
             label:      label for plot
+            k_max:      upper limit for wavenumber k
+            f_max:      upper limit for frequency f
         """
         # Checks
         self._check_if_closed()
         self._check_if_filled()
 
+        self.k_max = k_max
+        self.f_max = f_max
         self.x = x
 
         # Compute spectrum
         wavenumber, freqs, power = fa.spectral_analysis_2d(
             dataset, x=self.x, variable=self.variable, demean=self.demean
         )
-
-        print(freqs)
+        wavenumber = -1. * wavenumber  # flip wavenumbers, since we only look at waves in a given direction
 
         # Compute plot limits
-        rows = np.any(power > 0.01 * np.max(power), axis=1)
-        cols = np.any(power > 0.01 * np.max(power), axis=0)
+        if self.k_max is None:
+            self.k_max = 1.5 * np.max(wavenumber[np.argmax(power, axis=1)])
+
+        if self.f_max is None:
+            self.f_max = np.max(freqs[np.argmax(power, axis=0)])
 
         # Select cols and rows
+        rows = (freqs >= 0)
+        cols = (wavenumber >= 0)
         wavenumber = wavenumber[cols]
         freqs = freqs[rows]
         power = power[rows, :][:, cols]
@@ -389,6 +406,10 @@ class plot_spectrum_2d():
         # Colorbar
         self.cbar = self.fig.colorbar(self.im, cax=self.cax)
         self.cbar.set_label("Spectral power")
+
+        # Set plot limits
+        self.ax.set_xlim(0, np.round(self.k_max * self.x_scale, 1))
+        self.ax.set_ylim(0, np.round(self.f_max * self.y_scale, 1))
 
         # Log
         self.data_label = label
@@ -529,5 +550,5 @@ if __name__ == "__main__":
             .save(figure_dir)
 
     # fmt: on
-    test_spectrum_1d()
+    # test_spectrum_1d()
     test_spectrum_2d()
