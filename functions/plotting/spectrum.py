@@ -28,6 +28,7 @@ class plot_spectrum_1d():
         self,
         variable: str,
         demean: bool = True,
+        f_max: Numeric = None,
     ):
         """ Create and setup a figure for the 1d spectrum
 
@@ -36,15 +37,18 @@ class plot_spectrum_1d():
 
         Options:
             demean:     remove mean from data
+            f_max:      upper limit for frequency f (units: cycles per hour)
         """
         plot_spectrum_1d.number += 1
 
         self.figsize = FIGSIZE_NORMAL
-        self.demean = demean
         self.closed = False
         self._check_if_closed()
 
         self.fig, self.ax = plt.subplots(1, 1)
+
+        self.demean = demean
+        self.f_max = f_max
 
         self.variable: str
         self.variable_name: str
@@ -97,15 +101,14 @@ class plot_spectrum_1d():
         self._check_if_closed()
 
         # General
-        self.ax.axhline(color="black", linewidth=1)
         self.ax.legend(loc="upper right")
         self.ax.grid()
 
         # x-axis
         self.ax.set_xlabel("Frequency [cycles per hour]")
-        self.ax.set_xlim(0, 2.2)
-        self.ax.xaxis.set_ticks(np.arange(0, 2.2, 0.2))
-        self.ax.xaxis.set_ticks(np.arange(0, 2.2, 0.1), minor=True)
+        self.ax.set_xlim(0, self.f_max)
+        # self.ax.xaxis.set_ticks(np.arange(0, self.f_max, 0.1))
+        self.ax.xaxis.set_ticks(np.arange(0, self.f_max, 0.01), minor=True)
 
         # y-axis
         self.ax.set_ylabel("Spectral Power [m$^2$ hr]")
@@ -146,6 +149,21 @@ class plot_spectrum_1d():
         # Scale time units from seconds to hours
         freqs *= 3600.
         power /= 3600.
+
+        # Set limits
+        if self.f_max is None:
+            self.f_max = 0.
+
+        new_f_max = freqs[  # take freq
+            np.size(  # 'pick' last index
+                np.trim_zeros(  # help finding last index
+                    (power > np.var(power)).astype(int)  # find where power is significant
+                )
+            )
+        ]
+
+        if new_f_max > self.f_max:
+            self.f_max = np.round(1.4 * new_f_max, 1)
 
         # Plot
         self.ax.plot(
@@ -377,7 +395,8 @@ class plot_spectrum_2d():
         wavenumber, freqs, power = fa.spectral_analysis_2d(
             dataset, x=self.x, variable=self.variable, demean=self.demean
         )
-        wavenumber = -1. * wavenumber  # flip wavenumbers, since we only look at waves in a given direction
+        # flip wavenumbers, since we only look at waves in a given direction
+        wavenumber = -1. * wavenumber
 
         # Compute plot limits
         if self.k_max is None:
@@ -389,16 +408,17 @@ class plot_spectrum_2d():
         # Select cols and rows
         rows = (freqs >= 0)
         cols = (wavenumber >= 0)
+
         wavenumber = wavenumber[cols]
         freqs = freqs[rows]
         power = power[rows, :][:, cols]
 
         # Plot data
         self.im = self.ax.pcolormesh(
-            self.x_scale * wavenumber,
-            self.y_scale * freqs,
+            wavenumber * self.x_scale,
+            freqs * self.y_scale,
             power,
-            shading="nearest", # "gouraud",
+            shading="nearest",  # "gouraud",
             cmap=cmo.cm.matter,
             vmin=5.0 * np.min(power)
         )
@@ -443,7 +463,8 @@ class plot_spectrum_2d():
         ylims = self.ax.get_ylim()
 
         # Compute and plot dispersion relation
-        wavenumber = np.linspace(np.min(xlims), np.max(xlims), 100) / self.x_scale
+        wavenumber = np.linspace(
+            np.min(xlims), np.max(xlims), 100) / self.x_scale
 
         for i in range(n):
             dispersion = fa.dispersion_relation(wavenumber, n=i, alpha=alpha)
@@ -460,7 +481,7 @@ class plot_spectrum_2d():
                 xy=(
                     self.x_scale * wavenumber[-1],
                     self.y_scale * dispersion[-1]
-                    ),
+                ),
                 xycoords="data",
                 textcoords="offset pixels",
                 ha="right",
@@ -562,5 +583,5 @@ if __name__ == "__main__":
             .save(figure_dir)
 
     # fmt: on
-    # test_spectrum_1d()
+    test_spectrum_1d()
     test_spectrum_2d()
