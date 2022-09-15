@@ -305,7 +305,7 @@ class plot_spectrum_2d():
 
         # Figure specific
         self.fig.suptitle(
-            f"Power Spectrum - {self.variable_name} - {self.data_label} - $x = {self.x / 1000:0.1f}$ km",
+            f"Power Spectrum - {self.variable_name} - $x = {self.x / 1000:0.1f}$ km",
             va="top",
             ha="left",
             x=0.01
@@ -453,6 +453,18 @@ class plot_spectrum_2d():
                 linewidth=1,
                 linestyle="--",
                 color="black"
+            )
+            self.ax.annotate(
+                text=f"$n={i}$",
+                xytext=(-20, -40),
+                xy=(
+                    self.x_scale * wavenumber[-1],
+                    self.y_scale * dispersion[-1]
+                    ),
+                xycoords="data",
+                textcoords="offset pixels",
+                ha="right",
+                va="top"
             )
 
         # Reset limits of figure
