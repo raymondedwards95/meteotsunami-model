@@ -229,6 +229,11 @@ class plot_timeseries():
 
 
 if __name__ == "__main__":
+    # Additional imports
+    import matplotlib.ticker as mticker
+    f = mticker.ScalarFormatter(useOffset=False, useMathText=True)
+    fmt = lambda x: f.format_data(x)
+
     # Define paths
     script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     figure_dir = f"{script_dir}/tests/figures/"
@@ -245,30 +250,34 @@ if __name__ == "__main__":
         x = 1e4
         y = 1e6
         plot_timeseries() \
-            .add_plot(data_a, "wl", x=x, y=y, label=f"y={y}") \
-            .add_plot(data_a, "wl", x=x, y=5*y, label=f"y={5*y}") \
-            .add_plot(data_a, "p", x=x, y=y, label=f"y={y}") \
-            .add_plot(data_a, "p", x=x, y=5*y, label=f"y={5*y}") \
-            .add_plot(data_a, "u", x=x, y=y, label=f"y={y}") \
-            .add_plot(data_a, "u", x=x, y=5*y, label=f"y={5*y}") \
-            .add_plot(data_a, "v", x=x, y=y, label=f"y={y}") \
-            .add_plot(data_a, "v", x=x, y=5*y, label=f"y={5*y}") \
+            .add_plot(data_a, "wl", x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
+            .add_plot(data_a, "wl", x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "p",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
+            .add_plot(data_a, "p",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "u",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
+            .add_plot(data_a, "u",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "v",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
+            .add_plot(data_a, "v",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
             .save(figure_dir)
 
         plot_timeseries() \
-            .add_plot(data_a, "wl", x=x, y=y, label=f"y={y}") \
-            .add_plot(data_a, "wl", x=x, y=5*y, label=f"y={5*y}") \
-            .add_plot(data_a, "p", x=x, y=y, label=f"y={y}") \
-            .add_plot(data_a, "p", x=x, y=5*y, label=f"y={5*y}") \
+            .add_plot(data_a, "wl", x=x, y=np.pi*y, label=f"$y={fmt(np.pi*y)}$") \
+            .add_plot(data_a, "p",  x=x, y=np.pi*y, label=f"$y={fmt(np.pi*y)}$") \
             .save(figure_dir)
 
         plot_timeseries() \
-            .add_plot(data_a, "wl", x=x, y=y, label=f"y={y}") \
-            .add_plot(data_a, "wl", x=x, y=5*y, label=f"y={5*y}") \
-            .add_plot(data_a, "u", x=x, y=y, label=f"y={y}") \
-            .add_plot(data_a, "u", x=x, y=5*y, label=f"y={5*y}") \
-            .add_plot(data_a, "v", x=x, y=y, label=f"y={y}") \
-            .add_plot(data_a, "v", x=x, y=5*y, label=f"y={5*y}") \
+            .add_plot(data_a, "wl", x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
+            .add_plot(data_a, "wl", x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "u",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
+            .add_plot(data_a, "u",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "v",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
+            .add_plot(data_a, "v",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .save(figure_dir)
+
+        plot_timeseries() \
+            .add_plot(data_a, "wl", x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
+            .add_plot(data_a, "wl", x=x, y=3*y, label=f"$y={fmt(3*y)}$") \
+            .add_plot(data_a, "wl", x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
             .save(figure_dir)
 
     # fmt: on
