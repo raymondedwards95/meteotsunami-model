@@ -14,8 +14,6 @@ from matplotlib import gridspec
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-import functions.analysis as fa
-import functions.utilities as fu
 from functions import *
 # fmt: on
 
