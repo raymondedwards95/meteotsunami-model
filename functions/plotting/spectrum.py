@@ -1,6 +1,8 @@
 """ Functions for visualising spectra from model output
 
-Main functions:
+Main classes:
+    plot_spectrum_1d
+    plot_spectrum_2d
 """
 
 import os
@@ -38,6 +40,10 @@ class plot_spectrum_1d():
         Options:
             demean:     remove mean from data
             f_max:      upper limit for frequency f (units: cycles per hour)
+
+        Methods:
+            add_plot:   add data to the figure
+            save:       writes the figure to disk
         """
         plot_spectrum_1d.number += 1
 
@@ -252,10 +258,15 @@ class plot_spectrum_2d():
             variable:   name of variable, i.e. "wl", "u", "v" or "p"
 
         Options:
-            demean:     remove mean from data
-            label:      label for plot
-            k_max:      upper limit for wavenumber k
-            f_max:      upper limit for frequency f
+            demean:         remove mean from data
+            label:          label for plot
+            k_max:          upper limit for wavenumber k
+            f_max:          upper limit for frequency f
+
+        Methods:
+            add_plot:       add data to the figure
+            add_dispersion: add theoretical relationship between wavenumber and frequency
+            save:           writes the figure to disk
         """
         plot_spectrum_2d.number += 1
         self.x_scale = 1e6
