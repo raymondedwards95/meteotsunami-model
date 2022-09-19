@@ -157,7 +157,8 @@ class plot_spectrum_1d():
         new_f_max = freqs[  # take freq
             np.size(  # 'pick' last index
                 np.trim_zeros(  # help finding last index
-                    (power > np.var(power)).astype(int)  # find where power is significant
+                    # find where power is significant
+                    (power > np.var(power)).astype(int)
                 )
             )
         ]
