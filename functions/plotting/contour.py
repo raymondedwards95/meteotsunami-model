@@ -8,7 +8,9 @@ import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.typing as npt
 import xarray as xr
+from matplotlib import gridspec
 
 # fmt: off
 # fix for importing functions below
@@ -24,13 +26,29 @@ class plot_contour():
     def __init__(self):
         """ Create and setup a figure for time-slices
         """
-        raise NotImplementedError
+        plot_contour.number += 1
+
+        self.figsize = FIGSIZE_NORMAL
+        self.closed = False
+        self.filled = False
+
+        print(
+            f"\n# Initiated figure for contour-levels"
+        )
 
     def _check_if_closed(self):
         """ Raises an error if the figure is supposed to be closed """
         if self.closed:
             raise TypeError(
-                f"Figure is cleared and closed: it can not be edited")
+                f"Figure is cleared and closed: it can not be edited"
+            )
+
+    def _check_if_filled(self):
+        """ Raises an error if the figure is filled with data already """
+        if self.filled:
+            raise TypeError(
+                f"Figure contains data already: it cannot be edited"
+            )
 
     def _setup_figure(self):
         """ Figure setup """
@@ -44,20 +62,33 @@ class plot_contour():
         self._check_if_closed()
         raise NotImplementedError
 
-    def add_plot(
+    def add_plots(
         self,
         dataset: xr.Dataset,
-        variable: str,
-        t: Numeric,
-        ):
+        variable_list: npt.ArrayLike[str],
+        t_list: npt.ArrayLike[Numeric],
+    ):
         """ Adds a subplot with data
 
         Input:
-            dataset:    dataset containing model output
-            variable:   name of variable, e.g. 'wl', 'u', 'v' or 'p'
-            x:          x-coordinate
+            `dataset`:          dataset containing model output
+            `variable_list`:    list of names of variables, e.g. 'wl', 'u', 'v' or 'p'
+            `t_list`:           list of t-coordinates
         """
-        raise NotImplementedError
+        # Checks
+        self._check_if_closed()
+        self._check_if_filled()
+
+        # Create subplots
+        n_var = len(variable_list)
+        n_t = len(t_list)
+
+        self.fig, self.axes = plt.subplots(
+            n_t,
+            n_var,
+            sharex=True,
+            sharey=True,
+        )
 
     def save(
         self,
