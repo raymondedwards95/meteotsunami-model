@@ -29,7 +29,10 @@ class plot_timeseries():
         """ Create and setup a figure for time-series
 
         Options:
-            title:  alternative title
+            `title`:    figure title
+
+        Methods:
+            `add_plot`: add data to the figure
         """
         plot_timeseries.number += 1
 
@@ -122,13 +125,13 @@ class plot_timeseries():
         """ Adds data to a plot
 
         Input:
-            dataset:    dataset containing gridded model output
-            variable:   name of variable to plot
-            x:          x-coordinate
-            y:          y-coordinate
+            `dataset`:  dataset containing gridded model output
+            `variable`: name of variable to plot
+            `x`:        x-coordinate
+            `y`:        y-coordinate
 
         Options:
-            label:      label for plot
+            `label`:    label for plot
         """
         # Checks
         self._check_if_closed()
@@ -171,10 +174,10 @@ class plot_timeseries():
         """ Saves the figure
 
         Input:
-            saveloc:    location where the figure should be saved
+            `saveloc`:  location where the figure should be saved
 
         Options:
-            close:      close figure
+            `close`:    close figure
         """
         # Checks
         self._check_if_closed()
