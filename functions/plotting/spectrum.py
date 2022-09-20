@@ -35,15 +35,15 @@ class plot_spectrum_1d():
         """ Create and setup a figure for the 1d spectrum
 
         Input:
-            variable:   name of variable, i.e. "wl", "u", "v" or "p"
+            `variable`: name of variable, i.e. "wl", "u", "v" or "p"
 
         Options:
-            demean:     remove mean from data
-            f_max:      upper limit for frequency f (units: cycles per hour)
+            `demean`:   remove mean from data
+            `f_max`:    upper limit for frequency f (units: cycles per hour)
 
         Methods:
-            add_plot:   add data to the figure
-            save:       writes the figure to disk
+            `add_plot`: add data to the figure
+            `save`:     writes the figure to disk
         """
         plot_spectrum_1d.number += 1
 
@@ -133,12 +133,12 @@ class plot_spectrum_1d():
         """ Adds data to a plot
 
         Input:
-            dataset:    dataset containing model output
-            x:          x-coordinate
-            y:          y-coordinate
+            `dataset`:  dataset containing model output
+            `x`:        x-coordinate
+            `y`:        y-coordinate
 
         Options:
-            label:      label for plot
+            `label`:    label for plot
         """
         # Checks
         self._check_if_closed()
@@ -203,10 +203,10 @@ class plot_spectrum_1d():
         """ Saves the figure
 
         Input:
-            saveloc:    location where the figure should be saved
+            `saveloc`:  location where the figure should be saved
 
         Options:
-            close:      close figure
+            `close`:    close figure
         """
         # Checks
         self._check_if_closed()
@@ -255,18 +255,18 @@ class plot_spectrum_2d():
         """ Create and setup a figure for the 2d spectrum
 
         Input:
-            variable:   name of variable, i.e. "wl", "u", "v" or "p"
+            `variable`:         name of variable, i.e. "wl", "u", "v" or "p"
 
         Options:
-            demean:         remove mean from data
-            label:          label for plot
-            k_max:          upper limit for wavenumber k
-            f_max:          upper limit for frequency f
+            `demean`:           remove mean from data
+            `label`:            label for plot
+            `k_max`:            upper limit for wavenumber k
+            `f_max`:            upper limit for frequency f
 
         Methods:
-            add_plot:       add data to the figure
-            add_dispersion: add theoretical relationship between wavenumber and frequency
-            save:           writes the figure to disk
+            `add_plot`:         add data to the figure
+            `add_dispersion`:   add theoretical relationship between wavenumber and frequency
+            `save`:             writes the figure to disk
         """
         plot_spectrum_2d.number += 1
         self.x_scale = 1e6
@@ -387,13 +387,13 @@ class plot_spectrum_2d():
         """ Adds data to a plot
 
         Input:
-            dataset:    dataset containing model output
-            x:          x-coordinate
+            `dataset`:  dataset containing model output
+            `x`:        x-coordinate
 
         Options:
-            label:      label for plot
-            k_max:      upper limit for wavenumber k
-            f_max:      upper limit for frequency f
+            `label`:    label for plot
+            `k_max`:    upper limit for wavenumber k
+            `f_max`:    upper limit for frequency f
         """
         # Checks
         self._check_if_closed()
@@ -465,10 +465,10 @@ class plot_spectrum_2d():
         """ Adds the dispersion relation to a plot
 
         Input:
-            n:          maximum number of modes
+            `n`:        maximum number of modes
 
         Options:
-            alpha:      slope for computing dispersion relation
+            `alpha`:    slope for computing dispersion relation
         """
         # Get limits from figure
         xlims = self.ax.get_xlim()
@@ -516,10 +516,10 @@ class plot_spectrum_2d():
         """ Saves the figure
 
         Input:
-            saveloc:    location where the figure should be saved
+            `saveloc`:  location where the figure should be saved
 
         Options:
-            close:      close figure
+            `close`:    close figure
         """
         # Checks
         self._check_if_closed()
