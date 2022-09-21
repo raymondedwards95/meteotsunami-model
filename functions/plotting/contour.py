@@ -6,6 +6,7 @@ Main functions:
 import os
 import sys
 
+import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
@@ -16,6 +17,7 @@ from matplotlib import gridspec
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from functions import *
+import functions.utilities as fu
 # fmt: on
 
 
@@ -54,19 +56,30 @@ class plot_contour():
         """ Figure setup """
         # Checks
         self._check_if_closed()
-        raise NotImplementedError
 
     def _setup_plot(self):
         """ Plot setup """
         # Checks
         self._check_if_closed()
-        raise NotImplementedError
+
+    def _pick_cmap(self, variable: str):
+        match variable.lower().strip():
+            case "wl":
+                return cmo.cm.balance
+            case ("u" | "v"):
+                return cmo.cm.delta
+            case "p":
+                return cmo.cm.curl
+            case _:
+                raise ValueError(
+                    f"{variable=} should be 'wl', 'u', 'v' or 'p'"
+                )
 
     def add_plots(
         self,
         dataset: xr.Dataset,
-        variable_list: npt.ArrayLike[str],
-        t_list: npt.ArrayLike[Numeric],
+        variable_list: npt.ArrayLike,
+        t_list: npt.ArrayLike,
     ):
         """ Adds a subplot with data
 
@@ -79,16 +92,44 @@ class plot_contour():
         self._check_if_closed()
         self._check_if_filled()
 
+        t_list = np.sort(np.array(t_list))
+        variable_list = np.char.lower(np.char.strip(np.array(variable_list)))
+
+        if not np.all(np.isin(variable_list, np.array(["wl", "u", "v", "p"]))):
+            raise ValueError(
+                f"Variables in `variable_list` should be 'wl', 'u', 'v' or 'p'"
+            )
+
         # Create subplots
-        n_var = len(variable_list)
-        n_t = len(t_list)
+        var_num = len(variable_list)
+        t_num = len(t_list)
 
         self.fig, self.axes = plt.subplots(
-            n_t,
-            n_var,
+            t_num,
+            var_num,
             sharex=True,
             sharey=True,
+            squeeze=False,
         )
+
+        # Find plot limits
+        var_max = np.zeros(var_num)
+        for var_idx, var in enumerate(variable_list):
+            var_max[var_idx] = np.max(np.fabs(dataset[var]))
+
+        # Fill subplots
+        for t_idx, t in enumerate(t_list):
+            for var_idx, var in enumerate(variable_list):
+                self.axes[t_idx, var_idx].contourf(
+                    dataset["x"] / 1000.,
+                    dataset["y"] / 1000.,
+                    dataset[var].interp(t=fu.to_timestr(t)),
+                    cmap=self._pick_cmap(var)
+                )
+
+        # End
+        self.filled = True
+        return self
 
     def save(
         self,
@@ -133,3 +174,44 @@ class plot_contour():
         plt.close(self.fig)
         print(f"# Figure contour is closed")
         return
+
+
+if __name__ == "__main__":
+    # Define paths
+    script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    figure_dir = f"{script_dir}/tests/figures/"
+    os.makedirs(figure_dir, exist_ok=True)
+
+    # Get data
+    main_dir = os.path.dirname(script_dir)
+    data_a = f"{main_dir}/reproduction-an-2012/output/data_repr_00.nc"
+
+    data_a = xr.open_dataset(data_a, chunks="auto")
+
+    # Make figures
+    def test_contours():
+        plot_contour() \
+            .add_plots(
+                dataset=data_a,
+                variable_list=["wl"],
+                t_list=[10 * 3600 * i for i in range(1, 6)],
+        ) \
+            .save(figure_dir)
+
+        plot_contour() \
+            .add_plots(
+                dataset=data_a,
+                variable_list=["u", "v"],
+                t_list=[10 * 3600 * i for i in range(1, 6)],
+        ) \
+            .save(figure_dir)
+
+        plot_contour() \
+            .add_plots(
+                dataset=data_a,
+                variable_list=["wl", "p"],
+                t_list=[10 * 3600],
+        ) \
+            .save(figure_dir)
+
+    test_contours()
