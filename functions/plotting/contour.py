@@ -129,14 +129,15 @@ class plot_contour():
             `t_list`:           list of t-coordinates
 
         Options:
-            `x_max`:            upper limit for x
-            `x_min`:            lower limit for x
-            `y_max`:            upper limit for y
-            `y_min`:            lower limit for y
+            `x_max`:            upper limit for x (in kilometers)
+            `x_min`:            lower limit for x (in kilometers)
+            `y_max`:            upper limit for y (in kilometers)
+            `y_min`:            lower limit for y (in kilometers)
         """
         # Checks
         self._check_if_closed()
         self._check_if_filled()
+        print(f"# Adding plots to figure...")
 
         t_list = np.sort(np.array(t_list))
         variable_list = np.char.lower(np.char.strip(np.array(variable_list)))
@@ -154,6 +155,8 @@ class plot_contour():
         # Create subplots
         var_num = len(variable_list)
         t_num = len(t_list)
+        print(f"# Variables:", *variable_list)
+        print(f"# t:        ", *t_list)
 
         self.fig, self.axes = plt.subplots(
             t_num,
@@ -183,6 +186,7 @@ class plot_contour():
         # Fill subplots
         for t_idx, t in enumerate(t_list):
             for var_idx, var in enumerate(variable_list):
+                print(f"# Adding data for {var:2} and t={t}")
                 self.axes[t_idx, var_idx].contourf(
                     dataset["x"] / 1000.,
                     dataset["y"] / 1000.,
@@ -261,7 +265,7 @@ if __name__ == "__main__":
     main_dir = os.path.dirname(script_dir)
     data_a = f"{main_dir}/reproduction-an-2012/output/data_repr_00.nc"
 
-    data_a = xr.open_dataset(data_a, chunks="auto")
+    data_a = xr.open_dataset(data_a, chunks={"t": "auto", "x":-1, "y":-1})
 
     # Make figures
     def test_contours():
@@ -269,7 +273,7 @@ if __name__ == "__main__":
             .add_plots(
                 dataset=data_a,
                 variable_list=["wl"],
-                t_list=[10 * 3600 * i for i in range(1, 6)],
+                t_list=[10 * 3600 * i for i in range(1, 5)],
         ) \
             .save(figure_dir)
 
@@ -277,7 +281,8 @@ if __name__ == "__main__":
             .add_plots(
                 dataset=data_a,
                 variable_list=["u", "v"],
-                t_list=[10 * 3600 * i for i in range(1, 6)],
+                t_list=[10 * 3600 * i for i in range(1, 5)],
+                x_max=400,
         ) \
             .save(figure_dir)
 
@@ -286,6 +291,9 @@ if __name__ == "__main__":
                 dataset=data_a,
                 variable_list=["wl", "p"],
                 t_list=[10 * 3600],
+                x_max=500,
+                y_min=-500,
+                y_max=3500,
         ) \
             .save(figure_dir)
 
