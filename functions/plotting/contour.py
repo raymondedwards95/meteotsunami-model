@@ -58,6 +58,16 @@ class plot_contour():
         # Checks
         self._check_if_closed()
 
+        # General
+        self.fig.set_size_inches(self.figsize)
+        self.fig.set_dpi(FIG_DPI)
+        self.fig.set_tight_layout(True)
+
+        # Figure specific
+        self.fig.suptitle(
+            f"Contours", va="top", ha="left", x=0.01
+        )
+
     def _setup_plot(self):
         """ Plot setup """
         # Checks
@@ -71,6 +81,21 @@ class plot_contour():
                 return cmo.cm.delta
             case "p":
                 return cmo.cm.curl
+            case _:
+                raise ValueError(
+                    f"{variable=} should be 'wl', 'u', 'v' or 'p'"
+                )
+
+    def _pick_subtitle(self, variable: str):
+        match variable.lower().strip():
+            case "wl":
+                return "Water level"
+            case "u":
+                return "Cross shore water velocity"
+            case "v":
+                return "Along shore water velocity"
+            case "p":
+                return "Surface air pressure"
             case _:
                 raise ValueError(
                     f"{variable=} should be 'wl', 'u', 'v' or 'p'"
@@ -137,10 +162,20 @@ class plot_contour():
                     dataset["x"] / 1000.,
                     dataset["y"] / 1000.,
                     dataset[var].interp(t=fu.to_timestr(t)),
+                    levels=101,
                     cmap=cmap_list[var_idx],
                     vmin=(-1. * var_max[var_idx]),
                     vmax=var_max[var_idx],
                 )
+                self.axes[t_idx, var_idx].annotate(
+                    f"$t = {t / 3600:0.1f}$h",
+                    xy=(0.99, 0.98),
+                    xycoords="axes fraction",
+                    ha="right",
+                    va="top"
+                )
+                if t_idx == 0:
+                    self.axes[t_idx, var_idx].set_title(self._pick_subtitle(var))
 
         # End
         self.filled = True
