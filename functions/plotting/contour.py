@@ -35,6 +35,11 @@ class plot_contour():
         self.closed = False
         self.filled = False
 
+        self.x_max = None
+        self.x_min = None
+        self.y_max = None
+        self.y_min = None
+
         print(
             f"\n# Initiated figure for contour-levels"
         )
@@ -73,6 +78,11 @@ class plot_contour():
         # Checks
         self._check_if_closed()
 
+        # All
+        for ax in self.axes.ravel():
+            ax.set_xlim(self.x_min, self.x_max)
+            ax.set_ylim(self.y_min, self.y_max)
+
     def _pick_cmap(self, variable: str):
         match variable.lower().strip():
             case "wl":
@@ -106,6 +116,10 @@ class plot_contour():
         dataset: xr.Dataset,
         variable_list: npt.ArrayLike,
         t_list: npt.ArrayLike,
+        x_min: Numeric = None,
+        x_max: Numeric = None,
+        y_min: Numeric = None,
+        y_max: Numeric = None,
     ):
         """ Adds a subplot with data
 
@@ -113,6 +127,12 @@ class plot_contour():
             `dataset`:          dataset containing model output
             `variable_list`:    list of names of variables, e.g. 'wl', 'u', 'v' or 'p'
             `t_list`:           list of t-coordinates
+
+        Options:
+            `x_max`:            upper limit for x
+            `x_min`:            lower limit for x
+            `y_max`:            upper limit for y
+            `y_min`:            lower limit for y
         """
         # Checks
         self._check_if_closed()
@@ -125,6 +145,11 @@ class plot_contour():
             raise ValueError(
                 f"Variables in `variable_list` should be 'wl', 'u', 'v' or 'p'"
             )
+
+        self.x_max = x_max
+        self.x_min = x_min
+        self.y_max = y_max
+        self.y_min = y_min
 
         # Create subplots
         var_num = len(variable_list)
