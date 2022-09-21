@@ -7,11 +7,12 @@ import os
 import sys
 
 import cmocean as cmo
+import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
 import xarray as xr
-from matplotlib import gridspec
+from matplotlib.colors import Normalize
 
 # fmt: off
 # fix for importing functions below
@@ -115,7 +116,19 @@ class plot_contour():
         # Find plot limits
         var_max = np.zeros(var_num)
         for var_idx, var in enumerate(variable_list):
-            var_max[var_idx] = np.max(np.fabs(dataset[var]))
+            var_max[var_idx] = np.nanmax(np.fabs(dataset[var]))
+
+        # Set colormaps
+        cmap_list = []
+        norm_list = []
+        im_list = []
+        for var_idx, var in enumerate(variable_list):
+            _var_max = var_max[var_idx]
+            _var_min = -1. * _var_max
+            cmap_list.append(self._pick_cmap(var))
+            norm_list.append(Normalize(_var_min, _var_max))
+            im_list.append(cm.ScalarMappable(
+                norm=norm_list[-1], cmap=cmap_list[-1]))
 
         # Fill subplots
         for t_idx, t in enumerate(t_list):
@@ -124,7 +137,9 @@ class plot_contour():
                     dataset["x"] / 1000.,
                     dataset["y"] / 1000.,
                     dataset[var].interp(t=fu.to_timestr(t)),
-                    cmap=self._pick_cmap(var)
+                    cmap=cmap_list[var_idx],
+                    vmin=(-1. * var_max[var_idx]),
+                    vmax=var_max[var_idx],
                 )
 
         # End
