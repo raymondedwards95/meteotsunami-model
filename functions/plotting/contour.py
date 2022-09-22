@@ -31,7 +31,7 @@ class plot_contour():
         """
         plot_contour.number += 1
 
-        self.figsize = FIGSIZE_NORMAL
+        self.figsize = FIGSIZE_LONG
         self.closed = False
         self.filled = False
 
