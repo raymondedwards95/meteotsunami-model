@@ -66,7 +66,7 @@ class plot_contour():
         # General
         self.fig.set_size_inches(self.figsize)
         self.fig.set_dpi(FIG_DPI)
-        self.fig.set_tight_layout(True)
+        # self.fig.set_tight_layout(True)
 
         # Figure specific
         self.fig.suptitle(
@@ -77,11 +77,20 @@ class plot_contour():
         """ Plot setup """
         # Checks
         self._check_if_closed()
+        print(self.axes.shape)
 
         # All
         for ax in self.axes.ravel():
             ax.set_xlim(self.x_min, self.x_max)
             ax.set_ylim(self.y_min, self.y_max)
+
+        # Left
+        for i in range(self.axes.shape[0]):
+            self.axes[i, 0].set_ylabel("$y$ [km]")
+
+        # Bottom
+        for j in range(self.axes.shape[1]):
+            self.axes[-1, j].set_xlabel("$x$ [km]")
 
     def _pick_cmap(self, variable: str):
         match variable.lower().strip():
@@ -96,16 +105,16 @@ class plot_contour():
                     f"{variable=} should be 'wl', 'u', 'v' or 'p'"
                 )
 
-    def _pick_subtitle(self, variable: str):
+    def _pick_label(self, variable: str):
         match variable.lower().strip():
             case "wl":
-                return "Water level"
+                return "Water level [m]"
             case "u":
-                return "Cross shore water velocity"
+                return "Cross shore water velocity [m/s]"
             case "v":
-                return "Along shore water velocity"
+                return "Along shore water velocity [m/s]"
             case "p":
-                return "Surface air pressure"
+                return "Surface air pressure [Pa]"
             case _:
                 raise ValueError(
                     f"{variable=} should be 'wl', 'u', 'v' or 'p'"
@@ -164,6 +173,7 @@ class plot_contour():
             sharex=True,
             sharey=True,
             squeeze=False,
+            constrained_layout=True,
         )
 
         # Find plot limits
@@ -203,8 +213,16 @@ class plot_contour():
                     ha="right",
                     va="top"
                 )
-                if t_idx == 0:
-                    self.axes[t_idx, var_idx].set_title(self._pick_subtitle(var))
+
+        # Add colorbars
+        for var_idx, var in enumerate(variable_list):
+            self.fig.colorbar(
+                im_list[var_idx],
+                ax=self.axes[:, var_idx],
+                location="top",
+                label=self._pick_label(var),
+                aspect=50
+            )
 
         # End
         self.filled = True
@@ -265,7 +283,7 @@ if __name__ == "__main__":
     main_dir = os.path.dirname(script_dir)
     data_a = f"{main_dir}/reproduction-an-2012/output/data_repr_00.nc"
 
-    data_a = xr.open_dataset(data_a, chunks={"t": "auto", "x":-1, "y":-1})
+    data_a = xr.open_dataset(data_a, chunks={"t": "auto", "x": -1, "y": -1})
 
     # Make figures
     def test_contours():
