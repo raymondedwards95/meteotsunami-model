@@ -228,12 +228,17 @@ class plot_contour():
 
         # Add colorbars
         for var_idx, var in enumerate(variable_list):
-            self.fig.colorbar(
+            cb = self.fig.colorbar(
                 im_list[var_idx],
                 ax=self.axes[:, var_idx],
                 location="top",
+                orientation="horizontal",
                 label=self._pick_label(var),
+                shrink=0.8,
+                pad=0.01,
             )
+            cb.ax.xaxis.set_label_position("top")
+            cb.ax.xaxis.set_ticks_position("bottom")
 
         # End
         self.filled = True
