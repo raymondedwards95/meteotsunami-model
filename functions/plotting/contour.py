@@ -233,7 +233,6 @@ class plot_contour():
                 ax=self.axes[:, var_idx],
                 location="top",
                 label=self._pick_label(var),
-                aspect=50
             )
 
         # End
