@@ -22,6 +22,18 @@ import functions.utilities as fu
 # fmt: on
 
 
+def _relative_ceil(x: Floating) -> Floating:
+    """ Takes closest ceiling of a number
+
+    Examples:
+        1.2 -> 2
+        0.12 -> 0.2
+        0.02 -> 0.1
+    """
+    s = - 1 * int(np.floor(np.log10(np.abs(x))))
+    return np.round(x, s) + np.power(10., -1. * s)
+
+
 class plot_contour():
     """ Methods to create visualisations of time-slices """
     number = 0
@@ -179,7 +191,7 @@ class plot_contour():
         # Find plot limits
         var_max = np.zeros(var_num)
         for var_idx, var in enumerate(variable_list):
-            var_max[var_idx] = np.nanmax(np.fabs(dataset[var]))
+            var_max[var_idx] = _relative_ceil(np.nanmax(np.fabs(dataset[var])))
 
         # Set colormaps
         cmap_list = []
