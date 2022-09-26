@@ -9,6 +9,8 @@ This folder contains functions to help setting up simulations, to process model 
 * `pressure.py` helps with setting up space and time varying pressure fields;
 * `regrid.py` contains functions to convert D3D-FM output from a flexible mesh to a fixed regular grid (it can also be used as standalone);
 * `utilities.py` provides some useful general functions;
-* `visualisation.py` provides functions to make figures.
+* `visualisation.py` provides functions to make figures, but it is an old module.
 
 Importing this folder, i.e. `__init__.py` provides some general parameters and options.
+
+Functions for visualising are contained in the folder `plotting`.
