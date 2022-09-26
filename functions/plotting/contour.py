@@ -1,6 +1,7 @@
 """ Functions for contour plots of model output
 
-Main functions:
+Main classes:
+    plot_contour
 """
 
 import os
