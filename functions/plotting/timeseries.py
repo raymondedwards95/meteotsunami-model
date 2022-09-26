@@ -1,6 +1,7 @@
 """ Functions for visualising time-series from model output
 
-Main functions:
+Main classes:
+    plot_timeseries
 """
 
 import os
