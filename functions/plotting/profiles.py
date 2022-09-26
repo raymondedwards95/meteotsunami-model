@@ -1,6 +1,8 @@
 """ Functions for visualising wave profiles from model output
 
-Main Functions:
+Main classes:
+    plot_alongshore
+    plot_crossshore
 """
 
 import os
