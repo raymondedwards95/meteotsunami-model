@@ -102,15 +102,23 @@ class plot_alongshore():
         # Checks
         self._check_if_closed()
 
+        # Compute y-limits
+        max_lim = 0.
+        for ax in self.axes:
+            ax_max_lim = np.max(np.abs(ax.get_ylim()))
+            if ax_max_lim > max_lim:
+                max_lim = ax_max_lim
+
         # General
         for ax in self.axes:
             ax.axhline(color="black", linewidth=1)
             ax.legend(loc="upper right")
             ax.grid()
+            ax.set_ylim(-1. * max_lim, max_lim)
 
-            ax.set_xlabel(f"$y$ [km]")
-
-        self.axes[len(self.axes) // 2].set_ylabel(f"{self.variable_long} [{self.variable_unit}]")
+        self.axes[-1].set_xlabel(f"$y$ [km]")
+        self.fig.supylabel(
+            f"{self.variable_long} [{self.variable_unit}]", x=0.04)
 
     def add_subplot(
         self,
@@ -311,7 +319,7 @@ if __name__ == "__main__":
     # fmt: off
     def test_alongshore():
         x = 1e4
-        t = 3600
+        t = 36000
         plot_alongshore(variable="wl") \
             .add_plot(data_a, x=x, t=t, label=f"a - t={t}") \
             .add_plot(data_a, x=x, t=2*t, label=f"a - t={2*t}") \
@@ -329,7 +337,6 @@ if __name__ == "__main__":
             .add_subplot(data_a, x=x, t=2*t, label=f"a - t={2*t}") \
             .add_subplot(data_a, x=x, t=3*t, label=f"a - t={3*t}") \
             .add_subplot(data_a, x=x, t=4*t, label=f"a - t={4*t}") \
-            .add_subplot(data_a, x=x, t=5*t, label=f"a - t={5*t}") \
             .save(figure_dir)
 
     # fmt: on
