@@ -44,15 +44,25 @@ class plot_alongshore():
         self.title = None
 
         self.variable: str
+        self.variable_long: str
+        self.variable_unit: str
         match variable.lower().strip():
             case "wl":
                 self.variable = "wl"
+                self.variable_long = "Water level"
+                self.variable_unit = "m"
             case "u":
                 self.variable = "u"
+                self.variable_long = "Cross shore water velocity"
+                self.variable_unit = "m/s"
             case "v":
                 self.variable = "v"
+                self.variable_long = "Along shore water velocity"
+                self.variable_unit = "m/s"
             case "p":
                 self.variable = "p"
+                self.variable_long = "Surface air pressure"
+                self.variable_unit = "Pa"
             case _:
                 raise ValueError(
                     f"{variable=} should be 'wl', 'u', 'v' or 'p'"
@@ -94,7 +104,9 @@ class plot_alongshore():
             ax.legend(loc="upper right")
             ax.grid()
 
-            ax.set_xlabel("$y$ [km]")
+            ax.set_xlabel(f"$y$ [km]")
+
+        self.axes[len(self.axes) // 2].set_ylabel(f"{self.variable_long} [{self.variable_unit}]")
 
     def add_subplot(
         self,
