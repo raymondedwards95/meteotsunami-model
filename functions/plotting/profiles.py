@@ -82,6 +82,10 @@ class plot_alongshore():
         """ Figure setup """
         # Checks
         self._check_if_closed()
+        if len(self.axes) > 2:
+            self.figsize = FIGSIZE_HIGH
+        if len(self.axes) > 4:
+            self.figsize = FIGSIZE_LONG
 
         # General
         self.fig.set_size_inches(self.figsize)
