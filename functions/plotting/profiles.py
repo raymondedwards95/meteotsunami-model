@@ -96,18 +96,43 @@ class plot_alongshore():
 
             ax.set_xlabel("$y$ [km]")
 
-    def add_subplot(self):
+    def add_subplot(
+        self,
+        dataset: xr.Dataset = None,
+        x: Numeric = None,
+        t: Numeric = None,
+        label: str = None,
+    ):
+        """ Adds a subplot to the figure
+
+        Can also add data to the new subplot using the following arguments:
+
+        Input:
+            `dataset`:  dataset containing gridded model output
+            `variable`: name of variable to plot
+            `x`:        x-coordinate
+            `t`:        t-coordinate
+
+        Options:
+            `label`:    label for plot
+        """
         # Checks
         self._check_if_closed()
 
         # Add subplot
         self.axes.append(self.fig.add_subplot())
+        print(f"# Added subplot for along-shore profiles")
 
         # Add data
-        # TODO -> add data using function self.add_plot
+        if (dataset is not None) and (x is not None) and (t is not None):
+            return self.add_plot(
+                dataset=dataset,
+                x=x,
+                t=t,
+                label=label,
+            )
 
         # End
-        print(f"# Added subplot for along-shore profiles")
         return self
 
     def add_plot(
@@ -216,7 +241,6 @@ class plot_alongshore():
         return
 
 
-
 class plot_crossshore():
     """ Methods to create a visualisation of the cross-shore profiles """
     number = 0
@@ -253,7 +277,6 @@ class plot_crossshore():
                 )
 
 
-
 if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -283,6 +306,14 @@ if __name__ == "__main__":
             .add_plot(data_a, x=x, t=t, label=f"a - t={t}") \
             .add_subplot() \
             .add_plot(data_b, x=x, t=t, label=f"b - t={t}") \
+            .save(figure_dir)
+
+        plot_alongshore(variable="wl") \
+            .add_subplot(data_a, x=x, t=t, label=f"a - t={t}") \
+            .add_subplot(data_a, x=x, t=2*t, label=f"a - t={2*t}") \
+            .add_subplot(data_a, x=x, t=3*t, label=f"a - t={3*t}") \
+            .add_subplot(data_a, x=x, t=4*t, label=f"a - t={4*t}") \
+            .add_subplot(data_a, x=x, t=5*t, label=f"a - t={5*t}") \
             .save(figure_dir)
 
     # fmt: on
