@@ -351,6 +351,7 @@ class plot_spectrum_2d():
         self.ax.axhline(color="black", linewidth=1)
         self.ax.axvline(color="black", linewidth=1)
         self.ax.grid()
+        # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
 
         # x-axis
         self.ax.set_xlabel("Wavenumber [1 / (1000 km)]")
