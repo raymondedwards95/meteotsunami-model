@@ -236,7 +236,8 @@ if __name__ == "__main__":
     # Additional imports
     import matplotlib.ticker as mticker
     f = mticker.ScalarFormatter(useOffset=False, useMathText=True)
-    fmt = lambda x: f.format_data(x)
+    def fmt(x):
+        return f.format_data(x)
 
     # Define paths
     script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
