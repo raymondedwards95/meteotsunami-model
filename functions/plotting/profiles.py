@@ -110,7 +110,7 @@ class plot_alongshore():
         # General
         self.fig.set_size_inches(self.figsize)
         self.fig.set_dpi(FIG_DPI)
-        self.fig.set_tight_layout(True)
+        self.fig.set_layout_engine("compressed")
 
         # Figure specific
         if self.title is None:
@@ -140,7 +140,7 @@ class plot_alongshore():
 
         self.axes[-1].set_xlabel(f"$y$ [km]")
         self.fig.supylabel(
-            f"{self.variable_long} [{self.variable_unit}]", x=0.03)
+            f"{self.variable_long} [{self.variable_unit}]")
 
     def add_subplot(
         self,
@@ -297,7 +297,7 @@ class plot_alongshore():
             ax.set_xticklabels([])
 
         # Save
-        self.fig.execute_constrained_layout()
+        self.fig.get_layout_engine().execute(self.fig)
         self.fig.savefig(
             savename,
             bbox_inches="tight",
