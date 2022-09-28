@@ -81,6 +81,7 @@ class plot_timeseries():
             ax.axhline(color="black", linewidth=1)
             ax.legend(loc="upper right")
             ax.grid()
+            # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
 
             max_lim = np.max(np.abs(ax.get_ylim()))
             ax.set_ylim(-1. * max_lim, max_lim)
