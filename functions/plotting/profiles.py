@@ -28,6 +28,8 @@ class plot_alongshore():
     def __init__(
         self,
         variable: str,
+        y_min: Numeric = None,
+        y_max: Numeric = None,
     ):
         """ Create and setup a figure for along-shore profiles
 
@@ -38,6 +40,20 @@ class plot_alongshore():
 
         self.figsize = FIGSIZE_NORMAL
         self.closed = False
+
+        if y_min is None:
+            self.y_min = 0
+            self.y_min_fixed = False
+        else:
+            self.y_min = y_min
+            self.y_min_fixed = True
+
+        if y_max is None:
+            self.y_max = 0
+            self.y_max_fixed = False
+        else:
+            self.y_max = y_max
+            self.y_max_fixed = True
 
         self.fig = plt.figure()
         self.axes = []
@@ -114,6 +130,7 @@ class plot_alongshore():
             ax.axhline(color="black", linewidth=1)
             ax.legend(loc="upper right")
             ax.grid()
+            ax.set_xlim(self.y_min, self.y_max)
             ax.set_ylim(-1. * max_lim, max_lim)
 
         self.axes[-1].set_xlabel(f"$y$ [km]")
@@ -165,6 +182,8 @@ class plot_alongshore():
         x: Numeric,
         t: Numeric,
         label: str = None,
+        y_min: Numeric = None,
+        y_max: Numeric = None,
     ):
         """ Adds data to a plot
 
@@ -200,6 +219,25 @@ class plot_alongshore():
         # Plot
         self.axes[-1].plot(y, data, label=label)
         self.axes[-1].fill_between(y, data, alpha=0.1)
+
+        # Update plot-limits
+        if self.y_min_fixed:
+            pass
+        else:
+            if y_min is not None:
+                self.y_min_fixed = True
+                self.y_min = y_min
+            elif self.y_min > (y_min_data := y.min()):
+                self.y_min = y_min_data
+
+        if self.y_max_fixed:
+            pass
+        else:
+            if y_max is not None:
+                self.y_max_fixed = True
+                self.y_max = y_max
+            elif self.y_max < (y_max_data := y.max()):
+                self.y_max = y_max_data
 
         # Log
         print(
@@ -325,14 +363,14 @@ if __name__ == "__main__":
             .add_plot(data_a, x=x, t=2*t, label=f"a - t={2*t}") \
             .save(figure_dir)
 
-        plot_alongshore(variable="wl") \
+        plot_alongshore(variable="wl", y_max=5e3) \
             .add_subplot() \
             .add_plot(data_a, x=x, t=t, label=f"a - t={t}") \
             .add_subplot() \
             .add_plot(data_b, x=x, t=t, label=f"b - t={t}") \
             .save(figure_dir)
 
-        plot_alongshore(variable="wl") \
+        plot_alongshore(variable="wl", y_min=0) \
             .add_subplot(data_a, x=x, t=t, label=f"a - t={t}") \
             .add_subplot(data_a, x=x, t=2*t, label=f"a - t={2*t}") \
             .add_subplot(data_a, x=x, t=3*t, label=f"a - t={3*t}") \
