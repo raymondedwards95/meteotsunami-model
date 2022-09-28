@@ -79,7 +79,7 @@ class plot_contour():
         # General
         self.fig.set_size_inches(self.figsize)
         self.fig.set_dpi(FIG_DPI)
-        # self.fig.set_tight_layout(True)
+        self.fig.set_layout_engine("compressed")
 
         # Figure specific
         self.fig.suptitle(
@@ -96,10 +96,11 @@ class plot_contour():
         for ax in self.axes.ravel():
             ax.set_xlim(self.x_min, self.x_max)
             ax.set_ylim(self.y_min, self.y_max)
+            # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
+            ax.grid()
 
         # Left
-        for i in range(self.axes.shape[0]):
-            self.axes[i, 0].set_ylabel("$y$ [km]")
+        self.fig.supylabel(f"$y$ [km]")
 
         # Bottom
         for j in range(self.axes.shape[1]):
@@ -186,7 +187,6 @@ class plot_contour():
             sharex=True,
             sharey=True,
             squeeze=False,
-            constrained_layout=True,
         )
 
         # Find plot limits
@@ -268,6 +268,7 @@ class plot_contour():
         self._setup_plot()
 
         # Save
+        self.fig.get_layout_engine().execute(self.fig)
         self.fig.savefig(
             savename,
             bbox_inches="tight",
