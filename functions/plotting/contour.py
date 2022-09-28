@@ -303,13 +303,14 @@ if __name__ == "__main__":
     data_a = xr.open_dataset(data_a, chunks={"t": "auto", "x": -1, "y": -1})
 
     # Make figures
+    # fmt: off
     def test_contours():
         plot_contour() \
             .add_plots(
                 dataset=data_a,
                 variable_list=["wl"],
                 t_list=[10 * 3600 * i for i in range(1, 5)],
-        ) \
+            ) \
             .save(figure_dir)
 
         plot_contour() \
@@ -318,7 +319,7 @@ if __name__ == "__main__":
                 variable_list=["u", "v"],
                 t_list=[10 * 3600 * i for i in range(1, 5)],
                 x_max=400,
-        ) \
+            ) \
             .save(figure_dir)
 
         plot_contour() \
@@ -329,7 +330,8 @@ if __name__ == "__main__":
                 x_max=500,
                 y_min=-500,
                 y_max=3500,
-        ) \
+            ) \
             .save(figure_dir)
+    # fmt: on
 
     test_contours()
