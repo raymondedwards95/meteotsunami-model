@@ -35,6 +35,10 @@ class plot_alongshore():
 
         Input:
             `variable`:     name of variable to plot
+
+        Options:
+            `y_min`:        lower limit for y (in kilometers)
+            `y_max`:        upper limit for y (in kilometers)
         """
         plot_alongshore.number += 1
 
@@ -144,6 +148,8 @@ class plot_alongshore():
         x: Numeric = None,
         t: Numeric = None,
         label: str = None,
+        y_min: Numeric = None,
+        y_max: Numeric = None,
     ):
         """ Adds a subplot to the figure
 
@@ -157,6 +163,8 @@ class plot_alongshore():
 
         Options:
             `label`:    label for plot
+            `y_min`:    lower limit for y (in kilometers)
+            `y_max`:    upper limit for y (in kilometers)
         """
         # Checks
         self._check_if_closed()
@@ -172,6 +180,8 @@ class plot_alongshore():
                 x=x,
                 t=t,
                 label=label,
+                y_min=y_min,
+                y_max=y_max,
             )
 
         # End
@@ -196,6 +206,8 @@ class plot_alongshore():
 
         Options:
             `label`:    label for plot
+            `y_min`:    lower limit for y (in kilometers)
+            `y_max`:    upper limit for y (in kilometers)
         """
         # Checks
         self._check_if_closed()
@@ -381,6 +393,6 @@ if __name__ == "__main__":
             .add_subplot(data_a, x=x, t=3*t, label=f"a - t={3*t}") \
             .add_subplot(data_a, x=x, t=4*t, label=f"a - t={4*t}") \
             .save(figure_dir)
-
     # fmt: on
+
     test_alongshore()

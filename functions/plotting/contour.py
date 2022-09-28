@@ -151,10 +151,10 @@ class plot_contour():
             `t_list`:           list of t-coordinates
 
         Options:
-            `x_max`:            upper limit for x (in kilometers)
             `x_min`:            lower limit for x (in kilometers)
-            `y_max`:            upper limit for y (in kilometers)
+            `x_max`:            upper limit for x (in kilometers)
             `y_min`:            lower limit for y (in kilometers)
+            `y_max`:            upper limit for y (in kilometers)
         """
         # Checks
         self._check_if_closed()
