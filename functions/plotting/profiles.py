@@ -128,6 +128,7 @@ class plot_alongshore():
         # General
         for ax in self.axes:
             ax.axhline(color="black", linewidth=1)
+            ax.axvline(color="black", linewidth=1, alpha=0.5)
             ax.legend(loc="upper right")
             ax.grid()
             ax.set_xlim(self.y_min, self.y_max)
@@ -135,7 +136,7 @@ class plot_alongshore():
 
         self.axes[-1].set_xlabel(f"$y$ [km]")
         self.fig.supylabel(
-            f"{self.variable_long} [{self.variable_unit}]", x=0.04)
+            f"{self.variable_long} [{self.variable_unit}]", x=0.03)
 
     def add_subplot(
         self,
@@ -224,20 +225,24 @@ class plot_alongshore():
         if self.y_min_fixed:
             pass
         else:
-            if y_min is not None:
+            if y_min is not None:  # new provided limits
                 self.y_min_fixed = True
                 self.y_min = y_min
-            elif self.y_min > (y_min_data := y.min()):
-                self.y_min = y_min_data
+            else:
+                y_min_data = y[np.abs(data) > 0.1 * data.std()][0]
+                if self.y_min > (y_min_data):
+                    self.y_min = y_min_data
 
         if self.y_max_fixed:
             pass
         else:
-            if y_max is not None:
+            if y_max is not None:  # new provided limits
                 self.y_max_fixed = True
                 self.y_max = y_max
-            elif self.y_max < (y_max_data := y.max()):
-                self.y_max = y_max_data
+            else:
+                y_max_data = y[np.abs(data) > 0.1 * data.std()][-1]
+                if self.y_max < (y_max_data):
+                    self.y_max = y_max_data
 
         # Log
         print(
