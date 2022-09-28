@@ -137,6 +137,7 @@ class plot_alongshore():
             ax.grid()
             ax.set_xlim(self.y_min, self.y_max)
             ax.set_ylim(-1. * max_lim, max_lim)
+            # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
 
         self.axes[-1].set_xlabel(f"$y$ [km]")
         self.fig.supylabel(
