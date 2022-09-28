@@ -94,7 +94,7 @@ class plot_spectrum_1d():
         # General
         self.fig.set_size_inches(self.figsize)
         self.fig.set_dpi(FIG_DPI)
-        self.fig.set_tight_layout(True)
+        self.fig.set_layout_engine("compressed")
 
         # Figure specific
         self.fig.suptitle(
@@ -218,6 +218,7 @@ class plot_spectrum_1d():
         self._setup_plot()
 
         # Save
+        self.fig.get_layout_engine().execute(self.fig)
         self.fig.savefig(
             savename,
             bbox_inches="tight",
@@ -331,7 +332,7 @@ class plot_spectrum_2d():
         # General
         self.fig.set_size_inches(self.figsize)
         self.fig.set_dpi(FIG_DPI)
-        self.fig.set_tight_layout(True)
+        self.fig.set_layout_engine("compressed")
 
         # Figure specific
         self.fig.suptitle(
@@ -531,6 +532,7 @@ class plot_spectrum_2d():
         self._setup_plot()
 
         # Save
+        self.fig.get_layout_engine().execute(self.fig)
         self.fig.savefig(
             savename,
             bbox_inches="tight",
