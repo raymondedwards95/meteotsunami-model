@@ -44,14 +44,14 @@ def vis_timeseries(
     Plots water level vs time and pressure vs time
 
     Input:
-        data:       dataset containing processed model output
-        y:          list of y-coordinates
-        x:          x-coordinate
+        `data`:         dataset containing processed model output
+        `y`:            list of y-coordinates
+        `x`:            x-coordinate
 
     Options:
-        t_max:      maximum time to plot
-        saveloc:    filename
-        keep_open:  keep figure open if True
+        `t_max`:        maximum time to plot
+        `saveloc`:      filename
+        `keep_open`:    keep figure open if True
     """
     # Check input
     if not np.isscalar(x):
@@ -249,13 +249,13 @@ def vis_alongshore(
     Plots water level vs along-shore coordinate y
 
     Input:
-        data:       dataset containing processed model output
-        t:          list of t-coordinates
-        x:          x-coordinate
+        `data`:         dataset containing processed model output
+        `t`:            list of t-coordinates
+        `x`:            x-coordinate
 
     Options:
-        saveloc:    filename
-        keep_open:  keep figure open if True
+        `saveloc`:      filename
+        `keep_open`:    keep figure open if True
     """
     # Check input
     if not np.isscalar(x):
@@ -329,13 +329,13 @@ def vis_crossshore(
     Plots water level vs cross-shore coordinate x
 
     Input:
-        data:       dataset containing processed model output
-        y:          list of y-coordinates
-        t:          list of t-coordinates
+        `data`:         dataset containing processed model output
+        `y`:            list of y-coordinates
+        `t`:            list of t-coordinates
 
     Options:
-        saveloc:    filename
-        keep_open:  keep figure open if True
+        `saveloc`:      filename
+        `keep_open`:    keep figure open if True
     """
     # Check input
     if np.isscalar(y):
@@ -455,15 +455,15 @@ def vis_spectrum_1d(
     Plots power vs frequency
 
     Input:
-        data:       dataset containing processed model output
-        x:          x-coordinate
-        y:          list of y-coordinates
+        `data`:         dataset containing processed model output
+        `x`:            x-coordinate
+        `y`:            list of y-coordinates
 
     Options:
-        variable:   name of variable, e.g. 'wl', 'u', 'v' or 'p'
-        demean:     remove mean from data if True
-        saveloc:    filename
-        keep_open:  keep figure open if True
+        `variable`:     name of variable, e.g. 'wl', 'u', 'v' or 'p'
+        `demean`:       remove mean from data if True
+        `saveloc`:      filename
+        `keep_open`:    keep figure open if True
     """
     # Check inputs
     if not np.isscalar(x):
@@ -572,14 +572,14 @@ def vis_spectrum_2d(
     Plots power as a function of frequency and wavenumber
 
     Input:
-        data:       dataset containing processed model output
-        x:          x-coordinate
+        `data`:         dataset containing processed model output
+        `x`:            x-coordinate
 
     Options:
-        variable:   name of variable, e.g. 'wl', 'u', 'v' or 'p'
-        demean:     remove mean from data if True
-        saveloc:    filename
-        keep_open:  keep figure open if True
+        `variable`:     name of variable, e.g. 'wl', 'u', 'v' or 'p'
+        `demean`:       remove mean from data if True
+        `saveloc`:      filename
+        `keep_open`:    keep figure open if True
     """
     # Paths
     if saveloc is None:
@@ -668,13 +668,13 @@ def vis_contour(
     Plots power as a function of frequency and wavenumber
 
     Input:
-        data:       dataset containing processed model output
-        t:          list of t-coordinates
+        `data`:     dataset containing processed model output
+        `t`:        list of t-coordinates
 
     Options:
-        variable:   name of variable, e.g. 'wl', 'u', 'v' or 'p'
-        demean:     remove mean from data if True
-        saveloc:    filename
+        `variable`: name of variable, e.g. 'wl', 'u', 'v' or 'p'
+        `demean`:   remove mean from data if True
+        `saveloc`:  filename
     """
     # Check input
     if variable in ["wl"]:
