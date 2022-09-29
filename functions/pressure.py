@@ -275,6 +275,7 @@ def plot_pressure(
     cbar.set_label("Pressure Disturbance [Pa]")
     cbar.set_ticks(np.linspace(np.floor(p.min()), np.ceil(p.max()), 6))
 
+    fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI,
                 pil_kwargs={"optimize": True, "compress_level": 9})
     if not keep_open:
