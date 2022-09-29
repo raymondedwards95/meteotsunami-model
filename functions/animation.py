@@ -36,12 +36,12 @@ def animation_contour(
     """ Creates an animation of the top-down view of the water level and surface air pressure data
 
     Input:
-        data:       Dataset that contains all variables
-        savedir:    Folder to write the animation to
+        `data`:     Dataset that contains all variables
+        `savedir`:  Folder to write the animation to
 
     Options:
-        xlims:      x-limits for the figure
-        close:      close figure after finishing
+        `xlims`:    x-limits for the figure
+        `close`:    close figure after finishing
     """
     # Check inputs
     if not isinstance(data, xr.Dataset):
@@ -203,12 +203,12 @@ def animation_contour_uv(
     """ Creates an animation of the top-down view of the water velocity data
 
     Input:
-        data:       Dataset that contains all variables
-        savedir:    Folder to write the animation to
+        `data`:     Dataset that contains all variables
+        `savedir`:  Folder to write the animation to
 
     Options:
-        xlims:      x-limits for the figure
-        close:      close figure after finishing
+        `xlims`:    x-limits for the figure
+        `close`:    close figure after finishing
     """
     # Check inputs
     if not isinstance(data, xr.Dataset):
@@ -371,12 +371,12 @@ def animation_alongshore(
     """ Creates an animation of an alongshore cross-section of the water level and surface air pressure data
 
     Input:
-        data:       Dataset that contains all variables
-        savedir:    Folder to write the animation to
+        `data`:     Dataset that contains all variables
+        `savedir`:  Folder to write the animation to
 
     Options:
-        xlims:      x-limits for the figure
-        close:      close figure after finishing
+        `xlims`:    x-limits for the figure
+        `close`:    close figure after finishing
     """
     # Check inputs
     if not isinstance(data, xr.Dataset):
@@ -505,11 +505,11 @@ def animation_crossshore(
     """ Creates an animation of crossshore cross-sections of the water level and surface air pressure data
 
     Input:
-        data:       Dataset that contains all variables
-        savedir:    Folder to write the animation to
+        `data`:     Dataset that contains all variables
+        `savedir`:  Folder to write the animation to
 
     Options:
-        close:      close figure after finishing
+        `close`:    close figure after finishing
     """
     # Check inputs
     if not isinstance(data, xr.Dataset):
