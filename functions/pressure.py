@@ -244,7 +244,8 @@ def plot_pressure(
                            gridspec_kw={"width_ratios": [4]*t_num + [1]})
     fig.set_size_inches(FIGSIZE_WIDE)
     fig.set_dpi(FIG_DPI)
-    fig.set_tight_layout(True)
+    fig.set_layout_engine("compressed")
+    fig.suptitle("Pressure Disturbance", va="top", ha="left", x=0.01)
     ax = np.ravel(ax)
 
     im = [None] * t_num
