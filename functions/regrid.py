@@ -39,14 +39,14 @@ def _convert_coordinate_to_regular_grid(
     """ Creates an equally spaced array of coordinates
 
     Input:
-        coordinate: array with coordinates
+        `coordinate`:   array with coordinates
 
     Options:
-        numsteps:   number of coordinates
+        `numsteps`:     number of coordinates
 
     Output:
-        grid:       array of gridded coordinates
-        step:       value of spacing in coordinates
+        `grid`:         array of gridded coordinates
+        `step`:         value of spacing in coordinates
     """
     if numsteps is None:
         numsteps = np.unique(coordinate).size
@@ -68,13 +68,13 @@ def _create_grid_mapping(
     """ Find a mapping to convert data in unstructured data to gridded data
 
     Input:
-        x:          1-d array of unstructured x-coordinates
-        y:          1-d array of corresponding y-coordinates
-        x_grid:     1-d array of x-coordinates of a grid
-        y_grid:     1-d array of y-coordinates of a grid
+        `x`:        1-d array of unstructured x-coordinates
+        `y`:        1-d array of corresponding y-coordinates
+        `x_grid`:   1-d array of x-coordinates of a grid
+        `y_grid`:   1-d array of y-coordinates of a grid
 
     Output:
-        grid_map:   map that maps the unstructered coordinates to gridded coordinates
+        `grid_map`: map that maps the unstructered coordinates to gridded coordinates
     """
     # Check inputs
     if type(x) is xr.DataArray:
@@ -117,14 +117,14 @@ def _regrid_variable_map(
     """ Regrids unstructured data using a pre-defined mapping
 
     Input:
-        var:        unstructured data
-        grid_map:   map that maps the unstructered coordinates to gridded coordinates
+        `var`:      unstructured data
+        `grid_map`: map that maps the unstructered coordinates to gridded coordinates
 
     Options:
-        index:      only regrid a specific slice
+        `index`:    only regrid a specific slice
 
     Output:
-        var_grid:   regridded data
+        `var_grid`: regridded data
     """
     # Check inputs
     if type(var) is xr.DataArray:
@@ -190,17 +190,17 @@ def _regrid_variable_interpolate(
     """ Regrids unstructured data using interpolation
 
     Input:
-        var:        unstructured data
-        x:          1-d array of unstructured x-coordinates
-        y:          1-d array of corresponding y-coordinates
-        x_grid:     1-d array of x-coordinates of a grid
-        y_grid:     1-d array of y-coordinates of a grid
+        `var`:      unstructured data
+        `x`:        1-d array of unstructured x-coordinates
+        `y`:        1-d array of corresponding y-coordinates
+        `x_grid`:   1-d array of x-coordinates of a grid
+        `y_grid`:   1-d array of y-coordinates of a grid
 
     Options:
-        index:      only regrid a specific slice
+        `index`:    only regrid a specific slice
 
     Output:
-        var_grid:   regridded data
+        `var_grid`: regridded data
     """
     warnings.warn("Warning: Using interpolation as regridding tool!")
 
@@ -248,14 +248,14 @@ def extract_data(
     """ Extracts unstructured data from the output of D3D-FLOW-FM and convert it to a structured dataset
 
     Input:
-        filename    name of the output file from D3D-FLOW-FM
-        savename    name of the new dataset
+        `filename`  name of the output file from D3D-FLOW-FM
+        `savename`  name of the new dataset
 
     Options:
-        close:      close dataset after finishing
+        `close`:    close dataset after finishing
 
     Output:
-        data:       data array with structured data; if `close=False` then data is `None`
+        `data`:     data array with structured data; if `close=False` then data is `None`
     """
     t0 = time.perf_counter_ns()
 
