@@ -109,7 +109,7 @@ def vis_timeseries(
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
     fig.set_size_inches(figsize_a)
     fig.set_dpi(FIG_DPI)
-    # fig.set_tight_layout(True)
+    fig.set_layout_engine("compressed")
 
     ax = np.ravel(ax)
     ax[0].plot(t, wl)
@@ -162,6 +162,7 @@ def vis_timeseries(
         borderaxespad=0.
     )
 
+    fig.get_layout_engine().execute(fig)
     fig.savefig(savename + "_a", bbox_inches="tight",
                 dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}_a")
@@ -291,7 +292,7 @@ def vis_alongshore(
     fig, ax = plt.subplots(t_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
-    fig.set_tight_layout(True)
+    fig.set_layout_engine("compressed")
     ax = np.ravel(ax)
 
     for i in range(t_num):
@@ -307,6 +308,7 @@ def vis_alongshore(
         ax[i].grid()
     ax[-1].set_xlabel("$y$ [km]")
 
+    fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight",
                 dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
@@ -391,7 +393,7 @@ def vis_crossshore(
                            sharex=True, sharey=True)
     fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
-    fig.set_tight_layout(True)
+    fig.set_layout_engine("compressed")
 
     for i in range(t_num):
         for j in range(y_num):
@@ -430,6 +432,7 @@ def vis_crossshore(
     for j in range(y_num):
         ax[-1, j].set_xlabel("$x$ [km]")
 
+    fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight",
                 dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
@@ -513,7 +516,7 @@ def vis_spectrum_1d(
     fig, ax = plt.subplots(y_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
-    fig.set_tight_layout(True)
+    fig.set_layout_engine("compressed")
     fig.suptitle(
         f"Power Spectrum - {variable_name}",
         va="top",
@@ -544,6 +547,7 @@ def vis_spectrum_1d(
         ax[i].grid()
     ax[-1].set_xlabel("Frequency [cycles / hour]")
 
+    fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight",
                 dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
@@ -611,7 +615,7 @@ def vis_spectrum_2d(
     fig, ax = plt.subplots(1, 1, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
-    fig.set_tight_layout(True)
+    fig.set_layout_engine("compressed")
     ax = np.ravel(ax)
     div = make_axes_locatable(ax[0])
     cax = div.append_axes("right", "5%", "5%")
@@ -641,6 +645,7 @@ def vis_spectrum_2d(
     ax[0].set_ylabel("Frequency [cycles / hour]")
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$ km")
 
+    fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight",
                 dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
@@ -718,7 +723,7 @@ def vis_contour(
     fig, ax = plt.subplots(t_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(FIGSIZE_LONG)
     fig.set_dpi(FIG_DPI)
-    # fig.set_tight_layout(True)
+    fig.set_layout_engine("compressed")
     ax = np.ravel(ax)
 
     norm = Normalize(var_min, var_max)
@@ -757,6 +762,7 @@ def vis_contour(
     )
 
     # Save figure
+    fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight",
                 dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
@@ -794,6 +800,6 @@ if __name__ == "__main__":
     vis_alongshore(data, t=3600, x=1e4, keep_open=True)
     vis_alongshore(data, t=[3000, 7200], x=1e4, keep_open=True)
     vis_alongshore(data, t=[3600, 7200, 10800], x=1e4, keep_open=True)
-
     # fmt: on
+
     plt.close("all")
