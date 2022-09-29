@@ -118,16 +118,16 @@ def find_peaks_const_t(
     """ Finds the y-coordinates of the maxima in water level at a given time
 
     Input:
-        data:       Dataset that contains coordinates and data
-        t:          t-coordinate
-        x:          x-coordinate
+        `data`:     Dataset that contains coordinates and data
+        `t`:        t-coordinate
+        `x`:        x-coordinate
 
     Options:
-        window:     expected width of a peak (default: 50)
-        crests:     find crests (True) or throughs (False)
+        `window`:   expected width of a peak (default: 50)
+        `crests`:   find crests (True) or throughs (False)
 
     Output:
-        y_idx:      indices corresponding to the y-coordinates of the largest maxima
+        `y_idx`:    indices corresponding to the y-coordinates of the largest maxima
     """
     if x is None:
         x = data["x"].max().values / 50.  # random scaling? close to shore
