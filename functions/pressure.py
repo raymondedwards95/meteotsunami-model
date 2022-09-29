@@ -48,17 +48,17 @@ def convert_to_xarray(
     """ Function to convert separate numpy arrays for t, x, y and p to a single DataArray for writing to files
 
     Input:
-        t:          1d array with time since 1970-01-01 00:00:00 in seconds (shape = M)
-        x:          1d array with x coordinates in km (shape = Nx)
-        y:          1d array with y coordinates in km (shape = Ny)
-        p:          3d array with pressure in Pa (shape = (M, Ny, Nx))
+        `t`:        1d array with time since 1970-01-01 00:00:00 in seconds (shape = M)
+        `x`:        1d array with x coordinates in km (shape = Nx)
+        `y`:        1d array with y coordinates in km (shape = Ny)
+        `p`:        3d array with pressure in Pa (shape = (M, Ny, Nx))
 
     Options:
-        savename:   saves data as an .nc file
-        close:      closes data-array
+        `savename`: saves data as an .nc file
+        `close`:    closes data-array
 
     Output:
-        data:       data-array containing data; if 'close=True' then data is None
+        `data`:     data-array containing data; if 'close=True' then data is None
     """
     print(f"# Converting pressure data to a data-array")
     t0 = time.perf_counter_ns()
@@ -104,8 +104,8 @@ def write_pressure(
     """ Function to write a pressure field to a `pressure.amp` file for use with Delft3D-FM
 
     Input:
-        data:       pressure field and coordinate data
-        filename:   name of .amp file
+        `data`:     pressure field and coordinate data
+        `filename`: name of .amp file
     """
     # prepare
     t0 = time.perf_counter_ns()
@@ -209,12 +209,12 @@ def plot_pressure(
     """ Function to visualize pressure data
 
     Input:
-        data:       pressure and coordinate data
+        `data`:         pressure and coordinate data
 
     Options:
-        filename:   name of figures
-        x_scales:   lower and upper limit of x (should be a list of length 2)
-        keep_open:  keep figures open after finishing
+        `filename`:     name of figures
+        `x_scales`:     lower and upper limit of x (should be a list of length 2)
+        `keep_open`:    keep figures open after finishing
     """
     # prepare
     t0 = time.perf_counter_ns()
