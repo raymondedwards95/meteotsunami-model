@@ -35,14 +35,14 @@ def dispersion_relation(
     for shallow water waves on a beach of linear slope [Eckart, 1951]
 
     Input:
-        k:      wavenumbers
+        `k`:        wavenumbers
 
     Options:
-        n:      mode
-        alpha:  slope of beach
+        `n`:        mode
+        `alpha`:    slope of beach
 
     Output:
-        f:      frequencies corresponding to wavenumbers
+        `f`:        frequencies corresponding to wavenumbers
     """
     g = scipy.constants.g
     assert np.isclose(g, 9.81, rtol=1e-2)
@@ -57,12 +57,12 @@ def exp_decay(
     """ Returns an exponential decay in x with decay parameter k0 and scale y0
 
     Input:
-        x           horizontal coordinates
-        k0          decay parameter
-        y0          vertical scale
+        `x`:        horizontal coordinates
+        `k0`:       decay parameter
+        `y0`:       vertical scale
 
     Output:
-        profile:    profile of the exponential decay at coordinates x
+        `profile`:  profile of the exponential decay at coordinates x
     """
     return y0 * np.exp(-k0 * x)
 
@@ -75,9 +75,9 @@ def compute_decay_parameter(
     """ Computes the decay parameter and scaling parameter for data at given y and t
 
     Input:
-        data:   dataset containing water level data
-        y:      y-coordinate
-        t:      t-coordinate in seconds
+        `data`: dataset containing water level data
+        `y`:    y-coordinate
+        `t`:    t-coordinate in seconds
     """
     wl = data["wl"].interp(t=fu.to_timestr(t), y=y)
     if np.all(np.isnan(wl)):
@@ -103,16 +103,16 @@ def compute_wave_periods(
     """ Computes the wave period at given x,y
 
     Input:
-        data:       dataset containing all data
-        y:          y-coordinate
-        x:          x-coordinate
+        `data`:         dataset containing all data
+        `y`:            y-coordinate
+        `x`:            x-coordinate
 
     Options:
-        crests:     find crests (True) or throughs (default: False)
-        no_result:  value to return if there is no result (default: np.nan)
+        `crests`:       find crests (True) or throughs (default: False)
+        `no_result`:    value to return if there is no result (default: np.nan)
 
     Output:
-        periods:    list of time-intervals between wave crests
+        `periods`:      list of time-intervals between wave crests
     """
     t_idx = fu.find_peaks_const_y(data, y, x=x, crests=crests)
     t_idx = np.sort(t_idx)
@@ -141,16 +141,16 @@ def compute_wave_lengths(
     """ Computes the wave length at given x,t
 
     Input:
-        data:       dataset containing all data
-        t:          t-coordinate
-        x:          x-coordinate
+        `data`:         dataset containing all data
+        `t`:            t-coordinate
+        `x`:            x-coordinate
 
     Options:
-        crests:     find crests (True) or throughs (default: False)
-        no_result:  value to return if there is no result (default: np.nan)
+        `crests`:       find crests (True) or throughs (default: False)
+        `no_result`:    value to return if there is no result (default: np.nan)
 
     Output:
-        lengths:    list of distances between wave crests
+        `lengths`:      list of distances between wave crests
     """
     y_idx = fu.find_peaks_const_t(data, t, x=x, crests=crests)
     y_idx = np.sort(y_idx)
@@ -174,17 +174,17 @@ def spectral_analysis_1d(
     """ Apply fourier transform on timeseries
 
     Input:
-        data:       Dataset containing all data and coordinates
-        y:          y-coordinate
-        x:          x-coordinate
+        `data`:     Dataset containing all data and coordinates
+        `y`:        y-coordinate
+        `x`:        x-coordinate
 
     Options:
-        variable:   name of the variable to use, e.g. "wl" or "p", default="wl"
-        demean:     remove mean from signal, default=False
+        `variable`: name of the variable to use, e.g. "wl" or "p", default="wl"
+        `demean`:   remove mean from signal, default=False
 
     Output:
-        freqs:      corresponding frequencies (time-domain)
-        power:      power-spectrum
+        `freqs`:    corresponding frequencies (time-domain)
+        `power`:    power-spectrum
     """
     t = data["t"].values.astype("datetime64[s]").astype(float)
     dt = np.median(np.diff(t))
@@ -210,17 +210,17 @@ def spectral_analysis_2d(
     """ Apply fourier transform on spatial and temporal varying data
 
     Input:
-        data:       Dataset containing all data and coordinates
+        `data`:         Dataset containing all data and coordinates
 
     Options:
-        x:          x-coordinate
-        variable:   name of the variable to use, e.g. "wl" or "p", default="wl"
-        demean:     remove mean from signal, default=False
+        `x`:            x-coordinate
+        `variable`:     name of the variable to use, e.g. "wl" or "p", default="wl"
+        `demean`:       remove mean from signal, default=False
 
     Output:
-        wavenumber: corresponding wavenumbers (space-domain)
-        freqs:      corresponding frequencies (time-domain)
-        power:      power-spectrum
+        `wavenumber`:   corresponding wavenumbers (space-domain)
+        `freqs`:        corresponding frequencies (time-domain)
+        `power`:        power-spectrum
     """
     t = data["t"].values.astype("datetime64[s]").astype(float)
     dt = np.median(np.diff(t))
