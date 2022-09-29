@@ -28,13 +28,14 @@ class ObservationPoint():
     """ Single point for observation
 
     Attributes:
-        x:      x-coordinate (in meters)
-        y:      y-coordinate (in meters)
-        name:   (unique) name
+        `x`:    x-coordinate (in meters)
+        `y`:    y-coordinate (in meters)
+        `name`: (unique) name
     """
 
     def __init__(
-        self, x: Numeric,
+        self,
+        x: Numeric,
         y: Numeric,
         name: str = "",
         scale: Numeric = 1,
@@ -42,12 +43,12 @@ class ObservationPoint():
         """ Create an observation point
 
         Input:
-            x:      x-coordinate (in meters)
-            y:      y-coordinate (in meters)
+            `x`:        x-coordinate (in meters)
+            `y`:        y-coordinate (in meters)
 
         Options:
-            name:   (unique) name
-            scale:  value to multiply x and y with (default=1)
+            `name`:     (unique) name
+            `scale`:    value to multiply x and y with (default=1)
         """
         self.x = scale * x
         self.y = scale * y
@@ -81,10 +82,10 @@ class ObservationCrossSection():
     """ Lines for observation consisting of two or more points
 
     Attributes:
-        x:      x-coordinates of connecting points (in meters)
-        y:      y-coordinates of connecting points (in meters)
-        name:   (unique) name
-        n:      number of points
+        `x`:        x-coordinates of connecting points (in meters)
+        `y`:        y-coordinates of connecting points (in meters)
+        `name`:     (unique) name
+        `n`:        number of points
     """
 
     def __init__(
@@ -97,12 +98,12 @@ class ObservationCrossSection():
         """ Create an observation point
 
         Input:
-            x:      array of x-coordinates (in meters)
-            y:      array of y-coordinates (in meters)
+            `x`:        array of x-coordinates (in meters)
+            `y`:        array of y-coordinates (in meters)
 
         Options:
-            name:   (unique) name
-            scale:  value to multiply x and y with (default=1)
+            `name`:     (unique) name
+            `scale`:    value to multiply x and y with (default=1)
         """
         self.x = scale * np.array(x)
         self.y = scale * np.array(y)
@@ -145,8 +146,8 @@ def write_observations(
     """ Write observation points and observation cross sections to files
 
     Input:
-        data:       list of observation points and observation cross sections
-        filename:   name of file to write (extensions are added automatically)
+        `data`:     list of observation points and observation cross sections
+        `filename`: name of file to write (extensions are added automatically)
     """
     t0 = time.perf_counter_ns()
     print(f"# Writing observation points and cross-sections")
@@ -214,11 +215,11 @@ def plot_observations(
     """ Visualise observation points and lines
 
     Input:
-        data:       list of observation points and observation cross sections
+        `data`:         list of observation points and observation cross sections
 
     Options:
-        savename:   name of figure
-        keep_open:  keep figures open after finishing
+        `savename`:     name of figure
+        `keep_open`:    keep figures open after finishing
     """
     t0 = time.perf_counter_ns()
 
