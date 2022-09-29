@@ -64,17 +64,17 @@ def find_peaks_const_y(
     """ Finds the times at which the local maxima (or minima) of the waves are present for a given y-coordinate
 
     Input:
-        data:       Dataset that contains coordinates and data
-        y:          y-coordinate
-        x:          x-coordinate
+        `data`:     Dataset that contains coordinates and data
+        `y`:        y-coordinate
+        `x`:        x-coordinate
 
     Options:
-        window:     expected width of a peak (default: 10)
-        factor:     find crests (True) or throughs (False)
-        variable:   variable to use, e.g. "wl", "u" or "v"
+        `window`:   expected width of a peak (default: 10)
+        `factor`:   find crests (True) or throughs (False)
+        `variable`: variable to use, e.g. "wl", "u" or "v"
 
     Output:
-        t_idx:      indices corresponding to the time of the largest maxima
+        `t_idx`:    indices corresponding to the time of the largest maxima
     """
     if x is None:
         x = data["x"].max().values / 50.  # random scaling? close to shore
