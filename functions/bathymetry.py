@@ -223,7 +223,7 @@ def plot_bathymetry(
     fig_1, ax_1 = plt.subplots(1, 1)
     fig_1.set_size_inches(FIGSIZE_NORMAL)
     fig_1.set_dpi(FIG_DPI)
-    fig_1.set_tight_layout(True)
+    fig_1.set_layout_engine("compressed")
     ax_1.plot(x / 1000., b[i, :])
     _ylims = ax_1.get_ylim()
     ax_1.fill_between(x / 1000., _ylims[0], b[i, :], alpha=0.1)
@@ -233,6 +233,7 @@ def plot_bathymetry(
     ax_1.set_xlabel("$x$ [km]")
     ax_1.set_ylabel("Bed Level [m]")
     ax_1.grid()
+    fig_1.get_layout_engine().execute(fig_1)
     fig_1.savefig(savename, bbox_inches="tight",
                   dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     if not keep_open:
@@ -244,7 +245,7 @@ def plot_bathymetry(
     fig_2, ax_2 = plt.subplots(1, 1)
     fig_2.set_size_inches(FIGSIZE_NORMAL)
     fig_2.set_dpi(FIG_DPI)
-    fig_2.set_tight_layout(True)
+    fig_2.set_layout_engine("compressed")
     div = make_axes_locatable(ax_2)
     cax = div.append_axes("right", "5%", "5%")
     cont = ax_2.contourf(
@@ -265,6 +266,7 @@ def plot_bathymetry(
     ax_2.set_xlim(0, xmax)
     ax_2.set_xlabel("$x$ [km]")
     ax_2.set_ylabel("$y$ [km]")
+    fig_2.get_layout_engine().execute(fig_2)
     fig_2.savefig(savename, bbox_inches="tight",
                   dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     if not keep_open:
