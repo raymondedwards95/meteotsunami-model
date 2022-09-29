@@ -75,16 +75,16 @@ def convert_to_xarray(
     """ Function to convert separate numpy arrays for x, y and b to a single DataArray for writing to files
 
     Input:
-        x:          1d array with x coordinates in km (shape = Nx)
-        y:          1d array with y coordinates in km (shape = Ny)
-        b:          1d or 2d array with bathymetry data in m (shape = (Ny * Nx) OR shape = (Ny, Nx))
+        `x`:        1d array with x coordinates in km (shape = Nx)
+        `y`:        1d array with y coordinates in km (shape = Ny)
+        `b`:        1d or 2d array with bathymetry data in m (shape = (Ny * Nx) OR shape = (Ny, Nx))
 
     Options:
-        savename:   saves data as an .nc file
-        close:      closes data, if 'close=False', then data will be returned
+        `savename`: saves data as an .nc file
+        `close`:    closes data, if 'close=False', then data will be returned
 
     Output:
-        data:       data-array containing data; if 'close=True' then data is None
+        `data`:     data-array containing data; if 'close=True' then data is None
     """
     print(f"# Converting bathymetry data to a data-array")
     t0 = time.perf_counter_ns()
@@ -137,8 +137,8 @@ def write_bathymetry(
     """ Function to write bathymetry data to a `bathymetry.xyb` file for use with Delft3D-FM
 
     Input:
-        data:       bathymetry and coordinate data
-        filename:   .xyb file name
+        `data`:     bathymetry and coordinate data
+        `filename`: .xyb file name
     """
     # prepare
     t0 = time.perf_counter_ns()
@@ -182,12 +182,12 @@ def plot_bathymetry(
     """ Function to visualize bathymetry data
 
     Input:
-        data:       bathymetry and coordinate data
+        `data`:         bathymetry and coordinate data
 
     Options:
-        filename:   name of figures
-        xmax:       upper limit of x
-        keep_open:  keep figures open after finishing
+        `filename`:     name of figures
+        `xmax`:         upper limit of x
+        `keep_open`:    keep figures open after finishing
     """
     # Prepare
     t0 = time.perf_counter_ns()
