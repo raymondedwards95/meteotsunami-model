@@ -230,7 +230,7 @@ def plot_observations(
     fig, ax = plt.subplots(1, 1)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
-    fig.set_tight_layout(True)
+    fig.set_layout_engine("compressed")
 
     # Layout
     ax.set_title("Observation Points and Lines")
@@ -248,6 +248,7 @@ def plot_observations(
     ax.set_ylabel("$y$ [km]")
 
     # End
+    fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight",
                 dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"# Saved figure {savename}")
