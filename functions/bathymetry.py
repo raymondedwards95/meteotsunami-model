@@ -227,6 +227,7 @@ def plot_bathymetry(
     ax_1.plot(x / 1000., b[i, :])
     _ylims = ax_1.get_ylim()
     ax_1.fill_between(x / 1000., _ylims[0], b[i, :], alpha=0.1)
+    ax_1.axhline(color="black", linewidth=1, alpha=0.5)
     ax_1.set_title(f"Bottom Profile Cross-Section at $y={y[i]}$")
     ax_1.set_xlim(0, xmax)
     ax_1.set_ylim(_ylims)
