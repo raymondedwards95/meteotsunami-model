@@ -639,7 +639,7 @@ if __name__ == "__main__":
             .add_plot(data_a, t=t, y=y[1], label=f"a - y={y[1]}") \
             .save(figure_dir)
 
-        plot_crossshore(variable="wl") \
+        plot_crossshore(variable="wl", x_max=5e2) \
             .add_subplot(data_a, t=t, y=y[0], label=f"a - y={y[0]}") \
             .add_subplot(data_a, t=t, y=y[1], label=f"a - y={y[1]}") \
             .save(figure_dir)
