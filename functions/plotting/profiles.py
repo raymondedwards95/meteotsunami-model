@@ -645,5 +645,5 @@ if __name__ == "__main__":
             .save(figure_dir)
     # fmt: on
 
-    # test_alongshore()
+    test_alongshore()
     test_crossshore()
