@@ -342,19 +342,33 @@ class plot_crossshore():
         self.fig = plt.figure()
 
         self.variable: str
+        self.variable_long: str
+        self.variable_unit: str
         match variable.lower().strip():
             case "wl":
                 self.variable = "wl"
+                self.variable_long = "Water level"
+                self.variable_unit = "m"
             case "u":
                 self.variable = "u"
+                self.variable_long = "Cross shore water velocity"
+                self.variable_unit = "m/s"
             case "v":
                 self.variable = "v"
+                self.variable_long = "Along shore water velocity"
+                self.variable_unit = "m/s"
             case "p":
                 self.variable = "p"
+                self.variable_long = "Surface air pressure"
+                self.variable_unit = "Pa"
             case _:
                 raise ValueError(
                     f"{variable=} should be 'wl', 'u', 'v' or 'p'"
                 )
+
+        print(
+            f"\n# Initiated figure for cross-shore profiles"
+        )
 
 
 if __name__ == "__main__":
