@@ -158,7 +158,6 @@ class plot_alongshore():
 
         Input:
             `dataset`:  dataset containing gridded model output
-            `variable`: name of variable to plot
             `x`:        x-coordinate
             `t`:        t-coordinate
 
@@ -201,7 +200,6 @@ class plot_alongshore():
 
         Input:
             `dataset`:  dataset containing gridded model output
-            `variable`: name of variable to plot
             `x`:        x-coordinate
             `t`:        t-coordinate
 
@@ -328,18 +326,31 @@ class plot_crossshore():
     def __init__(
         self,
         variable: str,
+        x_max: Numeric = None,
     ):
         """ Create and setup a figure for cross-shore profiles
 
         Input:
             `variable`:     name of variable to plot
+
+        Options:
+            `x_max`:        upper limit for x (in kilometers)
         """
         plot_crossshore.number += 1
 
         self.figsize = FIGSIZE_NORMAL
         self.closed = False
 
+        if x_max is None:
+            self.x_max = 0
+            self.x_max_fixed = False
+        else:
+            self.x_max = x_max
+            self.x_max_fixed = True
+
         self.fig = plt.figure()
+        self.axes = []
+        self.title = None
 
         self.variable: str
         self.variable_long: str
@@ -369,6 +380,217 @@ class plot_crossshore():
         print(
             f"\n# Initiated figure for cross-shore profiles"
         )
+
+    def _check_if_closed(self):
+        """ Raises an error if the figure is supposed to be closed """
+        if self.closed:
+            raise TypeError(
+                f"Figure is cleared and closed: it can not be edited")
+
+    def _setup_figure(self):
+        """ Figure setup """
+        # Checks
+        self._check_if_closed()
+        if len(self.axes) > 2:
+            self.figsize = FIGSIZE_HIGH
+        if len(self.axes) > 4:
+            self.figsize = FIGSIZE_LONG
+
+        # General
+        self.fig.set_size_inches(self.figsize)
+        self.fig.set_dpi(FIG_DPI)
+        self.fig.set_layout_engine("compressed")
+
+        # Figure specific
+        if self.title is None:
+            self.title = f"Cross-shore profile"
+        self.fig.suptitle(self.title, va="top", ha="left", x=0.01)
+
+    def _setup_plot(self):
+        """ Plot setup """
+        # Checks
+        self._check_if_closed()
+
+        # Compute y-limits
+        max_lim = 0.
+        for ax in self.axes:
+            ax_max_lim = np.max(np.abs(ax.get_ylim()))
+            if ax_max_lim > max_lim:
+                max_lim = ax_max_lim
+
+        # General
+        for ax in self.axes:
+            ax.axhline(color="black", linewidth=1)
+            ax.axvline(color="black", linewidth=1, alpha=0.5)
+            ax.legend(loc="upper right")
+            ax.grid()
+            ax.set_xlim(0, self.x_max)
+            ax.set_ylim(-1. * max_lim, max_lim)
+            # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
+
+        self.axes[-1].set_xlabel(f"$x$ [km]")
+        self.fig.supylabel(
+            f"{self.variable_long} [{self.variable_unit}]")
+
+    def add_subplot(
+        self,
+        dataset: xr.Dataset = None,
+        t: Numeric = None,
+        y: Numeric = None,
+        label: str = None,
+        x_max: Numeric = None,
+    ):
+        """ Adds a subplot to the figure
+
+        Can also add data to the new subplot using the following arguments:
+
+        Input:
+            `dataset`:  dataset containing gridded model output
+            `t`:        t-coordinate
+            `y`:        y-coordinate
+
+        Options:
+            `label`:    label for plot
+            `x_max`:    upper limit for x (in kilometers)
+        """
+        # Checks
+        self._check_if_closed()
+
+        # Add subplot
+        self.axes.append(self.fig.add_subplot())
+        print(f"# Added subplot for cross-shore profiles")
+
+        # Add data
+        if (dataset is not None) and (y is not None) and (t is not None):
+            return self.add_plot(
+                dataset=dataset,
+                t=t,
+                y=y,
+                label=label,
+                x_max=x_max,
+            )
+
+        # End
+        return self
+
+    def add_plot(
+        self,
+        dataset: xr.Dataset,
+        t: Numeric,
+        y: Numeric,
+        label: str = None,
+        x_max: Numeric = None,
+    ):
+        """ Adds data to a plot
+
+        Input:
+            `dataset`:  dataset containing gridded model output
+            `t`:        t-coordinate
+            `y`:        y-coordinate
+
+        Options:
+            `label`:    label for plot
+            `y_min`:    lower limit for y (in kilometers)
+            `y_max`:    upper limit for y (in kilometers)
+        """
+        # Checks
+        self._check_if_closed()
+
+        if len(self.axes) == 0:
+            self.add_subplot()
+
+        dataset_name: str
+        try:
+            dataset_name = dataset.attrs["name"]
+        except KeyError:
+            dataset_name = "'unnamed'"
+
+        if label is None:
+            label = f"{dataset_name}"
+
+        # Extract data
+        x = dataset["x"] / 1000.
+        data = dataset[self.variable] \
+            .interp(y=y, t=fu.to_timestr(t))
+
+        # Plot
+        self.axes[-1].plot(x, data, label=label)
+        self.axes[-1].fill_between(x, data, alpha=0.1)
+
+        # Update plot-limits
+        if self.x_max_fixed:
+            pass
+        else:
+            if x_max is not None:  # new provided limits
+                self.x_max_fixed = True
+                self.x_max = x_max
+            else:
+                x_max_data = x.max()
+                if self.x_max < (x_max_data):
+                    self.x_max = x_max_data
+
+        # Log
+        print(
+            f"# Added {self.variable} data from {dataset_name} for {y=} and {t=}, labeled by {label=}"
+        )
+        return self
+
+    def save(
+        self,
+        saveloc: str,
+        close: bool = True,
+    ):
+        """ Saves the figure
+
+        Input:
+            `saveloc`:  location where the figure should be saved
+
+        Options:
+            `close`:    close figure
+        """
+        # Checks
+        self._check_if_closed()
+        savename = f"{saveloc}/cross_{plot_crossshore.number:02.0f}" \
+            .replace("//", "/")
+
+        # Setup
+        self._setup_figure()
+        self._setup_plot()
+
+        # Reposition axes/subplots
+        gs = gridspec.GridSpec(nrows=len(self.axes), ncols=1, figure=self.fig)
+        for ax_idx, ax in enumerate(self.axes):
+            ax.set_subplotspec(gs[ax_idx])
+
+        # update x-ticks
+        self.axes[0].get_shared_x_axes() \
+            .join(self.axes[0], *self.axes[1:])
+        for ax in self.axes[:-1]:
+            ax.set_xlabel("")
+            ax.set_xticklabels([])
+
+        # Save
+        self.fig.get_layout_engine().execute(self.fig)
+        self.fig.savefig(
+            savename,
+            bbox_inches="tight",
+            dpi=FIG_DPI,
+            pil_kwargs=FIG_PIL_KWARGS,
+        )
+
+        # End
+        print(f"# Saved cross-shore figure as {savename}")
+        if close:
+            self.close()
+        return
+
+    def close(self):
+        """ Close the figure """
+        self.closed = True
+        self.fig.clear()
+        plt.close(self.fig)
+        print(f"# Figure cross-shore is closed")
+        return
 
 
 if __name__ == "__main__":
@@ -408,6 +630,20 @@ if __name__ == "__main__":
             .add_subplot(data_a, x=x, t=3*t, label=f"a - t={3*t}") \
             .add_subplot(data_a, x=x, t=4*t, label=f"a - t={4*t}") \
             .save(figure_dir)
+
+    def test_crossshore():
+        y = [52e5, 72e5]
+        t = 3600*42
+        plot_crossshore(variable="wl") \
+            .add_plot(data_a, t=t, y=y[0], label=f"a - y={y[0]}") \
+            .add_plot(data_a, t=t, y=y[1], label=f"a - y={y[1]}") \
+            .save(figure_dir)
+
+        plot_crossshore(variable="wl") \
+            .add_subplot(data_a, t=t, y=y[0], label=f"a - y={y[0]}") \
+            .add_subplot(data_a, t=t, y=y[1], label=f"a - y={y[1]}") \
+            .save(figure_dir)
     # fmt: on
 
-    test_alongshore()
+    # test_alongshore()
+    test_crossshore()
