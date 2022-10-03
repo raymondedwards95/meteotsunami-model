@@ -24,3 +24,5 @@ functions/*.pli
 */pressure/*.nc
 
 *.amp
+*.xyb
+
