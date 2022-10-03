@@ -22,3 +22,5 @@ functions/*.pli
 
 */bathymetry/*.nc
 */pressure/*.nc
+
+*.amp
