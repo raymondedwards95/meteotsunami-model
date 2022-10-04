@@ -154,3 +154,63 @@ def find_peaks_const_t(
     # Find distinct peaks
     y_idx = _filter_peaks(wl, wl_idx, wl_std, window, factor)
     return y_idx
+
+
+def find_local_maxima_y(
+    dataset: xr.Dataset,
+    t: Numeric,
+    x: Numeric,
+    variable: str = "wl",
+    minima: bool = False,
+) -> np.ndarray:
+    """ Finds y-coordinates of the local maxima for fixed (t,x)
+
+    Input:
+        `dataset`:  dataset containing gridded model output
+        `t`:        t-coordinate
+        `x`:        x-coordinate
+
+    Options:
+        `variable`: name of variable
+        `minima`:   find local minima instead of maxima
+    """
+    # Extract data
+    data = dataset[variable].interp(x=x, t=t)
+
+    # Get lower limit
+    data_std = np.std(data)
+
+    # Invert data if minima are asked
+    if minima:
+        data = -1. * data
+
+    # Find slope of data
+    data_diff = data \
+        .differentiate("y") \
+        .data  # data converts from xarray to a plain numpy array
+
+    # Find indices of zero-crossings of derivative, i.e. local minima/maxima of data, by making use of sign-changes
+    y_idx = np.where(
+        (data_diff[:-1] * data_diff[1:]) < 0
+    )[0]
+
+    # Find indices for waves larger than a certain lower limit
+    return y_idx[data[y_idx] > data_std]
+
+
+if __name__ == "__main__":
+    # Define paths
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    anim_dir = f"{script_dir}/tests/anim"
+    os.makedirs(anim_dir, exist_ok=True)
+
+    # Read data
+    data = xr.open_dataset(
+        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc")
+
+    # Test functions
+    find_local_maxima_y(
+        dataset=data,
+        t=to_timestr(3600.*42.),
+        x=1e4,
+    )
