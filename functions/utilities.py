@@ -9,7 +9,9 @@ Main functions:
 import datetime
 import os
 import sys
+import time
 
+import dask
 import numpy as np
 import numpy.typing as npt
 import xarray as xr
@@ -162,6 +164,7 @@ def find_local_maxima_y(
     x: Numeric,
     variable: str = "wl",
     minima: bool = False,
+    show_timing: bool = False,
 ) -> np.ndarray:
     """ Finds y-coordinates of the local maxima for fixed (t,x)
 
@@ -174,8 +177,13 @@ def find_local_maxima_y(
         `variable`: name of variable
         `minima`:   find local minima instead of maxima
     """
+    t0 = time.perf_counter_ns()
+
+    # Convert inputs
+    t = to_timestr(t)
+
     # Extract data
-    data = dataset[variable].interp(x=x, t=t)
+    data = dataset[variable].interp(x=x, t=t).compute()
 
     # Get lower limit
     data_std = np.std(data)
@@ -195,7 +203,13 @@ def find_local_maxima_y(
     )[0]
 
     # Find indices for waves larger than a certain lower limit
-    return y_idx[data[y_idx] > data_std]
+    y_idx_valid = y_idx[data[y_idx] > data_std]
+
+    # End
+    t1 = time.perf_counter_ns()
+    if show_timing:
+        print(f"Function 'find_local_maxima_y' used {(t1 - t0) / 1e6:0.0f} ms")
+    return y_idx_valid
 
 
 if __name__ == "__main__":
@@ -205,12 +219,17 @@ if __name__ == "__main__":
     os.makedirs(anim_dir, exist_ok=True)
 
     # Read data
-    data = xr.open_dataset(
+    data_a = xr.open_dataset(
         f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc")
+    data_b = xr.open_dataset(
+        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc", chunks="auto")
 
     # Test functions
-    find_local_maxima_y(
-        dataset=data,
-        t=to_timestr(3600.*42.),
-        x=1e4,
-    )
+    for data in [data_a, data_b]:
+        test_a = find_local_maxima_y(
+            dataset=data,
+            t=3600.*42.,
+            x=1e4,
+            show_timing=True,
+        )
+        print(test_a)
