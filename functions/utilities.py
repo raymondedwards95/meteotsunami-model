@@ -4,6 +4,7 @@ Main functions:
     to_timestr
     find_peaks_const_y
     find_peaks_const_t
+    find_local_maxima_y
 """
 
 import datetime
@@ -11,7 +12,6 @@ import os
 import sys
 import time
 
-import dask
 import numpy as np
 import numpy.typing as npt
 import xarray as xr
@@ -215,8 +215,6 @@ def find_local_maxima_y(
 if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    anim_dir = f"{script_dir}/tests/anim"
-    os.makedirs(anim_dir, exist_ok=True)
 
     # Read data
     data_a = xr.open_dataset(
