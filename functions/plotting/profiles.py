@@ -432,6 +432,37 @@ class plot_crossshore():
         self.fig.supylabel(
             f"{self.variable_long} [{self.variable_unit}]")
 
+    def plot_peaks(
+        self,
+        dataset: xr.Dataset,
+        t: Numeric,
+        x_max: Numeric = None,
+    ):
+        """ Finds local maxima for fixed t and plots the cross-shore profiles in separate subplots
+
+        Input:
+            `dataset`:  dataset containing gridded model output
+            `t`:        t-coordinate
+
+        Options:
+            `x_max`:    upper limit for x (in kilometers)
+        """
+        # Checks
+        self._check_if_closed()
+
+        # Find indices and y-coordinates
+        x = np.min([dataset["x"][10], dataset["x"].max() / 20.])
+        y_idx = fu.find_local_maxima_y(dataset, t, x, variable=self.variable, minima=False)
+
+        # Make plots
+        for idx in y_idx:
+            y = dataset["y"][idx].values
+            self.add_subplot(dataset=dataset, t=t, y=y, label=None, x_max=x_max)
+
+        # End
+        print(f"# Added {len(y_idx)} plots")
+        return self
+
     def add_subplot(
         self,
         dataset: xr.Dataset = None,
@@ -503,10 +534,10 @@ class plot_crossshore():
         try:
             dataset_name = dataset.attrs["name"]
         except KeyError:
-            dataset_name = "'unnamed'"
+            dataset_name = ""
 
         if label is None:
-            label = f"{dataset_name}"
+            label = f"{dataset_name}: $y = {y:0.0f}$"
 
         # Extract data
         x = dataset["x"] / 1000.
@@ -642,6 +673,10 @@ if __name__ == "__main__":
         plot_crossshore(variable="wl", x_max=5e2) \
             .add_subplot(data_a, t=t, y=y[0], label=f"a - y={y[0]}") \
             .add_subplot(data_a, t=t, y=y[1], label=f"a - y={y[1]}") \
+            .save(figure_dir)
+
+        plot_crossshore(variable="wl", x_max=5e2) \
+            .plot_peaks(data_a, t) \
             .save(figure_dir)
     # fmt: on
 
