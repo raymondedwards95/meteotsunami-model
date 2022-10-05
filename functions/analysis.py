@@ -15,8 +15,8 @@ from typing import List, Tuple, Union
 import numpy as np
 import numpy.typing as npt
 import scipy.constants
+import scipy.optimize
 import xarray as xr
-from scipy.optimize import curve_fit
 
 # fmt: off
 # fix for importing functions below
@@ -68,25 +68,26 @@ def exp_decay(
 
 
 def compute_decay_parameter(
-    data: xr.Dataset,
+    dataset: xr.Dataset,
     y: Numeric,
     t: Numeric,
+    variable: str = "wl"
 ) -> Tuple[Numeric]:
     """ Computes the decay parameter and scaling parameter for data at given y and t
 
     Input:
-        `data`: dataset containing water level data
-        `y`:    y-coordinate
-        `t`:    t-coordinate in seconds
+        `dataset`:  dataset containing water level data
+        `y`:        y-coordinate
+        `t`:        t-coordinate in seconds
     """
-    wl = data["wl"].interp(t=fu.to_timestr(t), y=y)
-    if np.all(np.isnan(wl)):
+    data = dataset[variable].interp(t=fu.to_timestr(t), y=y)
+    if np.all(np.isnan(data)):
         return np.nan, 0
 
-    popt, _ = curve_fit(
+    popt, _ = scipy.optimize.curve_fit(
         exp_decay,  # f
-        data["x"],  # xdata
-        wl,  # ydata
+        dataset["x"].values,  # xdata
+        data,  # ydata
         p0=[1./100000., 1.],  # p0
     )
     k0, y0 = popt
@@ -242,3 +243,23 @@ def spectral_analysis_2d(
     wavenumber = np.fft.fftshift(wavenumber)
 
     return wavenumber, freqs, power
+
+
+if __name__ == "__main__":
+    # Define paths
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+
+    # Read data
+    data_a = xr.open_dataset(
+        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc")
+    data_b = xr.open_dataset(
+        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc", chunks="auto")
+
+    # Test functions
+    for data in [data_a, data_b]:
+        test_a = compute_decay_parameter(
+            data,
+            y=52e5,
+            t=3600.*42.,
+        )
+        print(test_a)
