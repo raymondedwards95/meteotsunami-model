@@ -521,8 +521,7 @@ class plot_crossshore():
 
         Options:
             `label`:    label for plot
-            `y_min`:    lower limit for y (in kilometers)
-            `y_max`:    upper limit for y (in kilometers)
+            `x_max`:    upper limit for x (in kilometers)
         """
         # Checks
         self._check_if_closed()
