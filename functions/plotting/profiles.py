@@ -17,6 +17,7 @@ from matplotlib import gridspec
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from functions import *
+import functions.analysis as fa
 import functions.utilities as fu
 # fmt: on
 
@@ -436,28 +437,38 @@ class plot_crossshore():
         self,
         dataset: xr.Dataset,
         t: Numeric,
+        fit_curve: bool = True,
         x_max: Numeric = None,
     ):
         """ Finds local maxima for fixed t and plots the cross-shore profiles in separate subplots
 
         Input:
-            `dataset`:  dataset containing gridded model output
-            `t`:        t-coordinate
+            `dataset`:      dataset containing gridded model output
+            `t`:            t-coordinate
 
         Options:
-            `x_max`:    upper limit for x (in kilometers)
+            `fit_curve`:    apply a curve fit on the data
+            `x_max`:        upper limit for x (in kilometers)
         """
         # Checks
         self._check_if_closed()
 
         # Find indices and y-coordinates
         x = np.min([dataset["x"][10], dataset["x"].max() / 20.])
-        y_idx = fu.find_local_maxima_y(dataset, t, x, variable=self.variable, minima=False)
+        y_idx = fu.find_local_maxima_y(
+            dataset, t, x, variable=self.variable, minima=False)
 
         # Make plots
         for idx in y_idx:
             y = dataset["y"][idx].values
-            self.add_subplot(dataset=dataset, t=t, y=y, label=None, x_max=x_max)
+            self.add_subplot(
+                dataset=dataset,
+                t=t,
+                y=y,
+                fit_curve=fit_curve,
+                label=None,
+                x_max=x_max
+            )
 
         # End
         print(f"# Added {len(y_idx)} plots")
@@ -468,6 +479,7 @@ class plot_crossshore():
         dataset: xr.Dataset = None,
         t: Numeric = None,
         y: Numeric = None,
+        fit_curve: bool = True,
         label: str = None,
         x_max: Numeric = None,
     ):
@@ -476,13 +488,14 @@ class plot_crossshore():
         Can also add data to the new subplot using the following arguments:
 
         Input:
-            `dataset`:  dataset containing gridded model output
-            `t`:        t-coordinate
-            `y`:        y-coordinate
+            `dataset`:      dataset containing gridded model output
+            `t`:            t-coordinate
+            `y`:            y-coordinate
 
         Options:
-            `label`:    label for plot
-            `x_max`:    upper limit for x (in kilometers)
+            `fit_curve`:    apply a curve fit on the data
+            `label`:        label for plot
+            `x_max`:        upper limit for x (in kilometers)
         """
         # Checks
         self._check_if_closed()
@@ -497,6 +510,7 @@ class plot_crossshore():
                 dataset=dataset,
                 t=t,
                 y=y,
+                fit_curve=fit_curve,
                 label=label,
                 x_max=x_max,
             )
@@ -509,19 +523,21 @@ class plot_crossshore():
         dataset: xr.Dataset,
         t: Numeric,
         y: Numeric,
+        fit_curve: bool = True,
         label: str = None,
         x_max: Numeric = None,
     ):
         """ Adds data to a plot
 
         Input:
-            `dataset`:  dataset containing gridded model output
-            `t`:        t-coordinate
-            `y`:        y-coordinate
+            `dataset`:      dataset containing gridded model output
+            `t`:            t-coordinate
+            `y`:            y-coordinate
 
         Options:
-            `label`:    label for plot
-            `x_max`:    upper limit for x (in kilometers)
+            `fit_curve`:    apply a curve fit on the data
+            `label`:        label for plot
+            `x_max`:        upper limit for x (in kilometers)
         """
         # Checks
         self._check_if_closed()
@@ -536,7 +552,7 @@ class plot_crossshore():
             dataset_name = ""
 
         if label is None:
-            label = f"{dataset_name}: $y = {y:0.0f}$"
+            label = f"{dataset_name}: $y = {y/1e3:0.0f}$km"
 
         # Extract data
         x = dataset["x"] / 1000.
@@ -546,6 +562,18 @@ class plot_crossshore():
         # Plot
         self.axes[-1].plot(x, data, label=label)
         self.axes[-1].fill_between(x, data, alpha=0.1)
+
+        # Fit curve
+        if fit_curve:
+            k0, y0 = fa.compute_decay_parameter(
+                dataset=dataset, y=y, t=t, variable=self.variable
+            )
+
+            fit = fa.exp_decay(dataset["x"], k0, y0)
+            label_fit = f"$A e^{{-k_0 x}}$ with $1/k_0 = {1/k0/1e3:0.0f}$km"
+
+            self.axes[-1].plot(x, fit, "--", label=label_fit)
+            # self.axes[-1].fill_between(x, fit, alpha=0.1)
 
         # Update plot-limits
         if self.x_max_fixed:
@@ -679,5 +707,5 @@ if __name__ == "__main__":
             .save(figure_dir)
     # fmt: on
 
-    test_alongshore()
+    # test_alongshore()
     test_crossshore()
