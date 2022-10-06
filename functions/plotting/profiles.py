@@ -439,6 +439,8 @@ class plot_crossshore():
         t: Numeric,
         fit_curve: bool = True,
         x_max: Numeric = None,
+        sort: bool = False,
+        number: Integer = None,
     ):
         """ Finds local maxima for fixed t and plots the cross-shore profiles in separate subplots
 
@@ -449,6 +451,8 @@ class plot_crossshore():
         Options:
             `fit_curve`:    apply a curve fit on the data
             `x_max`:        upper limit for x (in kilometers)
+            'sort'          sort plots by highest values in data
+            `number`:       number of waves to plot
         """
         # Checks
         self._check_if_closed()
@@ -456,7 +460,7 @@ class plot_crossshore():
         # Find indices and y-coordinates
         x = np.min([dataset["x"][10], dataset["x"].max() / 20.])
         y_idx = fu.find_local_maxima_y(
-            dataset, t, x, variable=self.variable, minima=False)
+            dataset, t, x, variable=self.variable, minima=False, sort=sort, number=number)
 
         # Make plots
         for idx in y_idx:
@@ -705,7 +709,15 @@ if __name__ == "__main__":
         plot_crossshore(variable="wl", x_max=5e2) \
             .plot_peaks(data_a, t) \
             .save(figure_dir)
+
+        plot_crossshore(variable="wl", x_max=5e2) \
+            .plot_peaks(data_a, t, number=3) \
+            .save(figure_dir)
+
+        plot_crossshore(variable="wl", x_max=5e2) \
+            .plot_peaks(data_a, t, number=3, sort=True) \
+            .save(figure_dir)
     # fmt: on
 
-    # test_alongshore()
+    test_alongshore()
     test_crossshore()

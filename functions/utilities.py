@@ -164,6 +164,8 @@ def find_local_maxima_y(
     x: Numeric,
     variable: str = "wl",
     minima: bool = False,
+    sort: bool = False,
+    number: Integer = None,
     show_timing: bool = False,
 ) -> np.ndarray:
     """ Finds y-coordinates of the local maxima for fixed (t,x)
@@ -176,6 +178,8 @@ def find_local_maxima_y(
     Options:
         `variable`: name of variable
         `minima`:   find local minima instead of maxima
+        `sort`:     sort y-coordinates by value of data
+        `number`:   number of maxima to return
     """
     t0 = time.perf_counter_ns()
 
@@ -204,6 +208,15 @@ def find_local_maxima_y(
 
     # Find indices for waves larger than a certain lower limit
     y_idx_valid = y_idx[data[y_idx] > data_std]
+
+    # Find the largest waves
+    if sort:
+        y_idx_valid = y_idx_valid[np.argsort(data[y_idx_valid])][::-1]
+
+    # Take subset if number is specified
+    if number is not None:
+        number = np.min([len(y_idx_valid), number])
+        y_idx_valid = y_idx_valid[:number]
 
     # End
     t1 = time.perf_counter_ns()
