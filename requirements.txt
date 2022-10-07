@@ -1,7 +1,7 @@
 cmocean
 dask
 h5netcdf
-matplotlib
+matplotlib==3.6.*
 netcdf4
 numpy
 scipy
