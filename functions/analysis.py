@@ -262,4 +262,15 @@ if __name__ == "__main__":
             y=52e5,
             t=3600.*42.,
         )
-        print(test_a)
+        print("compute_decay_parameter", [x for x in test_a])
+
+        test_b = spectral_analysis_1d(
+            data,
+            y=52e5,
+        )
+        print("spectral_analysis_1d", [np.mean(x) for x in test_b])
+
+        test_c = spectral_analysis_2d(
+            data,
+        )
+        print("spectral_analysis_2d", [np.mean(x) for x in test_c])
