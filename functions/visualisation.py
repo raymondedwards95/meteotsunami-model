@@ -80,11 +80,11 @@ def vis_timeseries(
 
     # Paths
     if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests/visualisations"
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/timeseries_x{x/1000:0.0f}_yn{y_num}"
+    savename = f"{saveloc}/timeseries_x{x/1000:0.0f}_yn{y_num}"
 
     # Extract data
     t = data["t"].values.astype("datetime64[s]").astype(float) / 3600
@@ -278,11 +278,11 @@ def vis_alongshore(
 
     # Paths
     if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests/visualisations"
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/along_shore_x{x/1000:0.0f}_tn{t_num}"
+    savename = f"{saveloc}/along_shore_x{x/1000:0.0f}_tn{t_num}"
 
     # Extract data
     y = data["y"]
@@ -371,12 +371,12 @@ def vis_crossshore(
 
     # Paths
     if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests/visualisations"
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
 
-    savename = saveloc + "/cross_shore_"
+    savename = f"{saveloc}/cross_shore_"
 
     if y_num == 1:
         savename += f"y{y_list[0]/1000:0.0f}_"
@@ -496,7 +496,7 @@ def vis_spectrum_1d(
 
     # Paths
     if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests/visualisations"
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
@@ -583,11 +583,11 @@ def vis_spectrum_2d(
     """
     # Paths
     if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests/visualisations"
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
-    savename = saveloc + f"/spectrum_2d_{x/1000:0.0f}_{variable}_{int(demean)}"
+    savename = f"{saveloc}/spectrum_2d_{x/1000:0.0f}_{variable}_{int(demean)}"
 
     # Check inputs
     if not np.isscalar(x):
@@ -698,7 +698,7 @@ def vis_contour(
 
     # Paths
     if saveloc is None:
-        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests"
+        saveloc = os.path.dirname(os.path.realpath(__file__)) + "/tests/visualisations"
     if saveloc.endswith(".jpg"):
         saveloc.replace(".jpg", "")
     os.makedirs(saveloc, exist_ok=True)
