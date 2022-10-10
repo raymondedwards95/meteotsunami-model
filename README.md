@@ -1,6 +1,6 @@
 # meteotsunami-model
 
-Scripts and files to run simulations in Delft3d-FM. 
+Scripts and files to run simulations in Delft3d-FM.
 
 
 ### Structure
