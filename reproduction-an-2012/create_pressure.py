@@ -31,7 +31,7 @@ p0 = 2000.  # default: 2000 Pa
 # cross shore (meters)
 x_min = 0.  # default: 0 km
 x_max = 1e6  # default: 1000 km
-x_steps = [1e4, 2e4, 4e4, 0.5e4, 1e4, 1e4, 1e4, 1e4, 1e4, 1e4, 1e4]  # default: 10 km
+x_steps = list(np.array([1e4, 2e4, 4e4, 0.5e4, 1e4, 1e4, 1e4, 1e4, 1e4, 1e4, 1e4]) / 5.)  # default: 2 km
 
 # along shore (meters)
 y_min = -1e7  # default: -10000 km
