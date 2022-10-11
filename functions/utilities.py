@@ -244,3 +244,7 @@ if __name__ == "__main__":
             show_timing=True,
         )
         print(test_a)
+
+    print(f"{to_timestr(100)=}")
+    print(f"{to_timestr([100])=}")
+    print(f"{to_timestr([100, 200])=}")
