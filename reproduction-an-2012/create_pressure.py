@@ -125,13 +125,18 @@ for case_number in range(num_cases):
 
     x = da.linspace(x_min, x_max, x_num, chunks=-1)
     y = da.linspace(y_min, y_max, y_num, chunks=-1)
-    t = da.arange(t_min, t_max+1, t_step, chunks=5)
+    t = da.arange(t_min, t_max+1, t_step, chunks=-1)
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
+    tt = tt.rechunk(("auto", -1, -1))
+    yy = yy.rechunk(tt.chunksize)
+    xx = xx.rechunk(tt.chunksize)
 
     print("Grid parameters:")
-    print(f"{x.size=}\t\t{y.size=}\t\t{t.size=}")
-    print(f"{x.chunksize=}\t{y.chunksize=}\t{t.chunksize=}")
+    print(f"{t.size=}\t\t{y.size=}\t\t{x.size=}")
+    print(f"{tt.chunksize=}")
+    print(f"{xx.chunksize=}")
+    print(f"{yy.chunksize=}")
 
     ## Compute pressure
     p = pressure(xx, yy, tt, T0, U, a, p0, x0).astype(np.float32)
