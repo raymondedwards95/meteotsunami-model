@@ -28,7 +28,7 @@ x0_list = np.array([0, 50000])
 # cross shore (meters)
 x_min = 0
 x_max = 1e6
-x_step = 5e3
+x_step = 2.5e3
 
 # along shore (meters)
 y_min = -2e6
@@ -38,7 +38,7 @@ y_step = x_step
 # time (seconds)
 t_min = 0
 t_max = 50. * 3600.
-t_step = 3600. / 6.
+t_step = 3600. / 10.
 
 
 ### Directories
@@ -134,25 +134,20 @@ for case_number in range(num_cases):
     figurename = f"{pressure_dir}/fig_exp_{case:02.0f}"
 
     ## Compute pressure
-    print(f"\nComputing pressure field for {case=} ({U=}, {a=}, {p0=}, {x0=})")
+    print(f"\nComputing pressure field for {case=:02.0f} ({U=}, {a=}, {p0=}, {x0=})")
     p = pressure(xx, yy, tt, t0_value, U, a, p0, x0).astype(np.float32)
 
-    ## Remove zero-columns and zero-rows
-    ix = da.where(~ da.all(da.isclose(p, 0), axis=(0, 1)))[0]
-    iy = da.where(~ da.all(da.isclose(p, 0), axis=(0, 2)))[0]
-    _x = x[ix]
-    _y = y[iy]
-    p = p[:, :, ix][:, iy, :]
+    ## Process pressure
+    print(f"Process pressure field for {case=:02.0f}")
+    data = fp.convert_to_xarray(t, x, y, p.compute())
+    del p
 
     ## Write field
-    data = fp.convert_to_xarray(t, _x, _y, p.compute())
-    print(f"Process pressure field for {case=}")
-    del _x, _y, p
-    print(f"Writing pressure field for {case=}")
+    print(f"Writing pressure field for {case=:02.0f}")
     fp.write_pressure(data, filename)
 
     ## Write forcing file
-    print(f"Overwriting forcing file for {case=}")
+    print(f"Overwriting forcing file for {case=:02.0f}")
     with open(f"{pressure_dir}/forcing_exp_{case:02.0f}.ext", "w") as file:
         file.write("* Meteo forcing \n")
         file.write("QUANTITY = atmosphericpressure \n")
@@ -162,7 +157,7 @@ for case_number in range(num_cases):
         file.write("OPERAND  = O \n")
 
     ## Visualise field
-    print(f"Plotting pressure field for {case=}")
+    print(f"Plotting pressure field for {case=:02.0f}")
     fp.plot_pressure(data, filename=figurename)
 
 
