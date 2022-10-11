@@ -31,7 +31,7 @@ p0 = 2000.  # default: 2000 Pa
 # cross shore (meters)
 x_min = 0.  # default: 0 km
 x_max = 1e6  # default: 1000 km
-x_steps = list(np.array([1e4, 2e4, 4e4, 0.5e4, 1e4, 1e4, 1e4, 1e4, 1e4, 1e4, 1e4]) / 5.)  # default: 2 km
+x_steps = list(np.array([5, 10, 20, 1, 5, 5, 5, 5, 5, 5, 5]) * 1e3)  # default: 2 km
 
 # along shore (meters)
 y_min = -1e7  # default: -10000 km
@@ -123,11 +123,11 @@ for case_number in range(num_cases):
     x_num = int((x_max - x_min) / x_step + 1)
     y_num = int((y_max - y_min) / y_step + 1)
 
-    x = da.linspace(x_min, x_max, x_num, chunks="auto")
-    y = da.linspace(y_min, y_max, y_num, chunks="auto")
-    t = da.arange(t_min, t_max+1, t_step, chunks=20)
+    x = da.linspace(x_min, x_max, x_num, chunks=-1)
+    y = da.linspace(y_min, y_max, y_num, chunks=-1)
+    t = da.arange(t_min, t_max+1, t_step, chunks=5)
 
-    tt, yy, xx = np.meshgrid(t, y, x, indexing="ij")
+    tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
 
     print("Grid parameters:")
     print(f"{x.size=}\t\t{y.size=}\t\t{t.size=}")
