@@ -11,6 +11,7 @@ import sys
 import time
 
 import cmocean as cmo
+import dask
 import dask.array as da
 import matplotlib.pyplot as plt
 import matplotlib.ticker
@@ -22,6 +23,7 @@ import xarray as xr
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
+import functions.utilities as fu
 # fmt: on
 
 
@@ -76,12 +78,14 @@ def convert_to_xarray(
     data.t.attrs["long_name"] = "seconds since 1970-01-01 00:00:00"
     data.t.attrs["units"] = "s"
 
+    data = data.to_dataset(name="p")
+
     if savename is not None:
         if not savename.endswith(".nc"):
             savename += ".nc"
         data.to_netcdf(
             savename,
-            encoding={"__xarray_dataarray_variable__": {
+            encoding={"p": {
                 "zlib": True,
                 "complevel": 1,
                 "least_significant_digit": 3
@@ -228,19 +232,22 @@ def plot_pressure(
     savename = f"{filename}_field"
     print(f"# Visualizing pressure field in '{savename}'")
 
-    x = data.x.values
-    y = data.y.values
-    t = data.t.values
-    p = data.values
+    t_num = 5
+
+    x = data["x"].values
+    y = data["y"].values
+    t = np.linspace(data["t"].min(), data["t"].max(), t_num)
+    p = data.interp(t=t).compute().values
 
     p_max = np.ceil(np.max([p.max(), np.abs(p.min())]))
     p_min = -1. * p_max
+
+    print(f"### {p_max=}")
 
     if x_scales is None:
         x_scales = [x.min() / 1000., x.max() / 1000.]
 
     # figure
-    t_num = 5
     fig, ax = plt.subplots(1, t_num+1, sharey=True, squeeze=False,
                            gridspec_kw={"width_ratios": [4]*t_num + [1]})
     fig.set_size_inches(FIGSIZE_WIDE)
@@ -255,7 +262,7 @@ def plot_pressure(
         im[i] = ax[i].contourf(
             x / 1000.,
             y / 1000.,
-            p[idx, :, :],
+            p[i, :, :],
             levels=41,
             vmin=p_min,
             vmax=p_max,
@@ -274,7 +281,7 @@ def plot_pressure(
     ax[-1].yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
     cbar = fig.colorbar(im[-2], cax=ax[-1])
     cbar.set_label("Pressure Disturbance [Pa]")
-    cbar.set_ticks(np.linspace(np.floor(p.min()), np.ceil(p.max()), 6))
+    cbar.set_ticks(np.linspace(np.floor(p.min()), np.ceil(p.max()), 11))
 
     fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI,
@@ -299,7 +306,7 @@ if __name__ == "__main__":
 
     # Define function for computing 'pressure'
     def f(x, y, t):
-        return (1. - da.exp(-t)) * da.sin(x * np.pi / 2000.) * da.sin(y * np.pi / 2000.)
+        return (1. - da.exp(-t/(3.*3600.))) * da.sin(x * np.pi / 2000.) * da.sin(y * np.pi / 2000.)
 
     # Define grid
     x = np.linspace(-5000, 5000, 51)
@@ -310,19 +317,16 @@ if __name__ == "__main__":
     tt = tt.rechunk("auto")
     yy = yy.rechunk(tt.chunksize)
     xx = xx.rechunk(tt.chunksize)
-    print(f"{tt=}")
 
     # Compute data
     p = f(xx, yy, tt)
-    print(f"{p=}")
 
     # Convert data
-    convert_to_xarray(t, x, y, p.compute(), savename=pressure_file, close=True)
+    convert_to_xarray(t, x, y, p, savename=pressure_file, close=True)
     del t, x, y, p
 
     # Read data from .nc-file
     data = xr.open_dataarray(f"{pressure_file}.nc", chunks="auto")
-    print(data)
 
     # Write data to .amp-file
     write_pressure(data, filename=pressure_file)
