@@ -101,6 +101,18 @@ def convert_to_xarray(
     return data
 
 
+def remove_zeros(data: xr.DataArray) -> xr.DataArray:
+    t0 = time.perf_counter_ns()
+
+    ix = np.where(~ np.all(np.isclose(data, 0), axis=(0, 1)))[0]
+    iy = np.where(~ np.all(np.isclose(data, 0), axis=(0, 2)))[0]
+    data = data[:, :, ix][:, iy, :]
+
+    t1 = time.perf_counter_ns()
+    print(f"# Filtered data in {(t1-t0)*1e-9:0.3f} seconds")
+    return data
+
+
 def write_pressure(
     data: xr.DataArray,
     filename: str,
@@ -119,6 +131,10 @@ def write_pressure(
         filename += ".amp"
     print(f"# Writing pressure data to '{filename}'")
 
+    # remove zero columns and rows
+    data = remove_zeros(data)
+
+    # prepare data
     x_num = data["x"].size
     y_num = data["y"].size
     t_num = data["t"].size
@@ -193,7 +209,7 @@ unit1           = Pa
                     # 2.: 0.00 -> 0 (remove .00)
                     s = " ".join(f"{val:0.02f}" for val in p_ty.values)\
                         .replace("-0.00", "0.00") \
-                        .replace(".00", "") \
+                        .replace(".00", "")
 
                     # write lines
                     file.write(s)
