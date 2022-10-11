@@ -11,7 +11,6 @@ import sys
 import time
 
 import cmocean as cmo
-import dask
 import dask.array as da
 import matplotlib.pyplot as plt
 import matplotlib.ticker
@@ -133,10 +132,7 @@ def write_pressure(
     x = data["x"].values
     y = data["y"].values
     t = data["t"].values
-    p = data.chunk({"t": 5, "x": -1, "y": "auto"})
-
-    # round values to two digits
-    p = p.round(2)
+    p = data.chunk({"t": "auto", "x": -1, "y": "auto"})
 
     # header
     # fmt: off
@@ -186,18 +182,16 @@ unit1           = Pa
 
             # write if there are values other than reference
             else:
-                p_t = p.sel(t=t[i])
-
                 # loop over y (rows)
                 for n in range(y_num):
                     # NOTE: negative y-index for p (i.e. -1*n) to fix coordinate-system
-                    p_ty = p_t.sel(y=y[-1*n]).values
+                    p_ty = p.sel(t=t[i], y=y[-1*n])
 
                     # replacement rules:
                     # 0.: values are rounded to two digits
                     # 1.: -0.00 -> 0.00 (remove minus)
                     # 2.: 0.00 -> 0 (remove .00)
-                    s = " ".join(f"{val:0.02f}" for val in p_ty)\
+                    s = " ".join(f"{val:0.02f}" for val in p_ty.values)\
                         .replace("-0.00", "0.00") \
                         .replace(".00", "") \
 
