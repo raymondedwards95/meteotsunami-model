@@ -6,6 +6,7 @@ import time
 
 import dask.array as da
 import numpy as np
+import xarray as xr
 
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -31,7 +32,7 @@ p0 = 2000.  # default: 2000 Pa
 # cross shore (meters)
 x_min = 0.  # default: 0 km
 x_max = 1e6  # default: 1000 km
-x_steps = list(np.array([5, 10, 20, 1, 5, 5, 5, 5, 5, 5, 5]) * 1e3)  # default: 2 km
+x_steps = list(np.array([5, 10, 20, 1, 5, 5, 5, 5, 5, 5, 5]) * 1e3)  # default: 5 km
 
 # along shore (meters)
 y_min = -1e7  # default: -10000 km
@@ -41,7 +42,7 @@ y_steps = x_steps  # default: 10 km
 # time (seconds)
 t_min = 0  # default: 0
 t_max = 55 * 3600.  # default: 70 hours
-t_steps = list(np.array([10., 10., 10., 10., 60., 30., 1., 10., 10., 10., 10.]) * 60.)  # default: 10 minutes
+t_steps = list(np.array([30, 30, 30, 30, 60, 15, 5, 30, 30, 30, 30]) * 60.)  # default: 30 minutes
 
 # other
 x0_vals = [0.] * num_cases
@@ -139,19 +140,20 @@ for case_number in range(num_cases):
     print(f"{yy.chunksize=}")
 
     ## Compute pressure
+    print(f"Computing pressure for case {case:02.0f}")
     p = pressure(xx, yy, tt, T0, U, a, p0, x0).astype(np.float32)
 
-    ## Remove zero-columns and zero-rows
-    ix = np.where(~ np.all(np.isclose(p, 0), axis=(0,1)))[0]
-    iy = np.where(~ np.all(np.isclose(p, 0), axis=(0,2)))[0]
-    x = x[ix]
-    y = y[iy]
-    p = p[:,:,ix][:,iy,:]
-
-    ## Write field
-    print(f"Writing pressure field for case {case:02.0f}")
-    data = fp.convert_to_xarray(t, x, y, p.compute())
+    ## Convert data
+    print(f"Converting data for case {case:02.0f}")
+    fp.convert_to_xarray(t, x, y, p, savename=filename, close=True)
     del t, x, y, p
+
+    ## Re-read data (lazy)
+    print(f"Read data for case {case:02.0f}")
+    data = xr.open_dataarray(f"{filename}.nc", chunks="auto")
+
+    ## Write pressure data
+    print(f"Writing pressure field for case {case:02.0f}")
     fp.write_pressure(data, filename)
 
     ## Write forcing file
