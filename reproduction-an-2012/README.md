@@ -50,9 +50,9 @@ All different cases are numbered.
 | 11 | Set `dx_p` and `dy_p` from `5` to `20` km | See 10 |
 | 12 | Set `dx_p` and `dy_p` from `5` to `1` km | See 10 |
 ||||
-| 15 | Set `dt_p` from `60` to `120` min | Temporal resolution of pressure distribution |
-| 16 | Set `dt_p` from `60` to `30` min | See 15 |
-| 17 | Set `dt_p` from `60` to `15` min | See 15 |
+| 15 | Set `dt_p` from `10` to `60` min | Temporal resolution of pressure distribution |
+| 16 | Set `dt_p` from `10` to `30` min | See 15 |
+| 17 | Set `dt_p` from `10` to `1` min | See 15 |
 ||||
 | 20 | Set `dx` and `dy` from `10` to `20` km | Spatial resolution of model |
 | 21 | Set `dx` and `dy` from `10` to `40` km | See 20 |
