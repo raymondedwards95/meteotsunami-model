@@ -130,8 +130,13 @@ def write_pressure(
     dx = _find_step(data["x"].values)
     dy = _find_step(data["y"].values)
 
+    x = data["x"].values
+    y = data["y"].values
     t = data["t"].values
     p = data.chunk({"t": 10, "x": "auto", "y": "auto"})
+
+    # round values to two digits
+    p = p.round(2)
 
     # header
     # fmt: off
@@ -185,18 +190,19 @@ unit1           = Pa
 
                 # loop over y (rows)
                 for n in range(y_num):
+                    # NOTE: negative y-index for p (i.e. -1*n) to fix coordinate-system
+                    p_ty = p_t.sel(y=y[-1*n]).values
 
-                    # loop over x (columns)
-                    for m in range(x_num):
-                        # write a value and neglect trailing zeros after decimal point
-                        # NOTE: second index for p (i.e. -1*n) to fix coordinate-system
-                        # replacement rules:
-                        # 0.: values are rounded to two digits
-                        # 1.: -0.00 -> 0.00 (remove minus)
-                        # 2.: 0.00 -> 0 (remove .00)
-                        # fmt: off
-                        file.write(f"{p_t[-1*n, m].values:0.2f} ".replace("-0.00", "0.00").replace(".00", ""))
-                        # fmt: on
+                    # replacement rules:
+                    # 0.: values are rounded to two digits
+                    # 1.: -0.00 -> 0.00 (remove minus)
+                    # 2.: 0.00 -> 0 (remove .00)
+                    s = " ".join(f"{val:0.02f}" for val in p_ty)\
+                        .replace("-0.00", "0.00") \
+                        .replace(".00", "") \
+
+                    # write lines
+                    file.write(s)
                     file.write("\n")
 
     # End
