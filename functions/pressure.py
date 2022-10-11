@@ -133,7 +133,7 @@ def write_pressure(
     x = data["x"].values
     y = data["y"].values
     t = data["t"].values
-    p = data.chunk({"t": 10, "x": "auto", "y": "auto"})
+    p = data.chunk({"t": 5, "x": -1, "y": "auto"})
 
     # round values to two digits
     p = p.round(2)
