@@ -40,8 +40,8 @@ y_steps = x_steps  # default: 10 km
 
 # time (seconds)
 t_min = 0  # default: 0
-t_max = 54 * 3600.  # default: 70 hours
-t_steps = list(np.array([1., 1., 1., 1., 2., 1./2., 1./4., 1., 1., 1., 1.]) * 3600.)  # default: 1 hour
+t_max = 55 * 3600.  # default: 70 hours
+t_steps = list(np.array([10., 10., 10., 10., 60., 30., 1., 10., 10., 10., 10.]) * 60.)  # default: 10 minutes
 
 # other
 x0_vals = [0.] * num_cases
@@ -128,7 +128,7 @@ for case_number in range(num_cases):
     t = da.arange(t_min, t_max+1, t_step, chunks=-1)
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
-    tt = tt.rechunk(("auto", -1, -1))
+    tt = tt.rechunk("auto")
     yy = yy.rechunk(tt.chunksize)
     xx = xx.rechunk(tt.chunksize)
 
