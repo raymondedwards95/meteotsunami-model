@@ -98,7 +98,7 @@ def convert_to_xarray(
 
     if close:
         return
-    return data
+    return data["p"]
 
 
 def remove_zeros(data: xr.DataArray) -> xr.DataArray:
