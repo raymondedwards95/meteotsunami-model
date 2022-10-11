@@ -120,18 +120,18 @@ def write_pressure(
         filename += ".amp"
     print(f"# Writing pressure data to '{filename}'")
 
-    x_num = data.x.values.size
-    y_num = data.y.values.size
-    t_num = data.t.values.size
+    x_num = data["x"].size
+    y_num = data["y"].size
+    t_num = data["t"].size
 
-    x_min = data.x.values.min()
-    y_min = data.y.values.min()
+    x_min = data["x"].min().values
+    y_min = data["y"].min().values
 
-    dx = _find_step(data.x.values)
-    dy = _find_step(data.y.values)
+    dx = _find_step(data["x"].values)
+    dy = _find_step(data["y"].values)
 
-    t = data.t.values
-    p = data.values
+    t = data["t"].values
+    p = data.chunk({"t": 10, "x": "auto", "y": "auto"})
 
     # header
     # fmt: off
@@ -181,6 +181,7 @@ unit1           = Pa
 
             # write if there are values other than reference
             else:
+                p_t = p.sel(t=t[i])
 
                 # loop over y (rows)
                 for n in range(y_num):
@@ -194,7 +195,7 @@ unit1           = Pa
                         # 1.: -0.00 -> 0.00 (remove minus)
                         # 2.: 0.00 -> 0 (remove .00)
                         # fmt: off
-                        file.write(f"{p[i, -1*n, m]:0.2f} ".replace("-0.00", "0.00").replace(".00", ""))
+                        file.write(f"{p_t[-1*n, m].values:0.2f} ".replace("-0.00", "0.00").replace(".00", ""))
                         # fmt: on
                     file.write("\n")
 
@@ -241,8 +242,6 @@ def plot_pressure(
 
     p_max = np.ceil(np.max([p.max(), np.abs(p.min())]))
     p_min = -1. * p_max
-
-    print(f"### {p_max=}")
 
     if x_scales is None:
         x_scales = [x.min() / 1000., x.max() / 1000.]
