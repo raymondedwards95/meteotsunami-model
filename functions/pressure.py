@@ -101,15 +101,17 @@ def convert_to_xarray(
     return data["p"]
 
 
-def remove_zeros(data: xr.DataArray) -> xr.DataArray:
+def filter_data(data: xr.DataArray) -> xr.DataArray:
     t0 = time.perf_counter_ns()
 
+    data = data.round(3)
     ix = np.where(~ np.all(np.isclose(data, 0), axis=(0, 1)))[0]
     iy = np.where(~ np.all(np.isclose(data, 0), axis=(0, 2)))[0]
     data = data[:, :, ix][:, iy, :]
 
     t1 = time.perf_counter_ns()
     print(f"# Filtered data in {(t1-t0)*1e-9:0.3f} seconds")
+    print(f"# New dimensions are {data.shape}")
     return data
 
 
@@ -132,7 +134,7 @@ def write_pressure(
     print(f"# Writing pressure data to '{filename}'")
 
     # remove zero columns and rows
-    data = remove_zeros(data)
+    data = filter_data(data)
 
     # prepare data
     x_num = data["x"].size
