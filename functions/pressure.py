@@ -11,6 +11,7 @@ import sys
 import time
 
 import cmocean as cmo
+import dask.array as da
 import matplotlib.pyplot as plt
 import matplotlib.ticker
 import numpy as np
@@ -298,22 +299,30 @@ if __name__ == "__main__":
 
     # Define function for computing 'pressure'
     def f(x, y, t):
-        return np.min([1, t / 5. / 3600.]) * np.sin(x * np.pi / 2000.) * np.sin(y * np.pi / 2000.)
+        return (1. - da.exp(-t)) * da.sin(x * np.pi / 2000.) * da.sin(y * np.pi / 2000.)
 
     # Define grid
     x = np.linspace(-5000, 5000, 51)
     y = np.linspace(-10000, 10000, 51)
     t = np.linspace(0, 10, 15) * 3600.
-    p = np.zeros((t.size, y.size, x.size), dtype=float)
 
-    # Compute and convert data
-    for n in range(t.size):
-        for j in range(y.size):
-            for i in range(x.size):
-                p[n, j, i] = f(x[i], y[j], t[n])
+    tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
+    tt = tt.rechunk("auto")
+    yy = yy.rechunk(tt.chunksize)
+    xx = xx.rechunk(tt.chunksize)
+    print(f"{tt=}")
 
-    data = convert_to_xarray(t, x, y, p, savename=pressure_file)
+    # Compute data
+    p = f(xx, yy, tt)
+    print(f"{p=}")
+
+    # Convert data
+    convert_to_xarray(t, x, y, p.compute(), savename=pressure_file, close=True)
     del t, x, y, p
+
+    # Read data from .nc-file
+    data = xr.open_dataarray(f"{pressure_file}.nc", chunks="auto")
+    print(data)
 
     # Write data to .amp-file
     write_pressure(data, filename=pressure_file)
