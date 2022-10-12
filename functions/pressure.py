@@ -104,7 +104,7 @@ def convert_to_xarray(
 def filter_data(data: xr.DataArray) -> xr.DataArray:
     t0 = time.perf_counter_ns()
 
-    data = data.round(3)
+    data = data.round(2)
     ix = np.where(~ np.all(np.isclose(data, 0), axis=(0, 1)))[0]
     iy = np.where(~ np.all(np.isclose(data, 0), axis=(0, 2)))[0]
     data = data[:, :, ix][:, iy, :]
@@ -150,7 +150,7 @@ def write_pressure(
     x = data["x"].values
     y = data["y"].values
     t = data["t"].values
-    p = data.chunk({"t": "auto", "x": -1, "y": "auto"}).data
+    p = data.chunk({"t": "auto", "x": -1, "y": "auto"}).data.compute()
 
     # header
     # fmt: off
@@ -203,15 +203,16 @@ unit1           = Pa
                 # loop over y (rows)
                 for n in range(y_num):
                     # NOTE: negative y-index for p (i.e. -1*n) to fix coordinate-system
-                    p_ty = p[i, -1*n, :]
-
                     # replacement rules:
                     # 0.: values are rounded to two digits
                     # 1.: -0.00 -> 0.00 (remove minus)
                     # 2.: 0.00 -> 0 (remove .00)
-                    s = " ".join(f"{val:0.02f}" for val in p_ty.compute())\
-                        .replace("-0.00", "0.00") \
-                        .replace(".00", "")
+
+                    p_ty = p[i, -1*n, :]
+                    p_ty = p_ty.astype(str)
+                    p_ty = np.char.replace(p_ty, "-0.0", "0.0")
+                    p_ty = np.char.replace(p_ty, "0.0", "0")
+                    s = " ".join(p_ty)
 
                     # write lines
                     file.write(s)
