@@ -44,7 +44,7 @@ function func_parameters ()
     local LocalIdentifier=$1
 
     # Start
-    echo "## Creating parameter files"
+    echo "## Creating parameter files for $LocalIdentifier"
     echo "$(date) - Creating parameter files" >> $LogFile
 
     # Bathymetry
@@ -119,14 +119,9 @@ do
     # Move to folder
     cd $Folder
     echo
-    echo "### Doing simulations in $PWD"
-
-    # Create parameter files
-    echo "### Create parameter files in $PWD"
-    func_parameters "$Identifier"
+    echo "### Preparing for simulations in $PWD"
 
     # Find cases
-    echo "### Doing simulations in $PWD"
     FileName=$(find *.mdu | grep -m 1 -P -o "^\D+")
     Identifier=$(find *.mdu | grep -m 1 -P -o "_(\w+)_" | grep -P -o "[^_]*")
     CaseNumbers=$(find *.mdu | grep -P -o "\d+")
@@ -135,7 +130,12 @@ do
     echo -n "## Found cases: "
     echo $CaseNumbers
 
+    # Create parameter files
+    echo "### Create parameter files in $PWD"
+    func_parameters "$Identifier"
+
     # Loop over all cases
+    echo "### Start simulations in $PWD"
     for Case in $CaseNumbers
     do
         # Wait for a bit
