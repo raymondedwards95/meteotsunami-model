@@ -37,6 +37,42 @@ if [ ! -f "$DFLOWFM_BIN_PATH/run_dflowfm.sh" ]
     exit 1
 fi
 
+# Define parameter creation
+function func_parameters ()
+{
+    # Catch arguments
+    local LocalIdentifier=$1
+
+    # Start
+    echo "## Creating parameter files"
+    echo "$(date) - Creating parameter files" >> $LogFile
+
+    # Bathymetry
+    echo "# Creating bathymetry files"
+    echo "$(date) - Creating bathymetry files" >> $LogFile
+    python3 "./create_bathymetry.py" 1> "${LogFolder}/bathymetry_${LocalIdentifier}.log" 2>&1
+
+    # Grid
+    # NOTE:DOES NOT WORK
+    # echo "# Creating grid files"
+    # echo "$(date) - Creating grid files" >> $LogFile
+    # python3 "./create_grid.py" 1> "${LogFolder}/grid_${LocalIdentifier}.log" 2>&1
+
+    # Observations
+    echo "# Creating observation files"
+    echo "$(date) - Creating observation files" >> $LogFile
+    python3 "./create_observations.py" 1> "${LogFolder}/observation_${LocalIdentifier}.log" 2>&1
+
+    # Pressure
+    echo "# Creating pressure files"
+    echo "$(date) - Creating pressure files" >> $LogFile
+    python3 "./create_pressure.py" 1> "${LogFolder}/pressure_${LocalIdentifier}.log" 2>&1
+
+    # End
+    echo "## Finished creating parameter files"
+    echo "$(date) - Finished creating parameter files" >> $LogFile
+}
+
 # Define computations
 function func_computations ()
 {
@@ -85,7 +121,12 @@ do
     echo
     echo "### Doing simulations in $PWD"
 
+    # Create parameter files
+    echo "### Create parameter files in $PWD"
+    func_parameters "$Identifier"
+
     # Find cases
+    echo "### Doing simulations in $PWD"
     FileName=$(find *.mdu | grep -m 1 -P -o "^\D+")
     Identifier=$(find *.mdu | grep -m 1 -P -o "_(\w+)_" | grep -P -o "[^_]*")
     CaseNumbers=$(find *.mdu | grep -P -o "\d+")
