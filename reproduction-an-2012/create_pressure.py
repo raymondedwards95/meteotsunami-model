@@ -42,7 +42,7 @@ y_steps = x_steps  # default: 10 km
 # time (seconds)
 t_min = 0  # default: 0
 t_max = 55 * 3600.  # default: 70 hours
-t_steps = list(np.array([30, 30, 30, 30, 60, 15, 5, 30, 30, 30, 30]) * 60.)  # default: 30 minutes
+t_steps = list(np.array([30, 30, 30, 30, 60, 20, 15, 30, 30, 30, 30]) * 60.)  # default: 30 minutes
 
 # other
 x0_vals = [0.] * num_cases

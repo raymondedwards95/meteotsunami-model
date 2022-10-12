@@ -50,13 +50,13 @@ All different cases are numbered.
 | 11 | Set `dx_p` and `dy_p` from `5` to `20` km | See 10 |
 | 12 | Set `dx_p` and `dy_p` from `5` to `40` km | See 10 |
 ||||
-| 15 | Set `dt_p` from `10` to `60` min | Temporal resolution of pressure distribution |
-| 16 | Set `dt_p` from `10` to `30` min | See 15 |
-| 17 | Set `dt_p` from `10` to `1` min | See 15 |
+| 15 | Set `dt_p` from `30` to `60` min | Temporal resolution of pressure distribution |
+| 16 | Set `dt_p` from `30` to `20` min | See 15 |
+| 17 | Set `dt_p` from `30` to `10` min | See 15 |
 ||||
 | 20 | Set `dx` and `dy` from `10` to `20` km | Spatial resolution of model |
 | 21 | Set `dx` and `dy` from `10` to `40` km | See 20 |
-| 22 | Set `dx` and `dy` from `10` to `5` km | See 20; *not included in `run_all.sh`* |
+| 22 | Set `dx` and `dy` from `10` to `5` km | See 20 |
 ||||
 | 31 | Set `x0_p` from `0` km to `100` km | Position of center of pressure disturbance |
 | 32 | Set `x0_p` from `0` km to `200` km | See 31 |
