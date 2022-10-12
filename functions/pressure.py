@@ -209,10 +209,9 @@ unit1           = Pa
                     # 2.: 0.00 -> 0 (remove .00)
 
                     p_ty = p[i, -1*n, :]
-                    p_ty = p_ty.astype(str)
-                    p_ty = np.char.replace(p_ty, "-0.0", "0.0")
-                    p_ty = np.char.replace(p_ty, "0.0", "0")
-                    s = " ".join(p_ty)
+                    s = " ".join(f"{elem:0.02f}" for elem in p_ty) \
+                        .replace("-0.00", "0.00") \
+                        .replace("0.00", "0")
 
                     # write lines
                     file.write(s)
