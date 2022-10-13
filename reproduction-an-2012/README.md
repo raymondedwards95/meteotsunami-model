@@ -46,9 +46,9 @@ All different cases are numbered.
 | 04 | Change `Teta0` from `0.55` to `0.59` | See 03 |
 | 05 | Change `Teta0` from `0.55` to `0.51` | See 03 |
 ||||
-| 10 | Set `dx_p` and `dy_p` from `5` to `10` km | Spatial resolution of pressure distribution |
-| 11 | Set `dx_p` and `dy_p` from `5` to `20` km | See 10 |
-| 12 | Set `dx_p` and `dy_p` from `5` to `40` km | See 10 |
+| 10 | Set `dx_p` and `dy_p` from `10` to `5` km | Spatial resolution of pressure distribution |
+| 11 | Set `dx_p` and `dy_p` from `10` to `20` km | See 10 |
+| 12 | Set `dx_p` and `dy_p` from `10` to `40` km | See 10 |
 ||||
 | 15 | Set `dt_p` from `30` to `60` min | Temporal resolution of pressure distribution |
 | 16 | Set `dt_p` from `30` to `20` min | See 15 |

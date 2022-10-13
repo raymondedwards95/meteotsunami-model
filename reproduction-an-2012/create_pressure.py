@@ -32,7 +32,7 @@ p0 = 2000.  # default: 2000 Pa
 # cross shore (meters)
 x_min = 0.  # default: 0 km
 x_max = 1e6  # default: 1000 km
-x_steps = list(np.array([5, 10, 20, 40, 5, 5, 5, 5, 5, 5, 5]) * 1e3)  # default: 5 km
+x_steps = list(np.array([10, 5, 20, 40, 10, 10, 10, 10, 10, 10, 10]) * 1e3)  # default: 10 km, i.e. same as model-grid
 
 # along shore (meters)
 y_min = -1e7  # default: -10000 km
