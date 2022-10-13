@@ -102,15 +102,28 @@ def convert_to_xarray(
 
 
 def filter_data(data: xr.DataArray) -> xr.DataArray:
+    """ Rounds data and remove columns and rows that only contain zeros """
     t0 = time.perf_counter_ns()
+    shape = data.shape
 
+    # Round
     data = data.round(2)
-    ix = np.where(~ np.all(np.isclose(data, 0), axis=(0, 1)))[0]
-    iy = np.where(~ np.all(np.isclose(data, 0), axis=(0, 2)))[0]
-    data = data[:, :, ix][:, iy, :]
 
+    # Find cols and rows where all values are close to 0
+    ix = np.argwhere(~ np.all(np.isclose(data, 0), axis=(0, 1)))
+    iy = np.argwhere(~ np.all(np.isclose(data, 0), axis=(0, 2)))
+
+    # Only remove cols and rows if they are on the outside
+    slice_ix = slice(np.min(ix), np.max(ix))
+    slice_iy = slice(np.min(iy), np.max(iy))
+
+    # Apply slicing
+    data = data[:, :, slice_ix][:, slice_iy, :]
+
+    # End
     t1 = time.perf_counter_ns()
     print(f"# Filtered data in {(t1-t0)*1e-9:0.3f} seconds")
+    print(f"# Old dimensions are {shape}")
     print(f"# New dimensions are {data.shape}")
     return data
 
@@ -150,7 +163,7 @@ def write_pressure(
     x = data["x"].values
     y = data["y"].values
     t = data["t"].values
-    p = data.chunk({"t": "auto", "x": -1, "y": "auto"}).data.compute()
+    p = data.chunk({"t": "auto", "x": -1, "y": -1}).data.compute()
 
     # header
     # fmt: off
@@ -323,11 +336,15 @@ if __name__ == "__main__":
 
     # Define function for computing 'pressure'
     def f(x, y, t):
-        return (1. - da.exp(-t/(3.*3600.))) * da.sin(x * np.pi / 2000.) * da.sin(y * np.pi / 2000.)
+        return 1. \
+            * (1. - da.exp(-t/(3.*3600.))) \
+            * da.sin(x * np.pi / 2000.) \
+            * da.sin(y * np.pi / 2000.) \
+            * da.exp(-(y**2.) / (3e3)**2.)
 
     # Define grid
     x = np.linspace(-5000, 5000, 51)
-    y = np.linspace(-10000, 10000, 51)
+    y = np.linspace(-10000, 10000, 151)
     t = np.linspace(0, 10, 15) * 3600.
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
