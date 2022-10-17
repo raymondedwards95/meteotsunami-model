@@ -18,7 +18,7 @@ print(f"\nStart creating bathymetry-files for repr")
 
 # Parameters
 cases = [0, 36, 41, 42, 43]
-slopes = [1./400., 1./800., 0., 0., 0.]
+slopes = [1.0 / 400.0, 1.0 / 800.0, 0.0, 0.0, 0.0]
 depths = [0, 0, 250, 100, 500]
 
 
@@ -29,8 +29,8 @@ xx, yy = np.meshgrid(x, y)
 
 
 # Function
-def simple_slope(x, alpha=1/400, d0=0.):
-    return -1. * (d0 + alpha * x)
+def simple_slope(x, alpha=1.0 / 400.0, d0=0.0):
+    return -1.0 * (d0 + alpha * x)
 
 
 # Paths
@@ -67,25 +67,23 @@ for i in range(len(cases)):
     case = cases[i]
     slope = slopes[i]
     depth_0 = depths[i]
-    print(
-        f"\n### Creating bathymetry for {case=:02.0f}, with {slope=} and {depth_0=}")
+    print(f"\n### Creating bathymetry for {case=:02.0f}, with {slope=} and {depth_0=}")
 
     # Compute bathymetry
     zz = simple_slope(xx, slope, depth_0)
 
     # Write to file
     data = fb.convert_to_xarray(
-        x, y, zz, savename=f"{bathymetry_dir}/repr_{case:02.0f}.nc")
+        x, y, zz, savename=f"{bathymetry_dir}/repr_{case:02.0f}.nc"
+    )
     fb.write_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}.xyb")
 
     # Visualize
-    fb.plot_bathymetry(
-        data, f"{bathymetry_dir}/fig_repr_{case:02.0f}")
+    fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_repr_{case:02.0f}")
 
     # End
     tb = time.perf_counter()
-    print(
-        f"### Finished creating bathymetry for {case=:02.0f} in {tb-ta:0.1f} seconds")
+    print(f"### Finished creating bathymetry for {case=:02.0f} in {tb-ta:0.1f} seconds")
 
 
 # End
