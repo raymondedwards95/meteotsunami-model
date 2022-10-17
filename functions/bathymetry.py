@@ -95,7 +95,7 @@ def convert_to_xarray(
         data = _convert_to_xarray_2d(x, y, b)
     else:
         raise ValueError(
-            f"{b.ndim} dimensions is not supported for 'b' (max dim is 2"
+            f"{b.ndim} dimensions is not supported for 'b' (max dim is 2)"
         )
 
     data.attrs["long_name"] = "bed level"
@@ -178,7 +178,7 @@ def plot_bathymetry(
     filename: str = None,
     xmax: Numeric = None,
     keep_open: bool = False,
-) -> Tuple[plt.Figure]:
+) -> Tuple[plt.Figure, plt.Figure]:
     """ Function to visualize bathymetry data
 
     Input:
