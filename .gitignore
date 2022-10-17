@@ -1,28 +1,37 @@
-
+# Develop
 *.vscode*
 *.ipynb_checkpoints*
 *.spyproject*
-*backup*
-*output*
-*test*
 *dask-worker-space*
 
+*test*
+
+# Backups
+*backup*
+
+# Cache
+*__pycache__*
 *.pyc
-*.cache
-*.dia
+
+# Model runs
 *.log
 *nohup.out
 
+# Config
 settings.sh
-functions/*.amp
-functions/*.xyb
-functions/fig_*
-functions/*.xyn
-functions/*.pli
 
+# Tests
+functions/tests
+
+# Bathymetry fields
 */bathymetry/*.nc
-*/pressure/*.nc
-
-*.amp
 *.xyb
 
+# Pressure fields
+*/pressure/*.nc
+*.amp
+
+# Model outputs
+*output*
+*.cache
+*.dia
