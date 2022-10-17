@@ -22,6 +22,12 @@ slopes = [1./400., 1./800., 0., 0., 0.]
 depths = [0, 0, 250, 100, 500]
 
 
+# Grid
+x, dx = np.linspace(0, 1e6, 7, retstep=True)
+y, dy = np.linspace(-1e7, 1e7, 7, retstep=True)
+xx, yy = np.meshgrid(x, y)
+
+
 # Function
 def simple_slope(x, alpha=1/400, d0=0.):
     return -1. * (d0 + alpha * x)
@@ -36,6 +42,7 @@ os.makedirs(bathymetry_dir, exist_ok=True)
 # Save parameters to file
 print("\nBathymetries for the following cases are computed: \ncase \tslope \tdepth")
 with open(f"{bathymetry_dir}/parameters_bathymetry.txt", "w") as file:
+    file.write(f"Sloped bottom parameters\n")
     file.write(f"case,slope,depth\n")
     for i in range(len(cases)):
         line = f"{cases[i]:02.0f},{slopes[i]:0.2e},{depths[i]:0.0f}"
@@ -43,13 +50,12 @@ with open(f"{bathymetry_dir}/parameters_bathymetry.txt", "w") as file:
         print(line.replace(",", "\t"))
         file.write(f"{line}\n")
 
+    file.write(f"\nGrid parameters\n")
+    file.write(f"coordinate,min,max,num,step\n")
+    file.write(f"x,{x.min()},{x.max()},{x.size},{dx:0.0f}\n")
+    file.write(f"y,{y.min()},{y.max()},{y.size},{dy:0.0f}\n")
+
     del line, i
-
-
-# Grid
-x = np.linspace(0, 1e6, 5)
-y = np.linspace(-1e7, 1e7, 5)
-xx, yy = np.meshgrid(x, y)
 
 
 # Computations
@@ -74,7 +80,7 @@ for i in range(len(cases)):
 
     # Visualize
     fb.plot_bathymetry(
-        data, f"{bathymetry_dir}/fig_repr_{case:02.0f}", keep_open=False)
+        data, f"{bathymetry_dir}/fig_repr_{case:02.0f}")
 
     # End
     tb = time.perf_counter()
