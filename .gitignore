@@ -14,6 +14,7 @@
 *.pyc
 
 # Model runs
+logs
 *.log
 *nohup.out
 
@@ -30,6 +31,10 @@ functions/tests
 # Pressure fields
 */pressure/*.nc
 *.amp
+
+# Observation fields
+*.pli
+*.xyn
 
 # Model outputs
 *output*
