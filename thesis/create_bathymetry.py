@@ -6,9 +6,11 @@ import time
 
 import numpy as np
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.bathymetry as fb
+# fmt: on
 
 t0 = time.perf_counter()
 print(f"\nStart creating bathymetry-files for exp")
@@ -16,7 +18,7 @@ print(f"\nStart creating bathymetry-files for exp")
 
 ### Function
 def exponential_shelf(x, h=20, a=1e-5):
-    return -1. * h * (1. - np.exp(- 1. * a * x))
+    return -1.0 * h * (1.0 - np.exp(-1.0 * a * x))
 
 
 ### Paths
