@@ -13,7 +13,7 @@ import scipy.constants
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
-from functions.theory import critical_velocity_sloped
+import functions.theory as ft
 # fmt: on
 
 
@@ -34,7 +34,7 @@ def theory_figure_speed_vs_size_alpha(a: npt.ArrayLike, alpha: npt.ArrayLike, sa
 
     # Computations
     grid_a, grid_alpha = np.meshgrid(a, alpha, sparse=True)
-    Ucr = critical_velocity_sloped(grid_a, grid_alpha)
+    Ucr = ft.critical_velocity_sloped(grid_a, grid_alpha)
 
     # Figure
     fig = plt.figure()
@@ -63,7 +63,7 @@ def theory_figure_speed_vs_size_alpha(a: npt.ArrayLike, alpha: npt.ArrayLike, sa
 
 
 ### Wavelength fundamental mode
-def theory_figure_wavelength_vs_alpha_speed(alpha: npt.ArrayLike, U: npt.ArrayLike, savename: str=None) -> None:
+def theory_figure_wavelength_vs_alpha_speed(alpha: npt.ArrayLike, velocity: npt.ArrayLike, savename: str=None) -> None:
     """ Plots the relation between wavelength and bottom slope and pressure disturbance velocity
 
     Input:
@@ -73,18 +73,21 @@ def theory_figure_wavelength_vs_alpha_speed(alpha: npt.ArrayLike, U: npt.ArrayLi
     Options:
         `savename`  figure name
     """
+    # Arguments
     if savename is None:
         savename = f"{figure_dir}/contour_fundamental_wl"
 
+    # Computations
+    grid_velocity, grid_alpha = np.meshgrid(velocity, alpha, sparse=True)
+    wavelength = ft.fundamental_wavelength_sloped(grid_velocity, grid_alpha).T
+
+    # Figure
     plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
     plt.title("Wavelength fundamental mode")
-    labda = np.zeros((U.size, alpha.size))
-    for i in range(U.size):
-        for j in range(alpha.size):
-            labda[i, j] = 2. * np.pi * U[i] / g / alpha[j]
-    cl = plt.contour(alpha, U, labda/1e3, levels=np.arange(0, 4e4+10, 1e4)/1e3, colors="black")
+
+    cl = plt.contour(alpha, velocity, wavelength/1e3, levels=np.arange(0, 4e4+10, 1e4)/1e3, colors="black")
     plt.clabel(cl, fmt="%2.0f")
-    plt.contourf(alpha, U, labda/1e3, levels=np.linspace(0, 40000, 51)/1e3, cmap=cmo.cm.amp)
+    plt.contourf(alpha, velocity, wavelength/1e3, levels=np.linspace(0, 40000, 51)/1e3, cmap=cmo.cm.amp)
     cb = plt.colorbar()
     cb.ax.set_title("$\\lambda_0$ [km]")
     plt.xlabel("$\\alpha$ [-]")
@@ -106,10 +109,6 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.realpath(__file__))
     figure_dir = f"{current_dir}/figures"
     os.makedirs(figure_dir, exist_ok=True)
-
-    # Constants
-    g = scipy.constants.g
-    assert np.abs(g - 9.81) < 1e-2
 
     # Parameters
     # a = np.arange(0, 301, 50) * 1e3
