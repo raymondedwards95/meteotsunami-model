@@ -118,22 +118,17 @@ def theory_figure_wavelength_vs_alpha_speed(alpha: npt.ArrayLike, velocity: npt.
 
 
 if __name__ == "__main__":
-    # Settings
-    show_figures = False
-    current_dir = os.path.dirname(os.path.realpath(__file__))
-    figure_dir = f"{current_dir}/figures"
+    # Paths
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    figure_dir = f"{script_dir}/figures"
     os.makedirs(figure_dir, exist_ok=True)
 
     # Parameters
     # a = np.arange(0, 301, 50) * 1e3
-    a = np.geomspace(1, 301, 50) * 1e3
-    alpha = 1. / np.logspace(1.5, 3.1)
-    U = np.arange(0, 60+1)
+    a = np.geomspace(1, 301, 100) * 1e3
+    alpha = 1. / np.logspace(1.5, 3.1, 100)
+    U = np.arange(0, 60+0.1, 0.5)
 
     # Figures
     theory_figure_speed_vs_size_alpha(a, alpha)
     theory_figure_wavelength_vs_alpha_speed(alpha, U)
-
-    # End
-    if show_figures:
-        plt.show()
