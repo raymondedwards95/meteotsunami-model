@@ -37,12 +37,12 @@ def critical_velocity_sloped(a: Numeric, alpha: Numeric) -> Numeric:
 
 
 @np.vectorize
-def fundamental_wavelength_sloped(alpha: Numeric, velocity: Numeric) -> Numeric:
+def fundamental_wavelength_sloped(velocity: Numeric, alpha: Numeric) -> Numeric:
     """ Computes the wavelength of the fundamental mode
 
     Input:
-        `alpha`:        bottom slope
         `velocity`:     wave velocity
+        `alpha`:        bottom slope
 
     Output:
         `wavelength`:   critical wave velocity
