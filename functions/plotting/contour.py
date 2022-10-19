@@ -90,7 +90,6 @@ class plot_contour():
         """ Plot setup """
         # Checks
         self._check_if_closed()
-        print(self.axes.shape)
 
         # All
         for ax in self.axes.ravel():
