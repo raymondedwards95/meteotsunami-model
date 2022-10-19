@@ -23,8 +23,8 @@ assert np.abs(g - 9.81) < 1e-2
 
 
 @np.vectorize
-def critical_velocity_sloped(a: Numeric, alpha: Numeric):
-    """ Computes the critical wave velocity Ucr^2 = g * a * alpha / pi
+def critical_velocity_sloped(a: Numeric, alpha: Numeric) -> Numeric:
+    """ Computes the critical wave velocity
 
     Input:
         `a`:        pressure disturbance size
@@ -33,7 +33,18 @@ def critical_velocity_sloped(a: Numeric, alpha: Numeric):
     Output:
         `Ucr`:      critical wave velocity
     """
-    # Constants
-
-    # Return
     return np.sqrt(g * a * alpha / np.pi)
+
+
+@np.vectorize
+def fundamental_wavelength_sloped(alpha: Numeric, velocity: Numeric) -> Numeric:
+    """ Computes the wavelength of the fundamental mode
+
+    Input:
+        `alpha`:        bottom slope
+        `velocity`:     wave velocity
+
+    Output:
+        `wavelength`:   critical wave velocity
+    """
+    return 2. * np.pi * velocity / g / alpha
