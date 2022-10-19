@@ -56,7 +56,12 @@ def theory_figure_speed_vs_size_alpha(a: npt.ArrayLike, alpha: npt.ArrayLike, sa
         plt.text(_angle, 0.01, f"{_angle}", color="red", transform=plt.gca().get_xaxis_transform())
         plt.axvline(_angle, color="red")
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(
+        savename,
+        bbox_inches="tight",
+        dpi=FIG_DPI,
+        pil_kwargs=FIG_PIL_KWARGS,
+    )
 
     print(f"Saved figure {savename}")
     return
@@ -101,7 +106,12 @@ def theory_figure_wavelength_vs_alpha_speed(alpha: npt.ArrayLike, velocity: npt.
         plt.text(_angle, 0.01, f"{_angle}", color="orange", transform=plt.gca().get_xaxis_transform())
         plt.axvline(_angle, color="orange")
     fig.get_layout_engine().execute(fig)
-    plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    plt.savefig(
+        savename,
+        bbox_inches="tight",
+        dpi=FIG_DPI,
+        pil_kwargs=FIG_PIL_KWARGS,
+    )
 
     print(f"Saved figure {savename}")
     return
