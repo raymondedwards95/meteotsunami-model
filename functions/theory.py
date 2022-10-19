@@ -1,0 +1,37 @@
+""" Theoretical relationships
+
+Main functions:
+    critical_velocity_sloped
+"""
+
+import os
+import sys
+
+import numpy as np
+import scipy.constants
+
+# fmt: off
+# fix for importing functions below
+sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
+import functions.utilities as fu
+# fmt: on
+
+g = scipy.constants.g
+assert np.abs(g - 9.81) < 1e-2
+
+@np.vectorize
+def critical_velocity_sloped(a: Numeric, alpha: Numeric):
+    """ Computes the critical wave velocity Ucr^2 = g * a * alpha / pi
+
+    Input:
+        `a`:        pressure disturbance size
+        `alpha`:    bottom slope
+
+    Output:
+        `Ucr`:      critical wave velocity
+    """
+    # Constants
+
+    # Return
+    return np.sqrt(g * a * alpha / np.pi)
