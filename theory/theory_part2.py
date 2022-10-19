@@ -53,7 +53,7 @@ def theory_figure_speed_vs_size_alpha(a: npt.ArrayLike, alpha: npt.ArrayLike, sa
     plt.grid()
     plt.xscale("log")
     for _angle in [1/50, 1/200, 1/1000]:
-        plt.text(_angle, 0.01, f"{_angle}", color="red", transform=plt.gca().get_xaxis_transform())
+        plt.text(_angle, 0.01, f"1/{1/_angle:0.0f}", color="red", transform=plt.gca().get_xaxis_transform())
         plt.axvline(_angle, color="red")
     fig.get_layout_engine().execute(fig)
     fig.savefig(
@@ -103,8 +103,8 @@ def theory_figure_wavelength_vs_alpha_speed(alpha: npt.ArrayLike, velocity: npt.
     plt.grid()
     plt.xscale("log")
     for _angle in [1/50, 1/200, 1/1000]:
-        plt.text(_angle, 0.01, f"{_angle}", color="orange", transform=plt.gca().get_xaxis_transform())
-        plt.axvline(_angle, color="orange")
+        plt.text(_angle, 0.01, f"1/{1/_angle:0.0f}", color="blue", transform=plt.gca().get_xaxis_transform())
+        plt.axvline(_angle, color="blue")
     fig.get_layout_engine().execute(fig)
     plt.savefig(
         savename,
@@ -126,7 +126,8 @@ if __name__ == "__main__":
     # Parameters
     # a = np.arange(0, 301, 50) * 1e3
     a = np.geomspace(1, 301, 100) * 1e3
-    alpha = 1. / np.logspace(1.5, 3.1, 100)
+    # alpha = 1. / np.logspace(1.5, 3.1, 100)
+    alpha = np.geomspace(1e-4, 1e-1, 100)
     U = np.arange(0, 60+0.1, 0.5)
 
     # Figures
