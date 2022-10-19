@@ -17,8 +17,10 @@ from functions import *
 import functions.utilities as fu
 # fmt: on
 
+
 g = scipy.constants.g
 assert np.abs(g - 9.81) < 1e-2
+
 
 @np.vectorize
 def critical_velocity_sloped(a: Numeric, alpha: Numeric):
