@@ -82,8 +82,11 @@ def theory_figure_wavelength_vs_alpha_speed(alpha: npt.ArrayLike, velocity: npt.
     wavelength = ft.fundamental_wavelength_sloped(grid_velocity, grid_alpha).T
 
     # Figure
-    plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
-    plt.title("Wavelength fundamental mode")
+    fig = plt.figure()
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
+    fig.set_layout_engine("compressed")
+    fig.suptitle("Wavelength Fundamental Mode", va="top", ha="left", x=0.01)
 
     cl = plt.contour(alpha, velocity, wavelength/1e3, levels=np.arange(0, 4e4+10, 1e4)/1e3, colors="black")
     plt.clabel(cl, fmt="%2.0f")
@@ -97,6 +100,7 @@ def theory_figure_wavelength_vs_alpha_speed(alpha: npt.ArrayLike, velocity: npt.
     for _angle in [1/50, 1/200, 1/1000]:
         plt.text(_angle, 0.01, f"{_angle}", color="orange", transform=plt.gca().get_xaxis_transform())
         plt.axvline(_angle, color="orange")
+    fig.get_layout_engine().execute(fig)
     plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
 
     print(f"Saved figure {savename}")
