@@ -45,6 +45,6 @@ def fundamental_wavelength_sloped(velocity: Numeric, alpha: Numeric) -> Numeric:
         `alpha`:        bottom slope
 
     Output:
-        `wavelength`:   critical wave velocity
+        `wavelength`:   wavelength of fundamental mode
     """
     return 2. * np.pi * velocity / g / alpha
