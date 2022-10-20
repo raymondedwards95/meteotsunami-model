@@ -117,7 +117,7 @@ def theory_figure_wavelength_vs_alpha_speed(
         colors="black",
         alpha=0.8,
     )
-    plt.clabel(cl, fmt="%0.0f")
+    plt.clabel(cl, fmt="%3.0f")
     plt.contourf(
         alpha,
         velocity,
