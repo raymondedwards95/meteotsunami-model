@@ -47,4 +47,4 @@ def fundamental_wavelength_sloped(velocity: Numeric, alpha: Numeric) -> Numeric:
     Output:
         `wavelength`:   wavelength of fundamental mode
     """
-    return 2. * np.pi * velocity / g / alpha
+    return 2. * np.pi * np.power(velocity, 2.) / g / alpha

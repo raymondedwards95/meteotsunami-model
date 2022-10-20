@@ -113,16 +113,16 @@ def theory_figure_wavelength_vs_alpha_speed(
         alpha,
         velocity,
         wavelength / 1e3,
-        levels=np.arange(0, 4e4 + 10, 1e4) / 1e3,
+        levels=np.geomspace(5000, 5e5, 3) / 1e3,
         colors="black",
         alpha=0.8,
     )
-    plt.clabel(cl, fmt="%2.0f")
+    plt.clabel(cl, fmt="%0.0f")
     plt.contourf(
         alpha,
         velocity,
         wavelength / 1e3,
-        levels=np.linspace(0, 40000, 51) / 1e3,
+        levels=np.linspace(0, 5e5, 101) / 1e3,
         cmap=cmo.cm.amp,
     )
     cb = plt.colorbar()
