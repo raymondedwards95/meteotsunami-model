@@ -60,7 +60,7 @@ def theory_figure_speed_vs_size_alpha(
     plt.ylabel("$a$ [km]")
     plt.grid()
     plt.xscale("log")
-    for _angle in [1 / 50, 1 / 400, 1 / 200, 1 / 1000]:
+    for _angle in [1 / 50, 1 / 400, 1 / 200, 1 / 800]:
         plt.text(
             _angle,
             0.01,
@@ -131,7 +131,7 @@ def theory_figure_wavelength_vs_alpha_speed(
     plt.ylabel("$U$ [m/s]")
     plt.grid()
     plt.xscale("log")
-    for _angle in [1 / 50, 1 / 400, 1 / 200, 1 / 1000]:
+    for _angle in [1 / 50, 1 / 400, 1 / 200, 1 / 800]:
         plt.text(
             _angle,
             0.01,
