@@ -7,9 +7,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
 
+create_map: bool
 try:
     import cartopy.crs as ccrs
     import cartopy.feature as cfeature
+
     create_map = True
 except:
     print("Cartopy is not installed!")
@@ -23,9 +25,11 @@ import functions.theory as ft
 # fmt: on
 
 
-### Speed
-def theory_figure_speed_vs_size(a: npt.ArrayLike, alpha: npt.ArrayLike, savename: str = None) -> None:
-    """ Plots the relation between critical velocity and pressure disturbance size
+# Speed
+def theory_figure_speed_vs_size(
+    a: npt.ArrayLike, alpha: npt.ArrayLike, savename: str = None
+) -> None:
+    """Plots the relation between critical velocity and pressure disturbance size
 
     Input:
         `a`:        array with pressure disturbance size
@@ -50,8 +54,12 @@ def theory_figure_speed_vs_size(a: npt.ArrayLike, alpha: npt.ArrayLike, savename
     fig.suptitle("Critical Storm Speed", va="top", ha="left", x=0.01)
 
     for i in range(alpha.size):
-        plt.semilogx(a / 1000., u_crit[i,:], label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$")
-        plt.fill_between(a / 1000., u_crit[i,:], alpha=0.1)
+        plt.semilogx(
+            a / 1000.0,
+            u_crit[i, :],
+            label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
+        )
+        plt.fill_between(a / 1000.0, u_crit[i, :], alpha=0.1)
     plt.legend()
     plt.xlabel("$a$ [km]")
     plt.ylabel("$U_{crit}$ [m/s]")
@@ -65,9 +73,11 @@ def theory_figure_speed_vs_size(a: npt.ArrayLike, alpha: npt.ArrayLike, savename
     return
 
 
-### Wavelength
-def theory_figure_wavelength_vs_size(a: npt.ArrayLike, alpha: npt.ArrayLike, savename: str=None) -> None:
-    """ Plots the relation between wavelength and pressure disturbance size
+# Wavelength
+def theory_figure_wavelength_vs_size(
+    a: npt.ArrayLike, alpha: npt.ArrayLike, savename: str = None
+) -> None:
+    """Plots the relation between wavelength and pressure disturbance size
 
     Input:
         `a`:        array with pressure disturbance size
@@ -93,9 +103,20 @@ def theory_figure_wavelength_vs_size(a: npt.ArrayLike, alpha: npt.ArrayLike, sav
     fig.suptitle("Wavelength of Edge Wave Packet", va="top", ha="left", x=0.01)
 
     for i in range(alpha.size):
-        plt.plot(a / 1000., wavelength[i,:] / 1000., label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$")
-        plt.fill_between(a / 1000., wavelength[i,:] / 1000., alpha=0.1)
-    plt.plot(a / 1000., 2. * a / 1000., color="black", linestyle="--", linewidth=1, label="$2a$")
+        plt.plot(
+            a / 1000.0,
+            wavelength[i, :] / 1000.0,
+            label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
+        )
+        plt.fill_between(a / 1000.0, wavelength[i, :] / 1000.0, alpha=0.1)
+    plt.plot(
+        a / 1000.0,
+        2.0 * a / 1000.0,
+        color="black",
+        linestyle="--",
+        linewidth=1,
+        label="$2a$",
+    )
     plt.legend()
     plt.xlabel("$a$ [km]")
     plt.ylabel("$\\lambda$ [km]")
@@ -111,9 +132,9 @@ def theory_figure_wavelength_vs_size(a: npt.ArrayLike, alpha: npt.ArrayLike, sav
     return
 
 
-### Map
-def theory_figure_map(savename: str=None) -> None:
-    """ Create figure of the area of interest
+# Map
+def theory_figure_map(savename: str = None) -> None:
+    """Create figure of the area of interest
 
     Options:
         savename    figure name
@@ -133,8 +154,7 @@ def theory_figure_map(savename: str=None) -> None:
     ax.coastlines("50m")
     ax.add_feature(
         cfeature.NaturalEarthFeature(
-            "physical", "land", "50m",
-            edgecolor="black", facecolor="gray"
+            "physical", "land", "50m", edgecolor="black", facecolor="gray"
         )
     )
     ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True)
@@ -158,7 +178,7 @@ if __name__ == "__main__":
 
     # Parameters
     a = np.logspace(2, 6)
-    alpha = np.array([1/400, 1/40, 1/4])
+    alpha = np.array([1 / 400, 1 / 40, 1 / 4])
 
     # Figures
     theory_figure_speed_vs_size(a, alpha)
