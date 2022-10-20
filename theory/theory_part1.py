@@ -178,7 +178,7 @@ if __name__ == "__main__":
 
     # Parameters
     a = np.logspace(2, 6)
-    alpha = np.array([1 / 400, 1 / 40, 1 / 4])
+    alpha = np.array([1 / 50, 1 / 400, 1 / 200, 1 / 800])
 
     # Figures
     theory_figure_speed_vs_size(a, alpha)
