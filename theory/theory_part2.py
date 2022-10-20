@@ -7,7 +7,6 @@ import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
-import scipy.constants
 
 # fmt: off
 # fix for importing functions below
