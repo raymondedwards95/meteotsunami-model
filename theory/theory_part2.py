@@ -39,37 +39,57 @@ def theory_figure_speed_vs_size_alpha(
     Ucr = ft.critical_velocity_sloped(grid_a, grid_alpha)
 
     # Figure
-    fig = plt.figure()
+    fig, ax = plt.subplots(1, 1)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
     fig.suptitle("Critical Velocity", va="top", ha="left", x=0.01)
 
-    cl = plt.contour(
+    # Plots
+    cl = ax.contour(
         alpha,
         a / 1e3,
         Ucr,
-        levels=np.arange(U.min(), U.max() + 10, 10),
+        levels=np.arange(0, 60 + 0.1, 10)[:-1],
         colors="black",
         alpha=0.8,
     )
-    plt.clabel(cl, fmt="%2.0f")
-    plt.contourf(alpha, a / 1e3, Ucr, levels=U, cmap=cmo.cm.speed)
-    cb = plt.colorbar()
+    ax.clabel(cl, fmt="%2.0f")
+
+    cf = ax.contourf(
+        alpha,
+        a / 1e3,
+        Ucr,
+        levels=np.arange(0, 60 + 0.1, 1),
+        cmap=cmo.cm.speed,
+    )
+
+    # Colorbar
+    div = make_axes_locatable(ax)
+    cax = div.append_axes(position="right",size="5%",pad="5%")
+    cb = fig.colorbar(cf, cax=cax)
     cb.set_label("$U_{cr}$ [m/s]")
-    plt.xlabel("$\\alpha$ [-]")
-    plt.ylabel("$a$ [km]")
-    plt.grid()
-    plt.xscale("log")
+    cb.set_ticks(np.arange(0, 60 + 1, 10))
+    cb.set_ticks(np.arange(0, 60 + 1, 5), minor=True)
+
+    # Other
+    ax.set_xlabel("$\\alpha$ [-]")
+    ax.set_ylabel("$a$ [km]")
+    ax.grid()
+    ax.set_xscale("log")
+
+    # Lines of constant alpha
     for _angle in [1 / 50, 1 / 400, 1 / 200, 1 / 800]:
-        plt.text(
+        ax.text(
             _angle,
             0.01,
             f"1/{1/_angle:0.0f}",
             color="red",
-            transform=plt.gca().get_xaxis_transform(),
+            transform=ax.get_xaxis_transform(),
         )
-        plt.axvline(_angle, color="red")
+        ax.axvline(_angle, color="red")
+
+    # Save figure
     fig.get_layout_engine().execute(fig)
     fig.savefig(
         savename,
@@ -120,24 +140,25 @@ def theory_figure_wavelength_vs_alpha_speed(
         alpha=0.8,
     )
     ax.clabel(cl, fmt="%2.0f")
+
     cf = ax.contourf(
         alpha,
         velocity,
         wavelength / 1e3,
-        levels=np.linspace(0, 7e5, 50) / 1e3,
+        levels=np.arange(0, 7e5 + 1, 1e4) / 1e3,
         cmap=cmo.cm.amp,
         # extend="max",
     )
 
     # Colorbar
-    div = make_axes_locatable(plt.gca())
+    div = make_axes_locatable(ax)
     cax = div.append_axes(position="right",size="5%",pad="5%")
     cb = fig.colorbar(cf, cax=cax)
     cb.set_label("$\\lambda_0$ [km]")
     cb.set_ticks(np.arange(0, 700 + 1, 100))
     cb.set_ticks(np.arange(0, 500 + 1, 25), minor=True)
 
-    # Box
+    # Other
     ax.set_xlabel("$\\alpha$ [-]")
     ax.set_ylabel("$U$ [m/s]")
     ax.grid()
