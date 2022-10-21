@@ -4,6 +4,7 @@ import os
 import sys
 
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 import numpy as np
 import numpy.typing as npt
 
@@ -66,6 +67,8 @@ def theory_figure_speed_vs_size(
     plt.grid()
     plt.ylim(0, 100)
     plt.xlim(1e0, 1e3)
+    plt.gca().xaxis.set_major_formatter(mticker.ScalarFormatter())
+    plt.ticklabel_format(axis="both", style="plain")
     fig.get_layout_engine().execute(fig)
     plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
 
@@ -120,8 +123,6 @@ def theory_figure_wavelength_vs_size(
     plt.legend()
     plt.xlabel("$a$ [km]")
     plt.ylabel("$\\lambda$ [km]")
-    plt.xticks(np.arange(0, 301, 100))
-    plt.yticks(np.arange(0, 601, 200))
     plt.xlim(0, 300)
     plt.ylim(0, 700)
     plt.grid()
@@ -170,8 +171,6 @@ def theory_figure_wavelength_vs_velocity(
     plt.legend()
     plt.xlabel("$U$ [m/s]")
     plt.ylabel("$\\lambda$ [km]")
-    # plt.xticks(np.arange(0, 301, 100))
-    # plt.yticks(np.arange(0, 601, 200))
     plt.xlim(velocity.min(), velocity.max())
     plt.ylim(0, 700)
     plt.grid()
@@ -229,7 +228,7 @@ if __name__ == "__main__":
     # Parameters
     a = np.logspace(2, 6, 201)
     alpha = np.sort(np.array([1 / 50, 1 / 400, 1 / 200, 1 / 800]))[::-1]
-    velocity = np.linspace(0, 100, 201)
+    velocity = np.linspace(0, 60, 201)
 
     # Figures
     theory_figure_speed_vs_size(a, alpha)
