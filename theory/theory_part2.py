@@ -66,7 +66,7 @@ def theory_figure_speed_vs_size_alpha(
 
     # Colorbar
     div = make_axes_locatable(ax)
-    cax = div.append_axes(position="right",size="5%",pad="5%")
+    cax = div.append_axes(position="right", size="5%", pad="5%")
     cb = fig.colorbar(cf, cax=cax)
     cb.set_label("$U_{cr}$ [m/s]")
     cb.set_ticks(np.arange(0, 60 + 1, 10))
@@ -152,7 +152,7 @@ def theory_figure_wavelength_vs_alpha_speed(
 
     # Colorbar
     div = make_axes_locatable(ax)
-    cax = div.append_axes(position="right",size="5%",pad="5%")
+    cax = div.append_axes(position="right", size="5%", pad="5%")
     cb = fig.colorbar(cf, cax=cax)
     cb.set_label("$\\lambda_0$ [km]")
     cb.set_ticks(np.arange(0, 700 + 1, 100))
