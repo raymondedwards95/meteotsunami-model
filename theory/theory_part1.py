@@ -132,6 +132,56 @@ def theory_figure_wavelength_vs_size(
     return
 
 
+# Wavelength
+def theory_figure_wavelength_vs_velocity(
+    velocity: npt.ArrayLike, alpha: npt.ArrayLike, savename: str = None
+) -> None:
+    """Plots the relation between wavelength and velocity
+
+    Input:
+        `velocity`: array with velocity
+        `alpha`:    array with bottom slope
+
+    Options:
+        `savename`  figure name
+    """
+    # Arguments
+    if savename is None:
+        savename = f"{figure_dir}/line_wavelength_velocity"
+
+    # Computations
+    grid_velocity, grid_alpha = np.meshgrid(velocity, alpha, sparse=True)
+    wavelength = ft.fundamental_wavelength_sloped(grid_velocity, grid_alpha)
+
+    # Figure
+    fig = plt.figure()
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
+    fig.set_layout_engine("compressed")
+    fig.suptitle("Wavelength of Edge Wave Packet", va="top", ha="left", x=0.01)
+
+    for i in range(alpha.size):
+        plt.plot(
+            velocity,
+            wavelength[i, :] / 1000.0,
+            label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
+        )
+        plt.fill_between(velocity, wavelength[i, :] / 1000.0, alpha=0.1)
+    plt.legend()
+    plt.xlabel("$U$ [m/s]")
+    plt.ylabel("$\\lambda$ [km]")
+    # plt.xticks(np.arange(0, 301, 100))
+    # plt.yticks(np.arange(0, 601, 200))
+    plt.xlim(velocity.min(), velocity.max())
+    plt.ylim(0, 700)
+    plt.grid()
+    fig.get_layout_engine().execute(fig)
+    plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+
+    print(f"Saved figure {savename}")
+    return
+
+
 # Map
 def theory_figure_map(savename: str = None) -> None:
     """Create figure of the area of interest
@@ -177,12 +227,14 @@ if __name__ == "__main__":
     os.makedirs(figure_dir, exist_ok=True)
 
     # Parameters
-    a = np.logspace(2, 6)
-    alpha = np.array([1 / 50, 1 / 400, 1 / 200, 1 / 800])
+    a = np.logspace(2, 6, 201)
+    alpha = np.sort(np.array([1 / 50, 1 / 400, 1 / 200, 1 / 800]))[::-1]
+    velocity = np.linspace(0, 100, 201)
 
     # Figures
     theory_figure_speed_vs_size(a, alpha)
     theory_figure_wavelength_vs_size(a, alpha)
+    theory_figure_wavelength_vs_velocity(velocity, alpha)
     if create_map:
         theory_figure_map()
 
