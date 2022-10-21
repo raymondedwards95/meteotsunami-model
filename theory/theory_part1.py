@@ -70,7 +70,12 @@ def theory_figure_speed_vs_size(
     plt.gca().xaxis.set_major_formatter(mticker.ScalarFormatter())
     plt.ticklabel_format(axis="both", style="plain")
     fig.get_layout_engine().execute(fig)
-    plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    plt.savefig(
+        savename,
+        bbox_inches="tight",
+        dpi=FIG_DPI,
+        pil_kwargs=FIG_PIL_KWARGS,
+    )
 
     print(f"Saved figure {savename}")
     return
@@ -127,7 +132,12 @@ def theory_figure_wavelength_vs_size(
     plt.ylim(0, 700)
     plt.grid()
     fig.get_layout_engine().execute(fig)
-    plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    plt.savefig(
+        savename,
+        bbox_inches="tight",
+        dpi=FIG_DPI,
+        pil_kwargs=FIG_PIL_KWARGS,
+    )
 
     print(f"Saved figure {savename}")
     return
@@ -175,7 +185,12 @@ def theory_figure_wavelength_vs_velocity(
     plt.ylim(0, 700)
     plt.grid()
     fig.get_layout_engine().execute(fig)
-    plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    plt.savefig(
+        savename,
+        bbox_inches="tight",
+        dpi=FIG_DPI,
+        pil_kwargs=FIG_PIL_KWARGS,
+    )
 
     print(f"Saved figure {savename}")
     return
@@ -212,7 +227,12 @@ def theory_figure_map(savename: str = None) -> None:
     # plt.xlabel("Longitude")
     # plt.ylabel("Latitude")
     fig.get_layout_engine().execute(fig)
-    plt.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    plt.savefig(
+        savename,
+        bbox_inches="tight",
+        dpi=FIG_DPI,
+        pil_kwargs=FIG_PIL_KWARGS,
+    )
 
     print(f"Saved figure {savename}")
     return
