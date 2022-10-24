@@ -128,9 +128,12 @@ def theory_figure_wavelength_vs_size(
     plt.legend()
     plt.xlabel("$a$ [km]")
     plt.ylabel("$\\lambda$ [km]")
-    plt.xlim(0, 300)
+    plt.xlim(1e0, 1e3)
     plt.ylim(0, 700)
     plt.grid()
+    plt.gca().set_xscale("log")
+    plt.gca().xaxis.set_major_formatter(mticker.ScalarFormatter())
+
     fig.get_layout_engine().execute(fig)
     plt.savefig(
         savename,
