@@ -48,3 +48,28 @@ def fundamental_wavelength_sloped(velocity: Numeric, alpha: Numeric) -> Numeric:
         `wavelength`:   wavelength of fundamental mode
     """
     return 2. * np.pi * np.power(velocity, 2.) / g / alpha
+
+
+if __name__ == "__main__":
+    a = np.geomspace(1, 1e6, 50)
+    alpha = np.geomspace(1e-1, 1e-4, 100)
+    vel = np.linspace(0, 100, 30)
+
+    def test_critical_velocity_sloped():
+        a_mesh, alpha_mesh = np.meshgrid(a, alpha, sparse=True)
+
+        print(critical_velocity_sloped(a_mesh, alpha_mesh).shape)
+        print(critical_velocity_sloped(a.mean(), alpha).shape)
+        print(critical_velocity_sloped(a, alpha.mean()).shape)
+        print(critical_velocity_sloped(a.mean(), alpha.mean()).shape)
+
+    def test_fundamental_wavelength_sloped():
+        vel_mesh, alpha_mesh = np.meshgrid(vel, alpha, sparse=True)
+
+        print(fundamental_wavelength_sloped(vel_mesh, alpha_mesh).shape)
+        print(fundamental_wavelength_sloped(vel.mean(), alpha).shape)
+        print(fundamental_wavelength_sloped(vel, alpha.mean()).shape)
+        print(fundamental_wavelength_sloped(vel.mean(), alpha.mean()).shape)
+
+    test_critical_velocity_sloped()
+    test_fundamental_wavelength_sloped()
