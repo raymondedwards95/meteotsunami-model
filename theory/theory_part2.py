@@ -5,6 +5,7 @@ import sys
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 import numpy as np
 import numpy.typing as npt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -79,6 +80,7 @@ def theory_figure_speed_vs_size_alpha(
     ax.set_xscale("log")
     ax.set_yscale("log")
     ax.set_ylim(1e0, 1e3)
+    ax.yaxis.set_major_formatter(mticker.ScalarFormatter())
 
     # Lines of constant alpha
     for _angle in [1 / 50, 1 / 400, 1 / 200, 1 / 800]:
