@@ -77,6 +77,8 @@ def theory_figure_speed_vs_size_alpha(
     ax.set_ylabel("$a$ [km]")
     ax.grid()
     ax.set_xscale("log")
+    ax.set_yscale("log")
+    ax.set_ylim(1e0, 1e3)
 
     # Lines of constant alpha
     for _angle in [1 / 50, 1 / 400, 1 / 200, 1 / 800]:
@@ -196,7 +198,7 @@ if __name__ == "__main__":
 
     # Parameters
     # a = np.arange(0, 301, 50) * 1e3
-    a = np.geomspace(1, 301, 100) * 1e3
+    a = np.geomspace(1e0, 1e3, 100) * 1e3
     # alpha = 1. / np.logspace(1.5, 3.1, 100)
     alpha = np.geomspace(1e-4, 1e-1, 100)
     U = np.arange(0, 60 + 0.1, 0.5)
