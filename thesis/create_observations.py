@@ -3,12 +3,14 @@
 import os
 import sys
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.observations as fo
+# fmt: on
 
 
-## Parameters
+# Parameters
 x_min = 0
 x_max = 1e6
 
@@ -20,13 +22,13 @@ obs_dir = f"{script_dir}/obs"
 os.makedirs(obs_dir, exist_ok=True)
 
 
-## Observation Points and Cross Sections
+# Observation Points and Cross Sections
 obs = []
 obs.append(
     fo.ObservationPoint(
         name="Test Point",
         x=10e3,
-        y=x_max/2.,
+        y=x_max / 2.0,
     )
 )
 
@@ -41,7 +43,7 @@ for i in range(4):
     )
 
 for i in range(5):
-    _y = i*y_max/4
+    _y = i * y_max / 4
     obs.append(
         fo.ObservationCrossSection(
             name=f"Cross Shore y={_y/1000:0.0f}km",
