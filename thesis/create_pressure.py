@@ -7,17 +7,19 @@ import time
 import dask.array as da
 import numpy as np
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.pressure as fp
+# fmt: on
 
 
-### Start
+# Start
 t0 = time.perf_counter()
 print(f"\nStart creating bathymetry-files for exp")
 
 
-### Parameters
+# Parameters
 # pressure distribution
 t0_value = 10000.
 U_list = np.array([5, 15, 25])
@@ -41,15 +43,16 @@ t_max = 50. * 3600.
 t_step = 3600. / 10.
 
 
-### Directories
+# Directories
 current_dir = os.path.dirname(os.path.realpath(__file__))
 pressure_dir = f"{current_dir}/pressure"
 
 os.makedirs(pressure_dir, exist_ok=True)
 
 
-### Convert parameters
-x0_list, a_list, p0_list, U_list = np.meshgrid(x0_list, a_list, p0_list, U_list, indexing="ij")
+# Convert parameters
+x0_list, a_list, p0_list, U_list = np.meshgrid(
+    x0_list, a_list, p0_list, U_list, indexing="ij",)
 x0_list = np.ravel(x0_list)
 a_list = np.ravel(a_list)
 p0_list = np.ravel(p0_list)
@@ -59,14 +62,14 @@ cases = np.arange(len(U_list))
 num_cases = np.size(cases)
 
 
-### Check parameters
+# Check parameters
 assert np.size(U_list) == num_cases
 assert np.size(a_list) == num_cases
 assert np.size(p0_list) == num_cases
 assert np.size(x0_list) == num_cases
 
 
-### Save parameters to file
+# Save parameters to file
 print("\nPressure fields for the following cases are computed: \ncase \tU \ta \tp0 \tx0")
 with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
     file.write(f"case,U,a,p0,x0\n")
@@ -78,7 +81,7 @@ with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
     del line, i
 
 
-### Grid
+# Grid
 x_num = int((x_max - x_min) / x_step + 1)
 y_num = int((y_max - y_min) / y_step + 1)
 
@@ -94,7 +97,7 @@ print("Grid parameters:")
 print(f"{x.size=}\t\t{y.size=}\t\t{t.size=}")
 print(f"{x.chunksize=}\t{y.chunksize=}\t{t.chunksize=}")
 
-### Function
+# Function
 def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
     """ Pressure disturbance distribution used for experiments
 
@@ -120,33 +123,34 @@ def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
     )
 
 
-### Compute fields
+# Compute fields
 for case_number in range(num_cases):
-    ## Set parameters
+    # Set parameters
     case = cases[case_number]
     U = U_list[case_number]
     a = a_list[case_number]
     p0 = p0_list[case_number]
     x0 = x0_list[case_number]
 
-    ## Set paths
+    # Set paths
     filename = f"{pressure_dir}/exp_{case:02.0f}"
     figurename = f"{pressure_dir}/fig_exp_{case:02.0f}"
 
-    ## Compute pressure
-    print(f"\nComputing pressure field for {case=:02.0f} ({U=}, {a=}, {p0=}, {x0=})")
+    # Compute pressure
+    print(
+        f"\nComputing pressure field for {case=:02.0f} ({U=}, {a=}, {p0=}, {x0=})")
     p = pressure(xx, yy, tt, t0_value, U, a, p0, x0).astype(np.float32)
 
-    ## Process pressure
+    # Process pressure
     print(f"Process pressure field for {case=:02.0f}")
     data = fp.convert_to_xarray(t, x, y, p.compute())
     del p
 
-    ## Write field
+    # Write field
     print(f"Writing pressure field for {case=:02.0f}")
     fp.write_pressure(data, filename)
 
-    ## Write forcing file
+    # Write forcing file
     print(f"Overwriting forcing file for {case=:02.0f}")
     with open(f"{pressure_dir}/forcing_exp_{case:02.0f}.ext", "w") as file:
         file.write("* Meteo forcing \n")
@@ -156,7 +160,7 @@ for case_number in range(num_cases):
         file.write("METHOD   = 1 \n")
         file.write("OPERAND  = O \n")
 
-    ## Visualise field
+    # Visualise field
     print(f"Plotting pressure field for {case=:02.0f}")
     fp.plot_pressure(data, filename=figurename)
 
