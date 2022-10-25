@@ -21,11 +21,11 @@ print(f"\nStart creating bathymetry-files for exp")
 
 # Parameters
 # pressure distribution
-t0_value = 10000.
-U_list = np.array([5, 15, 25])
-a_list = np.array([10000, 20000, 30000])
-p0_list = np.array([2000])
-x0_list = np.array([0, 50000])
+t0_value = 10000
+U_list = np.array([5, 15, 25], dtype=float)
+a_list = np.array([10000, 20000, 30000], dtype=float)
+p0_list = np.array([2000], dtype=float)
+x0_list = np.array([0, 50000], dtype=float)
 
 # cross shore (meters)
 x_min = 0
@@ -39,8 +39,8 @@ y_step = x_step
 
 # time (seconds)
 t_min = 0
-t_max = 50. * 3600.
-t_step = 3600. / 10.
+t_max = 50.0 * 3600.0
+t_step = 3600.0 / 10.0
 
 
 # Directories
@@ -52,7 +52,12 @@ os.makedirs(pressure_dir, exist_ok=True)
 
 # Convert parameters
 x0_list, a_list, p0_list, U_list = np.meshgrid(
-    x0_list, a_list, p0_list, U_list, indexing="ij",)
+    x0_list,
+    a_list,
+    p0_list,
+    U_list,
+    indexing="ij",
+)
 x0_list = np.ravel(x0_list)
 a_list = np.ravel(a_list)
 p0_list = np.ravel(p0_list)
@@ -70,7 +75,9 @@ assert np.size(x0_list) == num_cases
 
 
 # Save parameters to file
-print("\nPressure fields for the following cases are computed: \ncase \tU \ta \tp0 \tx0")
+print(
+    "\nPressure fields for the following cases are computed: \ncase \tU \ta \tp0 \tx0"
+)
 with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
     file.write(f"case,U,a,p0,x0\n")
     for i in range(num_cases):
@@ -85,9 +92,9 @@ with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
 x_num = int((x_max - x_min) / x_step + 1)
 y_num = int((y_max - y_min) / y_step + 1)
 
-x = da.linspace(x_min, x_max, x_num, chunks="auto")
-y = da.linspace(y_min, y_max, y_num, chunks="auto")
-t = da.arange(t_min, t_max+1, t_step, chunks=20)
+x = da.linspace(x_min, x_max, x_num, chunks="auto", dtype=float)
+y = da.linspace(y_min, y_max, y_num, chunks="auto", dtype=float)
+t = da.arange(t_min, t_max + 1, t_step, chunks=20, dtype=float)
 
 t_num = t.size
 
@@ -98,8 +105,17 @@ print(f"{x.size=}\t\t{y.size=}\t\t{t.size=}")
 print(f"{x.chunksize=}\t{y.chunksize=}\t{t.chunksize=}")
 
 # Function
-def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
-    """ Pressure disturbance distribution used for experiments
+def pressure(
+    x,
+    y,
+    t,
+    t0=10000.0,
+    U=50.0,
+    a=200000.0,
+    p0=2000.0,
+    x0=0.0
+):
+    """Pressure disturbance distribution used for experiments
 
     Input:
         x:  array of x-coordinates
@@ -118,8 +134,8 @@ def pressure(x, y, t, t0=10000., U=50., a=200000., p0=2000., x0=0.):
     """
     return (
         p0
-        * (1. - da.exp(-t / t0))
-        * da.exp(-((x - x0)**2. + (y - U * t)**2.) / a**2.)
+        * (1.0 - da.exp(-t / t0))
+        * da.exp(-((x - x0) ** 2.0 + (y - U * t) ** 2.0) / a**2.0)
     )
 
 
@@ -137,8 +153,7 @@ for case_number in range(num_cases):
     figurename = f"{pressure_dir}/fig_exp_{case:02.0f}"
 
     # Compute pressure
-    print(
-        f"\nComputing pressure field for {case=:02.0f} ({U=}, {a=}, {p0=}, {x0=})")
+    print(f"\nComputing pressure field for {case=:02.0f} ({U=}, {a=}, {p0=}, {x0=})")
     p = pressure(xx, yy, tt, t0_value, U, a, p0, x0).astype(np.float32)
 
     # Process pressure
