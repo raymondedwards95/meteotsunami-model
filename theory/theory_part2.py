@@ -199,9 +199,7 @@ if __name__ == "__main__":
     os.makedirs(figure_dir, exist_ok=True)
 
     # Parameters
-    # a = np.arange(0, 301, 50) * 1e3
     a = np.geomspace(1e0, 1e3, 100) * 1e3
-    # alpha = 1. / np.logspace(1.5, 3.1, 100)
     alpha = np.geomspace(1e-4, 1e-1, 100)
     U = np.arange(0, 60 + 0.1, 0.5)
 
