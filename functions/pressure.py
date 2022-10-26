@@ -29,12 +29,11 @@ import functions.utilities as fu
 def _find_step(
     x: npt.ArrayLike,
 ) -> Numeric:
-    """ Find the step between two values in an array """
+    """Find the step between two values in an array"""
     dx = np.gradient(x)
 
     if not np.all(np.isclose(np.mean(dx), dx)):
-        print(
-            f"# Values are not equally spaced (mean: {np.mean(x)}; sd: {np.std(x)})")
+        print(f"# Values are not equally spaced (mean: {np.mean(x)}; sd: {np.std(x)})")
 
     return np.mean(dx)
 
@@ -47,7 +46,7 @@ def convert_to_xarray(
     savename: str = None,
     close: bool = False,
 ) -> xr.DataArray | None:
-    """ Function to convert separate numpy arrays for t, x, y and p to a single DataArray for writing to files
+    """Function to convert separate numpy arrays for t, x, y and p to a single DataArray for writing to files
 
     Input:
         `t`:        1d array with time since 1970-01-01 00:00:00 in seconds (shape = M)
@@ -84,25 +83,30 @@ def convert_to_xarray(
             savename += ".nc"
         data.to_netcdf(
             savename,
-            encoding={"p": {
-                "zlib": True,
-                "complevel": 1,
-                "least_significant_digit": 3
-            }}
+            encoding={
+                "p": {"zlib": True, "complevel": 1, "least_significant_digit": 3}
+            },
         )
         print(f"# Saved data-array as {savename}")
 
     t1 = time.perf_counter_ns()
     print(
-        f"# Finished converting pressure data to a data-array in {(t1-t0)*1e-9:0.3f} seconds")
+        f"# Finished converting pressure data to a data-array in {(t1-t0)*1e-9:0.3f} seconds"
+    )
 
     if close:
         return
     return data["p"]
 
 
-def filter_pressure(data: xr.DataArray, xmin: Numeric = None, xmax: Numeric = None, ymin: Numeric = None, ymax: Numeric = None,) -> xr.DataArray:
-    """ Rounds data and remove columns and rows that only contain zeros """
+def filter_pressure(
+    data: xr.DataArray,
+    xmin: Numeric = None,
+    xmax: Numeric = None,
+    ymin: Numeric = None,
+    ymax: Numeric = None,
+) -> xr.DataArray:
+    """Rounds data and remove columns and rows that only contain zeros"""
     t0 = time.perf_counter_ns()
     print(f"# Start filtering data")
     shape = data.shape
@@ -126,8 +130,8 @@ def filter_pressure(data: xr.DataArray, xmin: Numeric = None, xmax: Numeric = No
     data = data.round(2)
 
     # Find cols and rows where all values are close to 0
-    ix = np.argwhere(~ np.all(np.isclose(data, 0), axis=(0, 1)))
-    iy = np.argwhere(~ np.all(np.isclose(data, 0), axis=(0, 2)))
+    ix = np.argwhere(~np.all(np.isclose(data, 0), axis=(0, 1)))
+    iy = np.argwhere(~np.all(np.isclose(data, 0), axis=(0, 2)))
 
     # Apply options
     if xmin is not None:
@@ -162,8 +166,12 @@ def filter_pressure(data: xr.DataArray, xmin: Numeric = None, xmax: Numeric = No
     print(f"# Filtered data in {(t1-t0)*1e-9:0.3f} seconds")
     print(f"# Old dimensions: {shape}")
     print(f"# New dimensions: {data.shape}")
-    print(f"# x: {ixmin}-{ixmax} -> {data['x'].values.min():0.1f}-{data['x'].values.max():0.1f}")
-    print(f"# y: {iymin}-{iymax} -> {data['y'].values.min():0.1f}-{data['y'].values.max():0.1f}")
+    print(
+        f"# x: {ixmin}-{ixmax} -> {data['x'].values.min():0.1f}-{data['x'].values.max():0.1f}"
+    )
+    print(
+        f"# y: {iymin}-{iymax} -> {data['y'].values.min():0.1f}-{data['y'].values.max():0.1f}"
+    )
     return data
 
 
@@ -171,7 +179,7 @@ def write_pressure(
     data: xr.DataArray,
     filename: str,
 ) -> None:
-    """ Function to write a pressure field to a `pressure.amp` file for use with Delft3D-FM
+    """Function to write a pressure field to a `pressure.amp` file for use with Delft3D-FM
 
     Input:
         `data`:     pressure field and coordinate data
@@ -260,10 +268,12 @@ unit1           = Pa
                     # 1.: -0.00 -> 0.00 (remove minus)
                     # 2.: 0.00 -> 0 (remove .00)
 
-                    p_ty = p[i, -1*n, :]
-                    s = " ".join(f"{elem:0.02f}" for elem in p_ty) \
-                        .replace("-0.00", "0.00") \
+                    p_ty = p[i, -1 * n, :]
+                    s = (
+                        " ".join(f"{elem:0.02f}" for elem in p_ty)
+                        .replace("-0.00", "0.00")
                         .replace("0.00", "0")
+                    )
 
                     # write lines
                     file.write(s)
@@ -286,7 +296,7 @@ def plot_pressure(
     y_min: Numeric = None,
     y_max: Numeric = None,
 ) -> plt.Figure:
-    """ Function to visualize pressure data
+    """Function to visualize pressure data
 
     Input:
         `data`:         pressure and coordinate data
@@ -315,7 +325,13 @@ def plot_pressure(
     # filter data
     if x_min is None:
         x_min = data["x"].values.min()
-    data = filter_pressure(data, xmin=x_min, xmax=x_max, ymin=y_min, ymax=y_max,)
+    data = filter_pressure(
+        data,
+        xmin=x_min,
+        xmax=x_max,
+        ymin=y_min,
+        ymax=y_max,
+    )
 
     # extract data
     x = data["x"].values
@@ -324,14 +340,19 @@ def plot_pressure(
     p = data.interp(t=t).compute().values
 
     p_max = np.ceil(np.max([p.max(), np.abs(p.min())]))
-    p_min = -1. * p_max
+    p_min = -1.0 * p_max
 
     if x_scales is None:
-        x_scales = [x.min() / 1000., x.max() / 1000.]
+        x_scales = [x.min() / 1000.0, x.max() / 1000.0]
 
     # figure
-    fig, ax = plt.subplots(1, t_num+1, sharey=True, squeeze=False,
-                           gridspec_kw={"width_ratios": [4]*t_num + [1]})
+    fig, ax = plt.subplots(
+        1,
+        t_num + 1,
+        sharey=True,
+        squeeze=False,
+        gridspec_kw={"width_ratios": [4] * t_num + [1]},
+    )
     fig.set_size_inches(FIGSIZE_WIDE)
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
@@ -342,13 +363,13 @@ def plot_pressure(
     for i in range(t_num):
         idx = t.size * i // t_num
         im[i] = ax[i].contourf(
-            x / 1000.,
-            y / 1000.,
+            x / 1000.0,
+            y / 1000.0,
             p[i, :, :],
             levels=np.linspace(p_min, p_max, 100),
             vmin=p_min,
             vmax=p_max,
-            cmap=cmo.cm.curl
+            cmap=cmo.cm.curl,
         )
         ax[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
         ax[i].set_xlim(x_scales)  # make it automatic?
@@ -366,8 +387,12 @@ def plot_pressure(
     cbar.set_ticks(np.linspace(np.floor(p.min()), np.ceil(p.max()), 11))
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI,
-                pil_kwargs={"optimize": True, "compress_level": 9})
+    fig.savefig(
+        savename,
+        bbox_inches="tight",
+        dpi=FIG_DPI,
+        pil_kwargs={"optimize": True, "compress_level": 9},
+    )
     if not keep_open:
         plt.close(fig)
     print(f"# Saved figure as '{savename}'")
@@ -388,16 +413,18 @@ if __name__ == "__main__":
 
     # Define function for computing 'pressure'
     def f(x, y, t):
-        return 1. \
-            * (1. - da.exp(-t/(3.*3600.))) \
-            * da.sin(x * np.pi / 2000.) \
-            * da.sin(y * np.pi / 2000.) \
-            * da.exp(-(y**2.) / (3e3)**2.)
+        return (
+            1.0
+            * (1.0 - da.exp(-t / (3.0 * 3600.0)))
+            * da.sin(x * np.pi / 2000.0)
+            * da.sin(y * np.pi / 2000.0)
+            * da.exp(-(y**2.0) / (3e3) ** 2.0)
+        )
 
     # Define grid
     x = np.linspace(-5000, 5000, 101)
     y = np.linspace(-15000, 15000, 200)
-    t = np.linspace(0, 10, 21) * 3600.
+    t = np.linspace(0, 10, 21) * 3600.0
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
     tt = tt.rechunk("auto")
