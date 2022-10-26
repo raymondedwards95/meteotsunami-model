@@ -42,7 +42,7 @@ p0 = 2000.0
 # x_steps: 10 km, i.e. same as model-grid
 x_min = 0.0
 x_max = 1e6
-x_steps = np.array([10, 5, 20, 40, 10, 10, 10, 10, 10, 10, 10]) * 1e3
+x_steps = np.array([10, 5, 20, 40, 10, 10, 10, 10, 10, 10, 10], dtype=np.float32) * 1e3
 
 # along shore (meters)
 # y_min: -10000 km
@@ -59,11 +59,11 @@ y_steps = x_steps
 # t_step: 30 minutes
 t_min = 0
 t_max = 55 * 3600.0
-t_steps = np.array([30, 30, 30, 30, 60, 20, 15, 30, 30, 30, 30]) * 60.0
+t_steps = np.array([30, 30, 30, 30, 60, 20, 15, 30, 30, 30, 30], dtype=np.float32) * 60.0
 
 # other
 # x0 is the x-coordinate of the center
-x0_vals = [0.0] * num_cases
+x0_vals = np.full(num_cases, 0, dtype=np.float32)
 x0_vals[7] = 1e5
 x0_vals[8] = 2e5
 x0_vals[9] = 3e5
@@ -146,9 +146,9 @@ for case_number in range(num_cases):
     x_num = int((x_max - x_min) / x_step + 1)
     y_num = int((y_max - y_min) / y_step + 1)
 
-    x = da.linspace(x_min, x_max, x_num, chunks=-1)
-    y = da.linspace(y_min, y_max, y_num, chunks=-1)
-    t = da.arange(t_min, t_max + 1, t_step, chunks=-1)
+    x = da.linspace(x_min, x_max, x_num, chunks=-1, dtype=np.float32)
+    y = da.linspace(y_min, y_max, y_num, chunks=-1, dtype=np.float32)
+    t = da.arange(t_min, t_max + 1, t_step, chunks=-1, dtype=np.float32)
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
     tt = tt.rechunk("auto")
