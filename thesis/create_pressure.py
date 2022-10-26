@@ -138,6 +138,8 @@ print(f"{yy.chunksize=}")
 
 # Compute fields
 for case_number in range(num_cases):
+    ta = time.perf_counter()
+
     # Set parameters
     case = cases[case_number]
     U = U_array[case_number]
@@ -179,6 +181,10 @@ for case_number in range(num_cases):
     # Visualise field
     print(f"Plotting pressure field for {case=:02.0f}")
     fp.plot_pressure(data, filename=figurename)
+
+    # End
+    tb = time.perf_counter()
+    print(f"Finished creating pressure-field {case=:02.0f} in {tb-ta:0.1f} seconds")
 
 
 # plt.show()
