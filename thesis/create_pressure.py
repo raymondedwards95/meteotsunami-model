@@ -20,6 +20,31 @@ print(f"\nStart creating bathymetry-files for exp")
 
 
 # Parameters
+def pressure(x, y, t, t0=10000.0, U=50.0, a=200000.0, p0=2000.0, x0=0.0):
+    """Pressure disturbance distribution used for experiments
+
+    Input:
+        x:  array of x-coordinates
+        y:  array of y-coordinates
+        t:  array of time-coordinates
+
+    Options:
+        t0: growth-timescale factor
+        U:  travel velocity of pressure disturbance
+        a:  size of pressure disturbance
+        p0: magnitude of pressure disturbance
+        x0: x-coordinate of the center of the pressure disturbance
+
+    Output:
+        p:  pressure
+    """
+    return (
+        p0
+        * (1.0 - da.exp(-t / t0))
+        * da.exp(-((x - x0) ** 2.0 + (y - U * t) ** 2.0) / a**2.0)
+    )
+
+
 # pressure distribution
 t0_value = 10000
 U_list = np.array([5, 15, 25], dtype=float)
@@ -51,27 +76,27 @@ os.makedirs(pressure_dir, exist_ok=True)
 
 
 # Convert parameters
-x0_list, a_list, p0_list, U_list = np.meshgrid(
+x0_array, a_array, p0_array, U_array = np.meshgrid(
     x0_list,
     a_list,
     p0_list,
     U_list,
     indexing="ij",
 )
-x0_list = np.ravel(x0_list)
-a_list = np.ravel(a_list)
-p0_list = np.ravel(p0_list)
-U_list = np.ravel(U_list)
+x0_array = np.ravel(x0_array)
+a_array = np.ravel(a_array)
+p0_array = np.ravel(p0_array)
+U_array = np.ravel(U_array)
 
-cases = np.arange(len(U_list))
+cases = np.arange(len(U_array))
 num_cases = np.size(cases)
 
 
 # Check parameters
-assert np.size(U_list) == num_cases
-assert np.size(a_list) == num_cases
-assert np.size(p0_list) == num_cases
-assert np.size(x0_list) == num_cases
+assert np.size(U_array) == num_cases
+assert np.size(a_array) == num_cases
+assert np.size(p0_array) == num_cases
+assert np.size(x0_array) == num_cases
 
 
 # Save parameters to file
@@ -81,7 +106,7 @@ print(
 with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
     file.write(f"case,U,a,p0,x0\n")
     for i in range(num_cases):
-        line = f"{cases[i]:02.0f},{U_list[i]:0.0f},{a_list[i]:0.0f},{p0_list[i]:0.0f},{x0_list[i]:0.0f}"
+        line = f"{cases[i]:02.0f},{U_array[i]:0.0f},{a_array[i]:0.0f},{p0_array[i]:0.0f},{x0_array[i]:0.0f}"
         print(line.replace(",", "\t"))
         file.write(f"{line}\n")
 
@@ -104,49 +129,15 @@ print("Grid parameters:")
 print(f"{x.size=}\t\t{y.size=}\t\t{t.size=}")
 print(f"{x.chunksize=}\t{y.chunksize=}\t{t.chunksize=}")
 
-# Function
-def pressure(
-    x,
-    y,
-    t,
-    t0=10000.0,
-    U=50.0,
-    a=200000.0,
-    p0=2000.0,
-    x0=0.0
-):
-    """Pressure disturbance distribution used for experiments
-
-    Input:
-        x:  array of x-coordinates
-        y:  array of y-coordinates
-        t:  array of time-coordinates
-
-    Options:
-        t0: growth-timescale factor
-        U:  travel velocity of pressure disturbance
-        a:  size of pressure disturbance
-        p0: magnitude of pressure disturbance
-        x0: x-coordinate of the center of the pressure disturbance
-
-    Output:
-        p:  pressure
-    """
-    return (
-        p0
-        * (1.0 - da.exp(-t / t0))
-        * da.exp(-((x - x0) ** 2.0 + (y - U * t) ** 2.0) / a**2.0)
-    )
-
 
 # Compute fields
 for case_number in range(num_cases):
     # Set parameters
     case = cases[case_number]
-    U = U_list[case_number]
-    a = a_list[case_number]
-    p0 = p0_list[case_number]
-    x0 = x0_list[case_number]
+    U = U_array[case_number]
+    a = a_array[case_number]
+    p0 = p0_array[case_number]
+    x0 = x0_array[case_number]
 
     # Set paths
     filename = f"{pressure_dir}/exp_{case:02.0f}"
