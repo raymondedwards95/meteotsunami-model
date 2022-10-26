@@ -31,16 +31,16 @@ num_cases = len(cases)
 # U: 50 m/s
 # a: 200 km
 # p0: 2000 Pa
-T0 = 10000.
-U = 50.
-a = 200000.
-p0 = 2000.
+T0 = 10000.0
+U = 50.0
+a = 200000.0
+p0 = 2000.0
 
 # cross shore (meters)
 # x_min: 0 km
 # x_max: 1000 km
 # x_steps: 10 km, i.e. same as model-grid
-x_min = 0.
+x_min = 0.0
 x_max = 1e6
 x_steps = np.array([10, 5, 20, 40, 10, 10, 10, 10, 10, 10, 10]) * 1e3
 
@@ -58,12 +58,12 @@ y_steps = x_steps
 # t_max: 70 hours
 # t_step: 30 minutes
 t_min = 0
-t_max = 55 * 3600.
-t_steps = np.array([30, 30, 30, 30, 60, 20, 15, 30, 30, 30, 30]) * 60.
+t_max = 55 * 3600.0
+t_steps = np.array([30, 30, 30, 30, 60, 20, 15, 30, 30, 30, 30]) * 60.0
 
 # other
 # x0 is the x-coordinate of the center
-x0_vals = [0.] * num_cases
+x0_vals = [0.0] * num_cases
 x0_vals[7] = 1e5
 x0_vals[8] = 2e5
 x0_vals[9] = 3e5
@@ -83,7 +83,9 @@ assert len(y_steps) == num_cases
 assert len(t_steps) == num_cases
 assert len(x0_vals) == num_cases
 
-print("\nPressure fields for the following cases are computed: \ncase \tx_step \ty_step \tt_step \tx0")
+print(
+    "\nPressure fields for the following cases are computed: \ncase \tx_step \ty_step \tt_step \tx0"
+)
 with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
     file.write(f"case,x_step,y_step,t_step,x0\n")
     for i in range(num_cases):
@@ -95,8 +97,8 @@ with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
 
 
 # Function
-def pressure(x, y, t, t0=T0, U=U, a=a, p0=p0, x0=0.):
-    """ Pressure disturbance distribution used for experiments
+def pressure(x, y, t, t0=T0, U=U, a=a, p0=p0, x0=0.0):
+    """Pressure disturbance distribution used for experiments
 
     Input:
         x:  array of x-coordinates
@@ -115,8 +117,8 @@ def pressure(x, y, t, t0=T0, U=U, a=a, p0=p0, x0=0.):
     """
     return (
         p0
-        * (1. - da.exp(-t / t0))
-        * da.exp(-((x - x0)**2. + (y - U * t)**2.) / a**2.)
+        * (1.0 - da.exp(-t / t0))
+        * da.exp(-((x - x0) ** 2.0 + (y - U * t) ** 2.0) / a**2.0)
     )
 
 
@@ -133,7 +135,8 @@ for case_number in range(num_cases):
     x0 = x0_vals[case_number]
 
     print(
-        f"\nComputing pressure field for case {case:02.0f} ({x_step:0.1f}, {y_step:0.1f}, {t_step:0.1f}, {x0:0.1f})")
+        f"\nComputing pressure field for case {case:02.0f} ({x_step:0.1f}, {y_step:0.1f}, {t_step:0.1f}, {x0:0.1f})"
+    )
 
     # Set paths
     filename = f"{pressure_dir}/repr_{case:02.0f}"
@@ -145,7 +148,7 @@ for case_number in range(num_cases):
 
     x = da.linspace(x_min, x_max, x_num, chunks=-1)
     y = da.linspace(y_min, y_max, y_num, chunks=-1)
-    t = da.arange(t_min, t_max+1, t_step, chunks=-1)
+    t = da.arange(t_min, t_max + 1, t_step, chunks=-1)
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
     tt = tt.rechunk("auto")
@@ -192,8 +195,7 @@ for case_number in range(num_cases):
 
     # End
     tb = time.perf_counter()
-    print(
-        f"Finished creating pressure-field for {case=:02.0f} in {tb-ta:0.1f} seconds")
+    print(f"Finished creating pressure-field for {case=:02.0f} in {tb-ta:0.1f} seconds")
 
 
 # End
