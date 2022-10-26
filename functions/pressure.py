@@ -155,8 +155,8 @@ def filter_pressure(
         iymax = np.max(iy)
 
     # Only remove cols and rows if they are on the outside
-    slice_ix = slice(ixmin, ixmax)
-    slice_iy = slice(iymin, iymax)
+    slice_ix = slice(ixmin, ixmax + 1)
+    slice_iy = slice(iymin, iymax + 1)
 
     # Apply slicing
     data = data[:, :, slice_ix][:, slice_iy, :]
