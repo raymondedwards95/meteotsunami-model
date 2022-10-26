@@ -101,9 +101,10 @@ def convert_to_xarray(
     return data["p"]
 
 
-def filter_data(data: xr.DataArray) -> xr.DataArray:
+def filter_pressure(data: xr.DataArray) -> xr.DataArray:
     """ Rounds data and remove columns and rows that only contain zeros """
     t0 = time.perf_counter_ns()
+    print(f"# Start filtering data")
     shape = data.shape
 
     # Round
@@ -147,7 +148,7 @@ def write_pressure(
     print(f"# Writing pressure data to '{filename}'")
 
     # remove zero columns and rows
-    data = filter_data(data)
+    data = filter_pressure(data)
 
     # prepare data
     x_num = data["x"].size
@@ -199,7 +200,7 @@ unit1           = Pa
                 print(f"# Step {i+1:4.0f} of {t_num:0.0f} ({(i+1)/t_num*100:0.1f}%)")
 
             file.write(
-                f"TIME = {t[i]/3600.:0.06f} hours since 1970-01-01 00:00:00 +00:00\n".replace(".000000", ".0")
+                f"TIME = {t[i]/3600.:0.6f} hours since 1970-01-01 00:00:00 +00:00\n".replace(".000000", ".0")
             )
             # fmt: on
 
