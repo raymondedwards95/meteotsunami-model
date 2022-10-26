@@ -10,12 +10,12 @@ import Libraries.FlowFlexibleMeshFunctions as FFMF
 import Libraries.StandardFunctions as SF
 
 
-## Filename (adjust following!)
+# Filename (adjust following!)
 grid_dir = os.path.dirname(os.path.realpath(__file__)) + "/grid"
 os.makedirs(grid_dir, exist_ok=True)
 
 
-## Grid
+# Grid
 case = [0, 20, 21, 22]
 num_cases = len(case)
 
@@ -34,7 +34,7 @@ x_length = x_max - x_min
 y_length = y_max - y_min
 
 
-## Write to file
+# Write to file
 for i in range(num_cases):
     x_num = int(x_length / x_step[i]) + 1
     y_num = int(y_length / y_step[i]) + 1
@@ -44,7 +44,15 @@ for i in range(num_cases):
     model = FFMF.WaterFlowFMModel()
     SF.AddToProject(model)
     model.WriteNetFile(net_file_path)
-    FFMF.GenerateRegularGridForModelUsingExtend(model, x_length, y_length, x_num, y_num, x_min, y_min)
+    FFMF.GenerateRegularGridForModelUsingExtend(
+        model,
+        x_length,
+        y_length,
+        x_num,
+        y_num,
+        x_min,
+        y_min,
+    )
     model.WriteNetFile(net_file_path)
 
     print("Finished writing to", net_file_path)
