@@ -374,8 +374,8 @@ def plot_pressure(
         ax[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
         ax[i].set_xlim(x_scales)  # make it automatic?
 
-    ax[t_num // 2].set_xlabel("$x$ [km]")
-    ax[0].set_ylabel("$y$ [km]")
+    fig.supxlabel("$x$ [km]")
+    fig.supylabel("$y$ [km]")
 
     # remove sharey from last subplot for colorbar
     ax[-1].get_shared_y_axes().remove(ax[-1])
