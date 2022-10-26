@@ -154,8 +154,6 @@ def filter_pressure(data: xr.DataArray, xmin: Numeric = None, xmax: Numeric = No
     slice_ix = slice(ixmin, ixmax)
     slice_iy = slice(iymin, iymax)
 
-    print(ixmax)
-
     # Apply slicing
     data = data[:, :, slice_ix][:, slice_iy, :]
 
@@ -347,7 +345,7 @@ def plot_pressure(
             x / 1000.,
             y / 1000.,
             p[i, :, :],
-            levels=41,
+            levels=np.linspace(p_min, p_max, 100),
             vmin=p_min,
             vmax=p_max,
             cmap=cmo.cm.curl
