@@ -101,11 +101,26 @@ def convert_to_xarray(
     return data["p"]
 
 
-def filter_pressure(data: xr.DataArray) -> xr.DataArray:
+def filter_pressure(data: xr.DataArray, xmin: Numeric = None, xmax: Numeric = None, ymin: Numeric = None, ymax: Numeric = None,) -> xr.DataArray:
     """ Rounds data and remove columns and rows that only contain zeros """
     t0 = time.perf_counter_ns()
     print(f"# Start filtering data")
     shape = data.shape
+
+    # Process options
+    ixmin: int = -1
+    ixmax: int = -1
+    iymin: int = -1
+    iymax: int = -1
+
+    if xmin is not None:
+        ixmin = np.searchsorted(data["x"].values, xmin)
+    if xmax is not None:
+        ixmax = np.searchsorted(data["x"].values, xmax)
+    if ymin is not None:
+        iymin = np.searchsorted(data["y"].values, ymin)
+    if ymax is not None:
+        iymax = np.searchsorted(data["y"].values, ymax)
 
     # Round
     data = data.round(2)
@@ -114,9 +129,32 @@ def filter_pressure(data: xr.DataArray) -> xr.DataArray:
     ix = np.argwhere(~ np.all(np.isclose(data, 0), axis=(0, 1)))
     iy = np.argwhere(~ np.all(np.isclose(data, 0), axis=(0, 2)))
 
+    # Apply options
+    if xmin is not None:
+        ixmin = np.min([ixmin, np.min(ix)])
+    else:
+        ixmin = np.min(ix)
+
+    if xmax is not None:
+        ixmax = np.max([ixmax, np.max(ix)])
+    else:
+        ixmax = np.max(ix)
+
+    if ymin is not None:
+        iymin = np.min([iymin, np.min(iy)])
+    else:
+        iymin = np.min(iy)
+
+    if ymax is not None:
+        iymax = np.max([iymax, np.max(iy)])
+    else:
+        iymax = np.max(iy)
+
     # Only remove cols and rows if they are on the outside
-    slice_ix = slice(np.min(ix), np.max(ix))
-    slice_iy = slice(np.min(iy), np.max(iy))
+    slice_ix = slice(ixmin, ixmax)
+    slice_iy = slice(iymin, iymax)
+
+    print(ixmax)
 
     # Apply slicing
     data = data[:, :, slice_ix][:, slice_iy, :]
@@ -124,8 +162,10 @@ def filter_pressure(data: xr.DataArray) -> xr.DataArray:
     # End
     t1 = time.perf_counter_ns()
     print(f"# Filtered data in {(t1-t0)*1e-9:0.3f} seconds")
-    print(f"# Old dimensions are {shape}")
-    print(f"# New dimensions are {data.shape}")
+    print(f"# Old dimensions: {shape}")
+    print(f"# New dimensions: {data.shape}")
+    print(f"# x: {ixmin}-{ixmax} -> {data['x'].values.min():0.1f}-{data['x'].values.max():0.1f}")
+    print(f"# y: {iymin}-{iymax} -> {data['y'].values.min():0.1f}-{data['y'].values.max():0.1f}")
     return data
 
 
@@ -243,6 +283,10 @@ def plot_pressure(
     filename: str = None,
     x_scales: Numeric = None,
     keep_open: bool = False,
+    x_min: Numeric = None,
+    x_max: Numeric = None,
+    y_min: Numeric = None,
+    y_max: Numeric = None,
 ) -> plt.Figure:
     """ Function to visualize pressure data
 
@@ -251,8 +295,11 @@ def plot_pressure(
 
     Options:
         `filename`:     name of figures
-        `x_scales`:     lower and upper limit of x (should be a list of length 2)
         `keep_open`:    keep figures open after finishing
+        `x_min`:        lower limit of x
+        `x_max`:        upper limit of x
+        `y_min`:        lower limit of y
+        `y_max`:        upper limit of y
     """
     # prepare
     t0 = time.perf_counter_ns()
@@ -267,6 +314,12 @@ def plot_pressure(
 
     t_num = 5
 
+    # filter data
+    if x_min is None:
+        x_min = data["x"].values.min()
+    data = filter_pressure(data, xmin=x_min, xmax=x_max, ymin=y_min, ymax=y_max,)
+
+    # extract data
     x = data["x"].values
     y = data["y"].values
     t = np.linspace(data["t"].min(), data["t"].max(), t_num)
@@ -344,9 +397,9 @@ if __name__ == "__main__":
             * da.exp(-(y**2.) / (3e3)**2.)
 
     # Define grid
-    x = np.linspace(-5000, 5000, 51)
-    y = np.linspace(-10000, 10000, 151)
-    t = np.linspace(0, 10, 15) * 3600.
+    x = np.linspace(-5000, 5000, 101)
+    y = np.linspace(-15000, 15000, 200)
+    t = np.linspace(0, 10, 21) * 3600.
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
     tt = tt.rechunk("auto")
@@ -367,4 +420,4 @@ if __name__ == "__main__":
     write_pressure(data, filename=pressure_file)
 
     # Visualise data
-    plot_pressure(data, filename=pressure_file)
+    plot_pressure(data, filename=pressure_file, y_min=-8e3)
