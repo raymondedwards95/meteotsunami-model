@@ -42,7 +42,13 @@ p0 = 2000.0
 # x_steps: 10 km, i.e. same as model-grid
 x_min = 0.0
 x_max = 1e6
-x_steps = np.array([10, 5, 20, 40, 10, 10, 10, 10, 10, 10, 10], dtype=np.float32) * 1e3
+x_steps = (
+    np.array(
+        [10, 5, 20, 40, 10, 10, 10, 10, 10, 10, 10],
+        dtype=np.float32,
+    )
+    * 1e3
+)
 
 # along shore (meters)
 # y_min: -10000 km
@@ -59,7 +65,13 @@ y_steps = x_steps
 # t_step: 30 minutes
 t_min = 0
 t_max = 55 * 3600.0
-t_steps = np.array([30, 30, 30, 30, 60, 20, 15, 30, 30, 30, 30], dtype=np.float32) * 60.0
+t_steps = (
+    np.array(
+        [30, 30, 30, 30, 60, 20, 15, 30, 30, 30, 30],
+        dtype=np.float32,
+    )
+    * 60.0
+)
 
 # other
 # x0 is the x-coordinate of the center
