@@ -6,6 +6,7 @@ import time
 
 import dask.array as da
 import numpy as np
+import xarray as xr
 
 # fmt: off
 # fix for importing functions below
@@ -47,10 +48,10 @@ def pressure(x, y, t, t0=10000.0, U=50.0, a=200000.0, p0=2000.0, x0=0.0):
 
 # pressure distribution
 t0_value = 10000
-U_list = np.array([5, 15, 25], dtype=float)
-a_list = np.array([10000, 20000, 30000], dtype=float)
-p0_list = np.array([2000], dtype=float)
-x0_list = np.array([0, 50000], dtype=float)
+U_list = np.array([5, 15, 25], dtype=np.float32)
+a_list = np.array([10000, 20000, 30000], dtype=np.float32)
+p0_list = np.array([2000], dtype=np.float32)
+x0_list = np.array([0, 50000], dtype=np.float32)
 
 # cross shore (meters)
 x_min = 0
@@ -117,9 +118,9 @@ with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
 x_num = int((x_max - x_min) / x_step + 1)
 y_num = int((y_max - y_min) / y_step + 1)
 
-x = da.linspace(x_min, x_max, x_num, chunks="auto", dtype=float)
-y = da.linspace(y_min, y_max, y_num, chunks="auto", dtype=float)
-t = da.arange(t_min, t_max + 1, t_step, chunks=20, dtype=float)
+x = da.linspace(x_min, x_max, x_num, chunks="auto", dtype=np.float32)
+y = da.linspace(y_min, y_max, y_num, chunks="auto", dtype=np.float32)
+t = da.arange(t_min, t_max + 1, t_step, chunks=20, dtype=np.float32)
 
 t_num = t.size
 
@@ -149,8 +150,12 @@ for case_number in range(num_cases):
 
     # Process pressure
     print(f"Process pressure field for {case=:02.0f}")
-    data = fp.convert_to_xarray(t, x, y, p.compute())
+    fp.convert_to_xarray(t, x, y, p, savename=filename, close=True)
     del p
+
+    # Re-read data (lazy)
+    print(f"Read data for {case=:02.0f}")
+    data = xr.open_dataarray(f"{filename}.nc", chunks="auto")
 
     # Write field
     print(f"Writing pressure field for {case=:02.0f}")
