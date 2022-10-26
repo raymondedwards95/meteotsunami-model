@@ -11,7 +11,7 @@ import functions.observations as fo
 
 
 # Parameters
-x_min = 0
+x_min = 0.0
 x_max = 1e6
 
 y_min = -1e7
@@ -28,7 +28,7 @@ obs.append(
     fo.ObservationPoint(
         name="Test Point",
         x=10e3,
-        y=x_max/2.,
+        y=x_max / 2.0,
     )
 )
 
@@ -43,7 +43,7 @@ for i in range(4):
     )
 
 for i in range(5):
-    _y = i*y_max/4
+    _y = i * y_max / 4
     obs.append(
         fo.ObservationCrossSection(
             name=f"Cross Shore y={_y/1000:0.0f}km",
