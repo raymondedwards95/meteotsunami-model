@@ -163,7 +163,6 @@ def filter_pressure(
 
     # End
     t1 = time.perf_counter_ns()
-    print(f"# Filtered data in {(t1-t0)*1e-9:0.3f} seconds")
     print(f"# Old dimensions: {shape}")
     print(f"# New dimensions: {data.shape}")
     print(
@@ -172,6 +171,7 @@ def filter_pressure(
     print(
         f"# y: {iymin}-{iymax} -> {data['y'].values.min():0.1f}-{data['y'].values.max():0.1f}"
     )
+    print(f"# Filtered data in {(t1-t0)*1e-9:0.3f} seconds")
     return data
 
 
@@ -366,7 +366,7 @@ def plot_pressure(
             x / 1000.0,
             y / 1000.0,
             p[i, :, :],
-            levels=np.linspace(p_min, p_max, 100),
+            levels=np.linspace(np.round(p.min()), np.ceil(p.max()), 100),
             vmin=p_min,
             vmax=p_max,
             cmap=cmo.cm.curl,
