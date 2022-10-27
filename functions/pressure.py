@@ -105,6 +105,7 @@ def filter_pressure(
     xmax: Numeric = None,
     ymin: Numeric = None,
     ymax: Numeric = None,
+    offset: Numeric = 1,
 ) -> xr.DataArray:
     """Rounds data and remove columns and rows that only contain zeros"""
     t0 = time.perf_counter_ns()
@@ -154,6 +155,14 @@ def filter_pressure(
     else:
         iymax = np.max(iy)
 
+    # Apply offset
+    # Minimum index should be 0 or larger, certainly not negative
+    # Maximum index does not have such restrictions, but limiting to size of original array is safe
+    ixmin = np.max([0, ixmin - offset])
+    ixmax = np.min([data["x"].size, ixmax + offset])
+    iymin = np.max([0, iymin - offset])
+    iymax = np.min([data["y"].size, iymax + offset])
+
     # Only remove cols and rows if they are on the outside
     slice_ix = slice(ixmin, ixmax + 1)
     slice_iy = slice(iymin, iymax + 1)
@@ -166,10 +175,10 @@ def filter_pressure(
     print(f"# Old dimensions: {shape}")
     print(f"# New dimensions: {data.shape}")
     print(
-        f"# x: {ixmin}-{ixmax} -> {data['x'].values.min():0.1f}-{data['x'].values.max():0.1f}"
+        f"# ix = [{ixmin}, {ixmax}] -> x = [{data['x'].values.min():0.1f}, {data['x'].values.max():0.1f}]"
     )
     print(
-        f"# y: {iymin}-{iymax} -> {data['y'].values.min():0.1f}-{data['y'].values.max():0.1f}"
+        f"# iy = [{iymin}, {iymax}] -> x = [{data['y'].values.min():0.1f}, {data['y'].values.max():0.1f}]"
     )
     print(f"# Filtered data in {(t1-t0)*1e-9:0.3f} seconds")
     return data
