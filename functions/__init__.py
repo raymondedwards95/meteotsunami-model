@@ -2,6 +2,7 @@
 import os
 from typing import TypeAlias, Union
 
+import dask.config
 import numpy as np
 import seaborn as sns
 
@@ -34,3 +35,6 @@ os.makedirs(test_results_dir, exist_ok=True)
 
 assert functions_dir.endswith("functions")
 assert test_results_dir.endswith("tests")
+
+# Dask options
+dask.config.set({"array.chunk-size": "512MiB"})
