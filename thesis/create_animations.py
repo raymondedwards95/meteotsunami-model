@@ -55,9 +55,9 @@ print(f"Grid size: {data.sizes}")
 # print(f"Chunksize: {data.chunksizes}")
 
 # Create animations
-anim.animation_alongshore(data, savedir=anim_dir, xlims=[0, 1000])
-anim.animation_contour(data, savedir=anim_dir, xlims=[0, 1000])
-anim.animation_contour_uv(data, savedir=anim_dir, xlims=[0, 1000])
+anim.animation_alongshore(data, savedir=anim_dir)
+anim.animation_contour(data, savedir=anim_dir)
+anim.animation_contour_uv(data, savedir=anim_dir)
 
 # Close data
 data.close()
