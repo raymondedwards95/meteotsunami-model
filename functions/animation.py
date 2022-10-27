@@ -142,7 +142,7 @@ def animation_contour(
         if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+                f"# Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
             )
 
         # remove data in contour plots
@@ -172,21 +172,21 @@ def animation_contour(
         frames=frames,
         interval=1000 / 20,
     )
-    print(f"Creating animation '{savename}'")
+    print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter_ns()
     print(
-        f"Finished contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+        f"# Finished contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
     )
-    print(f"Saved animation as '{savename}'")
+    print(f"# Saved animation as '{savename}'")
 
     if close:
         plt.close(fig)
-        print(f"Figure is closed")
+        print(f"# Figure is closed")
     else:
-        print(f"Figure is not closed!")
+        print(f"# Figure is not closed!")
 
     return
 
@@ -308,7 +308,7 @@ def animation_contour_uv(
         if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+                f"# Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
             )
 
         # remove data in contour plots
@@ -337,21 +337,21 @@ def animation_contour_uv(
         frames=frames,
         interval=1000 / 20,
     )
-    print(f"Creating animation '{savename}'")
+    print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter_ns()
     print(
-        f"Finished uv-contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+        f"# Finished uv-contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
     )
-    print(f"Saved animation as '{savename}'")
+    print(f"# Saved animation as '{savename}'")
 
     if close:
         plt.close(fig)
-        print(f"Figure is closed")
+        print(f"# Figure is closed")
     else:
-        print(f"Figure is not closed!")
+        print(f"# Figure is not closed!")
 
     return
 
@@ -448,7 +448,7 @@ def animation_alongshore(
         if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+                f"# Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
             )
 
         # new data
@@ -467,21 +467,21 @@ def animation_alongshore(
         frames=frames,
         interval=1000 / 20,
     )
-    print(f"Creating animation '{savename}'")
+    print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter_ns()
     print(
-        f"Finished alongshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+        f"# Finished alongshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
     )
-    print(f"Saved animation as '{savename}'")
+    print(f"# Saved animation as '{savename}'")
 
     if close:
         plt.close(fig)
-        print(f"Figure is closed")
+        print(f"# Figure is closed")
     else:
-        print(f"Figure is not closed!")
+        print(f"# Figure is not closed!")
 
     return
 
@@ -577,7 +577,7 @@ def animation_crossshore(
         if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+                f"# Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
             )
 
         # new data
@@ -596,21 +596,21 @@ def animation_crossshore(
         frames=frames,
         interval=1000 / 20,
     )
-    print(f"Creating animation '{savename}'")
+    print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter_ns()
     print(
-        f"Finished crossshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+        f"# Finished crossshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
     )
-    print(f"Saved animation as '{savename}'")
+    print(f"# Saved animation as '{savename}'")
 
     if close:
         plt.close(fig)
-        print(f"Figure is closed")
+        print(f"# Figure is closed")
     else:
-        print(f"Figure is not closed!")
+        print(f"# Figure is not closed!")
 
     return
 
@@ -626,8 +626,8 @@ if __name__ == "__main__":
         f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc",
         chunks={"y": -1, "x": -1, "t": "auto"},
     )
-    print(data.chunksizes)
-    print(data.sizes)
+    print(f"Grid size: {data.sizes}")
+    print(f"Chunksize: {data.chunksizes}")
 
     # Make animations
     animation_alongshore(data, savedir=anim_dir, _test_i_max=25)
