@@ -623,8 +623,11 @@ if __name__ == "__main__":
 
     # Read data
     data = xr.open_dataset(
-        f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc"
+        f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc",
+        chunks={"y": -1, "x": -1, "t": "auto"},
     )
+    print(data.chunksizes)
+    print(data.sizes)
 
     # Make animations
     animation_alongshore(data, savedir=anim_dir, _test_i_max=25)
