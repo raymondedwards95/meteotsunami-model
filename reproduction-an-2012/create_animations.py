@@ -50,9 +50,9 @@ if not os.path.exists(data_file):
     sys.exit(1)
 
 # Get data
-data = xr.open_dataset(data_file, chunks={"y": -1, "x": -1, "t": "auto"})
+data = xr.open_dataset(data_file)#, chunks={"y": -1, "x": -1, "t": "auto"})
 print(f"Grid size: {data.sizes}")
-print(f"Chunksize: {data.chunksizes}")
+# print(f"Chunksize: {data.chunksizes}")
 
 # Create animations
 anim.animation_alongshore(data, savedir=anim_dir, xlims=[0, 1000])
