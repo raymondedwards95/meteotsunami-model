@@ -33,7 +33,7 @@ def animation_contour(
     _test_i_max: Integer = None,
     close: bool = True,
 ) -> None:
-    """ Creates an animation of the top-down view of the water level and surface air pressure data
+    """Creates an animation of the top-down view of the water level and surface air pressure data
 
     Input:
         `data`:     Dataset that contains all variables
@@ -62,15 +62,15 @@ def animation_contour(
 
     x = x - x.min()
     wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
-    wl_min = -1. * wl_max
+    wl_min = -1.0 * wl_max
     p_max = float(np.max([np.abs([p.max(), p.min()])]))
-    p_min = -1. * p_max
+    p_min = -1.0 * p_max
 
     limits = [(wl_min, wl_max), (p_min, p_max)]
     cmaps = [cmo.cm.balance, cmo.cm.curl]
 
     if xlims is None:
-        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
+        xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
 
     # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
@@ -93,7 +93,7 @@ def animation_contour(
             vmin=wl_min,
             vmax=wl_max,
             cmap=cmaps[0],
-            levels=31
+            levels=31,
         )
         plotdata[1] = ax[1].contourf(
             y / 1000,
@@ -102,7 +102,7 @@ def animation_contour(
             vmin=p_min,
             vmax=p_max,
             cmap=cmaps[1],
-            levels=31
+            levels=31,
         )
 
     def set_plottext(i=0):
@@ -124,10 +124,7 @@ def animation_contour(
 
             # colorbar
             plotdata[i].set_clim(limits[i])
-            fig.colorbar(
-                plotdata[i],
-                cax=cax[i]
-            )
+            fig.colorbar(plotdata[i], cax=cax[i])
 
         ax[0].set_xlabel("$y$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
@@ -142,9 +139,11 @@ def animation_contour(
 
     def update(i):
         # progress
-        if not (num_frames-i-1) % (num_frames // 5):
+        if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
-            print(f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)")
+            print(
+                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+            )
 
         # remove data in contour plots
         for _temp in plotdata[0].collections:
@@ -160,10 +159,7 @@ def animation_contour(
         for j in range(2):
             plotdata[j].set_clim(limits[j])
             cax[j].cla()
-            fig.colorbar(
-                plotdata[j],
-                cax=cax[j]
-            )
+            fig.colorbar(plotdata[j], cax=cax[j])
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
@@ -174,14 +170,16 @@ def animation_contour(
         update,
         init_func=initfig,
         frames=frames,
-        interval=1000/20
+        interval=1000 / 20,
     )
     print(f"Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter_ns()
-    print(f"Finished contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)")
+    print(
+        f"Finished contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+    )
     print(f"Saved animation as '{savename}'")
 
     if close:
@@ -200,7 +198,7 @@ def animation_contour_uv(
     _test_i_max: Integer = None,
     close: bool = True,
 ) -> None:
-    """ Creates an animation of the top-down view of the water velocity data
+    """Creates an animation of the top-down view of the water velocity data
 
     Input:
         `data`:     Dataset that contains all variables
@@ -229,15 +227,15 @@ def animation_contour_uv(
 
     x = x - x.min()
     wl_max = float(np.max([np.abs([vel_u.max(), vel_u.min()])]))
-    wl_min = -1. * wl_max
+    wl_min = -1.0 * wl_max
     p_max = float(np.max([np.abs([vel_v.max(), vel_v.min()])]))
-    p_min = -1. * p_max
+    p_min = -1.0 * p_max
 
     limits = [(wl_min, wl_max), (p_min, p_max)]
     cmaps = [cmo.cm.delta, cmo.cm.delta]
 
     if xlims is None:
-        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
+        xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
 
     # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
@@ -260,7 +258,7 @@ def animation_contour_uv(
             vmin=wl_min,
             vmax=wl_max,
             cmap=cmaps[0],
-            levels=31
+            levels=31,
         )
         plotdata[1] = ax[1].contourf(
             y / 1000,
@@ -269,7 +267,7 @@ def animation_contour_uv(
             vmin=p_min,
             vmax=p_max,
             cmap=cmaps[1],
-            levels=31
+            levels=31,
         )
 
     def set_plottext(i=0):
@@ -292,10 +290,7 @@ def animation_contour_uv(
             # colorbar
             plotdata[i].set_clim(limits[i])
             cax[i].cla()
-            fig.colorbar(
-                plotdata[i],
-                cax=cax[i]
-            )
+            fig.colorbar(plotdata[i], cax=cax[i])
 
         ax[0].set_xlabel("$y$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
@@ -310,10 +305,11 @@ def animation_contour_uv(
 
     def update(i):
         # progress
-        if not (num_frames-i-1) % (num_frames // 5):
+        if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)")
+                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+            )
 
         # remove data in contour plots
         for _temp in plotdata[0].collections:
@@ -328,10 +324,7 @@ def animation_contour_uv(
         # colorbar
         for j in range(2):
             plotdata[j].set_clim(limits[j])
-            fig.colorbar(
-                plotdata[j],
-                cax=cax[j]
-            )
+            fig.colorbar(plotdata[j], cax=cax[j])
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
@@ -342,14 +335,16 @@ def animation_contour_uv(
         update,
         init_func=initfig,
         frames=frames,
-        interval=1000/20
+        interval=1000 / 20,
     )
     print(f"Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter_ns()
-    print(f"Finished uv-contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)")
+    print(
+        f"Finished uv-contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+    )
     print(f"Saved animation as '{savename}'")
 
     if close:
@@ -368,7 +363,7 @@ def animation_alongshore(
     _test_i_max: Integer = None,
     close: bool = True,
 ) -> None:
-    """ Creates an animation of an alongshore cross-section of the water level and surface air pressure data
+    """Creates an animation of an alongshore cross-section of the water level and surface air pressure data
 
     Input:
         `data`:     Dataset that contains all variables
@@ -397,12 +392,12 @@ def animation_alongshore(
 
     x = x - x.min()
     wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
-    wl_min = -1. * wl_max
+    wl_min = -1.0 * wl_max
     p_max = float(p.max())
     p_min = float(p.min())
 
     if xlims is None:
-        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
+        xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
 
     # Figure options
     fig, ax = plt.subplots(2, 1, sharex=True)
@@ -415,16 +410,8 @@ def animation_alongshore(
     plottext = np.zeros(1, dtype=object)
 
     def set_plotdata(i=0):
-        plotdata[0] = ax[0].plot(
-            y / 1000,
-            wl.isel(t=i).interp(x=10000),
-            color="C0"
-        )[0]
-        plotdata[1] = ax[1].plot(
-            y / 1000,
-            p.isel(t=i).interp(x=10000),
-            color="C1"
-        )[0]
+        plotdata[0] = ax[0].plot(y / 1000, wl.isel(t=i).interp(x=10000), color="C0")[0]
+        plotdata[1] = ax[1].plot(y / 1000, p.isel(t=i).interp(x=10000), color="C1")[0]
 
     def set_plottext(i=0):
         plottext[0] = ax[0].set_title(
@@ -458,10 +445,11 @@ def animation_alongshore(
 
     def update(i):
         # progress
-        if not (num_frames-i-1) % (num_frames // 5):
+        if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)")
+                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+            )
 
         # new data
         plotdata[0].set_ydata(wl.isel(t=i).interp(x=10000))
@@ -477,14 +465,16 @@ def animation_alongshore(
         update,
         init_func=initfig,
         frames=frames,
-        interval=1000/20
+        interval=1000 / 20,
     )
     print(f"Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter_ns()
-    print(f"Finished alongshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)")
+    print(
+        f"Finished alongshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+    )
     print(f"Saved animation as '{savename}'")
 
     if close:
@@ -502,7 +492,7 @@ def animation_crossshore(
     _test_i_max: Integer = None,
     close: bool = True,
 ) -> None:
-    """ Creates an animation of crossshore cross-sections of the water level and surface air pressure data
+    """Creates an animation of crossshore cross-sections of the water level and surface air pressure data
 
     Input:
         `data`:     Dataset that contains all variables
@@ -529,7 +519,7 @@ def animation_crossshore(
 
     x = x - x.min()
     wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
-    wl_min = -1. * wl_max
+    wl_min = -1.0 * wl_max
     y_max = float(y.max())
 
     # Figure options
@@ -550,7 +540,7 @@ def animation_crossshore(
                 x / 1000,
                 wl.isel(t=i).interp(y=_y[j]),
                 color="C0",
-                label=f"$y={_y[j]/1000:0.0f}$ km"
+                label=f"$y={_y[j]/1000:0.0f}$ km",
             )[0]
 
     def set_plottext(i=0):
@@ -584,10 +574,11 @@ def animation_crossshore(
 
     def update(i):
         # progress
-        if not (num_frames-i-1) % (num_frames // 5):
+        if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)")
+                f"Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+            )
 
         # new data
         for j in range(slices):
@@ -603,14 +594,16 @@ def animation_crossshore(
         update,
         init_func=initfig,
         frames=frames,
-        interval=1000/20
+        interval=1000 / 20,
     )
     print(f"Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
     anim.save(savename)
     t1 = time.perf_counter_ns()
-    print(f"Finished crossshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)")
+    print(
+        f"Finished crossshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+    )
     print(f"Saved animation as '{savename}'")
 
     if close:
@@ -629,7 +622,9 @@ if __name__ == "__main__":
     os.makedirs(anim_dir, exist_ok=True)
 
     # Read data
-    data = xr.open_dataset(f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc")
+    data = xr.open_dataset(
+        f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc"
+    )
 
     # Make animations
     animation_alongshore(data, savedir=anim_dir, _test_i_max=25)
