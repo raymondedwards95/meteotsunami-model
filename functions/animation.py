@@ -47,11 +47,9 @@ def animation_contour(
     if not isinstance(data, xr.Dataset):
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
-    if savedir.endswith(".mp4"):
-        savedir.replace(".mp4", "")
     os.makedirs(savedir, exist_ok=True)
-    savename = f"{savedir}/anim_contours.mp4"
-    savename_static = f"{savedir}/static_contours.png"
+    savename = f"{savedir}/anim_contours.{ANIM_EXT}"
+    savename_static = f"{savedir}/static_contours"
 
     # Shortcuts
     x = data["x"]
@@ -212,11 +210,9 @@ def animation_contour_uv(
     if not isinstance(data, xr.Dataset):
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
-    if savedir.endswith(".mp4"):
-        savedir.replace(".mp4", "")
     os.makedirs(savedir, exist_ok=True)
-    savename = f"{savedir}/anim_uv_cont.mp4"
-    savename_static = f"{savedir}/static_uv_cont.png"
+    savename = f"{savedir}/anim_uv_cont.{ANIM_EXT}"
+    savename_static = f"{savedir}/static_uv_cont"
 
     # Shortcuts
     x = data["x"]
@@ -377,11 +373,9 @@ def animation_alongshore(
     if not isinstance(data, xr.Dataset):
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
-    if savedir.endswith(".mp4"):
-        savedir.replace(".mp4", "")
     os.makedirs(savedir, exist_ok=True)
-    savename = f"{savedir}/anim_alongshore.mp4"
-    savename_static = f"{savedir}/static_alongshore.png"
+    savename = f"{savedir}/anim_alongshore.{ANIM_EXT}"
+    savename_static = f"{savedir}/static_alongshore"
 
     # Shortcuts
     x = data["x"]
@@ -505,11 +499,9 @@ def animation_crossshore(
     if not isinstance(data, xr.Dataset):
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
-    if savedir.endswith(".mp4"):
-        savedir.replace(".mp4", "")
     os.makedirs(savedir, exist_ok=True)
-    savename = f"{savedir}/anim_crossshore.mp4"
-    savename_static = f"{savedir}/static_crossshore.png"
+    savename = f"{savedir}/anim_crossshore.{ANIM_EXT}"
+    savename_static = f"{savedir}/static_crossshore"
 
     # Shortcuts
     x = data["x"]
@@ -624,10 +616,10 @@ if __name__ == "__main__":
     # Read data
     data = xr.open_dataset(
         f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc",
-        chunks={"y": -1, "x": -1, "t": "auto"},
+        # chunks={"y": -1, "x": -1, "t": "auto"},
     )
     print(f"Grid size: {data.sizes}")
-    print(f"Chunksize: {data.chunksizes}")
+    # print(f"Chunksize: {data.chunksizes}")
 
     # Make animations
     animation_alongshore(data, savedir=anim_dir, _test_i_max=25)

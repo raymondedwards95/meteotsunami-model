@@ -3,11 +3,19 @@ import os
 from typing import TypeAlias, Union
 
 import dask.config
+import matplotlib as mpl
 import numpy as np
 import seaborn as sns
 
 # Colors
 sns.set_palette(sns.color_palette("muted"))
+
+# Matplotlib figure options
+
+
+# Matplotlib video options
+mpl.rcParams["animation.codec"] = "libaom-av1"
+ANIM_EXT = "webm"
 
 # Figure size
 FIGSIZE_NORMAL = (7, 4)
