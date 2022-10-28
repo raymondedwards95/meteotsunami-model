@@ -59,9 +59,9 @@ def animation_contour(
     p = data["p"]
 
     x = x - x.min()
-    wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
+    wl_max = float(np.ceil(np.max([np.abs([wl.max(), wl.min()])])))
     wl_min = -1.0 * wl_max
-    p_max = float(np.max([np.abs([p.max(), p.min()])]))
+    p_max = float(np.ceil(np.max([np.abs([p.max(), p.min()])])))
     p_min = -1.0 * p_max
 
     limits = [(wl_min, wl_max), (p_min, p_max)]
@@ -78,6 +78,7 @@ def animation_contour(
 
     div = np.array([make_axes_locatable(ax[i]) for i in range(2)])
     cax = np.array([div[i].append_axes("right", "5%", "5%") for i in range(2)])
+    cbar = np.array([None, None])
 
     # Initial data
     plotdata = np.zeros(2, dtype=object)
@@ -91,7 +92,8 @@ def animation_contour(
             vmin=wl_min,
             vmax=wl_max,
             cmap=cmaps[0],
-            levels=31,
+            levels=np.linspace(np.round(wl.min(), 1),
+                               np.round(wl.max(), 1), 101),
         )
         plotdata[1] = ax[1].contourf(
             y / 1000,
@@ -100,7 +102,7 @@ def animation_contour(
             vmin=p_min,
             vmax=p_max,
             cmap=cmaps[1],
-            levels=31,
+            levels=np.linspace(np.round(p.min()), np.round(p.max()), 101),
         )
 
     def set_plottext(i=0):
@@ -122,7 +124,11 @@ def animation_contour(
 
             # colorbar
             plotdata[i].set_clim(limits[i])
-            fig.colorbar(plotdata[i], cax=cax[i])
+            cax[i].cla()
+            cbar[i] = fig.colorbar(plotdata[i], cax=cax[i])
+
+        cbar[0].set_ticks(np.linspace(np.round(wl.min(), 1), np.round(wl.max(), 1), 11))
+        cbar[1].set_ticks(np.linspace(np.round(p.min()), np.round(p.max()), 11))
 
         ax[0].set_xlabel("$y$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
@@ -154,10 +160,10 @@ def animation_contour(
         set_plottext(i)
 
         # colorbar
-        for j in range(2):
-            plotdata[j].set_clim(limits[j])
-            cax[j].cla()
-            fig.colorbar(plotdata[j], cax=cax[j])
+        # for j in range(2):
+        #     plotdata[j].set_clim(limits[j])
+        #     cax[j].cla()
+        #     fig.colorbar(plotdata[j], cax=cax[j])
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
@@ -218,16 +224,16 @@ def animation_contour_uv(
     x = data["x"]
     y = data["y"]
     t = data["t"]
-    vel_u = data["u"]
-    vel_v = data["v"]
+    u = data["u"]
+    v = data["v"]
 
     x = x - x.min()
-    wl_max = float(np.max([np.abs([vel_u.max(), vel_u.min()])]))
-    wl_min = -1.0 * wl_max
-    p_max = float(np.max([np.abs([vel_v.max(), vel_v.min()])]))
-    p_min = -1.0 * p_max
+    u_max = float(np.ceil(np.max([np.abs([u.max(), u.min()])])))
+    u_min = -1.0 * u_max
+    v_max = float(np.ceil(np.max([np.abs([v.max(), v.min()])])))
+    v_min = -1.0 * v_max
 
-    limits = [(wl_min, wl_max), (p_min, p_max)]
+    limits = [(u_min, u_max), (v_min, v_max)]
     cmaps = [cmo.cm.delta, cmo.cm.delta]
 
     if xlims is None:
@@ -241,6 +247,7 @@ def animation_contour_uv(
 
     div = np.array([make_axes_locatable(ax[i]) for i in range(2)])
     cax = np.array([div[i].append_axes("right", "5%", "5%") for i in range(2)])
+    cbar = np.array([None, None])
 
     # Initial data
     plotdata = np.zeros(2, dtype=object)
@@ -250,20 +257,21 @@ def animation_contour_uv(
         plotdata[0] = ax[0].contourf(
             y / 1000,
             x / 1000,
-            vel_u.isel(t=i).T,
-            vmin=wl_min,
-            vmax=wl_max,
+            u.isel(t=i).T,
+            vmin=u_min,
+            vmax=u_max,
             cmap=cmaps[0],
-            levels=31,
+            levels=np.linspace(np.round(u.min(), 1), np.round(u.max(), 1), 101),
         )
         plotdata[1] = ax[1].contourf(
             y / 1000,
             x / 1000,
-            vel_v.isel(t=i).T,
-            vmin=p_min,
-            vmax=p_max,
+            v.isel(t=i).T,
+            vmin=v_min,
+            vmax=v_max,
             cmap=cmaps[1],
-            levels=31,
+            levels=np.linspace(np.round(v.min(), 1),
+                               np.round(v.max(), 1), 101),
         )
 
     def set_plottext(i=0):
@@ -286,7 +294,10 @@ def animation_contour_uv(
             # colorbar
             plotdata[i].set_clim(limits[i])
             cax[i].cla()
-            fig.colorbar(plotdata[i], cax=cax[i])
+            cbar[i] = fig.colorbar(plotdata[i], cax=cax[i])
+
+        cbar[0].set_ticks(np.linspace(np.round(u.min(), 1), np.round(u.max(), 1), 11))
+        cbar[1].set_ticks(np.linspace(np.round(v.min(), 1), np.round(v.max(), 1), 11))
 
         ax[0].set_xlabel("$y$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
@@ -318,9 +329,9 @@ def animation_contour_uv(
         set_plottext(i)
 
         # colorbar
-        for j in range(2):
-            plotdata[j].set_clim(limits[j])
-            fig.colorbar(plotdata[j], cax=cax[j])
+        # for j in range(2):
+        #     plotdata[j].set_clim(limits[j])
+        #     fig.colorbar(plotdata[j], cax=cax[j])
 
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
@@ -622,9 +633,10 @@ if __name__ == "__main__":
     # print(f"Chunksize: {data.chunksizes}")
 
     # Make animations
-    animation_alongshore(data, savedir=anim_dir, _test_i_max=25)
     animation_contour(data, savedir=anim_dir, _test_i_max=25)
     animation_contour_uv(data, savedir=anim_dir, _test_i_max=25)
+
+    animation_alongshore(data, savedir=anim_dir, _test_i_max=25)
     animation_crossshore(data, savedir=anim_dir, _test_i_max=25)
 
     # End
