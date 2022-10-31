@@ -23,6 +23,7 @@ settings.sh
 
 # Tests
 functions/tests
+*/static*.png
 
 # Bathymetry fields
 */bathymetry/*.nc
