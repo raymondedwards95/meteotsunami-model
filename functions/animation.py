@@ -92,8 +92,7 @@ def animation_contour(
             vmin=wl_min,
             vmax=wl_max,
             cmap=cmaps[0],
-            levels=np.linspace(np.round(wl.min(), 1),
-                               np.round(wl.max(), 1), 101),
+            levels=np.linspace(np.round(wl.min(), 1), np.round(wl.max(), 1), 101),
         )
         plotdata[1] = ax[1].contourf(
             y / 1000,
@@ -270,8 +269,7 @@ def animation_contour_uv(
             vmin=v_min,
             vmax=v_max,
             cmap=cmaps[1],
-            levels=np.linspace(np.round(v.min(), 1),
-                               np.round(v.max(), 1), 101),
+            levels=np.linspace(np.round(v.min(), 1), np.round(v.max(), 1), 101),
         )
 
     def set_plottext(i=0):
