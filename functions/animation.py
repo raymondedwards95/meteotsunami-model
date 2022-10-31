@@ -62,13 +62,29 @@ def animation_contour(
     wl_max = float(np.ceil(np.max([np.abs([wl.max(), wl.min()])])))
     p_max = float(np.ceil(np.max([np.abs([p.max(), p.min()])])))
 
-    limits = [(-1. * wl_max, wl_max), (-1. * p_max, p_max)]
+    limits = [(-1.0 * wl_max, wl_max), (-1.0 * p_max, p_max)]
     cmaps = [cmo.cm.balance, cmo.cm.curl]
 
-    wl_levels = np.linspace(np.round(wl.min(), 1), np.round(wl.max(), 1), 101)
-    wl_ticks = np.linspace(np.round(wl.min(), 1), np.round(wl.max(), 1), 11)
-    p_levels = np.linspace(np.round(p.min()), np.round(p.max()), 101)
-    p_ticks = np.linspace(np.round(p.min()), np.round(p.max()), 11)
+    wl_levels = np.linspace(
+        np.floor(wl.min() * 10.0) / 10.0,
+        np.ceil(wl.max() * 10.0) / 10.0,
+        101,
+    )
+    wl_ticks = np.linspace(
+        np.floor(wl.min() * 10.0) / 10.0,
+        np.ceil(wl.max() * 10.0) / 10.0,
+        11,
+    )
+    p_levels = np.linspace(
+        np.floor(p.min() * 10.0) / 10.0,
+        np.ceil(p.max() * 10.0) / 10.0,
+        101,
+    )
+    p_ticks = np.linspace(
+        np.floor(p.min() * 10.0) / 10.0,
+        np.ceil(p.max() * 10.0) / 10.0,
+        11,
+    )
 
     if xlims is None:
         xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
@@ -92,7 +108,7 @@ def animation_contour(
             y / 1000,
             x / 1000,
             wl.isel(t=i).T,
-            vmin=-1. * wl_max,
+            vmin=-1.0 * wl_max,
             vmax=wl_max,
             cmap=cmaps[0],
             levels=wl_levels,
@@ -101,7 +117,7 @@ def animation_contour(
             y / 1000,
             x / 1000,
             p.isel(t=i).T,
-            vmin=-1. * p_max,
+            vmin=-1.0 * p_max,
             vmax=p_max,
             cmap=cmaps[1],
             levels=p_levels,
@@ -224,19 +240,16 @@ def animation_contour_uv(
     v = data["v"]
 
     x = x - x.min()
-    u_max = float(np.ceil(np.max([np.abs([u.max(), u.min()])])))
-    v_max = float(np.ceil(np.max([np.abs([v.max(), v.min()])])))
+    uv_max = float(np.ceil(np.max([np.abs([u.max(), u.min(), v.max(), v.min()])])))
 
-    limits = [(-1. * u_max, u_max), (-1. * v_max, v_max)]
+    limits = (-1.0 * uv_max, uv_max)
     cmaps = [cmo.cm.delta, cmo.cm.delta]
 
     if xlims is None:
         xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
 
-    u_levels = np.linspace(np.round(u.min(), 1), np.round(u.max(), 1), 101)
-    u_ticks = np.linspace(np.round(u.min(), 1), np.round(u.max(), 1), 11)
-    v_levels = np.linspace(np.round(v.min(), 1), np.round(v.max(), 1), 101)
-    v_ticks = np.linspace(np.round(v.min(), 1), np.round(v.max(), 1), 11)
+    uv_levels = np.linspace(-1.0 * uv_max, uv_max, 101)
+    uv_ticks = np.linspace(-1.0 * uv_max, uv_max, 11)
 
     # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
@@ -257,19 +270,19 @@ def animation_contour_uv(
             y / 1000,
             x / 1000,
             u.isel(t=i).T,
-            vmin=-1. * u_max,
-            vmax=u_max,
+            vmin=-1.0 * uv_max,
+            vmax=uv_max,
             cmap=cmaps[0],
-            levels=u_levels,
+            levels=uv_levels,
         )
         plotdata[1] = ax[1].contourf(
             y / 1000,
             x / 1000,
             v.isel(t=i).T,
-            vmin=-1. * v_max,
-            vmax=v_max,
+            vmin=-1.0 * uv_max,
+            vmax=uv_max,
             cmap=cmaps[1],
-            levels=v_levels,
+            levels=uv_levels,
         )
 
     def set_plottext(i=0):
@@ -290,12 +303,12 @@ def animation_contour_uv(
             ax[i].set_xlim(xlims)
 
             # colorbar
-            plotdata[i].set_clim(limits[i])
+            plotdata[i].set_clim(limits)
             cax[i].cla()
             cbar[i] = fig.colorbar(plotdata[i], cax=cax[i])
 
-        cbar[0].set_ticks(u_ticks)
-        cbar[1].set_ticks(v_ticks)
+        cbar[0].set_ticks(uv_ticks)
+        cbar[1].set_ticks(uv_ticks)
 
         ax[0].set_xlabel("$y$ [km]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
