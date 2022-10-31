@@ -60,11 +60,9 @@ def animation_contour(
 
     x = x - x.min()
     wl_max = float(np.ceil(np.max([np.abs([wl.max(), wl.min()])])))
-    wl_min = -1.0 * wl_max
     p_max = float(np.ceil(np.max([np.abs([p.max(), p.min()])])))
-    p_min = -1.0 * p_max
 
-    limits = [(wl_min, wl_max), (p_min, p_max)]
+    limits = [(-1. * wl_max, wl_max), (-1. * p_max, p_max)]
     cmaps = [cmo.cm.balance, cmo.cm.curl]
 
     if xlims is None:
@@ -89,7 +87,7 @@ def animation_contour(
             y / 1000,
             x / 1000,
             wl.isel(t=i).T,
-            vmin=wl_min,
+            vmin=-1. * wl_max,
             vmax=wl_max,
             cmap=cmaps[0],
             levels=np.linspace(np.round(wl.min(), 1), np.round(wl.max(), 1), 101),
@@ -98,7 +96,7 @@ def animation_contour(
             y / 1000,
             x / 1000,
             p.isel(t=i).T,
-            vmin=p_min,
+            vmin=-1. * p_max,
             vmax=p_max,
             cmap=cmaps[1],
             levels=np.linspace(np.round(p.min()), np.round(p.max()), 101),
@@ -228,11 +226,9 @@ def animation_contour_uv(
 
     x = x - x.min()
     u_max = float(np.ceil(np.max([np.abs([u.max(), u.min()])])))
-    u_min = -1.0 * u_max
     v_max = float(np.ceil(np.max([np.abs([v.max(), v.min()])])))
-    v_min = -1.0 * v_max
 
-    limits = [(u_min, u_max), (v_min, v_max)]
+    limits = [(-1. * u_max, u_max), (-1. * v_max, v_max)]
     cmaps = [cmo.cm.delta, cmo.cm.delta]
 
     if xlims is None:
@@ -257,7 +253,7 @@ def animation_contour_uv(
             y / 1000,
             x / 1000,
             u.isel(t=i).T,
-            vmin=u_min,
+            vmin=-1. * u_max,
             vmax=u_max,
             cmap=cmaps[0],
             levels=np.linspace(np.round(u.min(), 1), np.round(u.max(), 1), 101),
@@ -266,7 +262,7 @@ def animation_contour_uv(
             y / 1000,
             x / 1000,
             v.isel(t=i).T,
-            vmin=v_min,
+            vmin=-1. * v_max,
             vmax=v_max,
             cmap=cmaps[1],
             levels=np.linspace(np.round(v.min(), 1), np.round(v.max(), 1), 101),
@@ -631,11 +627,11 @@ if __name__ == "__main__":
     # print(f"Chunksize: {data.chunksizes}")
 
     # Make animations
-    animation_contour(data, savedir=anim_dir, _test_i_max=25)
-    animation_contour_uv(data, savedir=anim_dir, _test_i_max=25)
+    animation_contour(data, savedir=anim_dir, _test_i_max=5)
+    animation_contour_uv(data, savedir=anim_dir, _test_i_max=5)
 
-    animation_alongshore(data, savedir=anim_dir, _test_i_max=25)
-    animation_crossshore(data, savedir=anim_dir, _test_i_max=25)
+    animation_alongshore(data, savedir=anim_dir, _test_i_max=5)
+    animation_crossshore(data, savedir=anim_dir, _test_i_max=5)
 
     # End
     plt.close("all")
