@@ -240,7 +240,7 @@ def animation_contour_uv(
     v = data["v"]
 
     x = x - x.min()
-    uv_max = float(np.ceil(np.max([np.abs([u.max(), u.min(), v.max(), v.min()])])))
+    uv_max = float(np.ceil(10.* np.max([np.abs([u.max(), u.min(), v.max(), v.min()])])) / 10.)
 
     limits = (-1.0 * uv_max, uv_max)
     cmaps = [cmo.cm.delta, cmo.cm.delta]
@@ -403,7 +403,6 @@ def animation_alongshore(
 
     x = x - x.min()
     wl_max = float(np.max([np.abs([wl.max(), wl.min()])]))
-    wl_min = -1.0 * wl_max
     p_max = float(p.max())
     p_min = float(p.min())
 
@@ -439,7 +438,7 @@ def animation_alongshore(
             ax[i].axvline(color="black", linewidth=1)
             ax[i].set_xlim(xlims)
 
-        ax[0].set_ylim([wl_min, wl_max])
+        ax[0].set_ylim([-1.0 * wl_max, wl_max])
         ax[1].set_ylim([p_min, p_max])
         ax[1].set_xlabel("$y$ [km]")
         ax[0].set_ylabel("Sea Surface Elevation [m]")
