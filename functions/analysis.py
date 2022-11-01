@@ -29,9 +29,9 @@ import functions.utilities as fu
 def dispersion_relation(
     k: Union[npt.ArrayLike, Numeric],
     n: Integer = 0,
-    alpha: Numeric = 1/400,
+    alpha: Numeric = 1 / 400,
 ) -> np.ndarray | Numeric:
-    """ Returns the frequency related to the wavenumber
+    """Returns the frequency related to the wavenumber
     for shallow water waves on a beach of linear slope [Eckart, 1951]
 
     Input:
@@ -46,7 +46,7 @@ def dispersion_relation(
     """
     g = scipy.constants.g
     assert np.isclose(g, 9.81, rtol=1e-2)
-    return np.sqrt((g * np.abs(k) / 2. / np.pi) * (2. * n + 1.) * np.tan(alpha))
+    return np.sqrt((g * np.abs(k) / 2.0 / np.pi) * (2.0 * n + 1.0) * np.tan(alpha))
 
 
 def exp_decay(
@@ -54,7 +54,7 @@ def exp_decay(
     k0: Numeric,
     y0: Numeric,
 ) -> np.ndarray:
-    """ Returns an exponential decay in x with decay parameter k0 and scale y0
+    """Returns an exponential decay in x with decay parameter k0 and scale y0
 
     Input:
         `x`:        horizontal coordinates
@@ -68,12 +68,9 @@ def exp_decay(
 
 
 def compute_decay_parameter(
-    dataset: xr.Dataset,
-    y: Numeric,
-    t: Numeric,
-    variable: str = "wl"
+    dataset: xr.Dataset, y: Numeric, t: Numeric, variable: str = "wl"
 ) -> Tuple[Numeric]:
-    """ Computes the decay parameter and scaling parameter for data at given y and t
+    """Computes the decay parameter and scaling parameter for data at given y and t
 
     Input:
         `dataset`:  dataset containing water level data
@@ -88,7 +85,7 @@ def compute_decay_parameter(
         exp_decay,  # f
         dataset["x"].values,  # xdata
         data,  # ydata
-        p0=[1./100000., 1.],  # p0
+        p0=[1.0 / 100000.0, 1.0],  # p0
     )
     k0, y0 = popt
     return (k0, y0)
@@ -101,7 +98,7 @@ def compute_wave_periods(
     crests: bool = True,
     no_result: Numeric = np.nan,
 ) -> List[Numeric]:
-    """ Computes the wave period at given x,y
+    """Computes the wave period at given x,y
 
     Input:
         `data`:         dataset containing all data
@@ -122,12 +119,10 @@ def compute_wave_periods(
         print("No wave period can be computed!")
         return np.array([no_result])
 
-    periods = \
-        data["t"][t_idx] \
-        .diff(dim="t") \
-        .values \
-        .astype("timedelta64[s]") \
-        .astype(float) / 3600.
+    periods = (
+        data["t"][t_idx].diff(dim="t").values.astype("timedelta64[s]").astype(float)
+        / 3600.0
+    )
 
     return periods
 
@@ -139,7 +134,7 @@ def compute_wave_lengths(
     crests: bool = True,
     no_result: Numeric = np.nan,
 ) -> List[Numeric]:
-    """ Computes the wave length at given x,t
+    """Computes the wave length at given x,t
 
     Input:
         `data`:         dataset containing all data
@@ -172,7 +167,7 @@ def spectral_analysis_1d(
     variable: str = "wl",
     demean: bool = False,
 ) -> Tuple[np.ndarray]:
-    """ Apply fourier transform on timeseries
+    """Apply fourier transform on timeseries
 
     Input:
         `data`:     Dataset containing all data and coordinates
@@ -195,7 +190,7 @@ def spectral_analysis_1d(
         var -= np.mean(var)
 
     transform = np.fft.rfft(var)
-    power = np.power(np.abs(transform), 2.)
+    power = np.power(np.abs(transform), 2.0)
 
     freqs = np.fft.rfftfreq(var.size, dt)
 
@@ -208,7 +203,7 @@ def spectral_analysis_2d(
     variable: str = "wl",
     demean: bool = False,
 ) -> Tuple[np.ndarray]:
-    """ Apply fourier transform on spatial and temporal varying data
+    """Apply fourier transform on spatial and temporal varying data
 
     Input:
         `data`:         Dataset containing all data and coordinates
@@ -236,7 +231,7 @@ def spectral_analysis_2d(
     transform = np.fft.rfft2(var, axes=(1, 0))
     # rearrange data, so that wavenumber is in increasing order
     transform = np.fft.fftshift(transform, axes=1)
-    power = np.power(np.abs(transform), 2.)
+    power = np.power(np.abs(transform), 2.0)
 
     freqs = np.fft.rfftfreq(var.shape[0], dt)
     wavenumber = np.fft.fftfreq(var.shape[1], dy)
@@ -251,16 +246,18 @@ if __name__ == "__main__":
 
     # Read data
     data_a = xr.open_dataset(
-        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc")
+        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc"
+    )
     data_b = xr.open_dataset(
-        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc", chunks="auto")
+        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc", chunks="auto"
+    )
 
     # Test functions
     for data in [data_a, data_b]:
         test_a = compute_decay_parameter(
             data,
             y=52e5,
-            t=3600.*42.,
+            t=3600.0 * 42.0,
         )
         print("compute_decay_parameter", [x for x in test_a])
 
