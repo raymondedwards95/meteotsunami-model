@@ -370,17 +370,22 @@ def plot_pressure(
     im = [None] * t_num
     for i in range(t_num):
         idx = t.size * i // t_num
-        im[i] = ax[i].contourf(
+        im[i] = ax[i].pcolormesh(
             x / 1000.0,
             y / 1000.0,
             p[i, :, :],
-            levels=np.linspace(np.round(p.min()), np.round(p.max()), 100),
+            # levels=np.linspace(np.round(p.min()), np.round(p.max()), 100),
             vmin=p_min,
             vmax=p_max,
             cmap=cmo.cm.curl,
+            rasterized=True,
         )
         ax[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
         ax[i].set_xlim(x_scales)  # make it automatic?
+
+        # # rasterize contourf
+        # for pathcoll in im[i].collections:
+        #     pathcoll.set_rasterized(True)
 
     fig.supxlabel("$x$ [km]")
     fig.supylabel("$y$ [km]")
@@ -395,15 +400,9 @@ def plot_pressure(
     cbar.set_ticks(np.linspace(np.round(p.min()), np.round(p.max()), 11))
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(
-        savename,
-        bbox_inches="tight",
-        dpi=FIG_DPI,
-        pil_kwargs={"optimize": True, "compress_level": 9},
-    )
+    save_figure(fig, savename)
     if not keep_open:
         plt.close(fig)
-    print(f"# Saved figure as '{savename}'")
 
     # End
     t1 = time.perf_counter_ns()
