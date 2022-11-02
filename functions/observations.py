@@ -253,7 +253,6 @@ def plot_observations(
     # End
     fig.get_layout_engine().execute(fig)
     save_figure(fig, savename)
-    print(f"# Saved figure {savename}")
     if not keep_open:
         plt.close("all")
 
