@@ -24,8 +24,8 @@ from functions import *
 # fmt: on
 
 
-class ObservationPoint():
-    """ Single point for observation
+class ObservationPoint:
+    """Single point for observation
 
     Attributes:
         `x`:    x-coordinate (in meters)
@@ -40,7 +40,7 @@ class ObservationPoint():
         name: str = "",
         scale: Numeric = 1,
     ) -> None:
-        """ Create an observation point
+        """Create an observation point
 
         Input:
             `x`:        x-coordinate (in meters)
@@ -57,29 +57,31 @@ class ObservationPoint():
     def __str__(
         self,
     ):
-        return f"Observation point '{self.name}'' at x={self.x:.0e} and y={self.y:.0e}".replace("e+00", "")
+        return f"Observation point '{self.name}'' at x={self.x:.0e} and y={self.y:.0e}".replace(
+            "e+00", ""
+        )
 
     def plot(
         self,
         ax: plt.Axes,
     ) -> plt.Axes:
-        """ Plot point on an existing Axes object
+        """Plot point on an existing Axes object
 
         Input:
             ax:     existing Axes object
         """
         ax.plot(
-            self.x / 1000.,
-            self.y / 1000.,
+            self.x / 1000.0,
+            self.y / 1000.0,
             "o",
             markersize=5,
-            label=self.name
+            label=self.name,
         )
         return ax
 
 
-class ObservationCrossSection():
-    """ Lines for observation consisting of two or more points
+class ObservationCrossSection:
+    """Lines for observation consisting of two or more points
 
     Attributes:
         `x`:        x-coordinates of connecting points (in meters)
@@ -95,7 +97,7 @@ class ObservationCrossSection():
         name: str = "",
         scale: Numeric = 1,
     ) -> None:
-        """ Create an observation point
+        """Create an observation point
 
         Input:
             `x`:        array of x-coordinates (in meters)
@@ -118,23 +120,25 @@ class ObservationCrossSection():
     def __str__(
         self,
     ):
-        return f"Observation cross-section '{self.name}' with {self.n} points between p_start=({self.x[0]:.0e}, {self.y[0]:.0e}) and p_end=({self.x[-1]:.0e}, {self.y[-1]:.0e})".replace("e+00", "")
+        return f"Observation cross-section '{self.name}' with {self.n} points between p_start=({self.x[0]:.0e}, {self.y[0]:.0e}) and p_end=({self.x[-1]:.0e}, {self.y[-1]:.0e})".replace(
+            "e+00", ""
+        )
 
     def plot(
         self,
         ax: plt.Axes,
     ) -> plt.Axes:
-        """ Plot lines on an existing Axes object
+        """Plot lines on an existing Axes object
 
         Input:
             ax:     existing Axes object
         """
         ax.plot(
-            self.x / 1000.,
-            self.y / 1000.,
+            self.x / 1000.0,
+            self.y / 1000.0,
             "-o",
             markersize=5,
-            label=self.name
+            label=self.name,
         )
         return ax
 
@@ -143,7 +147,7 @@ def write_observations(
     data: npt.ArrayLike,
     filename: str,
 ) -> None:
-    """ Write observation points and observation cross sections to files
+    """Write observation points and observation cross sections to files
 
     Input:
         `data`:     list of observation points and observation cross sections
@@ -174,14 +178,15 @@ def write_observations(
             sections.append(element)
         else:
             print(
-                f"# '{element}' is not an ObservationPoint or ObservationCrossSection")
+                f"# '{element}' is not an ObservationPoint or ObservationCrossSection"
+            )
 
     # Process points
     if len(points) > 0:
         with open(filename_points, "w") as file:
             for element in points:
                 print(f"# * {element}")
-                _name = element.name.replace("\'", "")
+                _name = element.name.replace("'", "")
                 file.write(f"{element.x} \t{element.y} \t'{_name}'\n")
 
     print(f"# Finished writing points to '{filename_points}'")
@@ -191,7 +196,7 @@ def write_observations(
         with open(filename_sections, "w") as file:
             for element in sections:
                 print(f"# * {element}")
-                _name = element.name.replace("\'", "")
+                _name = element.name.replace("'", "")
                 file.write(f"{_name}\n")
                 file.write(f"{element.n} \t2\n")
                 for i in range(element.n):
@@ -203,7 +208,8 @@ def write_observations(
     # End
     t1 = time.perf_counter_ns()
     print(
-        f"# Finished writing observation points and cross-sections in {(t1-t0)*1e-9:0.3f} seconds")
+        f"# Finished writing observation points and cross-sections in {(t1-t0)*1e-9:0.3f} seconds"
+    )
     return
 
 
@@ -212,7 +218,7 @@ def plot_observations(
     savename: str,
     keep_open: bool = False,
 ) -> plt.Figure:
-    """ Visualise observation points and lines
+    """Visualise observation points and lines
 
     Input:
         `data`:         list of observation points and observation cross sections
@@ -222,10 +228,6 @@ def plot_observations(
         `keep_open`:    keep figures open after finishing
     """
     t0 = time.perf_counter_ns()
-
-    # Filename
-    if not savename.endswith(".png"):
-        savename += "_plot.png"
 
     # Figure
     fig, ax = plt.subplots(1, 1)
@@ -266,14 +268,42 @@ if __name__ == "__main__":
     obs_file = f"{obs_dir}/observations"
     os.makedirs(obs_dir, exist_ok=True)
 
-    # fmt: off
-    obs_0 = ObservationPoint(name="Center", x=0, y=0, scale=1e3)
-    obs_1 = ObservationPoint(name="Point", x=1, y=1, scale=1e3)
-    obs_2 = ObservationCrossSection(name="Line", x=[-3, 3], y=[3, 3], scale=1e3)
-    obs_3 = ObservationCrossSection(name="Diagonal", x=[-2, 3], y=[-4, 1], scale=1e3)
-    obs_4 = ObservationCrossSection(name="Curve", x=[-2, 0, -1], y=[-3, 1, 2], scale=1e3)
-    obs_5 = ObservationCrossSection(name="Square", x=[-4, -4, 4, 4], y=[-4, 4, 4, -4], scale=1e3)
-    # fmt: on
+    obs_0 = ObservationPoint(
+        name="Center",
+        x=0,
+        y=0,
+        scale=1e3,
+    )
+    obs_1 = ObservationPoint(
+        name="Point",
+        x=1,
+        y=1,
+        scale=1e3,
+    )
+    obs_2 = ObservationCrossSection(
+        name="Line",
+        x=[-3, 3],
+        y=[3, 3],
+        scale=1e3,
+    )
+    obs_3 = ObservationCrossSection(
+        name="Diagonal",
+        x=[-2, 3],
+        y=[-4, 1],
+        scale=1e3,
+    )
+    obs_4 = ObservationCrossSection(
+        name="Curve",
+        x=[-2, 0, -1],
+        y=[-3, 1, 2],
+        scale=1e3,
+    )
+    obs_5 = ObservationCrossSection(
+        name="Square",
+        x=[-4, -4, 4, 4],
+        y=[-4, 4, 4, -4],
+        scale=1e3,
+    )
 
     data = [obs_0, obs_1, obs_2, obs_3, obs_4, obs_5]
 
