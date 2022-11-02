@@ -73,7 +73,7 @@ def animation_contour(
     wl_ticks = np.linspace(
         np.floor(wl.min() * 10.0) / 10.0,
         np.ceil(wl.max() * 10.0) / 10.0,
-        11,
+        5,
     )
     p_levels = np.linspace(
         np.floor(p.min() * 10.0) / 10.0,
@@ -83,7 +83,7 @@ def animation_contour(
     p_ticks = np.linspace(
         np.floor(p.min() * 10.0) / 10.0,
         np.ceil(p.max() * 10.0) / 10.0,
-        11,
+        5,
     )
 
     if xlims is None:
@@ -91,8 +91,8 @@ def animation_contour(
 
     # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
-    fig.set_size_inches(14.4, 7.2)
-    fig.set_dpi(100)
+    fig.set_dpi(200)
+    fig.set_size_inches(1440/fig.get_dpi(), 720/fig.get_dpi())
     fig.set_tight_layout(True)
 
     div = np.array([make_axes_locatable(ax[i]) for i in range(2)])
@@ -249,12 +249,12 @@ def animation_contour_uv(
         xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
 
     uv_levels = np.linspace(-1.0 * uv_max, uv_max, 101)
-    uv_ticks = np.linspace(-1.0 * uv_max, uv_max, 11)
+    uv_ticks = np.linspace(-1.0 * uv_max, uv_max, 5)
 
     # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
-    fig.set_size_inches(14.4, 7.2)
-    fig.set_dpi(100)
+    fig.set_dpi(200)
+    fig.set_size_inches(1440/fig.get_dpi(), 720/fig.get_dpi())
     fig.set_tight_layout(True)
 
     div = np.array([make_axes_locatable(ax[i]) for i in range(2)])
@@ -411,8 +411,8 @@ def animation_alongshore(
 
     # Figure options
     fig, ax = plt.subplots(2, 1, sharex=True)
-    fig.set_size_inches(14.4, 7.2)
-    fig.set_dpi(100)
+    fig.set_dpi(200)
+    fig.set_size_inches(1440/fig.get_dpi(), 720/fig.get_dpi())
     fig.set_tight_layout(True)
 
     # Initial data
@@ -533,8 +533,8 @@ def animation_crossshore(
     # Figure options
     slices = 5
     fig, ax = plt.subplots(slices, 1, sharex=True)
-    fig.set_size_inches(14.4, 7.2)
-    fig.set_dpi(100)
+    fig.set_dpi(200)
+    fig.set_size_inches(1440/fig.get_dpi(), 720/fig.get_dpi())
     fig.set_tight_layout(True)
 
     # Initial data
