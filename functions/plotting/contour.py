@@ -209,7 +209,7 @@ class plot_contour():
         for t_idx, t in enumerate(t_list):
             for var_idx, var in enumerate(variable_list):
                 print(f"# Adding data for {var:2} and t={t}")
-                self.axes[t_idx, var_idx].contourf(
+                cont = self.axes[t_idx, var_idx].contourf(
                     dataset["x"] / 1000.,
                     dataset["y"] / 1000.,
                     dataset[var].interp(t=fu.to_timestr(t)),
@@ -217,14 +217,20 @@ class plot_contour():
                     cmap=cmap_list[var_idx],
                     vmin=(-1. * var_max[var_idx]),
                     vmax=var_max[var_idx],
+                    rasterized=True,
                 )
+
                 self.axes[t_idx, var_idx].annotate(
                     f"$t = {t / 3600:0.1f}$h",
                     xy=(0.99, 0.98),
                     xycoords="axes fraction",
                     ha="right",
-                    va="top"
+                    va="top",
                 )
+
+                # rasterize contourf
+                for coll in cont.collections:
+                    coll.set_rasterized(True)
 
         # Add colorbars
         for var_idx, var in enumerate(variable_list):
@@ -268,12 +274,7 @@ class plot_contour():
 
         # Save
         self.fig.get_layout_engine().execute(self.fig)
-        self.fig.savefig(
-            savename,
-            bbox_inches="tight",
-            dpi=FIG_DPI,
-            pil_kwargs=FIG_PIL_KWARGS,
-        )
+        save_figure(self.fig, savename)
 
         # End
         print(f"# Saved contour figure as {savename}")
