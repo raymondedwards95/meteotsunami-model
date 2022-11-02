@@ -191,7 +191,7 @@ def animation_contour(
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
-    anim.save(savename)
+    anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
         f"# Finished contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
@@ -353,7 +353,7 @@ def animation_contour_uv(
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
-    anim.save(savename)
+    anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
         f"# Finished uv-contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
@@ -480,7 +480,7 @@ def animation_alongshore(
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
-    anim.save(savename)
+    anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
         f"# Finished alongshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
@@ -607,7 +607,7 @@ def animation_crossshore(
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     plt.savefig(savename_static)
-    anim.save(savename)
+    anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
         f"# Finished crossshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
@@ -638,11 +638,11 @@ if __name__ == "__main__":
     # print(f"Chunksize: {data.chunksizes}")
 
     # Make animations
-    animation_contour(data, savedir=anim_dir, _test_i_max=5)
-    animation_contour_uv(data, savedir=anim_dir, _test_i_max=5)
+    animation_contour(data, savedir=anim_dir, _test_i_max=25)
+    animation_contour_uv(data, savedir=anim_dir, _test_i_max=25)
 
-    animation_alongshore(data, savedir=anim_dir, _test_i_max=5)
-    animation_crossshore(data, savedir=anim_dir, _test_i_max=5)
+    animation_alongshore(data, savedir=anim_dir, _test_i_max=25)
+    animation_crossshore(data, savedir=anim_dir, _test_i_max=25)
 
     # End
     plt.close("all")

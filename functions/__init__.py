@@ -14,8 +14,9 @@ sns.set_palette(sns.color_palette("muted"))
 
 
 # Matplotlib video options
-mpl.rcParams["animation.codec"] = "vp9"
-ANIM_EXT = "mp4"
+mpl.rcParams["animation.codec"] = "vp8"
+ANIM_EXT = "webm"
+FFMPEG_ARGS = ['-auto-alt-ref', '0',]
 
 # Figure size
 FIGSIZE_NORMAL = (7, 4)
@@ -28,7 +29,7 @@ FIGSIZE_SQUARE = (7, 7)
 FIG_DPI = 300
 
 # Figure save options
-FIG_PIL_KWARGS = {"optimize": True, "compress_level": 9}
+FIG_PIL_KWARGS = {"optimize": True, "compress_level": 9,}
 
 # Type Hints
 Integer: TypeAlias = Union[int, np.integer]
@@ -49,6 +50,15 @@ dask.config.set({"array.chunk-size": "512MiB"})
 
 # General functions
 def save_figure(fig: mpl.figure, name: str, path: str = None) -> None:
+    """Saves figure as a low-res png-file and a high res pgf-file
+
+    Input:
+        `fig`:      figure
+        `name`:     figure name
+
+    Options
+        `path`:     path to figure
+    """
     if path is None:
         path, name = os.path.split(name)
 
