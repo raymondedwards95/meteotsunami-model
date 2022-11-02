@@ -24,24 +24,24 @@ import functions.utilities as fu
 
 
 def _relative_ceil(x: Floating) -> Floating:
-    """ Takes closest ceiling of a number
+    """Takes closest ceiling of a number
 
     Examples:
         1.2 -> 2
         0.12 -> 0.2
         0.02 -> 0.1
     """
-    s = - 1 * int(np.floor(np.log10(np.abs(x))))
-    return np.round(x, s) + np.power(10., -1. * s)
+    s = -1.0 * int(np.floor(np.log10(np.abs(x))))
+    return np.round(x, s) + np.power(10.0, -1.0 * s)
 
 
-class plot_contour():
-    """ Methods to create visualisations of time-slices """
+class plot_contour:
+    """Methods to create visualisations of time-slices"""
+
     number = 0
 
     def __init__(self):
-        """ Create and setup a figure for time-slices
-        """
+        """Create and setup a figure for time-slices"""
         plot_contour.number += 1
 
         self.figsize = FIGSIZE_LONG
@@ -53,26 +53,20 @@ class plot_contour():
         self.y_max = None
         self.y_min = None
 
-        print(
-            f"\n# Initiated figure for contour-levels"
-        )
+        print(f"\n# Initiated figure for contour-levels")
 
     def _check_if_closed(self):
-        """ Raises an error if the figure is supposed to be closed """
+        """Raises an error if the figure is supposed to be closed"""
         if self.closed:
-            raise TypeError(
-                f"Figure is cleared and closed: it can not be edited"
-            )
+            raise TypeError(f"Figure is cleared and closed: it can not be edited")
 
     def _check_if_filled(self):
-        """ Raises an error if the figure is filled with data already """
+        """Raises an error if the figure is filled with data already"""
         if self.filled:
-            raise TypeError(
-                f"Figure contains data already: it cannot be edited"
-            )
+            raise TypeError(f"Figure contains data already: it cannot be edited")
 
     def _setup_figure(self):
-        """ Figure setup """
+        """Figure setup"""
         # Checks
         self._check_if_closed()
 
@@ -82,12 +76,10 @@ class plot_contour():
         self.fig.set_layout_engine("compressed")
 
         # Figure specific
-        self.fig.suptitle(
-            f"Contours", va="top", ha="left", x=0.01
-        )
+        self.fig.suptitle(f"Contours", va="top", ha="left", x=0.01)
 
     def _setup_plot(self):
-        """ Plot setup """
+        """Plot setup"""
         # Checks
         self._check_if_closed()
 
@@ -114,9 +106,7 @@ class plot_contour():
             case "p":
                 return cmo.cm.curl
             case _:
-                raise ValueError(
-                    f"{variable=} should be 'wl', 'u', 'v' or 'p'"
-                )
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
     def _pick_label(self, variable: str):
         match variable.lower().strip():
@@ -129,9 +119,7 @@ class plot_contour():
             case "p":
                 return "Surface air pressure [Pa]"
             case _:
-                raise ValueError(
-                    f"{variable=} should be 'wl', 'u', 'v' or 'p'"
-                )
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
     def add_plots(
         self,
@@ -143,7 +131,7 @@ class plot_contour():
         y_min: Numeric = None,
         y_max: Numeric = None,
     ):
-        """ Adds a subplot with data
+        """Adds a subplot with data
 
         Input:
             `dataset`:          dataset containing model output
@@ -199,23 +187,22 @@ class plot_contour():
         im_list = []
         for var_idx, var in enumerate(variable_list):
             _var_max = var_max[var_idx]
-            _var_min = -1. * _var_max
+            _var_min = -1.0 * _var_max
             cmap_list.append(self._pick_cmap(var))
             norm_list.append(Normalize(_var_min, _var_max))
-            im_list.append(cm.ScalarMappable(
-                norm=norm_list[-1], cmap=cmap_list[-1]))
+            im_list.append(cm.ScalarMappable(norm=norm_list[-1], cmap=cmap_list[-1]))
 
         # Fill subplots
         for t_idx, t in enumerate(t_list):
             for var_idx, var in enumerate(variable_list):
                 print(f"# Adding data for {var:2} and t={t}")
                 cont = self.axes[t_idx, var_idx].contourf(
-                    dataset["x"] / 1000.,
-                    dataset["y"] / 1000.,
+                    dataset["x"] / 1000.0,
+                    dataset["y"] / 1000.0,
                     dataset[var].interp(t=fu.to_timestr(t)),
                     levels=101,
                     cmap=cmap_list[var_idx],
-                    vmin=(-1. * var_max[var_idx]),
+                    vmin=(-1.0 * var_max[var_idx]),
                     vmax=var_max[var_idx],
                     rasterized=True,
                 )
@@ -255,7 +242,7 @@ class plot_contour():
         saveloc: str,
         close: bool = True,
     ):
-        """ Saves the figure
+        """Saves the figure
 
         Input:
             saveloc:    location where the figure should be saved
@@ -265,8 +252,7 @@ class plot_contour():
         """
         # Checks
         self._check_if_closed()
-        savename = f"{saveloc}/contour_{plot_contour.number:02.0f}" \
-            .replace("//", "/")
+        savename = f"{saveloc}/contour_{plot_contour.number:02.0f}".replace("//", "/")
 
         # Setup
         self._setup_figure()
@@ -283,7 +269,7 @@ class plot_contour():
         return
 
     def close(self):
-        """ Close the figure """
+        """Close the figure"""
         self.closed = True
         self.fig.clear()
         plt.close(self.fig)
