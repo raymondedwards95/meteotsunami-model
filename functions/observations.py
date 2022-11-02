@@ -250,8 +250,7 @@ def plot_observations(
 
     # End
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight",
-                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    save_figure(fig, savename)
     print(f"# Saved figure {savename}")
     if not keep_open:
         plt.close("all")
