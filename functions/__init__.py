@@ -14,8 +14,8 @@ sns.set_palette(sns.color_palette("muted"))
 
 
 # Matplotlib video options
-mpl.rcParams["animation.codec"] = "libaom-av1"
-ANIM_EXT = "webm"
+mpl.rcParams["animation.codec"] = "vp9"
+ANIM_EXT = "mp4"
 
 # Figure size
 FIGSIZE_NORMAL = (7, 4)
@@ -46,3 +46,38 @@ assert test_results_dir.endswith("tests")
 
 # Dask options
 dask.config.set({"array.chunk-size": "512MiB"})
+
+# General functions
+def save_figure(fig: mpl.figure, name: str, path: str = None) -> None:
+    if path is None:
+        path, name = os.path.split(name)
+
+    print(f"## Figure path is '{path}'")
+    print(f"## Figure name is '{name}'")
+    print(f"## Saving figure as low resolution 'png' and full resolution 'pgf'")
+
+    png_dir = os.path.join(path, "png")
+    pgf_dir = os.path.join(path, "pgf")
+
+    os.makedirs(png_dir, exist_ok=True)
+    os.makedirs(pgf_dir, exist_ok=True)
+
+    png_file = f"{png_dir}/{name}.png"
+    pgf_file = f"{pgf_dir}/{name}.pgf"
+
+    fig.savefig(
+        png_file,
+        bbox_inches="tight",
+        dpi=75,
+        pil_kwargs=FIG_PIL_KWARGS,
+    )
+    print(f"## Saved png figure as '{png_file}'")
+
+    fig.savefig(
+        pgf_file,
+        bbox_inches="tight",
+        dpi=1200,
+    )
+    print(f"## Saved pgf figure as '{pgf_file}'")
+
+    return
