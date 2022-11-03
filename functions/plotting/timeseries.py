@@ -210,12 +210,7 @@ class plot_timeseries():
 
         # Save
         self.fig.get_layout_engine().execute(self.fig)
-        self.fig.savefig(
-            savename,
-            bbox_inches="tight",
-            dpi=FIG_DPI,
-            pil_kwargs=FIG_PIL_KWARGS,
-        )
+        save_figure(self.fig, savename)
 
         # End
         print(f"# Saved time-series figure as {savename}")
@@ -236,6 +231,7 @@ if __name__ == "__main__":
     # Additional imports
     import matplotlib.ticker as mticker
     f = mticker.ScalarFormatter(useOffset=False, useMathText=True)
+
     def fmt(x):
         return f.format_data(x)
 
@@ -284,6 +280,6 @@ if __name__ == "__main__":
             .add_plot(data_a, "wl", x=x, y=3*y, label=f"$y={fmt(3*y)}$") \
             .add_plot(data_a, "wl", x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
             .save(figure_dir)
-
     # fmt: on
+
     test_timeseries()
