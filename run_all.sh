@@ -16,6 +16,7 @@ while [[ "$#" -gt 0 ]]; do
         -s|--simulations) run_model=true ;;
         -a|--animations) create_animations=true ;;
         -f|--figures) create_figures=true ;;
+        -h|--help) echo "Script to run all simulations (option -s), to create all animations (option -a) and to create all figures (option -f)"; exit 1 ;;
         *) echo "Unknown parameter $1"; exit 1 ;;
     esac
     shift
