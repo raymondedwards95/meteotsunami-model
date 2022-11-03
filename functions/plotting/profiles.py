@@ -214,7 +214,7 @@ class plot_alongshore:
         try:
             dataset_name = dataset.attrs["name"]
         except KeyError:
-            dataset_name = "'unnamed'"
+            dataset_name = "-"
 
         if label is None:
             label = f"{dataset_name}"
