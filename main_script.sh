@@ -4,7 +4,7 @@
 
 # Maximum number of simultanious tasks
 Ntasks=5
-Ntasks_half=$(python3 -c "print(f'{max([2, $Ntasks // 3]):0.0f}')")
+Ntasks_half=$(python3 -c "print(f'{max([3, $Ntasks // 3]):0.0f}')")
 
 # Default arguments
 run_model=false
