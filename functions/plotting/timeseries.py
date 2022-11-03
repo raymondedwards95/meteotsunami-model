@@ -19,15 +19,16 @@ from functions import *
 # fmt: on
 
 
-class plot_timeseries():
-    """ Methods to create a visualisation of time-series """
+class plot_timeseries:
+    """Methods to create a visualisation of time-series"""
+
     number = 0
 
     def __init__(
         self,
         title: str = None,
     ):
-        """ Create and setup a figure for time-series
+        """Create and setup a figure for time-series
 
         Options:
             `title`:    figure title
@@ -44,18 +45,15 @@ class plot_timeseries():
         self.fig, self.axes = plt.subplots(4, 1)
         self.title = title
 
-        print(
-            f"\n# Initiated figure for time-series"
-        )
+        print(f"\n# Initiated figure for time-series")
 
     def _check_if_closed(self):
-        """ Raises an error if the figure is supposed to be closed """
+        """Raises an error if the figure is supposed to be closed"""
         if self.closed:
-            raise TypeError(
-                f"Figure is cleared and closed: it can not be edited")
+            raise TypeError(f"Figure is cleared and closed: it can not be edited")
 
     def _setup_figure(self):
-        """ Figure setup """
+        """Figure setup"""
         # Checks
         self._check_if_closed()
         if np.count_nonzero(self.lines) > 2:
@@ -72,7 +70,7 @@ class plot_timeseries():
         self.fig.suptitle(self.title, va="top", ha="left", x=0.01)
 
     def _setup_plot(self):
-        """ Plot setup """
+        """Plot setup"""
         # Checks
         self._check_if_closed()
 
@@ -84,7 +82,7 @@ class plot_timeseries():
             # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
 
             max_lim = np.max(np.abs(ax.get_ylim()))
-            ax.set_ylim(-1. * max_lim, max_lim)
+            ax.set_ylim(-1.0 * max_lim, max_lim)
             ax.set_xlim(0, None)
             ax.set_xlabel("Time [hours]")
 
@@ -112,9 +110,7 @@ class plot_timeseries():
             case "p":
                 return 3
             case _:
-                raise ValueError(
-                    f"{variable=} should be 'wl', 'u', 'v' or 'p'"
-                )
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
     def add_plot(
         self,
@@ -124,7 +120,7 @@ class plot_timeseries():
         y: Numeric,
         label: str = None,
     ):
-        """ Adds data to a plot
+        """Adds data to a plot
 
         Input:
             `dataset`:  dataset containing gridded model output
@@ -151,12 +147,8 @@ class plot_timeseries():
             label = f"{dataset_name}"
 
         # Extract data
-        time = dataset["t"] \
-            .values \
-            .astype("datetime64[s]") \
-            .astype(float) / 3600.
-        data = dataset[variable] \
-            .interp(x=x, y=y)
+        time = dataset["t"].values.astype("datetime64[s]").astype(float) / 3600.0
+        data = dataset[variable].interp(x=x, y=y)
 
         # Plot
         self.axes[ax_idx].plot(time, data, label=label)
@@ -173,7 +165,7 @@ class plot_timeseries():
         saveloc: str,
         close: bool = True,
     ):
-        """ Saves the figure
+        """Saves the figure
 
         Input:
             `saveloc`:  location where the figure should be saved
@@ -183,8 +175,9 @@ class plot_timeseries():
         """
         # Checks
         self._check_if_closed()
-        savename = f"{saveloc}/timeseries_{plot_timeseries.number:02.0f}" \
-            .replace("//", "/")
+        savename = f"{saveloc}/timeseries_{plot_timeseries.number:02.0f}".replace(
+            "//", "/"
+        )
 
         # Setup
         self._setup_figure()
@@ -202,8 +195,7 @@ class plot_timeseries():
             ax.set_subplotspec(gs[ax_idx])
 
         # update x-ticks
-        self.axes[0].get_shared_x_axes() \
-            .join(self.axes[0], *self.axes[1:])
+        self.axes[0].get_shared_x_axes().join(self.axes[0], *self.axes[1:])
         for ax in self.axes[:-1]:
             ax.set_xlabel("")
             ax.set_xticklabels([])
@@ -219,7 +211,7 @@ class plot_timeseries():
         return
 
     def close(self):
-        """ Close the figure """
+        """Close the figure"""
         self.closed = True
         self.fig.clear()
         plt.close(self.fig)
@@ -230,6 +222,7 @@ class plot_timeseries():
 if __name__ == "__main__":
     # Additional imports
     import matplotlib.ticker as mticker
+
     f = mticker.ScalarFormatter(useOffset=False, useMathText=True)
 
     def fmt(x):
