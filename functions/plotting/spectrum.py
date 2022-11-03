@@ -22,8 +22,9 @@ import functions.analysis as fa
 # fmt: on
 
 
-class plot_spectrum_1d():
-    """ Methods to create a visualisation of the 1d spectrum """
+class plot_spectrum_1d:
+    """Methods to create a visualisation of the 1d spectrum"""
+
     number = 0
 
     def __init__(
@@ -32,7 +33,7 @@ class plot_spectrum_1d():
         demean: bool = True,
         f_max: Numeric = None,
     ):
-        """ Create and setup a figure for the 1d spectrum
+        """Create and setup a figure for the 1d spectrum
 
         Input:
             `variable`: name of variable, i.e. "wl", "u", "v" or "p"
@@ -72,22 +73,19 @@ class plot_spectrum_1d():
                 self.variable = "p"
                 self.variable_name = "Surface air pressure"
             case _:
-                raise ValueError(
-                    f"{variable=} should be 'wl', 'u', 'v' or 'p'"
-                )
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
         print(
             f"\n# Initiated figure for spectrum_1d with variable '{self.variable}' ({self.variable_name.lower()})"
         )
 
     def _check_if_closed(self):
-        """ Raises an error if the figure is supposed to be closed """
+        """Raises an error if the figure is supposed to be closed"""
         if self.closed:
-            raise TypeError(
-                f"Figure is cleared and closed: it can not be edited")
+            raise TypeError(f"Figure is cleared and closed: it can not be edited")
 
     def _setup_figure(self):
-        """ Figure setup """
+        """Figure setup"""
         # Checks
         self._check_if_closed()
 
@@ -102,7 +100,7 @@ class plot_spectrum_1d():
         )
 
     def _setup_plot(self):
-        """ Plot setup """
+        """Plot setup"""
         # Checks
         self._check_if_closed()
 
@@ -120,7 +118,10 @@ class plot_spectrum_1d():
         self.ax.set_ylabel("Spectral Power [m$^2$ hr]")
         self.ax.set_ylim(0, None)
         self.ax.ticklabel_format(
-            axis="y", style="sci", scilimits=(0, 0), useMathText=True,
+            axis="y",
+            style="sci",
+            scilimits=(0, 0),
+            useMathText=True,
         )
 
     def add_plot(
@@ -130,7 +131,7 @@ class plot_spectrum_1d():
         y: Numeric,
         label: str = "",
     ):
-        """ Adds data to a plot
+        """Adds data to a plot
 
         Input:
             `dataset`:  dataset containing model output
@@ -153,12 +154,12 @@ class plot_spectrum_1d():
         )
 
         # Scale time units from seconds to hours
-        freqs *= 3600.
-        power /= 3600.
+        freqs *= 3600.0
+        power /= 3600.0
 
         # Set limits
         if self.f_max is None:
-            self.f_max = 0.
+            self.f_max = 0.0
 
         new_f_max = freqs[  # take freq
             np.size(  # 'pick' last index
@@ -200,7 +201,7 @@ class plot_spectrum_1d():
         saveloc: str,
         close: bool = True,
     ):
-        """ Saves the figure
+        """Saves the figure
 
         Input:
             `saveloc`:  location where the figure should be saved
@@ -210,8 +211,9 @@ class plot_spectrum_1d():
         """
         # Checks
         self._check_if_closed()
-        savename = f"{saveloc}/spectrum_1d_{plot_spectrum_1d.number:02.0f}" \
-            .replace("//", "/")
+        savename = f"{saveloc}/spectrum_1d_{plot_spectrum_1d.number:02.0f}".replace(
+            "//", "/"
+        )
 
         # Setup
         self._setup_figure()
@@ -228,7 +230,7 @@ class plot_spectrum_1d():
         return
 
     def close(self):
-        """ Close the figure """
+        """Close the figure"""
         self.closed = True
         self.fig.clear()
         plt.close(self.fig)
@@ -236,8 +238,9 @@ class plot_spectrum_1d():
         return
 
 
-class plot_spectrum_2d():
-    """ Methods to create a visualisation of the 2d spectrum """
+class plot_spectrum_2d:
+    """Methods to create a visualisation of the 2d spectrum"""
+
     number = 0
 
     def __init__(
@@ -248,7 +251,7 @@ class plot_spectrum_2d():
         k_max: Numeric = None,
         f_max: Numeric = None,
     ):
-        """ Create and setup a figure for the 2d spectrum
+        """Create and setup a figure for the 2d spectrum
 
         Input:
             `variable`:         name of variable, i.e. "wl", "u", "v" or "p"
@@ -266,7 +269,7 @@ class plot_spectrum_2d():
         """
         plot_spectrum_2d.number += 1
         self.x_scale = 1e6
-        self.y_scale = 3600.
+        self.y_scale = 3600.0
 
         self.figsize = FIGSIZE_NORMAL
         self.closed = False
@@ -279,7 +282,7 @@ class plot_spectrum_2d():
         self.demean = demean
         self.k_max = k_max
         self.f_max = f_max
-        self.x = 0.
+        self.x = 0.0
 
         self.data_label = label
 
@@ -299,28 +302,24 @@ class plot_spectrum_2d():
                 self.variable = "p"
                 self.variable_name = "Surface air pressure"
             case _:
-                raise ValueError(
-                    f"{variable=} should be 'wl', 'u', 'v' or 'p'"
-                )
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
         print(
             f"\n# Initiated figure for spectrum_2d with variable '{self.variable}' ({self.variable_name.lower()})"
         )
 
     def _check_if_closed(self):
-        """ Raises an error if the figure is supposed to be closed """
+        """Raises an error if the figure is supposed to be closed"""
         if self.closed:
-            raise TypeError(
-                f"Figure is cleared and closed: it can not be edited")
+            raise TypeError(f"Figure is cleared and closed: it can not be edited")
 
     def _check_if_filled(self):
-        """ Raises an error if the figure is filled with data already """
+        """Raises an error if the figure is filled with data already"""
         if self.filled:
-            raise TypeError(
-                f"Figure contains data already: it cannot be edited")
+            raise TypeError(f"Figure contains data already: it cannot be edited")
 
     def _setup_figure(self):
-        """ Figure setup """
+        """Figure setup"""
         # Checks
         self._check_if_closed()
 
@@ -334,11 +333,11 @@ class plot_spectrum_2d():
             f"Power Spectrum - {self.variable_name} - $x = {self.x / 1000:0.1f}$ km",
             va="top",
             ha="left",
-            x=0.01
+            x=0.01,
         )
 
     def _setup_plot(self):
-        """ Plot setup """
+        """Plot setup"""
         # Checks
         self._check_if_closed()
 
@@ -357,7 +356,7 @@ class plot_spectrum_2d():
         self.ax.set_ylim(0, np.round(self.f_max * self.y_scale, 1))
 
     def _setup_cax(self):
-        """ Colorbar location setup
+        """Colorbar location setup
 
         Should be run after creating the figure and before adding data
         """
@@ -367,11 +366,7 @@ class plot_spectrum_2d():
 
         # Make space for colorbar
         div = make_axes_locatable(self.ax)
-        self.cax = div.append_axes(
-            position="right",
-            size="5%",
-            pad="5%"
-        )
+        self.cax = div.append_axes(position="right", size="5%", pad="5%")
 
     def add_plot(
         self,
@@ -381,7 +376,7 @@ class plot_spectrum_2d():
         k_max: Numeric = None,
         f_max: Numeric = None,
     ):
-        """ Adds data to a plot
+        """Adds data to a plot
 
         Input:
             `dataset`:  dataset containing model output
@@ -405,7 +400,7 @@ class plot_spectrum_2d():
             dataset, x=self.x, variable=self.variable, demean=self.demean
         )
         # flip wavenumbers, since we only look at waves in a given direction
-        wavenumber = -1. * wavenumber
+        wavenumber = -1.0 * wavenumber
 
         # Compute plot limits
         if self.k_max is None:
@@ -415,8 +410,8 @@ class plot_spectrum_2d():
             self.f_max = np.max(freqs[np.argmax(power, axis=0)])
 
         # Select cols and rows
-        rows = (freqs >= 0)
-        cols = (wavenumber >= 0)
+        rows = freqs >= 0
+        cols = wavenumber >= 0
 
         wavenumber = wavenumber[cols]
         freqs = freqs[rows]
@@ -429,7 +424,7 @@ class plot_spectrum_2d():
             power,
             shading="nearest",  # "gouraud",
             cmap=cmo.cm.matter,
-            vmin=5.0 * np.min(power)
+            vmin=5.0 * np.min(power),
         )
 
         # Colorbar
@@ -449,17 +444,11 @@ class plot_spectrum_2d():
                 self.data_label = dataset_name
         except KeyError:
             dataset_name = "'unnamed'"
-        print(
-            f"# Added data from {dataset_name} for {x=}"
-        )
+        print(f"# Added data from {dataset_name} for {x=}")
         return self
 
-    def add_dispersion(
-        self,
-        n: Numeric,
-        alpha: Numeric = 1./400.
-    ):
-        """ Adds the dispersion relation to a plot
+    def add_dispersion(self, n: Numeric, alpha: Numeric = 1.0 / 400.0):
+        """Adds the dispersion relation to a plot
 
         Input:
             `n`:        maximum number of modes
@@ -472,8 +461,7 @@ class plot_spectrum_2d():
         ylims = self.ax.get_ylim()
 
         # Compute and plot dispersion relation
-        wavenumber = np.linspace(
-            np.min(xlims), np.max(xlims), 100) / self.x_scale
+        wavenumber = np.linspace(np.min(xlims), np.max(xlims), 100) / self.x_scale
 
         for i in range(n):
             dispersion = fa.dispersion_relation(wavenumber, n=i, alpha=alpha)
@@ -482,19 +470,16 @@ class plot_spectrum_2d():
                 self.y_scale * dispersion,
                 linewidth=1,
                 linestyle="--",
-                color="black"
+                color="black",
             )
             self.ax.annotate(
                 text=f"$n={i}$",
                 xytext=(-20, -40),
-                xy=(
-                    self.x_scale * wavenumber[-1],
-                    self.y_scale * dispersion[-1]
-                ),
+                xy=(self.x_scale * wavenumber[-1], self.y_scale * dispersion[-1]),
                 xycoords="data",
                 textcoords="offset pixels",
                 ha="right",
-                va="top"
+                va="top",
             )
 
         # Reset limits of figure
@@ -510,7 +495,7 @@ class plot_spectrum_2d():
         saveloc: str,
         close: bool = True,
     ):
-        """ Saves the figure
+        """Saves the figure
 
         Input:
             `saveloc`:  location where the figure should be saved
@@ -520,8 +505,9 @@ class plot_spectrum_2d():
         """
         # Checks
         self._check_if_closed()
-        savename = f"{saveloc}/spectrum_2d_{plot_spectrum_2d.number:02.0f}" \
-            .replace("//", "/")
+        savename = f"{saveloc}/spectrum_2d_{plot_spectrum_2d.number:02.0f}".replace(
+            "//", "/"
+        )
 
         # Setup
         self._setup_figure()
@@ -538,7 +524,7 @@ class plot_spectrum_2d():
         return
 
     def close(self):
-        """ Close the figure """
+        """Close the figure"""
         self.closed = True
         self.fig.clear()
         plt.close(self.fig)
