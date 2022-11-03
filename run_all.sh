@@ -4,6 +4,7 @@
 
 # Maximum number of simultanious tasks
 Ntasks=5
+Ntasks_half=$(python3 -c "print(f'{max([2, $Ntasks // 3]):0.0f}')")
 
 # Default arguments
 run_model=false
@@ -59,6 +60,7 @@ echo "# Current directory is '$BaseDir'"
 echo "# Logging file is '$LogFile'"
 echo "# Path to executables is $DFLOWFM_BIN_PATH"
 echo "# Maximum number of simultanious tasks is $Ntasks"
+echo "# Alternative number of simultanious tasks is $Ntasks_half"
 
 if [ ! -f "$DFLOWFM_BIN_PATH/run_dflowfm.sh" ] ; then
     echo "$DFLOWFM_BIN_PATH/run_dflowfm.sh does not exist. Check ./setup/settings.sh. Exiting..."
@@ -72,13 +74,15 @@ function func_parameters ()
     local LocalIdentifier=$1
 
     # Start
+    local TStart=$(date +%s)
+
     echo "## Creating parameter files for $LocalIdentifier"
     echo "$(date) - Creating parameter files" >> $LogFile
 
     # Bathymetry
     echo "# Creating bathymetry files"
     echo "$(date) - Creating bathymetry files" >> $LogFile
-    python3 "./create_bathymetry.py" 1> "${LogFolder}/bathymetry_${LocalIdentifier}.log" 2>&1
+    python3 "./create_bathymetry.py" 1> "${LogFolder}/bathymetry_${LocalIdentifier}.log" 2>&1 &
 
     # Grid
     # NOTE:DOES NOT WORK
@@ -89,15 +93,20 @@ function func_parameters ()
     # Observations
     echo "# Creating observation files"
     echo "$(date) - Creating observation files" >> $LogFile
-    python3 "./create_observations.py" 1> "${LogFolder}/observation_${LocalIdentifier}.log" 2>&1
+    python3 "./create_observations.py" 1> "${LogFolder}/observation_${LocalIdentifier}.log" 2>&1 &
 
     # Pressure
     echo "# Creating pressure files"
     echo "$(date) - Creating pressure files" >> $LogFile
-    python3 "./create_pressure.py" 1> "${LogFolder}/pressure_${LocalIdentifier}.log" 2>&1
+    python3 "./create_pressure.py" 1> "${LogFolder}/pressure_${LocalIdentifier}.log" 2>&1 &
 
     # End
-    echo "## Finished creating parameter files"
+    wait
+
+    local TEnd=$(date +%s)
+    local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
+
+    echo "## Finished creating parameter files in $dTTotal minutes"
     echo "$(date) - Finished creating parameter files" >> $LogFile
 }
 
@@ -137,7 +146,7 @@ function func_computations ()
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
     echo "# Finished computations for $LocalIdentifier case $LocalCase"
-    echo "# Case $LocalIdentifier $LocalCase took $dTTotal minutes in total: $dTComputation minutes for D3D and $dTRegrid minutes for regridding"
+    echo "# Case $LocalIdentifier case $LocalCase took $dTTotal minutes in total: $dTComputation minutes for D3D and $dTRegrid minutes for regridding"
     echo "$(date) - Finished all for '$LocalInputFile'" >> $LogFile
 }
 
@@ -161,8 +170,7 @@ function func_animations ()
     local TEnd=$(date +%s)
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
-    echo "# Finished animations for $LocalIdentifier case $LocalCase"
-    echo "# Animations for case $LocalIdentifier $LocalCase took $dTTotal minutes"
+    echo "# Finished animations for case $LocalIdentifier case $LocalCase in $dTTotal minutes"
     echo "$(date) - Finished animations for '$LocalInputFile'" >> $LogFile
 }
 
@@ -186,8 +194,7 @@ function func_figures ()
     local TEnd=$(date +%s)
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
-    echo "# Finished figures for $LocalIdentifier case $LocalCase"
-    echo "# Figures for case $LocalIdentifier $LocalCase took $dTTotal minutes"
+    echo "# Finished figures for case $LocalIdentifier case $LocalCase in $dTTotal minutes"
     echo "$(date) - Finished figures for '$LocalInputFile'" >> $LogFile
 }
 
@@ -247,7 +254,7 @@ do
             sleep $(( 10#$Case ))
 
             # Make use of a queue
-            while [ $(jobs -p | wc -l) -ge $Ntasks ]
+            while [ $(jobs -p | wc -l) -ge $Ntasks_half ]
             do
                 sleep 60
             done  # end while loop
