@@ -297,3 +297,5 @@ done  # end for-loop over folders
 echo ""
 echo "### Finished all simulations"
 echo ""
+
+exit 0
