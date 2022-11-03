@@ -298,12 +298,7 @@ class plot_alongshore():
 
         # Save
         self.fig.get_layout_engine().execute(self.fig)
-        self.fig.savefig(
-            savename,
-            bbox_inches="tight",
-            dpi=FIG_DPI,
-            pil_kwargs=FIG_PIL_KWARGS,
-        )
+        save_figure(self.fig, savename)
 
         # End
         print(f"# Saved along-shore figure as {savename}")
@@ -633,12 +628,7 @@ class plot_crossshore():
 
         # Save
         self.fig.get_layout_engine().execute(self.fig)
-        self.fig.savefig(
-            savename,
-            bbox_inches="tight",
-            dpi=FIG_DPI,
-            pil_kwargs=FIG_PIL_KWARGS,
-        )
+        save_figure(self.fig, savename)
 
         # End
         print(f"# Saved cross-shore figure as {savename}")
