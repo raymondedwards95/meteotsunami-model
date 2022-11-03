@@ -190,7 +190,7 @@ class plot_spectrum_1d:
         try:
             dataset_name = dataset.attrs["name"]
         except KeyError:
-            dataset_name = "'unnamed'"
+            dataset_name = "-"
         print(
             f"# Added data from {dataset_name} for {x=} and {y=}, labeled by {label=}"
         )
@@ -443,7 +443,7 @@ class plot_spectrum_2d:
             if self.data_label == "":
                 self.data_label = dataset_name
         except KeyError:
-            dataset_name = "'unnamed'"
+            dataset_name = "-"
         print(f"# Added data from {dataset_name} for {x=}")
         return self
 
