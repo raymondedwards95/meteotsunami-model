@@ -8,15 +8,21 @@ Ntasks_half=$(python3 -c "print(f'{max([2, $Ntasks // 3]):0.0f}')")
 
 # Default arguments
 run_model=false
+create_parameters=false
 create_animations=false
 create_figures=false
+
+FolderList=()
 
 # Commandline arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
+        -p|--parameters) create_parameters=true ;;
         -s|--simulations) run_model=true ;;
         -a|--animations) create_animations=true ;;
         -f|--figures) create_figures=true ;;
+        -r|--repr) FolderList+=("./reproduction-an-2012") ;;
+        -e|--exp) FolderList+=("./thesis") ;;
         -h|--help) echo "Script to run all simulations (option -s), to create all animations (option -a) and to create all figures (option -f)"; exit 1 ;;
         *) echo "Unknown parameter $1"; exit 1 ;;
     esac
@@ -24,10 +30,14 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 echo ""
-echo "### Script: run_all.sh"
+echo "### Running from: main_script.sh"
 echo "## Processing arguments"
 if [ "$run_model" = true ] ; then
+    create_parameters=true
     echo "# Simulations are enabled"
+fi
+if [ "$create_parameters" = true ] ; then
+    echo "# Parameter creation is enabled"
 fi
 if [ "$create_animations" = true ] ; then
     echo "# Animations are enabled"
@@ -36,8 +46,18 @@ if [ "$create_figures" = true ] ; then
     echo "# Figures are enabled"
 fi
 
-# List of folders with inputfiles
-FolderList=("./reproduction-an-2012 ./thesis")
+# Default list of folders with input files
+if [ ${#FolderList[@]} -eq 0 ] ; then
+    echo "# Using default folder list"
+    FolderList=("./reproduction-an-2012 ./thesis")
+fi
+echo "## Folders:"
+for dir in ${FolderList[@]}
+do
+    echo "# $dir"
+done
+
+sleep 2
 
 # Global settings
 if [ ! -f ./settings.sh ] ; then
@@ -215,11 +235,14 @@ do
     echo -n "## Found cases: "
     echo $CaseNumbers
 
-    # Do simulations
-    if [ "$run_model" = true ] ; then
+    # Create parameter files
+    if [ "$create_parameters" = true ] ; then
         echo "### Create parameter files in $PWD"
         func_parameters "$Identifier"
+    fi
 
+    # Do simulations
+    if [ "$run_model" = true ] ; then
         echo "### Start simulations in $PWD"
         for Case in $CaseNumbers
         do
@@ -295,7 +318,7 @@ do
 done  # end for-loop over folders
 
 echo ""
-echo "### Finished all simulations"
+echo "### Finished all tasks"
 echo ""
 
 exit 0
