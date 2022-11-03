@@ -219,12 +219,7 @@ class plot_spectrum_1d():
 
         # Save
         self.fig.get_layout_engine().execute(self.fig)
-        self.fig.savefig(
-            savename,
-            bbox_inches="tight",
-            dpi=FIG_DPI,
-            pil_kwargs=FIG_PIL_KWARGS,
-        )
+        save_figure(self.fig, savename)
 
         # End
         print(f"# Saved 1d-spectrum figure as {savename}")
@@ -534,12 +529,7 @@ class plot_spectrum_2d():
 
         # Save
         self.fig.get_layout_engine().execute(self.fig)
-        self.fig.savefig(
-            savename,
-            bbox_inches="tight",
-            dpi=FIG_DPI,
-            pil_kwargs=FIG_PIL_KWARGS,
-        )
+        save_figure(self.fig, savename)
 
         # End
         print(f"# Saved 2d-spectrum figure as {savename}")
@@ -596,7 +586,7 @@ if __name__ == "__main__":
         plot_spectrum_2d(variable="p", demean=False) \
             .add_plot(data_a, x=x) \
             .save(figure_dir)
-
     # fmt: on
+
     test_spectrum_1d()
     test_spectrum_2d()
