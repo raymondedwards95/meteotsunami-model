@@ -22,8 +22,9 @@ import functions.utilities as fu
 # fmt: on
 
 
-class plot_alongshore():
-    """ Methods to create a visualisation of the along-shore profiles """
+class plot_alongshore:
+    """Methods to create a visualisation of the along-shore profiles"""
+
     number = 0
 
     def __init__(
@@ -32,7 +33,7 @@ class plot_alongshore():
         y_min: Numeric = None,
         y_max: Numeric = None,
     ):
-        """ Create and setup a figure for along-shore profiles
+        """Create and setup a figure for along-shore profiles
 
         Input:
             `variable`:     name of variable to plot
@@ -85,22 +86,17 @@ class plot_alongshore():
                 self.variable_long = "Surface air pressure"
                 self.variable_unit = "Pa"
             case _:
-                raise ValueError(
-                    f"{variable=} should be 'wl', 'u', 'v' or 'p'"
-                )
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
-        print(
-            f"\n# Initiated figure for along-shore profiles"
-        )
+        print(f"\n# Initiated figure for along-shore profiles")
 
     def _check_if_closed(self):
-        """ Raises an error if the figure is supposed to be closed """
+        """Raises an error if the figure is supposed to be closed"""
         if self.closed:
-            raise TypeError(
-                f"Figure is cleared and closed: it can not be edited")
+            raise TypeError(f"Figure is cleared and closed: it can not be edited")
 
     def _setup_figure(self):
-        """ Figure setup """
+        """Figure setup"""
         # Checks
         self._check_if_closed()
         if len(self.axes) > 2:
@@ -119,12 +115,12 @@ class plot_alongshore():
         self.fig.suptitle(self.title, va="top", ha="left", x=0.01)
 
     def _setup_plot(self):
-        """ Plot setup """
+        """Plot setup"""
         # Checks
         self._check_if_closed()
 
         # Compute y-limits
-        max_lim = 0.
+        max_lim = 0.0
         for ax in self.axes:
             ax_max_lim = np.max(np.abs(ax.get_ylim()))
             if ax_max_lim > max_lim:
@@ -137,12 +133,11 @@ class plot_alongshore():
             ax.legend(loc="upper right")
             ax.grid()
             ax.set_xlim(self.y_min, self.y_max)
-            ax.set_ylim(-1. * max_lim, max_lim)
+            ax.set_ylim(-1.0 * max_lim, max_lim)
             # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
 
         self.axes[-1].set_xlabel(f"$y$ [km]")
-        self.fig.supylabel(
-            f"{self.variable_long} [{self.variable_unit}]")
+        self.fig.supylabel(f"{self.variable_long} [{self.variable_unit}]")
 
     def add_subplot(
         self,
@@ -153,7 +148,7 @@ class plot_alongshore():
         y_min: Numeric = None,
         y_max: Numeric = None,
     ):
-        """ Adds a subplot to the figure
+        """Adds a subplot to the figure
 
         Can also add data to the new subplot using the following arguments:
 
@@ -197,7 +192,7 @@ class plot_alongshore():
         y_min: Numeric = None,
         y_max: Numeric = None,
     ):
-        """ Adds data to a plot
+        """Adds data to a plot
 
         Input:
             `dataset`:  dataset containing gridded model output
@@ -225,9 +220,8 @@ class plot_alongshore():
             label = f"{dataset_name}"
 
         # Extract data
-        y = dataset["y"] / 1000.
-        data = dataset[self.variable] \
-            .interp(x=x, t=fu.to_timestr(t))
+        y = dataset["y"] / 1000.0
+        data = dataset[self.variable].interp(x=x, t=fu.to_timestr(t))
 
         # Plot
         self.axes[-1].plot(y, data, label=label)
@@ -267,7 +261,7 @@ class plot_alongshore():
         saveloc: str,
         close: bool = True,
     ):
-        """ Saves the figure
+        """Saves the figure
 
         Input:
             `saveloc`:  location where the figure should be saved
@@ -277,8 +271,7 @@ class plot_alongshore():
         """
         # Checks
         self._check_if_closed()
-        savename = f"{saveloc}/along_{plot_alongshore.number:02.0f}" \
-            .replace("//", "/")
+        savename = f"{saveloc}/along_{plot_alongshore.number:02.0f}".replace("//", "/")
 
         # Setup
         self._setup_figure()
@@ -290,8 +283,7 @@ class plot_alongshore():
             ax.set_subplotspec(gs[ax_idx])
 
         # update x-ticks
-        self.axes[0].get_shared_x_axes() \
-            .join(self.axes[0], *self.axes[1:])
+        self.axes[0].get_shared_x_axes().join(self.axes[0], *self.axes[1:])
         for ax in self.axes[:-1]:
             ax.set_xlabel("")
             ax.set_xticklabels([])
@@ -307,7 +299,7 @@ class plot_alongshore():
         return
 
     def close(self):
-        """ Close the figure """
+        """Close the figure"""
         self.closed = True
         self.fig.clear()
         plt.close(self.fig)
@@ -315,8 +307,9 @@ class plot_alongshore():
         return
 
 
-class plot_crossshore():
-    """ Methods to create a visualisation of the cross-shore profiles """
+class plot_crossshore:
+    """Methods to create a visualisation of the cross-shore profiles"""
+
     number = 0
 
     def __init__(
@@ -324,7 +317,7 @@ class plot_crossshore():
         variable: str,
         x_max: Numeric = None,
     ):
-        """ Create and setup a figure for cross-shore profiles
+        """Create and setup a figure for cross-shore profiles
 
         Input:
             `variable`:     name of variable to plot
@@ -369,22 +362,17 @@ class plot_crossshore():
                 self.variable_long = "Surface air pressure"
                 self.variable_unit = "Pa"
             case _:
-                raise ValueError(
-                    f"{variable=} should be 'wl', 'u', 'v' or 'p'"
-                )
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
-        print(
-            f"\n# Initiated figure for cross-shore profiles"
-        )
+        print(f"\n# Initiated figure for cross-shore profiles")
 
     def _check_if_closed(self):
-        """ Raises an error if the figure is supposed to be closed """
+        """Raises an error if the figure is supposed to be closed"""
         if self.closed:
-            raise TypeError(
-                f"Figure is cleared and closed: it can not be edited")
+            raise TypeError(f"Figure is cleared and closed: it can not be edited")
 
     def _setup_figure(self):
-        """ Figure setup """
+        """Figure setup"""
         # Checks
         self._check_if_closed()
         if len(self.axes) > 2:
@@ -403,12 +391,12 @@ class plot_crossshore():
         self.fig.suptitle(self.title, va="top", ha="left", x=0.01)
 
     def _setup_plot(self):
-        """ Plot setup """
+        """Plot setup"""
         # Checks
         self._check_if_closed()
 
         # Compute y-limits
-        max_lim = 0.
+        max_lim = 0.0
         for ax in self.axes:
             ax_max_lim = np.max(np.abs(ax.get_ylim()))
             if ax_max_lim > max_lim:
@@ -421,12 +409,11 @@ class plot_crossshore():
             ax.legend(loc="upper right")
             ax.grid()
             ax.set_xlim(0, self.x_max)
-            ax.set_ylim(-1. * max_lim, max_lim)
+            ax.set_ylim(-1.0 * max_lim, max_lim)
             # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
 
         self.axes[-1].set_xlabel(f"$x$ [km]")
-        self.fig.supylabel(
-            f"{self.variable_long} [{self.variable_unit}]")
+        self.fig.supylabel(f"{self.variable_long} [{self.variable_unit}]")
 
     def plot_peaks(
         self,
@@ -437,7 +424,7 @@ class plot_crossshore():
         sort: bool = False,
         number: Integer = None,
     ):
-        """ Finds local maxima for fixed t and plots the cross-shore profiles in separate subplots
+        """Finds local maxima for fixed t and plots the cross-shore profiles in separate subplots
 
         Input:
             `dataset`:      dataset containing gridded model output
@@ -453,9 +440,16 @@ class plot_crossshore():
         self._check_if_closed()
 
         # Find indices and y-coordinates
-        x = np.min([dataset["x"][10], dataset["x"].max() / 20.])
+        x = np.min([dataset["x"][10], dataset["x"].max() / 20.0])
         y_idx = fu.find_local_maxima_y(
-            dataset, t, x, variable=self.variable, minima=False, sort=sort, number=number)
+            dataset,
+            t,
+            x,
+            variable=self.variable,
+            minima=False,
+            sort=sort,
+            number=number,
+        )
 
         # Make plots
         for idx in y_idx:
@@ -466,7 +460,7 @@ class plot_crossshore():
                 y=y,
                 fit_curve=fit_curve,
                 label=None,
-                x_max=x_max
+                x_max=x_max,
             )
 
         # End
@@ -482,7 +476,7 @@ class plot_crossshore():
         label: str = None,
         x_max: Numeric = None,
     ):
-        """ Adds a subplot to the figure
+        """Adds a subplot to the figure
 
         Can also add data to the new subplot using the following arguments:
 
@@ -526,7 +520,7 @@ class plot_crossshore():
         label: str = None,
         x_max: Numeric = None,
     ):
-        """ Adds data to a plot
+        """Adds data to a plot
 
         Input:
             `dataset`:      dataset containing gridded model output
@@ -554,9 +548,8 @@ class plot_crossshore():
             label = f"{dataset_name}: $y = {y/1e3:0.0f}$km"
 
         # Extract data
-        x = dataset["x"] / 1000.
-        data = dataset[self.variable] \
-            .interp(y=y, t=fu.to_timestr(t))
+        x = dataset["x"] / 1000.0
+        data = dataset[self.variable].interp(y=y, t=fu.to_timestr(t))
 
         # Plot
         self.axes[-1].plot(x, data, label=label)
@@ -597,7 +590,7 @@ class plot_crossshore():
         saveloc: str,
         close: bool = True,
     ):
-        """ Saves the figure
+        """Saves the figure
 
         Input:
             `saveloc`:  location where the figure should be saved
@@ -607,8 +600,7 @@ class plot_crossshore():
         """
         # Checks
         self._check_if_closed()
-        savename = f"{saveloc}/cross_{plot_crossshore.number:02.0f}" \
-            .replace("//", "/")
+        savename = f"{saveloc}/cross_{plot_crossshore.number:02.0f}".replace("//", "/")
 
         # Setup
         self._setup_figure()
@@ -620,8 +612,7 @@ class plot_crossshore():
             ax.set_subplotspec(gs[ax_idx])
 
         # update x-ticks
-        self.axes[0].get_shared_x_axes() \
-            .join(self.axes[0], *self.axes[1:])
+        self.axes[0].get_shared_x_axes().join(self.axes[0], *self.axes[1:])
         for ax in self.axes[:-1]:
             ax.set_xlabel("")
             ax.set_xticklabels([])
@@ -637,7 +628,7 @@ class plot_crossshore():
         return
 
     def close(self):
-        """ Close the figure """
+        """Close the figure"""
         self.closed = True
         self.fig.clear()
         plt.close(self.fig)
