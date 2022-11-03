@@ -33,9 +33,6 @@ y = np.linspace(-2e6, +3e6, 5)
 xx, yy = np.meshgrid(x, y)
 zz = exponential_shelf(xx, a=5e-4)
 
-print(f"{x=}")
-print(f"{y=}")
-
 
 # Write to file
 data = fb.convert_to_xarray(x, y, zz, savename=f"{bathymetry_dir}/exp_00.nc")
