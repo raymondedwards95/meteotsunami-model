@@ -138,13 +138,13 @@ class plot_timeseries:
         try:
             dataset_name = dataset.attrs["name"]
         except KeyError:
-            dataset_name = "'unnamed'"
+            dataset_name = "-"
 
         ax_idx = self._match_variable(variable)
         self.lines[ax_idx] += 1
 
         if label is None:
-            label = f"{dataset_name}"
+            label = f"{dataset_name}; $x = {x/1000.:0.1f}$ km; $y = {y/1000.:0.1f}$ km"
 
         # Extract data
         time = dataset["t"].values.astype("datetime64[s]").astype(float) / 3600.0
@@ -255,8 +255,8 @@ if __name__ == "__main__":
             .save(figure_dir)
 
         plot_timeseries() \
-            .add_plot(data_a, "wl", x=x, y=np.pi*y, label=f"$y={fmt(np.pi*y)}$") \
-            .add_plot(data_a, "p",  x=x, y=np.pi*y, label=f"$y={fmt(np.pi*y)}$") \
+            .add_plot(data_a, "wl", x=x, y=np.pi*y) \
+            .add_plot(data_a, "p",  x=x, y=np.pi*y) \
             .save(figure_dir)
 
         plot_timeseries() \
@@ -269,9 +269,9 @@ if __name__ == "__main__":
             .save(figure_dir)
 
         plot_timeseries() \
-            .add_plot(data_a, "wl", x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "wl", x=x, y=3*y, label=f"$y={fmt(3*y)}$") \
-            .add_plot(data_a, "wl", x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "wl", x=x, y=1*y) \
+            .add_plot(data_a, "wl", x=x, y=3*y) \
+            .add_plot(data_a, "wl", x=x, y=5*y) \
             .save(figure_dir)
     # fmt: on
 
