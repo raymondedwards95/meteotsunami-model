@@ -252,8 +252,8 @@ do
                 sleep 60
             done  # end while loop
 
+            # Create animations
             func_animations "$Case" "$Identifier" &
-
         done  # end for-loop over cases
 
         # Wait for simulations to finish
@@ -274,8 +274,8 @@ do
                 sleep 60
             done  # end while loop
 
+            # Create figures
             func_figures "$Case" "$Identifier" &
-
         done  # end for-loop over cases
 
         # Wait for simulations to finish
