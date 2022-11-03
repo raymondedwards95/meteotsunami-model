@@ -5,12 +5,40 @@
 # Maximum number of simultanious tasks
 Ntasks=5
 
+# Default arguments
+run_model=false
+create_animations=false
+create_figures=false
+
+# Commandline arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -s|--simulations) run_model=true ;;
+        -a|--animations) create_animations=true ;;
+        -f|--figures) create_figures=true ;;
+        *) echo "Unknown parameter $1"; exit 1 ;;
+    esac
+    shift
+done
+
+echo ""
+echo "### Script: run_all.sh"
+echo "## Processing arguments"
+if [ "$run_model" = true ] ; then
+    echo "# Simulations are enabled"
+fi
+if [ "$create_animations" = true ] ; then
+    echo "# Animations are enabled"
+fi
+if [ "$create_figures" = true ] ; then
+    echo "# Figures are enabled"
+fi
+
 # List of folders with inputfiles
 FolderList=("./reproduction-an-2012 ./thesis")
 
 # Global settings
-if [ ! -f ./settings.sh ]
-  then
+if [ ! -f ./settings.sh ] ; then
     echo "./settings.sh does not exist. Creating file... Probably it needs to be adjusted manually."
     cp ./setup/settings.sh.template ./settings.sh
     exit 1
@@ -23,7 +51,7 @@ LogFolder="${PWD}/logs"
 mkdir -p "${LogFolder}"
 
 echo ""
-echo "### Prepare simulations"
+echo "### Prepare script"
 echo "## Reading './settings.sh'"
 source ./settings.sh
 echo "# Current directory is '$BaseDir'"
@@ -31,8 +59,7 @@ echo "# Logging file is '$LogFile'"
 echo "# Path to executables is $DFLOWFM_BIN_PATH"
 echo "# Maximum number of simultanious tasks is $Ntasks"
 
-if [ ! -f "$DFLOWFM_BIN_PATH/run_dflowfm.sh" ]
-  then
+if [ ! -f "$DFLOWFM_BIN_PATH/run_dflowfm.sh" ] ; then
     echo "$DFLOWFM_BIN_PATH/run_dflowfm.sh does not exist. Check ./setup/settings.sh. Exiting..."
     exit 1
 fi
@@ -113,13 +140,63 @@ function func_computations ()
     echo "$(date) - Finished all for '$LocalInputFile'" >> $LogFile
 }
 
+# Define animations
+function func_animations ()
+{
+    # Catch arguments
+    local LocalCase=$1
+    local LocalIdentifier=$2
+
+    # Start timer
+    local TStart=$(date +%s)
+
+    # Create animations
+    echo "# Creating animations for $LocalIdentifier case $LocalCase"
+    echo "$(date) - Creating animations for '$LocalInputFile'" >> $LogFile
+
+    python3 $PWD/create_animations.py $LocalCase 1> "${LogFolder}/animations_${LocalIdentifier}_${LocalCase}.log" 2>&1
+
+    # End
+    local TEnd=$(date +%s)
+    local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
+
+    echo "# Finished animations for $LocalIdentifier case $LocalCase"
+    echo "# Animations for case $LocalIdentifier $LocalCase took $dTTotal minutes"
+    echo "$(date) - Finished animations for '$LocalInputFile'" >> $LogFile
+}
+
+# Define figures
+function func_figures ()
+{
+    # Catch arguments
+    local LocalCase=$1
+    local LocalIdentifier=$2
+
+    # Start timer
+    local TStart=$(date +%s)
+
+    # Create figures
+    echo "# Creating figures for $LocalIdentifier case $LocalCase"
+    echo "$(date) - Creating figures for '$LocalInputFile'" >> $LogFile
+
+    python3 $PWD/create_figures.py $LocalCase 1> "${LogFolder}/figures_${LocalIdentifier}_${LocalCase}.log" 2>&1
+
+    # End
+    local TEnd=$(date +%s)
+    local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
+
+    echo "# Finished figures for $LocalIdentifier case $LocalCase"
+    echo "# Figures for case $LocalIdentifier $LocalCase took $dTTotal minutes"
+    echo "$(date) - Finished figures for '$LocalInputFile'" >> $LogFile
+}
+
 # Loop over all folders
 for Folder in $FolderList
 do
     # Move to folder
     cd $Folder
     echo
-    echo "### Preparing for simulations in $PWD"
+    echo "### Preparing for tasks in $PWD"
 
     # Find cases
     FileName=$(find *.mdu | grep -m 1 -P -o "^\D+")
@@ -130,39 +207,84 @@ do
     echo -n "## Found cases: "
     echo $CaseNumbers
 
-    # Create parameter files
-    echo "### Create parameter files in $PWD"
-    func_parameters "$Identifier"
+    # Do simulations
+    if [ "$run_model" = true ] ; then
+        echo "### Create parameter files in $PWD"
+        func_parameters "$Identifier"
 
-    # Loop over all cases
-    echo "### Start simulations in $PWD"
-    for Case in $CaseNumbers
-    do
-        # Wait for a bit
-        sleep $(( 10#$Case ))
-
-        # Make use of a queue
-        while [ $(jobs -p | wc -l) -ge $Ntasks ]
+        echo "### Start simulations in $PWD"
+        for Case in $CaseNumbers
         do
-            sleep 60
-        done
+            # Wait for a bit
+            sleep $(( 10#$Case ))
 
-        # Prepare
-        InputFile="${PWD}/${FileName}${Case}.mdu"
-        OutputName="${PWD}/output/${Identifier}_${Case}/FlowFM_map.nc"
-        RegridName="${PWD}/output/data_${Identifier}_${Case}.nc"
+            # Make use of a queue
+            while [ $(jobs -p | wc -l) -ge $Ntasks ]
+            do
+                sleep 60
+            done  # end while loop
 
-        # Do computations
-        func_computations "$Case" "$InputFile" "$OutputName" "$RegridName" "$Identifier" &
-    done
+            # Prepare
+            InputFile="${PWD}/${FileName}${Case}.mdu"
+            OutputName="${PWD}/output/${Identifier}_${Case}/FlowFM_map.nc"
+            RegridName="${PWD}/output/data_${Identifier}_${Case}.nc"
 
-    # Wait for tasks to finish
-    wait
-    echo "### Finished simulations in $PWD"
+            # Do computations
+            func_computations "$Case" "$InputFile" "$OutputName" "$RegridName" "$Identifier" &
+        done  # end for-loop over cases
+
+        # Wait for simulations to finish
+        wait
+        echo "### Finished simulations in $PWD"
+    fi  # end if run_model
+
+    # Create animations
+    if [ "$create_animations" = true ] ; then
+        for Case in $CaseNumbers
+        do
+            # Wait for a bit
+            sleep $(( 10#$Case ))
+
+            # Make use of a queue
+            while [ $(jobs -p | wc -l) -ge $Ntasks ]
+            do
+                sleep 60
+            done  # end while loop
+
+            func_animations "$Case" "$Identifier" &
+
+        done  # end for-loop over cases
+
+        # Wait for simulations to finish
+        wait
+        echo "### Finished creating animations in $PWD"
+    fi  # end if create_animations
+
+    # Create figures
+    if [ "$create_figures" = true ] ; then
+        for Case in $CaseNumbers
+        do
+            # Wait for a bit
+            sleep $(( 10#$Case ))
+
+            # Make use of a queue
+            while [ $(jobs -p | wc -l) -ge $Ntasks ]
+            do
+                sleep 60
+            done  # end while loop
+
+            func_figures "$Case" "$Identifier" &
+
+        done  # end for-loop over cases
+
+        # Wait for simulations to finish
+        wait
+        echo "### Finished creating figures in $PWD"
+    fi  # end if create figures
 
     # Return
     cd $BaseDir
-done
+done  # end for-loop over folders
 
 echo ""
 echo "### Finished all simulations"
