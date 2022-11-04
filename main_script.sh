@@ -21,10 +21,11 @@ while [[ "$#" -gt 0 ]]; do
         -s|--simulations) run_model=true ;;
         -a|--animations) create_animations=true ;;
         -f|--figures) create_figures=true ;;
+        -v|--visualisations) create_figures=true ; create_animations=true ;;
         -r|--repr) FolderList+=("./reproduction-an-2012") ;;
         -e|--exp) FolderList+=("./thesis") ;;
-        -h|--help) echo "Script to run all simulations (option -s), to create all animations (option -a) and to create all figures (option -f)"; exit 1 ;;
-        *) echo "Unknown parameter $1"; exit 1 ;;
+        -h|--help) echo "Script to run all simulations (option -s), to create all animations (option -a) and to create all figures (option -f)" ; exit 1 ;;
+        *) echo "Unknown parameter $1" ; exit 1 ;;
     esac
     shift
 done
@@ -311,7 +312,7 @@ do
         # Wait for simulations to finish
         wait
         echo "### Finished creating figures in $PWD"
-    fi  # end if create figures
+    fi  # end if create_figures
 
     # Return
     cd $BaseDir
