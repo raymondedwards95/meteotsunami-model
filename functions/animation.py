@@ -92,7 +92,7 @@ def animation_contour(
     # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
     fig.set_dpi(200)
-    fig.set_size_inches(1440/fig.get_dpi(), 720/fig.get_dpi())
+    fig.set_size_inches(1440 / fig.get_dpi(), 720 / fig.get_dpi())
     fig.set_tight_layout(True)
 
     div = np.array([make_axes_locatable(ax[i]) for i in range(2)])
@@ -240,7 +240,9 @@ def animation_contour_uv(
     v = data["v"]
 
     x = x - x.min()
-    uv_max = float(np.ceil(10.* np.max([np.abs([u.max(), u.min(), v.max(), v.min()])])) / 10.)
+    uv_max = float(
+        np.ceil(10.0 * np.max([np.abs([u.max(), u.min(), v.max(), v.min()])])) / 10.0
+    )
 
     limits = (-1.0 * uv_max, uv_max)
     cmaps = [cmo.cm.delta, cmo.cm.delta]
@@ -254,7 +256,7 @@ def animation_contour_uv(
     # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
     fig.set_dpi(200)
-    fig.set_size_inches(1440/fig.get_dpi(), 720/fig.get_dpi())
+    fig.set_size_inches(1440 / fig.get_dpi(), 720 / fig.get_dpi())
     fig.set_tight_layout(True)
 
     div = np.array([make_axes_locatable(ax[i]) for i in range(2)])
@@ -412,7 +414,7 @@ def animation_alongshore(
     # Figure options
     fig, ax = plt.subplots(2, 1, sharex=True)
     fig.set_dpi(200)
-    fig.set_size_inches(1440/fig.get_dpi(), 720/fig.get_dpi())
+    fig.set_size_inches(1440 / fig.get_dpi(), 720 / fig.get_dpi())
     fig.set_tight_layout(True)
 
     # Initial data
@@ -534,7 +536,7 @@ def animation_crossshore(
     slices = 5
     fig, ax = plt.subplots(slices, 1, sharex=True)
     fig.set_dpi(200)
-    fig.set_size_inches(1440/fig.get_dpi(), 720/fig.get_dpi())
+    fig.set_size_inches(1440 / fig.get_dpi(), 720 / fig.get_dpi())
     fig.set_tight_layout(True)
 
     # Initial data
