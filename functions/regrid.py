@@ -29,14 +29,16 @@ from functions import *
 # 1 is the default; it should work
 # 2 is faster, but sometimes it gives wrong results
 __regrid_method = 1
-__regrid_error = f"Set '__regrid_method' in file 'regrid.py' to '1'! Now it is {__regrid_method}"
+__regrid_error = (
+    f"Set '__regrid_method' in file 'regrid.py' to '1'! Now it is {__regrid_method}"
+)
 
 
 def _convert_coordinate_to_regular_grid(
     coordinate: npt.ArrayLike,
     numsteps: Integer = None,
 ) -> Tuple[np.ndarray, Numeric]:
-    """ Creates an equally spaced array of coordinates
+    """Creates an equally spaced array of coordinates
 
     Input:
         `coordinate`:   array with coordinates
@@ -54,7 +56,7 @@ def _convert_coordinate_to_regular_grid(
         np.min(coordinate),
         np.max(coordinate),
         numsteps,
-        retstep=True
+        retstep=True,
     )
     return (grid, step)
 
@@ -65,7 +67,7 @@ def _create_grid_mapping(
     x_grid: npt.ArrayLike,
     y_grid: npt.ArrayLike,
 ) -> np.ndarray:
-    """ Find a mapping to convert data in unstructured data to gridded data
+    """Find a mapping to convert data in unstructured data to gridded data
 
     Input:
         `x`:        1-d array of unstructured x-coordinates
@@ -114,7 +116,7 @@ def _regrid_variable_map(
     grid_map: npt.ArrayLike,
     index: Integer = None,
 ) -> np.ndarray:
-    """ Regrids unstructured data using a pre-defined mapping
+    """Regrids unstructured data using a pre-defined mapping
 
     Input:
         `var`:      unstructured data
@@ -156,10 +158,8 @@ def _regrid_variable_map(
     # Regrid loop over time
     for k in range(t_size):
         # Show progress
-        if not (t_size-k-1) % (t_size // progress_factor):
-            print(
-                f"# Step {k:4.0f} of {t_size:0.0f} ({(k+1)/t_size*100:0.1f}%)"
-            )
+        if not (t_size - k - 1) % (t_size // progress_factor):
+            print(f"# Step {k:4.0f} of {t_size:0.0f} ({(k+1)/t_size*100:0.1f}%)")
 
         # Regrid
         if __regrid_method == 1:
@@ -168,9 +168,11 @@ def _regrid_variable_map(
                 var_grid[k, j, i] = var[k, n]
 
         elif __regrid_method == 2:
-            var_grid[k] = var[k, :] \
-                .reshape(y_size, x_size)[tuple(grid_map.T)] \
-                .reshape(y_size, x_size)  # fast method 2
+            var_grid[k] = (
+                var[k, :]
+                .reshape(y_size, x_size)[tuple(grid_map.T)]
+                .reshape(y_size, x_size)
+            )  # fast method 2
 
         else:
             raise NotImplementedError(__regrid_error)
@@ -187,7 +189,7 @@ def _regrid_variable_interpolate(
     y_grid: npt.ArrayLike,
     index: Integer = None,
 ) -> np.ndarray:
-    """ Regrids unstructured data using interpolation
+    """Regrids unstructured data using interpolation
 
     Input:
         `var`:      unstructured data
@@ -227,10 +229,8 @@ def _regrid_variable_interpolate(
     # loop over time
     for i in range(num_steps):
         # show progress
-        if not (num_steps-i-1) % (num_steps // progress_factor):
-            print(
-                f"# Step {i:4.0f} of {num_steps:0.0f} ({(i+1)/num_steps*100:0.1f}%)"
-            )
+        if not (num_steps - i - 1) % (num_steps // progress_factor):
+            print(f"# Step {i:4.0f} of {num_steps:0.0f} ({(i+1)/num_steps*100:0.1f}%)")
 
         temp = scipy.interpolate.griddata(
             xy, var[i, :], (x_grid_mesh, y_grid_mesh), "linear"
@@ -245,7 +245,7 @@ def extract_data(
     savename: str,
     close: bool = False,
 ) -> xr.Dataset | None:
-    """ Extracts unstructured data from the output of D3D-FLOW-FM and convert it to a structured dataset
+    """Extracts unstructured data from the output of D3D-FLOW-FM and convert it to a structured dataset
 
     Input:
         `filename`  name of the output file from D3D-FLOW-FM
@@ -268,11 +268,7 @@ def extract_data(
     print(f"# Reading file '{filename}'")
 
     ## Name and Description
-    identifier = savename \
-        .split("/")[-1] \
-        .strip(".nc") \
-        .strip("data_") \
-        .replace("_", " ")
+    identifier = savename.split("/")[-1].strip(".nc").strip("data_").replace("_", " ")
     dataset_name = f"Case {identifier}"
     dataset_desc = f"Gridded output data from simulation case {identifier}."
     del identifier
@@ -295,7 +291,7 @@ def extract_data(
 
     data = xr.Dataset(
         coords={"t": t.values, "x": x_grid, "y": y_grid},
-        attrs={"name": dataset_name, "description": dataset_desc}
+        attrs={"name": dataset_name, "description": dataset_desc},
     )
     data.x.attrs["long_name"] = "x coordinate"
     data.x.attrs["units"] = "m"
@@ -310,10 +306,7 @@ def extract_data(
     print(f"#")
     print(f"# Processing bathymetry")
     ta = time.perf_counter_ns()
-    data["b"] = (
-        ("y", "x"),
-        _regrid_variable_map(b, grid_map, index=1)[0, :, :]
-    )
+    data["b"] = (("y", "x"), _regrid_variable_map(b, grid_map, index=1)[0, :, :])
     data.b.attrs["long_name"] = "Water depth"
     data.b.attrs["units"] = "m"
     del b
@@ -340,9 +333,7 @@ def extract_data(
     data.u.attrs["units"] = "m s-1"
     del u
     tb = time.perf_counter_ns()
-    print(
-        f"# Used {(tb-ta)*1e-9:0.3f} seconds to process zonal flow velocity data"
-    )
+    print(f"# Used {(tb-ta)*1e-9:0.3f} seconds to process zonal flow velocity data")
 
     # Regrid meridional flow velocity
     print(f"#")
@@ -375,11 +366,9 @@ def extract_data(
     # Save data
     ta = time.perf_counter_ns()
     encoding = {
-        var: {
-            "zlib": True,
-            "complevel": 1,
-            "least_significant_digit": 6
-        } for var in data}
+        var: {"zlib": True, "complevel": 1, "least_significant_digit": 6}
+        for var in data
+    }
     data.to_netcdf(savename, encoding=encoding)
     data.close()
     tb = time.perf_counter_ns()
@@ -437,23 +426,16 @@ if __name__ == "__main__":
 
     delete_original_model_output = bool(args.delete_original_model_output)
     if delete_original_model_output:
-        warnings.warn(
-            f"Original model output will be deleted! {filename_original}"
-        )
+        warnings.warn(f"Original model output will be deleted! {filename_original}")
         time.sleep(2)
 
     # Convert data
     time.sleep(2)
-    extract_data(
-        filename=filename_original,
-        savename=filename_processed
-    )
+    extract_data(filename=filename_original, savename=filename_processed)
 
     # Clean up data
     if delete_original_model_output:
-        warnings.warn(
-            f"Original model output will be deleted! {filename_original}"
-        )
+        warnings.warn(f"Original model output will be deleted! {filename_original}")
         time.sleep(2)
         os.remove(filename_original)
         print(f"Original model output is deleted! {filename_original}")
