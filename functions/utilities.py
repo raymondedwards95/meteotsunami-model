@@ -30,7 +30,7 @@ def _filter_peaks(
     window: Integer,
     factor: Numeric,
 ) -> np.ndarray:
-    """ Find the largest values, remove large values when they are close """
+    """Find the largest values, remove large values when they are close"""
     idx = []  # list of indices corresponding to maxima
     for i in wl_idx:
         if len(idx) == 0:
@@ -39,7 +39,7 @@ def _filter_peaks(
         else:
             for j in idx:
                 # check if it is neighbour of previous
-                if np.abs(i-j) < window:
+                if np.abs(i - j) < window:
                     break
             else:  # i is a new peak
                 # check if peak is large enough
@@ -51,7 +51,7 @@ def _filter_peaks(
 
 @np.vectorize
 def to_timestr(seconds: Numeric) -> str:
-    """ Converts time in seconds since reference to a date-string """
+    """Converts time in seconds since reference to a date-string"""
     return datetime.datetime.fromtimestamp(seconds).strftime("%Y-%m-%d %H:%M:%S")
 
 
@@ -63,7 +63,7 @@ def find_peaks_const_y(
     crests: bool = True,
     variable: str = "wl",
 ) -> np.ndarray:
-    """ Finds the times at which the local maxima (or minima) of the waves are present for a given y-coordinate
+    """Finds the times at which the local maxima (or minima) of the waves are present for a given y-coordinate
 
     Input:
         `data`:     Dataset that contains coordinates and data
@@ -79,7 +79,7 @@ def find_peaks_const_y(
         `t_idx`:    indices corresponding to the time of the largest maxima
     """
     if x is None:
-        x = data["x"].max().values / 50.  # random scaling? close to shore
+        x = data["x"].max().values / 50.0  # random scaling? close to shore
 
     if not np.isscalar(y):
         raise ValueError(f"{y=} is not a number")
@@ -117,7 +117,7 @@ def find_peaks_const_t(
     window: Integer = 50,
     crests: bool = True,
 ) -> np.ndarray:
-    """ Finds the y-coordinates of the maxima in water level at a given time
+    """Finds the y-coordinates of the maxima in water level at a given time
 
     Input:
         `data`:     Dataset that contains coordinates and data
@@ -132,7 +132,7 @@ def find_peaks_const_t(
         `y_idx`:    indices corresponding to the y-coordinates of the largest maxima
     """
     if x is None:
-        x = data["x"].max().values / 50.  # random scaling? close to shore
+        x = data["x"].max().values / 50.0  # random scaling? close to shore
 
     if np.isscalar(t):
         t = to_timestr(t)
@@ -168,7 +168,7 @@ def find_local_maxima_y(
     number: Integer = None,
     show_timing: bool = False,
 ) -> np.ndarray:
-    """ Finds y-coordinates of the local maxima for fixed (t,x)
+    """Finds y-coordinates of the local maxima for fixed (t,x)
 
     Input:
         `dataset`:  dataset containing gridded model output
@@ -194,17 +194,14 @@ def find_local_maxima_y(
 
     # Invert data if minima are asked
     if minima:
-        data = -1. * data
+        data = -1.0 * data
 
     # Find slope of data
-    data_diff = data \
-        .differentiate("y") \
-        .data  # data converts from xarray to a plain numpy array
+    data_diff = data.differentiate("y").data
+    # data converts from xarray to a plain numpy array
 
     # Find indices of zero-crossings of derivative, i.e. local minima/maxima of data, by making use of sign-changes
-    y_idx = np.where(
-        (data_diff[:-1] * data_diff[1:]) < 0
-    )[0]
+    y_idx = np.where((data_diff[:-1] * data_diff[1:]) < 0)[0]
 
     # Find indices for waves larger than a certain lower limit
     y_idx_valid = y_idx[data[y_idx] > data_std]
@@ -231,15 +228,18 @@ if __name__ == "__main__":
 
     # Read data
     data_a = xr.open_dataset(
-        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc")
+        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc",
+    )
     data_b = xr.open_dataset(
-        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc", chunks="auto")
+        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc",
+        chunks="auto",
+    )
 
     # Test functions
     for data in [data_a, data_b]:
         test_a = find_local_maxima_y(
             dataset=data,
-            t=3600.*42.,
+            t=3600.0 * 42.0,
             x=1e4,
             show_timing=True,
         )
