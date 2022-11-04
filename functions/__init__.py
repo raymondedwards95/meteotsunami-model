@@ -16,7 +16,10 @@ sns.set_palette(sns.color_palette("muted"))
 # Matplotlib video options
 mpl.rcParams["animation.codec"] = "vp8"
 ANIM_EXT = "webm"
-FFMPEG_ARGS = ['-auto-alt-ref', '0',]
+FFMPEG_ARGS = [
+    "-auto-alt-ref",
+    "0",
+]
 
 # Figure size
 FIGSIZE_NORMAL = (7, 4)
@@ -29,7 +32,10 @@ FIGSIZE_SQUARE = (7, 7)
 FIG_DPI = 300
 
 # Figure save options
-FIG_PIL_KWARGS = {"optimize": True, "compress_level": 9,}
+FIG_PIL_KWARGS = {
+    "optimize": True,
+    "compress_level": 9,
+}
 
 # Type Hints
 Integer: TypeAlias = Union[int, np.integer]
