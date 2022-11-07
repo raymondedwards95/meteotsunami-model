@@ -149,7 +149,7 @@ for case_number in range(num_cases):
 
     # Set paths
     filename = f"{pressure_dir}/exp_{case:02.0f}"
-    figurename = f"{pressure_dir}/fig_exp_{case:02.0f}"
+    figurename = f"{pressure_dir}/exp_{case:02.0f}"
 
     # Compute pressure
     print(f"\nComputing pressure field for {case=:02.0f} ({U=}, {a=}, {p0=}, {x0=})")
