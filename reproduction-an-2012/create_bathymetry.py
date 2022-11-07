@@ -79,7 +79,7 @@ for i in range(len(cases)):
     fb.write_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}.xyb")
 
     # Visualize
-    fb.plot_bathymetry(data, f"{bathymetry_dir}/fig_repr_{case:02.0f}")
+    fb.plot_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}")
 
     # End
     tb = time.perf_counter()

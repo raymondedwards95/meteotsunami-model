@@ -1,0 +1,12 @@
+Sloped bottom parameters
+case,slope,depth
+00,2.50e-03,0
+36,1.25e-03,0
+41,0,250
+42,0,100
+43,0,500
+
+Grid parameters
+coordinate,min,max,num,step
+x,0.0,1000000.0,7,166667
+y,-10000000.0,10000000.0,7,3333333
