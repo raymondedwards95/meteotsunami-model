@@ -33,18 +33,19 @@ done
 echo ""
 echo "### Running from: main_script.sh"
 echo "## Processing arguments"
+echo "## The following sub-tasks will be done:"
 if [ "$run_model" = true ] ; then
     create_parameters=true
-    echo "# Simulations are enabled"
+    echo "# Simulations"
 fi
 if [ "$create_parameters" = true ] ; then
-    echo "# Parameter creation is enabled"
+    echo "# Parameter-files"
 fi
 if [ "$create_animations" = true ] ; then
-    echo "# Animations are enabled"
+    echo "# Animations"
 fi
 if [ "$create_figures" = true ] ; then
-    echo "# Figures are enabled"
+    echo "# Figures"
 fi
 
 # Default list of folders with input files
