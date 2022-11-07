@@ -429,9 +429,9 @@ if __name__ == "__main__":
         )
 
     # Define grid
-    x = np.linspace(-5000, 5000, 101)
-    y = np.linspace(-15000, 15000, 200)
-    t = np.linspace(0, 10, 21) * 3600.0
+    x = np.linspace(-5000, 5000, 101, dtype=np.float32)
+    y = np.linspace(-15000, 15000, 200, dtype=np.float32)
+    t = np.linspace(0, 10, 21, dtype=np.float32) * 3600.0
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
     tt = tt.rechunk("auto")
