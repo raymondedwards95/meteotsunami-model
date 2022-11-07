@@ -152,7 +152,7 @@ for case_number in range(num_cases):
 
     # Set paths
     filename = f"{pressure_dir}/repr_{case:02.0f}"
-    figurename = f"{pressure_dir}/fig_repr_{case:02.0f}"
+    figurename = f"{pressure_dir}/repr_{case:02.0f}"
 
     # Create grid
     x_num = int((x_max - x_min) / x_step + 1)
