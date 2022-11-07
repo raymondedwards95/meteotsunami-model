@@ -11,6 +11,7 @@ run_model=false
 create_parameters=false
 create_animations=false
 create_figures=false
+create_theory=false
 
 FolderList=()
 
@@ -24,6 +25,7 @@ while [[ "$#" -gt 0 ]]; do
         -v|--visualisations) create_figures=true ; create_animations=true ;;
         -r|--repr) FolderList+=("./reproduction-an-2012") ;;
         -e|--exp) FolderList+=("./thesis") ;;
+        -t|--theory) create_theory=true ;;
         -h|--help) echo "Script to run all simulations (option -s), to create all animations (option -a) and to create all figures (option -f)" ; exit 1 ;;
         *) echo "Unknown parameter $1" ; exit 1 ;;
     esac
@@ -46,6 +48,9 @@ if [ "$create_animations" = true ] ; then
 fi
 if [ "$create_figures" = true ] ; then
     echo "# Figures"
+fi
+if [ "$create_theory" = true ] ; then
+    echo "# Theory"
 fi
 
 # Default list of folders with input files
@@ -220,6 +225,39 @@ function func_figures ()
     echo "$(date) - Finished figures for '$LocalInputFile'" >> $LogFile
 }
 
+# Define theory
+function func_theory ()
+{
+    # Start timer
+    local TStart=$(date +%s)
+
+    # Create theory
+    echo "# Creating figures for theory"
+    echo "$(date) - Creating figures for theory" >> $LogFile
+
+    cd ./theory
+    echo "# Creating figures in '$PWD'"
+    python3 $PWD/theory_part1.py 1> "${LogFolder}/theory_part1.log" 2>&1 &
+    python3 $PWD/theory_part2.py 1> "${LogFolder}/theory_part2.log" 2>&1 &
+    wait
+    cd ..
+    echo "# Returned to '$PWD'"
+
+    # End
+    local TEnd=$(date +%s)
+    local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
+
+    echo "# Finished figures for theory in $dTTotal minutes"
+    echo "$(date) - Finished figures for theory" >> $LogFile
+}
+
+# Create theory
+if [ "$create_theory" = true ] ; then
+    echo "### Create figures theory"
+    func_theory
+    echo "### Finished theory"
+fi
+
 # Loop over all folders
 for Folder in $FolderList
 do
@@ -241,6 +279,7 @@ do
     if [ "$create_parameters" = true ] ; then
         echo "### Create parameter files in $PWD"
         func_parameters "$Identifier"
+        echo "### Finished parameter files in $PWD"
     fi
 
     # Do simulations
@@ -273,6 +312,7 @@ do
 
     # Create animations
     if [ "$create_animations" = true ] ; then
+        echo "### Start animations in $PWD"
         for Case in $CaseNumbers
         do
             # Wait for a bit
@@ -290,11 +330,12 @@ do
 
         # Wait for simulations to finish
         wait
-        echo "### Finished creating animations in $PWD"
+        echo "### Finished animations in $PWD"
     fi  # end if create_animations
 
     # Create figures
     if [ "$create_figures" = true ] ; then
+        echo "### Start visualising in $PWD"
         for Case in $CaseNumbers
         do
             # Wait for a bit
@@ -312,7 +353,7 @@ do
 
         # Wait for simulations to finish
         wait
-        echo "### Finished creating figures in $PWD"
+        echo "### Finished visualising in $PWD"
     fi  # end if create_figures
 
     # Return
