@@ -60,7 +60,7 @@ def theory_figure_speed_vs_size(
             u_crit[i, :],
             label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
         )
-        plt.fill_between(a / 1000.0, u_crit[i, :], alpha=0.1)
+        plt.fill_between(a / 1000.0, u_crit[i, :], alpha=0.1, rasterized=True,)
     plt.legend()
     plt.xlabel("$a$ [km]")
     plt.ylabel("$U_{crit}$ [m/s]")
@@ -70,12 +70,7 @@ def theory_figure_speed_vs_size(
     plt.gca().xaxis.set_major_formatter(mticker.ScalarFormatter())
     plt.ticklabel_format(axis="both", style="plain")
     fig.get_layout_engine().execute(fig)
-    plt.savefig(
-        savename,
-        bbox_inches="tight",
-        dpi=FIG_DPI,
-        pil_kwargs=FIG_PIL_KWARGS,
-    )
+    save_figure(fig, savename)
 
     print(f"Saved figure {savename}")
     return
@@ -116,7 +111,8 @@ def theory_figure_wavelength_vs_size(
             wavelength[i, :] / 1000.0,
             label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
         )
-        plt.fill_between(a / 1000.0, wavelength[i, :] / 1000.0, alpha=0.1)
+        plt.fill_between(
+            a / 1000.0, wavelength[i, :] / 1000.0, alpha=0.1, rasterized=True,)
     plt.plot(
         a / 1000.0,
         2.0 * a / 1000.0,
@@ -135,12 +131,7 @@ def theory_figure_wavelength_vs_size(
     plt.gca().xaxis.set_major_formatter(mticker.ScalarFormatter())
 
     fig.get_layout_engine().execute(fig)
-    plt.savefig(
-        savename,
-        bbox_inches="tight",
-        dpi=FIG_DPI,
-        pil_kwargs=FIG_PIL_KWARGS,
-    )
+    save_figure(fig, savename)
 
     print(f"Saved figure {savename}")
     return
@@ -180,7 +171,8 @@ def theory_figure_wavelength_vs_velocity(
             wavelength[i, :] / 1000.0,
             label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
         )
-        plt.fill_between(velocity, wavelength[i, :] / 1000.0, alpha=0.1)
+        plt.fill_between(
+            velocity, wavelength[i, :] / 1000.0, alpha=0.1, rasterized=True,)
     plt.legend()
     plt.xlabel("$U$ [m/s]")
     plt.ylabel("$\\lambda$ [km]")
@@ -188,12 +180,7 @@ def theory_figure_wavelength_vs_velocity(
     plt.ylim(0, 700)
     plt.grid()
     fig.get_layout_engine().execute(fig)
-    plt.savefig(
-        savename,
-        bbox_inches="tight",
-        dpi=FIG_DPI,
-        pil_kwargs=FIG_PIL_KWARGS,
-    )
+    save_figure(fig, savename)
 
     print(f"Saved figure {savename}")
     return

@@ -65,6 +65,12 @@ def theory_figure_speed_vs_size_alpha(
         cmap=cmo.cm.speed,
     )
 
+    # rasterize contourf
+    # for pathcoll in cl.collections:
+    #     pathcoll.set_rasterized(True)
+    for pathcoll in cf.collections:
+        pathcoll.set_rasterized(True)
+
     # Colorbar
     div = make_axes_locatable(ax)
     cax = div.append_axes(position="right", size="5%", pad="5%")
@@ -95,12 +101,7 @@ def theory_figure_speed_vs_size_alpha(
 
     # Save figure
     fig.get_layout_engine().execute(fig)
-    fig.savefig(
-        savename,
-        bbox_inches="tight",
-        dpi=FIG_DPI,
-        pil_kwargs=FIG_PIL_KWARGS,
-    )
+    save_figure(fig, savename)
 
     print(f"Saved figure {savename}")
     return
@@ -154,6 +155,12 @@ def theory_figure_wavelength_vs_alpha_speed(
         # extend="max",
     )
 
+    # rasterize contourf
+    # for pathcoll in cl.collections:
+    #     pathcoll.set_rasterized(True)
+    for pathcoll in cf.collections:
+        pathcoll.set_rasterized(True)
+
     # Colorbar
     div = make_axes_locatable(ax)
     cax = div.append_axes(position="right", size="5%", pad="5%")
@@ -181,12 +188,7 @@ def theory_figure_wavelength_vs_alpha_speed(
 
     # Save figure
     fig.get_layout_engine().execute(fig)
-    fig.savefig(
-        savename,
-        bbox_inches="tight",
-        dpi=FIG_DPI,
-        pil_kwargs=FIG_PIL_KWARGS,
-    )
+    save_figure(fig, savename)
 
     print(f"Saved figure {savename}")
     return
