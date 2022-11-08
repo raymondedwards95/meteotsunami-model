@@ -31,7 +31,7 @@ def _relative_ceil(x: Floating) -> Floating:
         0.12 -> 0.2
         0.02 -> 0.1
     """
-    s = -1.0 * int(np.floor(np.log10(np.abs(x))))
+    s = -1 * int(np.floor(np.log10(np.abs(x))))
     return np.round(x, s) + np.power(10.0, -1.0 * s)
 
 
@@ -204,7 +204,6 @@ class plot_contour:
                     cmap=cmap_list[var_idx],
                     vmin=(-1.0 * var_max[var_idx]),
                     vmax=var_max[var_idx],
-                    rasterized=True,
                 )
 
                 self.axes[t_idx, var_idx].annotate(
