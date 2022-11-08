@@ -207,6 +207,32 @@ class plot_alongshore:
         # Checks
         self._check_if_closed()
 
+        if isinstance(x, (tuple, list, np.ndarray)) and np.size(x) > 1:
+            print(f"# Given `{x=}` is a sequence")
+            for x_single in x:
+                self.add_plot(
+                    dataset=dataset,
+                    x=x_single,
+                    t=t,
+                    label=label,
+                    y_min=y_min,
+                    y_max=y_max,
+                )
+            return self
+
+        if isinstance(t, (tuple, list, np.ndarray)) and np.size(t) > 1:
+            print(f"# Given `{t=}` is a sequence")
+            for t_single in t:
+                self.add_plot(
+                    dataset=dataset,
+                    x=x,
+                    t=t_single,
+                    label=label,
+                    y_min=y_min,
+                    y_max=y_max,
+                )
+            return self
+
         if len(self.axes) == 0:
             self.add_subplot()
 
@@ -535,6 +561,32 @@ class plot_crossshore:
         # Checks
         self._check_if_closed()
 
+        if isinstance(y, (tuple, list, np.ndarray)) and np.size(y) > 1:
+            print(f"# Given `{y=}` is a sequence")
+            for y_single in y:
+                self.add_plot(
+                    dataset=dataset,
+                    t=t,
+                    y=y_single,
+                    fit_curve=fit_curve,
+                    label=label,
+                    x_max=x_max,
+                )
+            return self
+
+        if isinstance(t, (tuple, list, np.ndarray)) and np.size(t) > 1:
+            print(f"# Given `{t=}` is a sequence")
+            for t_single in t:
+                self.add_plot(
+                    dataset=dataset,
+                    t=t_single,
+                    y=y,
+                    fit_curve=fit_curve,
+                    label=label,
+                    x_max=x_max,
+                )
+            return self
+
         if len(self.axes) == 0:
             self.add_subplot()
 
@@ -660,6 +712,10 @@ if __name__ == "__main__":
             .add_plot(data_a, x=x, t=2*t, label=f"a - t={2*t}") \
             .save(figure_dir)
 
+        plot_alongshore(variable="wl") \
+            .add_plot(data_a, x=[x, 2*x], t=t) \
+            .save(figure_dir)
+
         plot_alongshore(variable="wl", y_max=5e3) \
             .add_subplot() \
             .add_plot(data_a, x=x, t=t, label=f"a - t={t}") \
@@ -674,6 +730,14 @@ if __name__ == "__main__":
             .add_subplot(data_a, x=x, t=4*t, label=f"a - t={4*t}") \
             .save(figure_dir)
 
+        plot_alongshore(variable="wl", y_min=0) \
+            .add_subplot(data_a, x=x, t=np.linspace(0, t, 5)) \
+            .save(figure_dir)
+
+        plot_alongshore(variable="wl", y_min=0) \
+            .add_subplot(data_a, x=np.arange(x, 5*x, x), t=np.linspace(0, t, 5)) \
+            .save(figure_dir)
+
     def test_crossshore():
         y = [52e5, 72e5]
         t = 3600*42
@@ -683,8 +747,7 @@ if __name__ == "__main__":
             .save(figure_dir)
 
         plot_crossshore(variable="wl", x_max=5e2) \
-            .add_subplot(data_a, t=t, y=y[0], label=f"a - y={y[0]}") \
-            .add_subplot(data_a, t=t, y=y[1], label=f"a - y={y[1]}") \
+            .add_subplot(data_a, t=t, y=y) \
             .save(figure_dir)
 
         plot_crossshore(variable="wl", x_max=5e2) \
