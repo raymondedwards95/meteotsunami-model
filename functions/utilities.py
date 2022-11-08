@@ -259,4 +259,8 @@ if __name__ == "__main__":
     print(f"{to_timestr([100])=}")
     print(f"{to_timestr([100, 200])=}")
 
-    print(f"{from_timestr(np.datetime64('1970-01-03T02:00:00.000000000'))=}")
+    print(f"{from_timestr(np.datetime64('1970-01-01T00:00:00.000000000'))=}")
+    print(f"{from_timestr(np.datetime64('1970-01-01T01:00:00.000000000'))=}")
+    print(f"{from_timestr(np.datetime64('1970-01-03T00:00:00.000000000'))=}")
+    print(f"{from_timestr(np.datetime64('1970-01-03T01:00:00.000000000'))=}")
+    print(f"{from_timestr(np.datetime64('1970-01-03T01:00:01.000000000'))=}")
