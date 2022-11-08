@@ -48,8 +48,8 @@ def animation_contour(
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
     os.makedirs(savedir, exist_ok=True)
-    savename = f"{savedir}/anim_contours.{ANIM_EXT}"
-    savename_static = f"{savedir}/static_contours"
+    savename = f"{savedir}_contours.{ANIM_EXT}"
+    savename_static = f"{savedir}_static_contours"
 
     # Shortcuts
     x = data["x"]
@@ -229,8 +229,8 @@ def animation_contour_uv(
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
     os.makedirs(savedir, exist_ok=True)
-    savename = f"{savedir}/anim_uv_cont.{ANIM_EXT}"
-    savename_static = f"{savedir}/static_uv_cont"
+    savename = f"{savedir}_uv_cont.{ANIM_EXT}"
+    savename_static = f"{savedir}_static_uv_cont"
 
     # Shortcuts
     x = data["x"]
@@ -393,8 +393,8 @@ def animation_alongshore(
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
     os.makedirs(savedir, exist_ok=True)
-    savename = f"{savedir}/anim_alongshore.{ANIM_EXT}"
-    savename_static = f"{savedir}/static_alongshore"
+    savename = f"{savedir}_alongshore.{ANIM_EXT}"
+    savename_static = f"{savedir}_static_alongshore"
 
     # Shortcuts
     x = data["x"]
@@ -518,8 +518,8 @@ def animation_crossshore(
         raise TypeError(f"data is not a Dataset, but it is {type(data)}")
 
     os.makedirs(savedir, exist_ok=True)
-    savename = f"{savedir}/anim_crossshore.{ANIM_EXT}"
-    savename_static = f"{savedir}/static_crossshore"
+    savename = f"{savedir}_crossshore.{ANIM_EXT}"
+    savename_static = f"{savedir}_static_crossshore"
 
     # Shortcuts
     x = data["x"]
@@ -628,7 +628,7 @@ def animation_crossshore(
 if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    anim_dir = f"{script_dir}/tests/anim"
+    anim_dir = f"{script_dir}/tests/anim/anim"
     os.makedirs(anim_dir, exist_ok=True)
 
     # Read data
