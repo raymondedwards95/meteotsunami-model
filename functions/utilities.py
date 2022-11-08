@@ -16,6 +16,8 @@ import numpy as np
 import numpy.typing as npt
 import xarray as xr
 
+from typing import Union
+
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -53,6 +55,14 @@ def _filter_peaks(
 def to_timestr(seconds: Numeric) -> str:
     """Converts time in seconds since reference to a date-string"""
     return datetime.datetime.fromtimestamp(seconds).strftime("%Y-%m-%d %H:%M:%S")
+
+
+@np.vectorize
+def from_timestr(time: Union[np.datetime64, xr.DataArray]) -> float:
+    """Converts a datetime to time in seconds since reference"""
+    if isinstance(time, xr.DataArray):
+        return from_timestr(time.values)
+    return time.astype("datetime64[s]").astype(float)
 
 
 def find_peaks_const_y(
@@ -248,3 +258,5 @@ if __name__ == "__main__":
     print(f"{to_timestr(100)=}")
     print(f"{to_timestr([100])=}")
     print(f"{to_timestr([100, 200])=}")
+
+    print(f"{from_timestr(np.datetime64('1970-01-03T02:00:00.000000000'))=}")
