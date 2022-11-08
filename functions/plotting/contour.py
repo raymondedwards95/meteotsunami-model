@@ -196,14 +196,15 @@ class plot_contour:
         for t_idx, t in enumerate(t_list):
             for var_idx, var in enumerate(variable_list):
                 print(f"# Adding data for {var:2} and t={t}")
-                cont = self.axes[t_idx, var_idx].contourf(
+                cont = self.axes[t_idx, var_idx].pcolormesh(
                     dataset["x"] / 1000.0,
                     dataset["y"] / 1000.0,
                     dataset[var].interp(t=fu.to_timestr(t)),
-                    levels=101,
+                    # levels=101,
                     cmap=cmap_list[var_idx],
                     vmin=(-1.0 * var_max[var_idx]),
                     vmax=var_max[var_idx],
+                    rasterized=True,
                 )
 
                 self.axes[t_idx, var_idx].annotate(
@@ -214,9 +215,9 @@ class plot_contour:
                     va="top",
                 )
 
-                # rasterize contourf
-                for coll in cont.collections:
-                    coll.set_rasterized(True)
+                # # rasterize contourf
+                # for coll in cont.collections:
+                #     coll.set_rasterized(True)
 
         # Add colorbars
         for var_idx, var in enumerate(variable_list):
