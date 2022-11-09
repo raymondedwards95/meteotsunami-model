@@ -44,6 +44,8 @@ def animation_contour(
     Options:
         `xlims`:    x-limits for the figure
         `close`:    close figure after finishing
+        `fps`:      number of frames per second in the video
+        `static`:   save first frame as image
     """
     # Check inputs
     if not isinstance(data, xr.Dataset):
@@ -192,7 +194,8 @@ def animation_contour(
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
-    if static: plt.savefig(savename_static)
+    if static:
+        plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
@@ -227,6 +230,8 @@ def animation_contour_uv(
     Options:
         `xlims`:    x-limits for the figure
         `close`:    close figure after finishing
+        `fps`:      number of frames per second in the video
+        `static`:   save first frame as image
     """
     # Check inputs
     if not isinstance(data, xr.Dataset):
@@ -358,7 +363,8 @@ def animation_contour_uv(
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
-    if static: plt.savefig(savename_static)
+    if static:
+        plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
@@ -393,6 +399,8 @@ def animation_alongshore(
     Options:
         `xlims`:    x-limits for the figure
         `close`:    close figure after finishing
+        `fps`:      number of frames per second in the video
+        `static`:   save first frame as image
     """
     # Check inputs
     if not isinstance(data, xr.Dataset):
@@ -487,7 +495,8 @@ def animation_alongshore(
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
-    if static: plt.savefig(savename_static)
+    if static:
+        plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
@@ -520,6 +529,8 @@ def animation_crossshore(
 
     Options:
         `close`:    close figure after finishing
+        `fps`:      number of frames per second in the video
+        `static`:   save first frame as image
     """
     # Check inputs
     if not isinstance(data, xr.Dataset):
@@ -616,7 +627,8 @@ def animation_crossshore(
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
-    if static: plt.savefig(savename_static)
+    if static:
+        plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
@@ -648,11 +660,32 @@ if __name__ == "__main__":
     # print(f"Chunksize: {data.chunksizes}")
 
     # Make animations
-    animation_contour(data, savedir=anim_dir, _test_i_max=25, static=True,)
-    animation_contour_uv(data, savedir=anim_dir, _test_i_max=25, static=True,)
+    animation_contour(
+        data,
+        savedir=anim_dir,
+        _test_i_max=25,
+        static=True,
+    )
+    animation_contour_uv(
+        data,
+        savedir=anim_dir,
+        _test_i_max=25,
+        static=True,
+    )
 
-    animation_alongshore(data, savedir=anim_dir, _test_i_max=25, static=True,)
-    animation_crossshore(data, savedir=anim_dir, _test_i_max=15, fps=10, static=True,)
+    animation_alongshore(
+        data,
+        savedir=anim_dir,
+        _test_i_max=25,
+        static=True,
+    )
+    animation_crossshore(
+        data,
+        savedir=anim_dir,
+        _test_i_max=15,
+        fps=10,
+        static=True,
+    )
 
     # End
     plt.close("all")
