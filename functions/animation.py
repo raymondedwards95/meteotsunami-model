@@ -32,6 +32,7 @@ def animation_contour(
     xlims: Numeric = None,
     _test_i_max: Integer = None,
     close: bool = True,
+    fps=20,
 ) -> None:
     """Creates an animation of the top-down view of the water level and surface air pressure data
 
@@ -186,7 +187,7 @@ def animation_contour(
         update,
         init_func=initfig,
         frames=frames,
-        interval=1000 / 20,
+        interval=1000 / fps,
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
@@ -213,6 +214,7 @@ def animation_contour_uv(
     xlims: Numeric = None,
     _test_i_max: Integer = None,
     close: bool = True,
+    fps=20,
 ) -> None:
     """Creates an animation of the top-down view of the water velocity data
 
@@ -350,7 +352,7 @@ def animation_contour_uv(
         update,
         init_func=initfig,
         frames=frames,
-        interval=1000 / 20,
+        interval=1000 / fps,
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
@@ -377,6 +379,7 @@ def animation_alongshore(
     xlims: Numeric = None,
     _test_i_max: Integer = None,
     close: bool = True,
+    fps=20,
 ) -> None:
     """Creates an animation of an alongshore cross-section of the water level and surface air pressure data
 
@@ -477,7 +480,7 @@ def animation_alongshore(
         update,
         init_func=initfig,
         frames=frames,
-        interval=1000 / 20,
+        interval=1000 / fps,
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
@@ -503,6 +506,7 @@ def animation_crossshore(
     savedir: str,
     _test_i_max: Integer = None,
     close: bool = True,
+    fps=20,
 ) -> None:
     """Creates an animation of crossshore cross-sections of the water level and surface air pressure data
 
@@ -604,7 +608,7 @@ def animation_crossshore(
         update,
         init_func=initfig,
         frames=frames,
-        interval=1000 / 20,
+        interval=1000 / fps,
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
@@ -644,7 +648,8 @@ if __name__ == "__main__":
     animation_contour_uv(data, savedir=anim_dir, _test_i_max=25)
 
     animation_alongshore(data, savedir=anim_dir, _test_i_max=25)
-    animation_crossshore(data, savedir=anim_dir, _test_i_max=25)
+    animation_crossshore(data, savedir=anim_dir, _test_i_max=15,
+                         fps=10)
 
     # End
     plt.close("all")
