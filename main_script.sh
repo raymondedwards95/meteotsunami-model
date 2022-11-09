@@ -2,6 +2,9 @@
 # Runs all simulations in the given folders.
 # Also processes the model output.
 
+echo ""
+echo "### Running from: main_script.sh"
+
 # Maximum number of simultanious tasks
 Ntasks=5
 Ntasks_half=$(python3 -c "print(f'{max([3, $Ntasks // 3]):0.0f}')")
@@ -16,25 +19,23 @@ create_theory=false
 FolderList=()
 
 # Commandline arguments
+echo "## Processing arguments"
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        -p|--parameters) create_parameters=true ;;
-        -s|--simulations) run_model=true ;;
-        -a|--animations) create_animations=true ;;
-        -f|--figures) create_figures=true ;;
-        -v|--visualisations) create_figures=true ; create_animations=true ;;
-        -r|--repr) FolderList+=("./reproduction-an-2012") ;;
-        -e|--exp) FolderList+=("./thesis") ;;
-        -t|--theory) create_theory=true ;;
-        -h|--help) echo "Script to run all simulations (option -s), to create all animations (option -a) and to create all figures (option -f)" ; exit 1 ;;
+        -p|--parameters) echo "Got argument `--parameters`" ; create_parameters=true ;;
+        -s|--simulations) echo "Got argument `--simulations`" ; run_model=true ;;
+        -a|--animations) echo "Got argument `--animations`" ; create_animations=true ;;
+        -f|--figures) echo "Got argument `--figures`" ; create_figures=true ;;
+        -v|--visualisations) echo "Got argument `--visualisations`" ; create_figures=true ; create_animations=true ;;
+        -r|--repr) echo "Got argument `--repr`" ; FolderList+=("./reproduction-an-2012") ;;
+        -e|--exp) echo "Got argument `--exp`" ; FolderList+=("./thesis") ;;
+        -t|--theory) echo "Got argument `--theory`" ; create_theory=true ;;
+        -h|--help) echo "Got argument `--help`" ; echo "Script to run all simulations (option -s), to create all animations (option -a) and to create all figures (option -f)" ; exit 1 ;;
         *) echo "Unknown parameter $1" ; exit 1 ;;
     esac
     shift
 done
 
-echo ""
-echo "### Running from: main_script.sh"
-echo "## Processing arguments"
 echo "## The following sub-tasks will be done:"
 if [ "$run_model" = true ] ; then
     create_parameters=true
