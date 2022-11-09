@@ -32,7 +32,7 @@ def animation_contour(
     xlims: Numeric = None,
     _test_i_max: Integer = None,
     close: bool = True,
-    fps=20,
+    fps: Numeric=20,
 ) -> None:
     """Creates an animation of the top-down view of the water level and surface air pressure data
 
@@ -214,7 +214,7 @@ def animation_contour_uv(
     xlims: Numeric = None,
     _test_i_max: Integer = None,
     close: bool = True,
-    fps=20,
+    fps: Numeric=20,
 ) -> None:
     """Creates an animation of the top-down view of the water velocity data
 
@@ -379,7 +379,7 @@ def animation_alongshore(
     xlims: Numeric = None,
     _test_i_max: Integer = None,
     close: bool = True,
-    fps=20,
+    fps: Numeric=20,
 ) -> None:
     """Creates an animation of an alongshore cross-section of the water level and surface air pressure data
 
@@ -506,7 +506,7 @@ def animation_crossshore(
     savedir: str,
     _test_i_max: Integer = None,
     close: bool = True,
-    fps=20,
+    fps: Numeric=20,
 ) -> None:
     """Creates an animation of crossshore cross-sections of the water level and surface air pressure data
 
