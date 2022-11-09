@@ -33,6 +33,7 @@ def animation_contour(
     _test_i_max: Integer = None,
     close: bool = True,
     fps: Numeric = 20,
+    static: bool = False,
 ) -> None:
     """Creates an animation of the top-down view of the water level and surface air pressure data
 
@@ -50,7 +51,7 @@ def animation_contour(
 
     os.makedirs(savedir, exist_ok=True)
     savename = f"{savedir}_contours.{ANIM_EXT}"
-    savename_static = f"{savedir}_static_contours"
+    savename_static = f"{savedir}__static_contours"
 
     # Shortcuts
     x = data["x"]
@@ -191,7 +192,7 @@ def animation_contour(
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
-    plt.savefig(savename_static)
+    if static: plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
@@ -215,6 +216,7 @@ def animation_contour_uv(
     _test_i_max: Integer = None,
     close: bool = True,
     fps: Numeric = 20,
+    static: bool = False,
 ) -> None:
     """Creates an animation of the top-down view of the water velocity data
 
@@ -232,7 +234,7 @@ def animation_contour_uv(
 
     os.makedirs(savedir, exist_ok=True)
     savename = f"{savedir}_uv_cont.{ANIM_EXT}"
-    savename_static = f"{savedir}_static_uv_cont"
+    savename_static = f"{savedir}__static_uv_cont"
 
     # Shortcuts
     x = data["x"]
@@ -356,7 +358,7 @@ def animation_contour_uv(
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
-    plt.savefig(savename_static)
+    if static: plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
@@ -380,6 +382,7 @@ def animation_alongshore(
     _test_i_max: Integer = None,
     close: bool = True,
     fps: Numeric = 20,
+    static: bool = False,
 ) -> None:
     """Creates an animation of an alongshore cross-section of the water level and surface air pressure data
 
@@ -397,7 +400,7 @@ def animation_alongshore(
 
     os.makedirs(savedir, exist_ok=True)
     savename = f"{savedir}_alongshore.{ANIM_EXT}"
-    savename_static = f"{savedir}_static_alongshore"
+    savename_static = f"{savedir}__static_alongshore"
 
     # Shortcuts
     x = data["x"]
@@ -484,7 +487,7 @@ def animation_alongshore(
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
-    plt.savefig(savename_static)
+    if static: plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
@@ -507,6 +510,7 @@ def animation_crossshore(
     _test_i_max: Integer = None,
     close: bool = True,
     fps: Numeric = 20,
+    static: bool = False,
 ) -> None:
     """Creates an animation of crossshore cross-sections of the water level and surface air pressure data
 
@@ -523,7 +527,7 @@ def animation_crossshore(
 
     os.makedirs(savedir, exist_ok=True)
     savename = f"{savedir}_crossshore.{ANIM_EXT}"
-    savename_static = f"{savedir}_static_crossshore"
+    savename_static = f"{savedir}__static_crossshore"
 
     # Shortcuts
     x = data["x"]
@@ -612,7 +616,7 @@ def animation_crossshore(
     )
     print(f"# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
-    plt.savefig(savename_static)
+    if static: plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
@@ -644,11 +648,11 @@ if __name__ == "__main__":
     # print(f"Chunksize: {data.chunksizes}")
 
     # Make animations
-    animation_contour(data, savedir=anim_dir, _test_i_max=25)
-    animation_contour_uv(data, savedir=anim_dir, _test_i_max=25)
+    animation_contour(data, savedir=anim_dir, _test_i_max=25, static=True,)
+    animation_contour_uv(data, savedir=anim_dir, _test_i_max=25, static=True,)
 
-    animation_alongshore(data, savedir=anim_dir, _test_i_max=25)
-    animation_crossshore(data, savedir=anim_dir, _test_i_max=15, fps=10)
+    animation_alongshore(data, savedir=anim_dir, _test_i_max=25, static=True,)
+    animation_crossshore(data, savedir=anim_dir, _test_i_max=15, fps=10, static=True,)
 
     # End
     plt.close("all")
