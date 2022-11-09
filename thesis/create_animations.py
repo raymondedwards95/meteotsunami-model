@@ -54,10 +54,15 @@ data = xr.open_dataset(data_file)#, chunks={"y": -1, "x": -1, "t": "auto"})
 print(f"Grid size: {data.sizes}")
 # print(f"Chunksize: {data.chunksizes}")
 
+# Downsample data
+data = data.resample(t="1800s").interpolate()
+print(f"Downsampled grid size: {data.sizes}")
+# print(f"Chunksize: {data.chunksizes}")
+
 # Create animations
-anim.animation_alongshore(data, savedir=anim_dir)
-anim.animation_contour(data, savedir=anim_dir)
-anim.animation_contour_uv(data, savedir=anim_dir)
+anim.animation_alongshore(data, savedir=anim_dir, fps=10.)
+anim.animation_contour(data, savedir=anim_dir, fps=10.)
+anim.animation_contour_uv(data, savedir=anim_dir, fps=10.)
 
 # Close data
 data.close()
