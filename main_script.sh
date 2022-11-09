@@ -22,15 +22,15 @@ FolderList=()
 echo "## Processing arguments"
 while [[ "$#" -gt 0 ]]; do
     case $1 in
-        -p|--parameters) echo "Got argument `--parameters`" ; create_parameters=true ;;
-        -s|--simulations) echo "Got argument `--simulations`" ; run_model=true ;;
-        -a|--animations) echo "Got argument `--animations`" ; create_animations=true ;;
-        -f|--figures) echo "Got argument `--figures`" ; create_figures=true ;;
-        -v|--visualisations) echo "Got argument `--visualisations`" ; create_figures=true ; create_animations=true ;;
-        -r|--repr) echo "Got argument `--repr`" ; FolderList+=("./reproduction-an-2012") ;;
-        -e|--exp) echo "Got argument `--exp`" ; FolderList+=("./thesis") ;;
-        -t|--theory) echo "Got argument `--theory`" ; create_theory=true ;;
-        -h|--help) echo "Got argument `--help`" ; echo "Script to run all simulations (option -s), to create all animations (option -a) and to create all figures (option -f)" ; exit 1 ;;
+        -p|--parameters) echo "Got argument '--parameters'" ; create_parameters=true ;;
+        -s|--simulations) echo "Got argument '--simulations'" ; run_model=true ;;
+        -a|--animations) echo "Got argument '--animations'" ; create_animations=true ;;
+        -f|--figures) echo "Got argument '--figures'" ; create_figures=true ;;
+        -v|--visualisations) echo "Got argument '--visualisations'" ; create_figures=true ; create_animations=true ;;
+        -r|--repr) echo "Got argument '--repr'" ; FolderList+=("./reproduction-an-2012") ;;
+        -e|--exp) echo "Got argument '--exp'" ; FolderList+=("./thesis") ;;
+        -t|--theory) echo "Got argument '--theory'" ; create_theory=true ;;
+        -h|--help) echo "Got argument '--help'" ; echo "Script to run all simulations (option -s), to create all animations (option -a) and to create all figures (option -f)" ; exit 1 ;;
         *) echo "Unknown parameter $1" ; exit 1 ;;
     esac
     shift
