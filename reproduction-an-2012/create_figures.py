@@ -52,88 +52,105 @@ if not os.path.exists(data_file):
     sys.exit(1)
 
 # Get data
-data = xr.open_dataset(data_file)#, chunks={"y": -1, "x": -1, "t": "auto"})
+data = xr.open_dataset(data_file)  # , chunks={"y": -1, "x": -1, "t": "auto"})
 print(f"Grid size: {data.sizes}")
 # print(f"Chunksize: {data.chunksizes}")
 
 # Parameters
 t_list = np.linspace(
     fu.from_timestr(data["t"].min()),
-    fu.from_timestr(data["t"].max()) - 7200.,
-    5,)
+    fu.from_timestr(data["t"].max()) - 7200.0,
+    5,
+)
 y_list = np.linspace(
-    0.,
+    0.0,
     data["y"].max(),
     5,
 )
-y_min = 0.
-x_max = np.round(data["x"].max() / 2. / 1000., -1)
-x_ref = np.ceil(data["x"].min() * 2. / 1e3) * 1e3
+y_min = 0.0
+x_max = np.round(data["x"].max() / 2.0 / 1000.0, -1)
+x_ref = np.ceil(data["x"].min() * 2.0 / 1e3) * 1e3
 
 # Contour
-fpl.plot_contour() \
-    .add_plots(
-        dataset=data,
-        variable_list=["wl"],
-        t_list=t_list,
-        y_min=y_min,
-        x_max=x_max,
-    ) \
-    .save(figure_dir)
+_contour_a = fpl.plot_contour()
+_contour_a.add_plots(
+    dataset=data,
+    variable_list=["wl"],
+    t_list=t_list,
+    y_min=y_min,
+    x_max=x_max,
+)
+_contour_a.save(figure_dir)
 
-fpl.plot_contour() \
-    .add_plots(
-        dataset=data,
-        variable_list=["wl", "p"],
-        t_list=t_list,
-        y_min=y_min,
-        x_max=x_max,
-) \
-    .save(figure_dir)
+_contour_b = fpl.plot_contour()
+_contour_b.add_plots(
+    dataset=data,
+    variable_list=["wl", "p"],
+    t_list=t_list,
+    y_min=y_min,
+    x_max=x_max,
+)
+_contour_b.save(figure_dir)
 
-fpl.plot_contour() \
-    .add_plots(
-        dataset=data,
-        variable_list=["u", "v"],
-        t_list=t_list,
-        y_min=y_min,
-        x_max=x_max,
-) \
-    .save(figure_dir)
+_contour_c = fpl.plot_contour()
+_contour_c.add_plots(
+    dataset=data,
+    variable_list=["u", "v"],
+    t_list=t_list,
+    y_min=y_min,
+    x_max=x_max,
+)
+_contour_c.save(figure_dir)
 
 # Alongshore
-fpl.plot_alongshore(variable="wl") \
-    .add_subplot(dataset=data,
-                 x=x_ref, t=t_list,
+_along_shore = fpl.plot_alongshore(variable="wl")
+_along_shore.add_subplot(
+    dataset=data,
+    x=x_ref,
+    t=t_list,
     y_min=0,
-    ) \
-    .save(figure_dir)
+)
+_along_shore.save(figure_dir)
 
 # Crossshore
 for t_single in t_list:
-    fpl.plot_crossshore(variable="wl") \
-        .plot_peaks(dataset=data, t=t_single, number=5,) \
-            .save(figure_dir)
+    _cross_shore = fpl.plot_crossshore(variable="wl")
+    _cross_shore.plot_peaks(
+        dataset=data,
+        t=t_single,
+        number=5,
+    )
+    _cross_shore.save(figure_dir)
 
 # Spectrum-1d
 _spectrum_1d = fpl.plot_spectrum_1d(variable="wl", demean=True)
 for y_single in y_list:
-    _spectrum_1d.add_plot(dataset=data, x=x_ref, y=y_single,)
+    _spectrum_1d.add_plot(
+        dataset=data,
+        x=x_ref,
+        y=y_single,
+    )
 _spectrum_1d.save(figure_dir)
-del _spectrum_1d
 
 # Spectrum-2d
-fpl.plot_spectrum_2d(variable="wl", demean=True) \
-    .add_plot(dataset=data, x=x,) \
-    .add_dispersion(n=3) \
-    .save(figure_dir)
+_spectrum_2d = fpl.plot_spectrum_2d(variable="wl", demean=True)
+_spectrum_2d.add_plot(
+    dataset=data,
+    x=x_ref,
+)
+_spectrum_2d.add_dispersion(n=3)
+_spectrum_2d.save(figure_dir)
 
 # Timeseries
 _timeseries = fpl.plot_timeseries()
 for y_single in y_list:
-    _timeseries.add_plot(dataset=data, variable="wl", x=x_ref, y=y_single,)
+    _timeseries.add_plot(
+        dataset=data,
+        variable="wl",
+        x=x_ref,
+        y=y_single,
+    )
 _timeseries.save(figure_dir)
-del _timeseries
 
 # Close data
 data.close()
