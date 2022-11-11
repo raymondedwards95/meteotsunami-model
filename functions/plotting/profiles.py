@@ -459,7 +459,7 @@ class plot_crossshore:
         Options:
             `fit_curve`:    apply a curve fit on the data
             `x_max`:        upper limit for x (in kilometers)
-            'sort'          sort plots by highest values in data
+            'sort':         sort plots by highest values in data
             `number`:       number of waves to plot
         """
         # Checks
