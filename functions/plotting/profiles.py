@@ -477,6 +477,11 @@ class plot_crossshore:
             number=number,
         )
 
+        if len(y_idx) < 1:
+            print(f"# There are no local maxima to plot!")
+            self.axes.append(self.fig.add_subplot())  # create empty plot
+            return self
+
         # Make plots
         for idx in y_idx:
             y = dataset["y"][idx].values
