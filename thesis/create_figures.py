@@ -58,8 +58,8 @@ print(f"Grid size: {data.sizes}")
 
 # Parameters
 t_list = np.linspace(
-    fu.from_timestr(data["t"].min()),
-    fu.from_timestr(data["t"].max()) - 7200.0,
+    fu.from_timestr(data["t"].values.min()),
+    fu.from_timestr(data["t"].values.max()) - 7200.0,
     5,
 )
 y_list = np.linspace(
@@ -68,8 +68,8 @@ y_list = np.linspace(
     5,
 )
 y_min = 0.0
-x_max = np.round(data["x"].max() / 2.0 / 1000.0, -1)
-x_ref = np.ceil(data["x"].min() * 2.0 / 1e3) * 1e3
+x_max = np.round(data["x"].values.max() / 2.0 / 1000.0, -1)
+x_ref = np.ceil(data["x"].values.min() * 2.0 / 1e3) * 1e3
 
 # Contour
 _contour_a = fpl.plot_contour()
