@@ -476,7 +476,8 @@ class plot_spectrum_2d:
                 self.y_scale * dispersion,
                 linewidth=1,
                 linestyle="--",
-                color="black", rasterized=False,
+                color="black",
+                rasterized=False,
             )
             self.ax.annotate(
                 text=f"$n={i}$",
