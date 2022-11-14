@@ -178,11 +178,13 @@ class plot_spectrum_1d:
             freqs,
             power,
             label=label,
+            rasterized=False,
         )
         self.ax.fill_between(
             freqs,
             power,
             alpha=0.1,
+            rasterized=False,
         )
 
         # Log
@@ -397,7 +399,10 @@ class plot_spectrum_2d:
 
         # Compute spectrum
         wavenumber, freqs, power = fa.spectral_analysis_2d(
-            dataset, x=self.x, variable=self.variable, demean=self.demean
+            dataset,
+            x=self.x,
+            variable=self.variable,
+            demean=self.demean,
         )
         # flip wavenumbers, since we only look at waves in a given direction
         wavenumber = -1.0 * wavenumber
@@ -425,6 +430,7 @@ class plot_spectrum_2d:
             shading="nearest",  # "gouraud",
             cmap=cmo.cm.matter,
             vmin=5.0 * np.min(power),
+            rasterized=True,
         )
 
         # Colorbar
@@ -470,7 +476,7 @@ class plot_spectrum_2d:
                 self.y_scale * dispersion,
                 linewidth=1,
                 linestyle="--",
-                color="black",
+                color="black", rasterized=False,
             )
             self.ax.annotate(
                 text=f"$n={i}$",
