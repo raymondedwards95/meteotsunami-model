@@ -151,8 +151,18 @@ class plot_timeseries:
         data = dataset[variable].interp(x=x, y=y)
 
         # Plot
-        self.axes[ax_idx].plot(time, data, label=label)
-        self.axes[ax_idx].fill_between(time, data, alpha=0.1)
+        self.axes[ax_idx].plot(
+            time,
+            data,
+            label=label,
+            rasterized=False,
+        )
+        self.axes[ax_idx].fill_between(
+            time,
+            data,
+            alpha=0.1,
+            rasterized=False,
+        )
 
         # Log
         print(
