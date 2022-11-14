@@ -343,9 +343,9 @@ do
             sleep $(( 10#$Case ))
 
             # Make use of a queue
-            while [ $(jobs -p | wc -l) -ge $Ntasks ]
+            while [ $(jobs -p | wc -l) -ge 2 ]
             do
-                sleep 60
+                sleep 20
             done  # end while loop
 
             # Create figures
