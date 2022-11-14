@@ -250,8 +250,18 @@ class plot_alongshore:
         data = dataset[self.variable].interp(x=x, t=fu.to_timestr(t))
 
         # Plot
-        self.axes[-1].plot(y, data, label=label, rasterized=True,)
-        self.axes[-1].fill_between(y, data, alpha=0.1, rasterized=True,)
+        self.axes[-1].plot(
+            y,
+            data,
+            label=label,
+            rasterized=True,
+        )
+        self.axes[-1].fill_between(
+            y,
+            data,
+            alpha=0.1,
+            rasterized=True,
+        )
 
         # Update plot-limits
         if self.y_min_fixed:
@@ -609,8 +619,18 @@ class plot_crossshore:
         data = dataset[self.variable].interp(y=y, t=fu.to_timestr(t))
 
         # Plot
-        self.axes[-1].plot(x, data, label=label, rasterized=False,)
-        self.axes[-1].fill_between(x, data, alpha=0.1, rasterized=False,)
+        self.axes[-1].plot(
+            x,
+            data,
+            label=label,
+            rasterized=False,
+        )
+        self.axes[-1].fill_between(
+            x,
+            data,
+            alpha=0.1,
+            rasterized=False,
+        )
 
         # Fit curve
         if fit_curve:
@@ -621,7 +641,13 @@ class plot_crossshore:
             fit = fa.exp_decay(dataset["x"], k0, y0)
             label_fit = f"$A e^{{-k_0 x}}$ with $1/k_0 = {1/k0/1e3:0.0f}$km"
 
-            self.axes[-1].plot(x, fit, "--", label=label_fit, rasterized=False,)
+            self.axes[-1].plot(
+                x,
+                fit,
+                "--",
+                label=label_fit,
+                rasterized=False,
+            )
             # self.axes[-1].fill_between(x, fit, alpha=0.1, rasterized=False,)
 
         # Update plot-limits
