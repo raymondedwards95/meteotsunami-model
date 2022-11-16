@@ -35,7 +35,7 @@ case = f"{args.case:02}"
 
 # Paths
 current_dir = os.path.dirname(os.path.realpath(__file__))
-figure_dir = f"{current_dir}/figures/exp_{case}"
+figure_dir = f"{current_dir}/results/exp_{case}"
 data_dir = f"{current_dir}/output"
 
 data_file = f"{data_dir}/data_exp_{case}.nc"
