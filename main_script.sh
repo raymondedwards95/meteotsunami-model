@@ -5,6 +5,29 @@
 echo ""
 echo "### Running from: main_script.sh"
 
+# Help
+TextHelp="
+#####
+\n
+Main script for simulating and visualising.
+\n\n
+Options:
+\n\t -p \t Create parameter files
+\n\t -s \t Run simulations, also applies -p
+\n\t -a \t Create animations
+\n\t -f \t Create figures
+\n\t -v \t Create visualisations, applies -f, -v and -t
+\n\t -t \t Create figures for theory
+\n\n
+Folders:
+\n\t -r \t Apply options to the reproduction
+\n\t -e \t Apply options to the experiments
+\n\n
+Help:
+\n\t -h \t Show this text
+\n\n
+"
+
 # Maximum number of simultanious tasks
 Ntasks=5
 Ntasks_half=$(python3 -c "print(f'{max([3, $Ntasks // 3]):0.0f}')")
@@ -26,11 +49,11 @@ while [[ "$#" -gt 0 ]]; do
         -s|--simulations) echo "Got argument '--simulations'" ; run_model=true ;;
         -a|--animations) echo "Got argument '--animations'" ; create_animations=true ;;
         -f|--figures) echo "Got argument '--figures'" ; create_figures=true ;;
-        -v|--visualisations) echo "Got argument '--visualisations'" ; create_figures=true ; create_animations=true ;;
+        -v|--visualisations) echo "Got argument '--visualisations'" ; create_figures=true ; create_animations=true ; create_theory=true ;;
         -r|--repr) echo "Got argument '--repr'" ; FolderList+=("./reproduction-an-2012") ;;
         -e|--exp) echo "Got argument '--exp'" ; FolderList+=("./thesis") ;;
         -t|--theory) echo "Got argument '--theory'" ; create_theory=true ;;
-        -h|--help) echo "Got argument '--help'" ; echo "Script to run all simulations (option -s), to create all animations (option -a) and to create all figures (option -f)" ; exit 1 ;;
+        -h|--help) echo "Got argument '--help'" ; echo -e $TextHelp ; exit 1 ;;
         *) echo "Unknown parameter $1" ; exit 1 ;;
     esac
     shift
