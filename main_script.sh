@@ -7,24 +7,23 @@ echo "### Running from: main_script.sh"
 
 # Help
 TextHelp="
-#####
 \n
 Main script for simulating and visualising.
 \n\n
 Options:
-\n\t -p \t Create parameter files
-\n\t -s \t Run simulations, also applies -p
-\n\t -a \t Create animations
-\n\t -f \t Create figures
-\n\t -v \t Create visualisations, applies -f, -v and -t
-\n\t -t \t Create figures for theory
+\n  -p, --parameters         \t      Create parameter files
+\n  -s, --simulations        \t      Run simulations, also applies -p
+\n  -a, --animations         \t      Create animations
+\n  -f, --figures            \t\t    Create figures
+\n  -v, --visualisations     \t      Create visualisations, applies -f, -v and -t
+\n  -t, --theory             \t\t    Create figures for theory
 \n\n
 Folders:
-\n\t -r \t Apply options to the reproduction
-\n\t -e \t Apply options to the experiments
+\n  -r, --repr               \t\t    Apply options to the reproduction
+\n  -e, --exp                \t\t    Apply options to the experiments
 \n\n
 Help:
-\n\t -h \t Show this text
+\n  -h, --help               \t\t    Show this text
 \n\n
 "
 
