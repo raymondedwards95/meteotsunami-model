@@ -43,13 +43,23 @@ Floating: TypeAlias = Union[float, np.floating]
 Numeric: TypeAlias = Union[int, float, np.integer, np.floating]
 
 # Paths
-functions_dir = os.path.dirname(os.path.realpath(__file__))
-main_dir = os.path.dirname(functions_dir)
-test_results_dir = f"{functions_dir}/tests"
-os.makedirs(test_results_dir, exist_ok=True)
+PATH_FUNCTIONS = os.path.dirname(os.path.realpath(__file__))
+PATH_MAIN = os.path.dirname(PATH_FUNCTIONS)
+PATH_TEST = f"{PATH_FUNCTIONS}/tests"
+PATH_FIGURES = f"{PATH_MAIN}/figures"
+PATH_PNG = f"{PATH_MAIN}/figures/png"
+PATH_PGF = f"{PATH_MAIN}/figures/pgf"
 
-assert functions_dir.endswith("functions")
-assert test_results_dir.endswith("tests")
+os.makedirs(PATH_TEST, exist_ok=True)
+os.makedirs(PATH_FIGURES, exist_ok=True)
+os.makedirs(PATH_PNG, exist_ok=True)
+os.makedirs(PATH_PGF, exist_ok=True)
+
+assert PATH_FUNCTIONS.endswith("functions")
+assert PATH_TEST.endswith("tests")
+assert PATH_FIGURES.endswith("figures")
+assert PATH_PNG.endswith("png")
+assert PATH_PGF.endswith("pgf")
 
 # Dask options
 dask.config.set({"array.chunk-size": "512MiB"})
@@ -68,12 +78,16 @@ def save_figure(fig: mpl.figure, name: str, path: str = None) -> None:
     if path is None:
         path, name = os.path.split(name)
 
+    path = path.removeprefix(PATH_MAIN)
+    path = path.removeprefix("/")
+    path = path.replace("/figures", "")
+
     print(f"## Figure path is '{path}'")
     print(f"## Figure name is '{name}'")
     print(f"## Saving figure as low resolution 'png' and full resolution 'pgf'")
 
-    png_dir = os.path.join(path, "png")
-    pgf_dir = os.path.join(path, "pgf")
+    png_dir = os.path.join(PATH_PNG, path)
+    pgf_dir = os.path.join(PATH_PGF, path)
 
     os.makedirs(png_dir, exist_ok=True)
     os.makedirs(pgf_dir, exist_ok=True)
