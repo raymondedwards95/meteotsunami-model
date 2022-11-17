@@ -10,6 +10,7 @@ import xarray as xr
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 import functions.animation as anim
 # fmt: on
 
@@ -33,12 +34,10 @@ case = f"{args.case:02}"
 
 # Paths
 current_dir = os.path.dirname(os.path.realpath(__file__))
-anim_dir = f"{current_dir}/animations/repr_{case}"
+anim_dir = f"{PATH_MAIN}/animations/repr_{case}"
 data_dir = f"{current_dir}/output"
 
 data_file = f"{data_dir}/data_repr_{case}.nc"
-
-os.makedirs(anim_dir, exist_ok=True)
 
 # Checks
 print(f"Making animations for repr {case=}")
