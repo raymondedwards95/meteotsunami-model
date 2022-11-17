@@ -40,8 +40,6 @@ data_dir = f"{current_dir}/output"
 
 data_file = f"{data_dir}/data_exp_{case}.nc"
 
-os.makedirs(figure_dir, exist_ok=True)
-
 # Checks
 print(f"Making figures for exp {case=}")
 print(f"Save location: {figure_dir}")
