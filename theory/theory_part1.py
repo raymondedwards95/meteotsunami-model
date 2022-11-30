@@ -233,7 +233,6 @@ if __name__ == "__main__":
     show_figures = False
     current_dir = os.path.dirname(os.path.realpath(__file__))
     figure_dir = f"{current_dir}/figures"
-    os.makedirs(figure_dir, exist_ok=True)
 
     # Parameters
     a = np.logspace(2, 6, 201)

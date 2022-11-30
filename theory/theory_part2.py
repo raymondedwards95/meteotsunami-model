@@ -196,9 +196,8 @@ def theory_figure_wavelength_vs_alpha_speed(
 
 if __name__ == "__main__":
     # Paths
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    figure_dir = f"{script_dir}/figures"
-    os.makedirs(figure_dir, exist_ok=True)
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    figure_dir = f"{current_dir}/figures"
 
     # Parameters
     a = np.geomspace(1e0, 1e3, 100) * 1e3
