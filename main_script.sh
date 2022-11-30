@@ -2,9 +2,6 @@
 # Runs all simulations in the given folders.
 # Also processes the model output.
 
-echo ""
-echo "### Running from: main_script.sh"
-
 # Help
 TextHelp="
 \n
@@ -41,7 +38,6 @@ create_theory=false
 FolderList=()
 
 # Commandline arguments
-echo "## Processing arguments"
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -p|--parameters) echo "Got argument '--parameters'" ; create_parameters=true ;;
@@ -52,11 +48,14 @@ while [[ "$#" -gt 0 ]]; do
         -r|--repr) echo "Got argument '--repr'" ; FolderList+=("./reproduction-an-2012") ;;
         -e|--exp) echo "Got argument '--exp'" ; FolderList+=("./thesis") ;;
         -t|--theory) echo "Got argument '--theory'" ; create_theory=true ;;
-        -h|--help) echo "Got argument '--help'" ; echo -e $TextHelp ; exit 1 ;;
+        -h|--help) echo -e $TextHelp ; exit 1 ;;
         *) echo "Unknown parameter $1" ; exit 1 ;;
     esac
     shift
 done
+
+echo ""
+echo "### Running from: main_script.sh"
 
 echo "## The following sub-tasks will be done:"
 if [ "$run_model" = true ] ; then
