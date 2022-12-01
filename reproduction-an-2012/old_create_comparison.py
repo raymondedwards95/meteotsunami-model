@@ -25,7 +25,7 @@ cases = [
     [0, 20, 21],
     [0, 31, 32, 33],
     [0, 36],
-    [36, 37, 38, 39]
+    [36, 37, 38, 39],
 ]
 
 titles = [
@@ -36,7 +36,7 @@ titles = [
     "Spatial Resolution - Model",
     "Pressure Distribution Location",
     "Bottom Slope",
-    "Location Pressure and Slope Bottom"
+    "Location Pressure and Slope Bottom",
 ]
 
 num_comparisons = len(cases)
@@ -68,23 +68,25 @@ def comp_alongshore(data_list, title, cases, savename):
 
     # Subplots
     for i in range(ax.size):
-        _ax = ax[i//2, i % 2]  # select subplot
+        _ax = ax[i // 2, i % 2]  # select subplot
         _ax.grid()
         _ax.set_xlim(_ylims[i])
         _ax.set_ylim([-0.9, 0.9])
         _ax.set_title(f"$t = {_times[i]:0.0f}$s")
         _ax.axhline(color="black", linewidth=1)
         _ax.axvline(color="black", linewidth=1)
-        if i//2: _ax.set_xlabel("$y$ [km]")
-        if not i%2: _ax.set_ylabel("$SSE$ [m]")
+        if i // 2:
+            _ax.set_xlabel("$y$ [km]")
+        if not i % 2:
+            _ax.set_ylabel("$SSE$ [m]")
 
         for j in range(len(data_list)):
             data = data_list[j]
             _ax.plot(
-                data["y"]/1000.,
+                data["y"] / 1000.0,
                 data["wl"].interp(t=fu.to_timestr(_times[i]), x=10e3),
                 color=f"C{j}",
-                label=f"Case {cases[j]:02.0f}"
+                label=f"Case {cases[j]:02.0f}",
             )
 
         if i == 0:
@@ -113,15 +115,17 @@ def comp_alongshore_diff(data_list, title, cases, savename):
 
     # Subplots
     for i in range(ax.size):
-        _ax = ax[i//2, i % 2]  # select subplot
+        _ax = ax[i // 2, i % 2]  # select subplot
         _ax.grid()
         _ax.set_xlim(_ylims[i])
         _ax.set_ylim([-0.2, 0.2])
         _ax.set_title(f"$t = {_times[i]:0.0f}$s")
         _ax.axhline(color="black", linewidth=1)
         _ax.axvline(color="black", linewidth=1)
-        if i//2: _ax.set_xlabel("$y$ [km]")
-        if not i%2: _ax.set_ylabel("$\\Delta SSE$ [m]")
+        if i // 2:
+            _ax.set_xlabel("$y$ [km]")
+        if not i % 2:
+            _ax.set_ylabel("$\\Delta SSE$ [m]")
 
         reference = data_list[0]["wl"].interp(t=fu.to_timestr(_times[i]), x=10e3)
 
@@ -129,10 +133,10 @@ def comp_alongshore_diff(data_list, title, cases, savename):
             j = _j + 1
             data = data_list[j]
             _ax.plot(
-                data["y"]/1000.,
+                data["y"] / 1000.0,
                 data["wl"].interp(t=fu.to_timestr(_times[i]), x=10e3) - reference,
                 color=f"C{j}",
-                label=f"Case {cases[j]:02.0f}"
+                label=f"Case {cases[j]:02.0f}",
             )
 
         if i == 0:
@@ -172,31 +176,30 @@ def comp_crossshore(data_list, title, cases, savename):
         _ax.set_ylim([0, 0.9])
         _ax.set_title(f"$y = {_yslices[i]/1000.}$km")
         _ax.set_ylabel("$SSE$ [m]")
-        if i == ax.size: _ax.set_xlabel("x [km]")
+        if i == ax.size:
+            _ax.set_xlabel("x [km]")
 
         for j in range(len(data_list)):
             data = data_list[j]
 
             # Compute best fit parameters
-            k0, y0 = fa.compute_decay_parameter(
-                data, _yslices[i], _tslice
-            )
+            k0, y0 = fa.compute_decay_parameter(data, _yslices[i], _tslice)
 
             # Plot data
             plt.plot(
-                data["x"] / 1000.,
+                data["x"] / 1000.0,
                 data["wl"].interp(t=fu.to_timestr(_tslice), y=_yslices[i]),
                 color=f"C{j}",
-                label=f"Case {cases[j]:02.0f}"
+                label=f"Case {cases[j]:02.0f}",
             )
 
             # Plot best fit
             plt.plot(
-                data["x"] / 1000.,
+                data["x"] / 1000.0,
                 fa.exp_decay(data["x"], k0, y0),
                 color=f"C{j}",
                 linestyle="--",
-                label=f"Best fit: $1/k_0 = {1./k0/1000.:0.1f}$km"
+                label=f"Best fit: $1/k_0 = {1./k0/1000.:0.1f}$km",
             )
 
         _ax.legend()
@@ -235,7 +238,8 @@ def comp_crossshore_diff(data_list, title, cases, savename):
         _ax.set_ylim([-0.2, 0.2])
         _ax.set_title(f"$y = {_yslices[i]/1000.}$km")
         _ax.set_ylabel("$\\Delta SSE$ [m]")
-        if i == ax.size: _ax.set_xlabel("x [km]")
+        if i == ax.size:
+            _ax.set_xlabel("x [km]")
 
         reference = data_list[0]["wl"].interp(t=fu.to_timestr(_tslice), y=_yslices[i])
 
@@ -245,10 +249,10 @@ def comp_crossshore_diff(data_list, title, cases, savename):
 
             # Plot data
             plt.plot(
-                data["x"] / 1000.,
+                data["x"] / 1000.0,
                 data["wl"].interp(t=fu.to_timestr(_tslice), y=_yslices[i]) - reference,
                 color=f"C{j}",
-                label=f"Case {cases[j]:02.0f}"
+                label=f"Case {cases[j]:02.0f}",
             )
 
         _ax.legend()
@@ -274,18 +278,25 @@ def make_comparison(cases, title, id="test"):
         data_list.append(xr.open_dataset(datafile))
 
     # Make figures
-    try: comp_alongshore(data_list, title, cases, savename)
-    except: pass
+    try:
+        comp_alongshore(data_list, title, cases, savename)
+    except:
+        pass
 
-    try: comp_crossshore(data_list, title, cases, savename)
-    except: pass
+    try:
+        comp_crossshore(data_list, title, cases, savename)
+    except:
+        pass
 
-    try: comp_alongshore_diff(data_list, title, cases, savename)
-    except: pass
+    try:
+        comp_alongshore_diff(data_list, title, cases, savename)
+    except:
+        pass
 
-    try: comp_crossshore_diff(data_list, title, cases, savename)
-    except: pass
-
+    try:
+        comp_crossshore_diff(data_list, title, cases, savename)
+    except:
+        pass
 
     return
 
