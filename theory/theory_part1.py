@@ -60,7 +60,13 @@ def theory_figure_speed_vs_size(
             u_crit[i, :],
             label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
         )
-        plt.fill_between(a / 1000.0, u_crit[i, :], alpha=0.1, rasterized=True,)
+        plt.fill_between(
+            a / 1000.0,
+            u_crit[i, :],
+            alpha=0.1,
+            rasterized=True,
+        )
+
     plt.legend()
     plt.xlabel("$a$ [km]")
     plt.ylabel("$U_{crit}$ [m/s]")
@@ -112,7 +118,12 @@ def theory_figure_wavelength_vs_size(
             label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
         )
         plt.fill_between(
-            a / 1000.0, wavelength[i, :] / 1000.0, alpha=0.1, rasterized=True,)
+            a / 1000.0,
+            wavelength[i, :] / 1000.0,
+            alpha=0.1,
+            rasterized=True,
+        )
+
     plt.plot(
         a / 1000.0,
         2.0 * a / 1000.0,
@@ -121,6 +132,7 @@ def theory_figure_wavelength_vs_size(
         linewidth=1,
         label="$2a$",
     )
+
     plt.legend()
     plt.xlabel("$a$ [km]")
     plt.ylabel("$\\lambda$ [km]")
@@ -172,7 +184,12 @@ def theory_figure_wavelength_vs_velocity(
             label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
         )
         plt.fill_between(
-            velocity, wavelength[i, :] / 1000.0, alpha=0.1, rasterized=True,)
+            velocity,
+            wavelength[i, :] / 1000.0,
+            alpha=0.1,
+            rasterized=True,
+        )
+
     plt.legend()
     plt.xlabel("$U$ [m/s]")
     plt.ylabel("$\\lambda$ [km]")
