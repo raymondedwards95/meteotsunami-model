@@ -49,7 +49,7 @@ if not os.path.exists(data_file):
     sys.exit(1)
 
 # Get data
-data = xr.open_dataset(data_file)#, chunks={"y": -1, "x": -1, "t": "auto"})
+data = xr.open_dataset(data_file)  # , chunks={"y": -1, "x": -1, "t": "auto"})
 print(f"Grid size: {data.sizes}")
 # print(f"Chunksize: {data.chunksizes}")
 
@@ -59,9 +59,9 @@ print(f"Downsampled grid size: {data.sizes}")
 # print(f"Chunksize: {data.chunksizes}")
 
 # Create animations
-anim.animation_alongshore(data, savedir=anim_dir, fps=10.)
-anim.animation_contour(data, savedir=anim_dir, fps=10.)
-anim.animation_contour_uv(data, savedir=anim_dir, fps=10.)
+anim.animation_alongshore(data, savedir=anim_dir, fps=10.0)
+anim.animation_contour(data, savedir=anim_dir, fps=10.0)
+anim.animation_contour_uv(data, savedir=anim_dir, fps=10.0)
 
 # Close data
 data.close()
