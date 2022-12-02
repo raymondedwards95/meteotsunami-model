@@ -7,6 +7,7 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+import numpy.typing as npt
 import xarray as xr
 
 # fmt: off
@@ -17,6 +18,14 @@ import functions.utilities as fu
 # fmt: on
 
 
+# Helper functions
+def closest_index_to_reference(array: npt.ArrayLike, value: Numeric) -> int:
+    dist = np.abs(np.array(array) - value)
+    idx = np.argmin(dist)
+    return idx
+
+
+# Figures
 def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     ta = time.perf_counter_ns()
 
@@ -29,6 +38,10 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     # Figure
     print(f"Create figure '01_sse_contours'")
     fig, axes = plt.subplots(2, 2, sharex=True, sharey=False)
+
+    fig.set_size_inches(FIGSIZE_SMALL)
+    fig.set_dpi(FIG_DPI)
+    fig.set_layout_engine("compressed")
 
     fig.supxlabel("$x$ [km]")
     fig.supylabel("$y$ [km]")
@@ -70,6 +83,10 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     print(f"Create figure '02_sse_along'")
     fig, axes = plt.subplots(2, 2, sharex=False, sharey=True)
 
+    fig.set_size_inches(FIGSIZE_SMALL)
+    fig.set_dpi(FIG_DPI)
+    fig.set_layout_engine("compressed")
+
     fig.supxlabel("$x$ [km]")
     fig.supylabel("$y$ [km]")
 
@@ -102,9 +119,28 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     y_single = 7.56e6  # m; change this value to local max
     t_single = 1.6e5  # s
 
+    # Find best y closest to given y_single
+    y_idx = fu.find_local_maxima_y(
+        dataset=dataset,
+        t=t_single,
+        x=10e3,
+        variable="wl",
+        minima=False,
+        sort=True,
+        number=5,
+    )
+    y_maxima = dataset["y"][y_idx]
+    print(f"# Preferred value for y is {y_single:0.2e}")
+    y_single = y_maxima[closest_index_to_reference(y_maxima, y_single)]
+    print(f"# Best value for y is {y_single:0.2e}")
+
     # Figure
     print(f"Create figure '03_sse_cross'")
     fig, ax = plt.subplots(1, 1, sharex=False, sharey=False)
+
+    fig.set_size_inches(FIGSIZE_SMALL)
+    fig.set_dpi(FIG_DPI)
+    fig.set_layout_engine("compressed")
 
     fig.supxlabel("$x$ [km]")
     fig.supylabel("$y$ [km]")
