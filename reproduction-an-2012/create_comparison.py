@@ -32,8 +32,8 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     # Options
     savename = f"{saveloc}_01_sse_contours"
     t_list = np.array([4, 8, 12, 16]) * 1e4  # seconds
-    y_min_list = np.array([0, 1, 2, 3]) * 1e3  # km
-    y_max_list = np.array([4, 6, 8, 10]) * 1e3  # km
+    y_min_list = np.array([0, 1, 2, 3])  # Mm
+    y_max_list = np.array([4, 6, 8, 10])  # Mm
 
     # Figure
     print(f"Create figure '01_sse_contours'")
@@ -43,8 +43,8 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$x$ [km]")
-    fig.supylabel("$y$ [km]")
+    fig.supxlabel("$x$ [Mm]")
+    fig.supylabel("$y$ [Mm]")
 
     # Subplots
     for i, ax in enumerate(np.ravel(axes)):
@@ -52,14 +52,18 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
         print(f"# Add subplot {i}")
 
         ax.pcolormesh(
-            dataset["x"] / 1e3,
-            dataset["y"] / 1e3,
+            dataset["x"] / 1e6,
+            dataset["y"] / 1e6,
             dataset["wl"].interp(t=fu.to_timestr(t_single)),
             rasterized=True,
         )
 
-        ax.set_xlim(0, 3e2)
+        ax.set_xlim(0, 0.3)
         ax.set_ylim(y_min_list[i], y_max_list[i])
+
+        ax.set_xticks(np.arange(0, 0.4, 0.1))
+        ax.set_yticks(np.arange(y_min_list[i], y_max_list[i]+1, 1))
+        ax.ticklabel_format(useMathText=True, scilimits=(-2, 2))
 
     # End
     tb = time.perf_counter_ns()
@@ -75,8 +79,8 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     # Options
     savename = f"{saveloc}_02_sse_along"
     t_list = np.array([4, 8, 12, 16]) * 1e4  # seconds
-    y_min_list = np.array([0, 1, 2, 3]) * 1e3  # km
-    y_max_list = np.array([4, 6, 8, 10]) * 1e3  # km
+    y_min_list = np.array([0, 1, 2, 3])   # Mm
+    y_max_list = np.array([4, 6, 8, 10])   # Mm
     x_single = 10e3  # m
 
     # Figure
@@ -87,8 +91,8 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$x$ [km]")
-    fig.supylabel("$y$ [km]")
+    fig.supxlabel("$y$ [Mm]")
+    fig.supylabel("SSE [m]")
 
     # Subplots
     for i, ax in enumerate(np.ravel(axes)):
@@ -96,12 +100,18 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
         print(f"# Add subplot {i}")
 
         ax.plot(
-            dataset["y"] / 1e3,
+            dataset["y"] / 1e6,
             dataset["wl"].interp(x=x_single, t=fu.to_timestr(t_single)),
         )
 
+        ax.axhline(color="black", alpha=0.1, linewidth=1,)
+
         ax.set_xlim(y_min_list[i], y_max_list[i])
         ax.set_ylim(-1, 1)
+
+        ax.set_xticks(np.arange(y_min_list[i], y_max_list[i]+1, 1))
+        ax.set_yticks([-1., -0.5, 0, 0.5, 1.])
+        ax.ticklabel_format(useMathText=True, scilimits=(-2, 2))
 
     # End
     tb = time.perf_counter_ns()
