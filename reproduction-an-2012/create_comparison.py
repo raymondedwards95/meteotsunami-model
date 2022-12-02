@@ -5,6 +5,7 @@ import os
 import sys
 import time
 
+import cmocean as cmo
 import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
@@ -35,6 +36,11 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     y_min_list = np.array([0, 1, 2, 3])  # Mm
     y_max_list = np.array([4, 6, 8, 10])  # Mm
 
+    # wl_absmax = dataset["wl"].apply(np.fabs).max().values
+    wl_absmax = np.nanmax(np.fabs(dataset["wl"]))
+
+    subplot_labels = "abcd"
+
     # Figure
     print(f"Create figure '01_sse_contours'")
     fig, axes = plt.subplots(2, 2, sharex=True, sharey=False)
@@ -55,8 +61,13 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
             dataset["x"] / 1e6,
             dataset["y"] / 1e6,
             dataset["wl"].interp(t=fu.to_timestr(t_single)),
+            cmap=cmo.cm.balance,
+            vmin=-1.0 * wl_absmax,
+            vmax=wl_absmax,
             rasterized=True,
         )
+
+        ax.set_xlabel(f"({subplot_labels[i]})")
 
         ax.set_xlim(0, 0.3)
         ax.set_ylim(y_min_list[i], y_max_list[i])
@@ -83,6 +94,8 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     y_max_list = np.array([4, 6, 8, 10])   # Mm
     x_single = 10e3  # m
 
+    subplot_labels = "abcd"
+
     # Figure
     print(f"Create figure '02_sse_along'")
     fig, axes = plt.subplots(2, 2, sharex=False, sharey=True)
@@ -105,6 +118,8 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
         )
 
         ax.axhline(color="black", alpha=0.1, linewidth=1,)
+
+        ax.set_xlabel(f"({subplot_labels[i]})")
 
         ax.set_xlim(y_min_list[i], y_max_list[i])
         ax.set_ylim(-1, 1)
@@ -153,7 +168,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_layout_engine("compressed")
 
     fig.supxlabel("$x$ [km]")
-    fig.supylabel("$y$ [km]")
+    fig.supylabel("SSE [m]")
 
     # Subplots
     ax.plot(
@@ -163,6 +178,10 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
 
     ax.set_ylim(0, 0.8)
     ax.set_xlim(10, 600)
+
+    ax.set_xticks([10, 100, 200, 300, 400, 500, 600])
+    ax.set_yticks(np.arange(0, 0.9, 0.1))
+    ax.ticklabel_format(useMathText=True)
 
     # End
     tb = time.perf_counter_ns()
