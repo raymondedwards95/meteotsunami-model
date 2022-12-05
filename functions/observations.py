@@ -237,8 +237,8 @@ def plot_observations(
 
     # Layout
     ax.set_title("Observation Points and Lines")
-    ax.axhline(color="black", linewidth=1)
-    ax.axvline(color="black", linewidth=1)
+    ax.axhline(color="black", linewidth=1, alpha=0.5)
+    ax.axvline(color="black", linewidth=1, alpha=0.5)
 
     ## Points and lines
     for element in data:
