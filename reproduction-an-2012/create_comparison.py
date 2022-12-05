@@ -15,6 +15,7 @@ import xarray as xr
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
+import functions.analysis as fa
 import functions.utilities as fu
 # fmt: on
 
@@ -28,7 +29,7 @@ def closest_index_to_reference(array: npt.ArrayLike, value: Numeric) -> int:
 
 # Figures
 def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
-    ta = time.perf_counter_ns()  #TODO ADD COLORBAR
+    ta = time.perf_counter_ns()  # TODO ADD COLORBAR
 
     # Options
     savename = f"{saveloc}_01_sse_contours"
@@ -67,13 +68,19 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
             rasterized=True,
         )
 
-        ax.annotate(f"({subplot_labels[i]})", (0.95, 0.95), xycoords="axes fraction", ha="right", va="top",)
+        ax.annotate(
+            f"({subplot_labels[i]})",
+            (0.95, 0.95),
+            xycoords="axes fraction",
+            ha="right",
+            va="top",
+        )
 
         ax.set_xlim(0, 0.3)
         ax.set_ylim(y_min_list[i], y_max_list[i])
 
         ax.set_xticks(np.arange(0, 0.4, 0.1))
-        ax.set_yticks(np.arange(y_min_list[i], y_max_list[i]+1, 1))
+        ax.set_yticks(np.arange(y_min_list[i], y_max_list[i] + 1, 1))
         ax.ticklabel_format(useMathText=True, scilimits=(-2, 2))
 
     # End
@@ -90,8 +97,8 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     # Options
     savename = f"{saveloc}_02_sse_along"
     t_list = np.array([4, 8, 12, 16]) * 1e4  # seconds
-    y_min_list = np.array([0, 1, 2, 3])   # Mm
-    y_max_list = np.array([4, 6, 8, 10])   # Mm
+    y_min_list = np.array([0, 1, 2, 3])  # Mm
+    y_max_list = np.array([4, 6, 8, 10])  # Mm
     x_single = 10e3  # m
 
     subplot_labels = "abcd"
@@ -117,15 +124,25 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
             dataset["wl"].interp(x=x_single, t=fu.to_timestr(t_single)),
         )
 
-        ax.axhline(color="black", linewidth=1, alpha=0.5,)
+        ax.axhline(
+            color="black",
+            linewidth=1,
+            alpha=0.5,
+        )
 
-        ax.annotate(f"({subplot_labels[i]})", (0.95, 0.95), xycoords="axes fraction", ha="right", va="top",)
+        ax.annotate(
+            f"({subplot_labels[i]})",
+            (0.95, 0.95),
+            xycoords="axes fraction",
+            ha="right",
+            va="top",
+        )
 
         ax.set_xlim(y_min_list[i], y_max_list[i])
         ax.set_ylim(-1, 1)
 
-        ax.set_xticks(np.arange(y_min_list[i], y_max_list[i]+1, 1))
-        ax.set_yticks([-1., -0.5, 0, 0.5, 1.])
+        ax.set_xticks(np.arange(y_min_list[i], y_max_list[i] + 1, 1))
+        ax.set_yticks([-1.0, -0.5, 0, 0.5, 1.0])
         ax.ticklabel_format(useMathText=True, scilimits=(-2, 2))
 
     # End
@@ -137,7 +154,7 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
 
 
 def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
-    ta = time.perf_counter_ns()  #TODO ADD BEST FIT
+    ta = time.perf_counter_ns()  # TODO ADD BEST FIT
 
     # Options
     savename = f"{saveloc}_03_sse_cross"
@@ -156,8 +173,23 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     )
     y_maxima = dataset["y"][y_idx]
     print(f"# Preferred value for y is {y_single:0.2e}")
-    y_single = y_maxima[closest_index_to_reference(y_maxima, y_single)]
+    y_single = y_maxima[closest_index_to_reference(y_maxima, y_single)].values
     print(f"# Best value for y is {y_single:0.2e}")
+
+    label_data = (
+        ""  # f"Data at $t={t_single/1e4:0.0f}\cdot 10^4$ s, $y={y_single/1e6:0.2f}$ Mm"
+    )
+
+    # Compute best fit
+    k0, y0 = fa.compute_decay_parameter(
+        dataset=dataset,
+        y=y_single,
+        t=t_single,
+        variable="wl",
+    )
+
+    fit = fa.exp_decay(dataset["x"], k0, y0)
+    label_fit = f"$A e^{{-k_0 x}}$ with $1/k_0 = {1/k0/1e3:0.0f}$km"
 
     # Figure
     print(f"Create figure '03_sse_cross'")
@@ -174,7 +206,27 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     ax.plot(
         dataset["x"] / 1e3,
         dataset["wl"].interp(y=y_single, t=fu.to_timestr(t_single)),
+        linestyle="-",
+        color="C0",
+        label=label_data,
+        rasterized=False,
     )
+
+    ax.plot(
+        dataset["x"] / 1e3,
+        fit,
+        linestyle="--",
+        color="C1",
+        label=label_fit,
+        rasterized=False,
+    )
+    # ax.fill_between(
+    #     dataset["x"] / 1e3,
+    #     fit,
+    #     color="C1",
+    #     alpha=0.1,
+    #     rasterized=False,
+    # )
 
     ax.set_ylim(0, 0.8)
     ax.set_xlim(10, 600)
@@ -182,6 +234,8 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     ax.set_xticks([10, 100, 200, 300, 400, 500, 600])
     ax.set_yticks(np.arange(0, 0.9, 0.1))
     ax.ticklabel_format(useMathText=True)
+
+    ax.legend(fontsize="small")
 
     # End
     tb = time.perf_counter_ns()
