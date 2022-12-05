@@ -154,7 +154,7 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
 
 
 def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
-    ta = time.perf_counter_ns()  # TODO ADD BEST FIT
+    ta = time.perf_counter_ns()
 
     # Options
     savename = f"{saveloc}_03_sse_cross"
