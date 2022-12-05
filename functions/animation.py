@@ -139,8 +139,8 @@ def animation_contour(
     # Subplot layout
     def initfig():
         for i in range(2):
-            ax[i].axhline(color="black", linewidth=1)
-            ax[i].axvline(color="black", linewidth=1)
+            ax[i].axhline(color="black", linewidth=1, alpha=0.5)
+            ax[i].axvline(color="black", linewidth=1, alpha=0.5)
             ax[i].set_ylabel("$x$ [km]")
             ax[i].set_ylim([0, 200])
             ax[i].set_xlim(xlims)
@@ -309,8 +309,8 @@ def animation_contour_uv(
     # Subplot layout
     def initfig():
         for i in range(2):
-            ax[i].axhline(color="black", linewidth=1)
-            ax[i].axvline(color="black", linewidth=1)
+            ax[i].axhline(color="black", linewidth=1, alpha=0.5)
+            ax[i].axvline(color="black", linewidth=1, alpha=0.5)
             ax[i].set_ylabel("$x$ [km]")
             ax[i].set_ylim([0, 200])
             ax[i].set_xlim(xlims)
@@ -453,8 +453,8 @@ def animation_alongshore(
     # Subplot layout
     def initfig():
         for i in range(2):
-            ax[i].axhline(color="black", linewidth=1)
-            ax[i].axvline(color="black", linewidth=1)
+            ax[i].axhline(color="black", linewidth=1, alpha=0.5)
+            ax[i].axvline(color="black", linewidth=1, alpha=0.5)
             ax[i].set_xlim(xlims)
 
         ax[0].set_ylim([-1.0 * wl_max, wl_max])
@@ -587,8 +587,8 @@ def animation_crossshore(
     # Subplot layout
     def initfig():
         for i in range(slices):
-            ax[i].axhline(color="black", linewidth=1)
-            ax[i].axvline(color="black", linewidth=1)
+            ax[i].axhline(color="black", linewidth=1, alpha=0.5)
+            ax[i].axvline(color="black", linewidth=1, alpha=0.5)
             ax[i].set_xlim([0, 200])
             ax[i].set_ylabel("SSE [m]")
             ax[i].set_ylim([wl_min, wl_max])
