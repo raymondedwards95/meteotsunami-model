@@ -118,10 +118,18 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     for i, ax in enumerate(np.ravel(axes)):
         t_single = t_list[i]
         print(f"# Add subplot {i}")
+        wl = dataset["wl"].interp(x=x_single, t=fu.to_timestr(t_single))
 
         ax.plot(
             dataset["y"] / 1e6,
-            dataset["wl"].interp(x=x_single, t=fu.to_timestr(t_single)),
+            wl,
+            rasterized=True,
+        )
+        ax.fill_between(
+            dataset["y"] / 1e6,
+            wl,
+            alpha=0.1,
+            rasterized=True,
         )
 
         ax.axhline(
@@ -176,6 +184,8 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     y_single = y_maxima[closest_index_to_reference(y_maxima, y_single)].values
     print(f"# Best value for y is {y_single:0.2e}")
 
+    # Data
+    wl = dataset["wl"].interp(y=y_single, t=fu.to_timestr(t_single))
     label_data = (
         ""  # f"Data at $t={t_single/1e4:0.0f}\cdot 10^4$ s, $y={y_single/1e6:0.2f}$ Mm"
     )
@@ -205,10 +215,17 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     # Subplots
     ax.plot(
         dataset["x"] / 1e3,
-        dataset["wl"].interp(y=y_single, t=fu.to_timestr(t_single)),
+        wl,
         linestyle="-",
         color="C0",
         label=label_data,
+        rasterized=False,
+    )
+    ax.fill_between(
+        dataset["x"] / 1e3,
+        wl,
+        color="C0",
+        alpha=0.1,
         rasterized=False,
     )
 
@@ -220,13 +237,13 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
         label=label_fit,
         rasterized=False,
     )
-    # ax.fill_between(
-    #     dataset["x"] / 1e3,
-    #     fit,
-    #     color="C1",
-    #     alpha=0.1,
-    #     rasterized=False,
-    # )
+    ax.fill_between(
+        dataset["x"] / 1e3,
+        fit,
+        color="C1",
+        alpha=0.1,
+        rasterized=False,
+    )
 
     ax.set_ylim(0, 0.8)
     ax.set_xlim(10, 600)
