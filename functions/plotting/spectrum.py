@@ -344,8 +344,8 @@ class plot_spectrum_2d:
         self._check_if_closed()
 
         # General
-        self.ax.axhline(color="black", linewidth=1)
-        self.ax.axvline(color="black", linewidth=1)
+        self.ax.axhline(color="black", linewidth=1, alpha=0.5)
+        self.ax.axvline(color="black", linewidth=1, alpha=0.5)
         self.ax.grid()
         # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
 

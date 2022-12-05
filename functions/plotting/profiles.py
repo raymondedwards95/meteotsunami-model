@@ -128,7 +128,7 @@ class plot_alongshore:
 
         # General
         for ax in self.axes:
-            ax.axhline(color="black", linewidth=1)
+            ax.axhline(color="black", linewidth=1, alpha=0.5)
             ax.axvline(color="black", linewidth=1, alpha=0.5)
             ax.legend(loc="upper right")
             ax.grid()
@@ -440,7 +440,7 @@ class plot_crossshore:
 
         # General
         for ax in self.axes:
-            ax.axhline(color="black", linewidth=1)
+            ax.axhline(color="black", linewidth=1, alpha=0.5)
             ax.axvline(color="black", linewidth=1, alpha=0.5)
             ax.legend(loc="upper right")
             ax.grid()
