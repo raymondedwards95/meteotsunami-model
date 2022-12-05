@@ -28,7 +28,7 @@ def closest_index_to_reference(array: npt.ArrayLike, value: Numeric) -> int:
 
 # Figures
 def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
-    ta = time.perf_counter_ns()
+    ta = time.perf_counter_ns()  #TODO ADD COLORBAR
 
     # Options
     savename = f"{saveloc}_01_sse_contours"
@@ -49,8 +49,8 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$x$ [Mm]")
-    fig.supylabel("$y$ [Mm]")
+    fig.supxlabel("$x$ [Mm]", x=0.975, ha="right", fontsize="medium")
+    fig.supylabel("$y$ [Mm]", y=0.975, va="top", fontsize="medium")
 
     # Subplots
     for i, ax in enumerate(np.ravel(axes)):
@@ -67,7 +67,7 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
             rasterized=True,
         )
 
-        ax.set_xlabel(f"({subplot_labels[i]})")
+        ax.annotate(f"({subplot_labels[i]})", (0.95, 0.95), xycoords="axes fraction", ha="right", va="top",)
 
         ax.set_xlim(0, 0.3)
         ax.set_ylim(y_min_list[i], y_max_list[i])
@@ -104,8 +104,8 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$y$ [Mm]")
-    fig.supylabel("SSE [m]")
+    fig.supxlabel("$y$ [Mm]", x=0.975, ha="right", fontsize="medium")
+    fig.supylabel("SSE [m]", y=0.975, va="top", fontsize="medium")
 
     # Subplots
     for i, ax in enumerate(np.ravel(axes)):
@@ -117,9 +117,9 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
             dataset["wl"].interp(x=x_single, t=fu.to_timestr(t_single)),
         )
 
-        ax.axhline(color="black", alpha=0.1, linewidth=1,)
+        ax.axhline(color="black", linewidth=1, alpha=0.5,)
 
-        ax.set_xlabel(f"({subplot_labels[i]})")
+        ax.annotate(f"({subplot_labels[i]})", (0.95, 0.95), xycoords="axes fraction", ha="right", va="top",)
 
         ax.set_xlim(y_min_list[i], y_max_list[i])
         ax.set_ylim(-1, 1)
@@ -137,7 +137,7 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
 
 
 def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
-    ta = time.perf_counter_ns()
+    ta = time.perf_counter_ns()  #TODO ADD BEST FIT
 
     # Options
     savename = f"{saveloc}_03_sse_cross"
@@ -167,8 +167,8 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$x$ [km]")
-    fig.supylabel("SSE [m]")
+    fig.supxlabel("$x$ [km]", x=0.975, ha="right", fontsize="medium")
+    fig.supylabel("SSE [m]", y=0.975, va="top", fontsize="medium")
 
     # Subplots
     ax.plot(
