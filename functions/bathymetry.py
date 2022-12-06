@@ -239,8 +239,8 @@ def plot_bathymetry(
     fig_2.set_size_inches(figsize)
     fig_2.set_dpi(FIG_DPI)
     fig_2.set_layout_engine("compressed")
-    div = make_axes_locatable(ax_2)
-    cax = div.append_axes("right", "5%", "5%")
+    # div = make_axes_locatable(ax_2)
+    # cax = div.append_axes("right", "5%", "5%")
     cont = ax_2.contourf(
         x / 1e6,
         y / 1e6,
@@ -251,7 +251,8 @@ def plot_bathymetry(
         vmax=b_max,
         rasterized=True,
     )
-    cbar = fig_2.colorbar(cont, cax=cax)
+    # cbar = fig_2.colorbar(cont, cax=cax)
+    cbar = fig_2.colorbar(cont, ax=ax_2, fraction=0.1, aspect=25, pad=0.01)
     cbar.set_label("Water Depth [m]")
     cbar.set_ticks(np.linspace(0, b_min, 6))
     cbar.set_ticklabels(
