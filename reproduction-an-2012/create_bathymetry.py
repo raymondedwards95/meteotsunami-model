@@ -80,6 +80,7 @@ for i in range(len(cases)):
 
     # Visualize
     fb.plot_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}")
+    fb.plot_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}", half_width=True)
 
     # End
     tb = time.perf_counter()
