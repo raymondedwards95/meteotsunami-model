@@ -209,7 +209,7 @@ def plot_bathymetry(
 
     if xmax is None:
         xmax = x.max()
-    xmax /= 1000
+    xmax /= 1e6
 
     # Figure 1 - cross-section
     savename = f"{filename}_cross"
@@ -217,16 +217,17 @@ def plot_bathymetry(
     fig_1.set_size_inches(figsize)
     fig_1.set_dpi(FIG_DPI)
     fig_1.set_layout_engine("compressed")
-    ax_1.plot(x / 1000.0, b[i, :], rasterized=False,)
+    ax_1.plot(x / 1e6, b[i, :], rasterized=False, label=f"$y={y[i]/1e6:0.0f}$ Mm")
     _ylims = ax_1.get_ylim()
-    ax_1.fill_between(x / 1000.0, _ylims[0], b[i, :], alpha=0.1, rasterized=False,)
+    ax_1.fill_between(x / 1e6, _ylims[0], b[i, :], alpha=0.1, rasterized=False,)
     ax_1.axhline(color="black", linewidth=1, alpha=0.5)
-    ax_1.set_title(f"Bottom Profile Cross-Section at $y={y[i]}$")
+    ax_1.set_title(f"Bottom Profile - Cross-section")
     ax_1.set_xlim(0, xmax)
     ax_1.set_ylim(_ylims)
-    ax_1.set_xlabel("$x$ [km]")
+    ax_1.set_xlabel("$x$ [Mm]")
     ax_1.set_ylabel("Bed Level [m]")
     ax_1.grid()
+    ax_1.legend(loc="upper right")
     fig_1.get_layout_engine().execute(fig_1)
     save_figure(fig_1, savename)
     if not keep_open:
@@ -241,8 +242,8 @@ def plot_bathymetry(
     div = make_axes_locatable(ax_2)
     cax = div.append_axes("right", "5%", "5%")
     cont = ax_2.contourf(
-        x / 1000.0,
-        y / 1000.0,
+        x / 1e6,
+        y / 1e6,
         b,
         levels=np.sort(np.linspace(0, b_min, 21)),
         cmap=cmo.tools.crop(cmo.cm.topo, b_min, b_max, 0),
@@ -256,10 +257,10 @@ def plot_bathymetry(
     cbar.set_ticklabels(
         [f"{ticklabel:0.0f}" for ticklabel in np.linspace(0, -1.0 * b_min, 6)]
     )
-    ax_2.set_title(f"Bottom Profile")
+    ax_2.set_title(f"Bottom Profile - Contours")
     ax_2.set_xlim(0, xmax)
-    ax_2.set_xlabel("$x$ [km]")
-    ax_2.set_ylabel("$y$ [km]")
+    ax_2.set_xlabel("$x$ [Mm]")
+    ax_2.set_ylabel("$y$ [Mm]")
     fig_2.get_layout_engine().execute(fig_2)
     save_figure(fig_2, savename)
     if not keep_open:
