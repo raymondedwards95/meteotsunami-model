@@ -29,7 +29,7 @@ def closest_index_to_reference(array: npt.ArrayLike, value: Numeric) -> int:
 
 # Figures
 def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
-    ta = time.perf_counter_ns()  # TODO ADD COLORBAR
+    ta = time.perf_counter_ns()
 
     # Options
     savename = f"{saveloc}_01_sse_contours"
@@ -37,8 +37,7 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     y_min_list = np.array([0, 1, 2, 3])  # Mm
     y_max_list = np.array([4, 6, 8, 10])  # Mm
 
-    # wl_absmax = dataset["wl"].apply(np.fabs).max().values
-    wl_absmax = np.nanmax(np.fabs(dataset["wl"]))
+    wl_absmax = 0.8  # np.nanmax(np.fabs(dataset["wl"]))
 
     subplot_labels = "abcd"
 
@@ -50,15 +49,15 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$x$ [Mm]", x=0.975, ha="right", fontsize="medium")
-    fig.supylabel("$y$ [Mm]", y=0.975, va="top", fontsize="medium")
+    fig.supxlabel("$x$ [Mm]", x=0.8, va="bottom", ha="right", fontsize="medium")
+    fig.supylabel("$y$ [Mm]", y=0.975, va="top", ha="left", fontsize="medium")
 
     # Subplots
     for i, ax in enumerate(np.ravel(axes)):
         t_single = t_list[i]
         print(f"# Add subplot {i}")
 
-        ax.pcolormesh(
+        im = ax.pcolormesh(
             dataset["x"] / 1e6,
             dataset["y"] / 1e6,
             dataset["wl"].interp(t=fu.to_timestr(t_single)),
@@ -82,6 +81,10 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
         ax.set_xticks(np.arange(0, 0.4, 0.1))
         ax.set_yticks(np.arange(y_min_list[i], y_max_list[i] + 1, 1))
         ax.ticklabel_format(useMathText=True, scilimits=(-2, 2))
+
+    # Colorbar
+    cb = fig.colorbar(im, ax=axes, fraction=0.1, aspect=25, pad=0.01)
+    cb.set_label("SSE [m]", loc="top", va="center")
 
     # End
     tb = time.perf_counter_ns()
@@ -111,8 +114,8 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$y$ [Mm]", x=0.975, ha="right", fontsize="medium")
-    fig.supylabel("SSE [m]", y=0.975, va="top", fontsize="medium")
+    fig.supxlabel("$y$ [Mm]", x=0.975, va="bottom", ha="right", fontsize="medium")
+    fig.supylabel("SSE [m]", y=0.975, va="top", ha="left", fontsize="medium")
 
     # Subplots
     for i, ax in enumerate(np.ravel(axes)):
@@ -209,8 +212,8 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$x$ [km]", x=0.975, ha="right", fontsize="medium")
-    fig.supylabel("SSE [m]", y=0.975, va="top", fontsize="medium")
+    fig.supxlabel("$x$ [km]", x=0.975, va="bottom", ha="right", fontsize="medium")
+    fig.supylabel("SSE [m]", y=0.975, va="top", ha="left", fontsize="medium")
 
     # Subplots
     ax.plot(
@@ -221,7 +224,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
         label=label_data,
         rasterized=False,
     )
-    ax.fill_between(
+    ax.fill_between(  # TODO: maybe remove?
         dataset["x"] / 1e3,
         wl,
         color="C0",
@@ -237,7 +240,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
         label=label_fit,
         rasterized=False,
     )
-    ax.fill_between(
+    ax.fill_between(  # TODO: maybe remove?
         dataset["x"] / 1e3,
         fit,
         color="C1",
