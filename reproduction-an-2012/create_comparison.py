@@ -49,8 +49,22 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$x$ [Mm]", x=0.8, va="bottom", ha="right", fontsize="medium")
-    fig.supylabel("$y$ [Mm]", y=0.975, va="top", ha="left", fontsize="medium")
+    fig.supxlabel(
+        "$x$ [Mm]",
+        x=0.8,
+        y=0.0,
+        va="top",
+        ha="right",
+        fontsize="medium",
+    )
+    fig.supylabel(
+        "$y$ [Mm]",
+        x=0.0,
+        y=0.975,
+        va="top",
+        ha="right",
+        fontsize="medium",
+    )
 
     # Subplots
     for i, ax in enumerate(np.ravel(axes)):
@@ -114,8 +128,22 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$y$ [Mm]", x=0.975, va="bottom", ha="right", fontsize="medium")
-    fig.supylabel("SSE [m]", y=0.975, va="top", ha="left", fontsize="medium")
+    fig.supxlabel(
+        "$y$ [Mm]",
+        x=0.975,
+        y=0.0,
+        va="top",
+        ha="right",
+        fontsize="medium",
+    )
+    fig.supylabel(
+        "SSE [m]",
+        x=0.0,
+        y=0.975,
+        va="top",
+        ha="center",
+        fontsize="medium",
+    )
 
     # Subplots
     for i, ax in enumerate(np.ravel(axes)):
@@ -189,9 +217,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
 
     # Data
     wl = dataset["wl"].interp(y=y_single, t=fu.to_timestr(t_single))
-    label_data = (
-        ""  # f"Data at $t={t_single/1e4:0.0f}\cdot 10^4$ s, $y={y_single/1e6:0.2f}$ Mm"
-    )
+    label_data = ""
 
     # Compute best fit
     k0, y0 = fa.compute_decay_parameter(
@@ -212,8 +238,22 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
-    fig.supxlabel("$x$ [km]", x=0.975, va="bottom", ha="right", fontsize="medium")
-    fig.supylabel("SSE [m]", y=0.975, va="top", ha="left", fontsize="medium")
+    fig.supxlabel(
+        "$x$ [km]",
+        x=0.975,
+        y=0.0,
+        va="top",
+        ha="right",
+        fontsize="medium",
+    )
+    fig.supylabel(
+        "SSE [m]",
+        x=0.0,
+        y=0.975,
+        va="top",
+        ha="right",
+        fontsize="medium",
+    )
 
     # Subplots
     ax.plot(
