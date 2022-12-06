@@ -163,6 +163,7 @@ def plot_bathymetry(
     filename: str = None,
     xmax: Numeric = None,
     keep_open: bool = False,
+    half_width: bool = False,
 ) -> Tuple[plt.Figure, plt.Figure]:
     """Function to visualize bathymetry data
 
@@ -173,6 +174,7 @@ def plot_bathymetry(
         `filename`:     name of figures
         `xmax`:         upper limit of x
         `keep_open`:    keep figures open after finishing
+        `half_width`:   make figures for use in columns, i.e. side-by-side
     """
     # Prepare
     t0 = time.perf_counter_ns()
@@ -183,6 +185,12 @@ def plot_bathymetry(
         filename = f"{script_path}/tests/fig_bathymetry"
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
+
+    figsize=FIGSIZE_NORMAL
+    if half_width:
+        figsize = FIGSIZE_SMALL
+        filename+="_small"
+
     print(f"# Visualizing bathymetry in '{filename}'")
 
     # Extract data
@@ -206,7 +214,7 @@ def plot_bathymetry(
     # Figure 1 - cross-section
     savename = f"{filename}_cross"
     fig_1, ax_1 = plt.subplots(1, 1)
-    fig_1.set_size_inches(FIGSIZE_NORMAL)
+    fig_1.set_size_inches(figsize)
     fig_1.set_dpi(FIG_DPI)
     fig_1.set_layout_engine("compressed")
     ax_1.plot(x / 1000.0, b[i, :], rasterized=False,)
@@ -227,7 +235,7 @@ def plot_bathymetry(
     # Figure 2 - map
     savename = f"{filename}_contour"
     fig_2, ax_2 = plt.subplots(1, 1)
-    fig_2.set_size_inches(FIGSIZE_NORMAL)
+    fig_2.set_size_inches(figsize)
     fig_2.set_dpi(FIG_DPI)
     fig_2.set_layout_engine("compressed")
     div = make_axes_locatable(ax_2)
@@ -290,3 +298,4 @@ if __name__ == "__main__":
 
     # Visualise data
     plot_bathymetry(data, filename=bathymetry_file)
+    plot_bathymetry(data, filename=bathymetry_file, half_width=True)
