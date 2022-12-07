@@ -11,7 +11,6 @@ import sys
 import time
 
 import cmocean as cmo
-import dask.array as da
 import matplotlib.pyplot as plt
 import matplotlib.ticker
 import numpy as np
@@ -353,6 +352,8 @@ def plot_pressure(
     if x_scales is None:
         x_scales = [x.min() / 1000.0, x.max() / 1000.0]
 
+    cmap = cmo.cm.curl
+
     # figure 1
     savename = f"{filename}_field"
     print(f"# Visualizing pressure field in '{savename}'")
@@ -378,9 +379,9 @@ def plot_pressure(
             y / 1e3,
             p[i, :, :],
             # levels=np.linspace(np.round(p.min()), np.round(p.max()), 100),
+            cmap=cmap,
             vmin=p_min,
             vmax=p_max,
-            cmap=cmo.cm.curl,
             rasterized=True,
         )
         ax_1[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
@@ -398,7 +399,7 @@ def plot_pressure(
     ax_1[-1].yaxis.major = matplotlib.axis.Ticker()
     ax_1[-1].yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
     ax_1[-1].yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    cbar = fig_1.colorbar(im[-2], cax=ax_1[-1])
+    cbar = fig_1.colorbar(im[-2], cax=ax_1[-1],)
     cbar.set_label("Pressure Disturbance [Pa]")
     cbar.set_ticks(np.linspace(np.round(p.min()), np.round(p.max()), 11))
 
