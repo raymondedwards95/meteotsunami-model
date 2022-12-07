@@ -303,7 +303,7 @@ def plot_pressure(
     x_max: Numeric = None,
     y_min: Numeric = None,
     y_max: Numeric = None,
-) -> plt.Figure:
+) -> tuple[plt.Figure, plt.Figure]:
     """Function to visualize pressure data
 
     Input:
@@ -325,8 +325,6 @@ def plot_pressure(
         filename = f"{os.path.dirname(os.path.realpath(__file__))}/tests/fig_pressure"
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
-    savename = f"{filename}_field"
-    print(f"# Visualizing pressure field in '{savename}'")
 
     t_num = 5
 
@@ -347,32 +345,37 @@ def plot_pressure(
     t = np.linspace(data["t"].min(), data["t"].max(), t_num)
     p = data.interp(t=t).compute().values
 
+    ix_single = data.argmax(["x", "y", "t"])["x"]
+
     p_max = np.ceil(np.max([p.max(), np.abs(p.min())]))
     p_min = -1.0 * p_max
 
     if x_scales is None:
         x_scales = [x.min() / 1000.0, x.max() / 1000.0]
 
-    # figure
-    fig, ax = plt.subplots(
+    # figure 1
+    savename = f"{filename}_field"
+    print(f"# Visualizing pressure field in '{savename}'")
+
+    fig_1, ax_1 = plt.subplots(
         1,
         t_num + 1,
         sharey=True,
         squeeze=False,
         gridspec_kw={"width_ratios": [4] * t_num + [1]},
     )
-    fig.set_size_inches(FIGSIZE_WIDE)
-    fig.set_dpi(FIG_DPI)
-    fig.set_layout_engine("compressed")
-    fig.suptitle("Pressure Disturbance", va="top", ha="left", x=0.01)
-    ax = np.ravel(ax)
+    fig_1.set_size_inches(FIGSIZE_WIDE)
+    fig_1.set_dpi(FIG_DPI)
+    fig_1.set_layout_engine("compressed")
+    fig_1.suptitle("Pressure Disturbance", va="top", ha="left", x=0.01)
+    ax_1 = np.ravel(ax_1)
 
     im = [None] * t_num
     for i in range(t_num):
         idx = t.size * i // t_num
-        im[i] = ax[i].pcolormesh(
-            x / 1000.0,
-            y / 1000.0,
+        im[i] = ax_1[i].pcolormesh(
+            x / 1e3,
+            y / 1e3,
             p[i, :, :],
             # levels=np.linspace(np.round(p.min()), np.round(p.max()), 100),
             vmin=p_min,
@@ -380,35 +383,68 @@ def plot_pressure(
             cmap=cmo.cm.curl,
             rasterized=True,
         )
-        ax[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
-        ax[i].set_xlim(x_scales)  # make it automatic?
+        ax_1[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
+        ax_1[i].set_xlim(x_scales)  # make it automatic?
 
         # # rasterize contourf
         # for pathcoll in im[i].collections:
         #     pathcoll.set_rasterized(True)
 
-    fig.supxlabel("$x$ [km]")
-    fig.supylabel("$y$ [km]")
+    fig_1.supxlabel("$x$ [km]")
+    fig_1.supylabel("$y$ [km]")
 
     # remove sharey from last subplot for colorbar
-    ax[-1].get_shared_y_axes().remove(ax[-1])
-    ax[-1].yaxis.major = matplotlib.axis.Ticker()
-    ax[-1].yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
-    ax[-1].yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    cbar = fig.colorbar(im[-2], cax=ax[-1])
+    ax_1[-1].get_shared_y_axes().remove(ax_1[-1])
+    ax_1[-1].yaxis.major = matplotlib.axis.Ticker()
+    ax_1[-1].yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
+    ax_1[-1].yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
+    cbar = fig_1.colorbar(im[-2], cax=ax_1[-1])
     cbar.set_label("Pressure Disturbance [Pa]")
     cbar.set_ticks(np.linspace(np.round(p.min()), np.round(p.max()), 11))
 
-    fig.get_layout_engine().execute(fig)
-    save_figure(fig, savename)
+    fig_1.get_layout_engine().execute(fig_1)
+    save_figure(fig_1, savename)
     if not keep_open:
-        plt.close(fig)
+        plt.close(fig_1)
+
+    # figure 2
+    savename = f"{filename}_profile"
+    print(f"# Visualizing pressure profile in '{savename}'")
+
+    fig_2, ax_2 = plt.subplots(1,1)
+    fig_2.set_size_inches(FIGSIZE_WIDE)
+    fig_2.set_dpi(FIG_DPI)
+    fig_2.set_layout_engine("compressed")
+    fig_2.suptitle("Pressure Disturbance", va="top", ha="left", x=0.01)
+
+    for i in range(t_num):
+        idx = t.size * i // t_num
+        ax_2.plot(y / 1e3, p[i, :, ix_single], label=f"$t = {t[idx]/3600.:0.0f}$h",)
+        ax_2.fill_between(y / 1e3, p[i, :, ix_single], alpha=0.1,)
+
+    ax_2.axhline(
+        color="black",
+        linewidth=1,
+        alpha=0.5,
+    )
+
+    ax_2.set_xlabel("$y$ [km]")
+    ax_2.set_ylabel("Pressure Disturbance [Pa]")
+    ax_2.grid()
+    ax_2.legend()
+    ax_2.set_xlim(y.min() / 1e3, y.max() / 1e3)
+    ax_2.set_ylim(np.floor(p.min()), np.ceil(p.max()))
+
+    fig_2.get_layout_engine().execute(fig_2)
+    save_figure(fig_2, savename)
+    if not keep_open:
+        plt.close(fig_2)
 
     # End
     t1 = time.perf_counter_ns()
     print(f"# Finished visualising in {(t1-t0)*1e-9:0.3f} seconds")
 
-    return fig
+    return fig_1, fig_2
 
 
 if __name__ == "__main__":
@@ -418,38 +454,40 @@ if __name__ == "__main__":
     pressure_file = f"{pressure_dir}/pressure"
     os.makedirs(pressure_dir, exist_ok=True)
 
-    # Define function for computing 'pressure'
-    def f(x, y, t):
-        return (
-            1.0
-            * (1.0 - da.exp(-t / (3.0 * 3600.0)))
-            * da.sin(x * np.pi / 2000.0)
-            * da.sin(y * np.pi / 2000.0)
-            * da.exp(-(y**2.0) / (3e3) ** 2.0)
-        )
+    pressure_file = f"{PATH_MAIN}/reproduction-an-2012/pressure/repr_10"
 
-    # Define grid
-    x = np.linspace(-5000, 5000, 101, dtype=np.float32)
-    y = np.linspace(-15000, 15000, 200, dtype=np.float32)
-    t = np.linspace(0, 10, 21, dtype=np.float32) * 3600.0
+    # # Define function for computing 'pressure'
+    # def f(x, y, t):
+    #     return (
+    #         1.0
+    #         * (1.0 - da.exp(-t / (3.0 * 3600.0)))
+    #         * da.sin(x * np.pi / 2000.0)
+    #         * da.sin(y * np.pi / 2000.0)
+    #         * da.exp(-(y**2.0) / (3e3) ** 2.0)
+    #     )
 
-    tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
-    tt = tt.rechunk("auto")
-    yy = yy.rechunk(tt.chunksize)
-    xx = xx.rechunk(tt.chunksize)
+    # # Define grid
+    # x = np.linspace(-5000, 5000, 101, dtype=np.float32)
+    # y = np.linspace(-15000, 15000, 200, dtype=np.float32)
+    # t = np.linspace(0, 10, 21, dtype=np.float32) * 3600.0
 
-    # Compute data
-    p = f(xx, yy, tt)
+    # tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
+    # tt = tt.rechunk("auto")
+    # yy = yy.rechunk(tt.chunksize)
+    # xx = xx.rechunk(tt.chunksize)
 
-    # Convert data
-    convert_to_xarray(t, x, y, p, savename=pressure_file, close=True)
-    del t, x, y, p
+    # # Compute data
+    # p = f(xx, yy, tt)
+
+    # # Convert data
+    # convert_to_xarray(t, x, y, p, savename=pressure_file, close=True)
+    # del t, x, y, p
 
     # Read data from .nc-file
     data = xr.open_dataarray(f"{pressure_file}.nc", chunks="auto")
 
-    # Write data to .amp-file
-    write_pressure(data, filename=pressure_file)
+    # # Write data to .amp-file
+    # write_pressure(data, filename=pressure_file)
 
     # Visualise data
     plot_pressure(data, filename=pressure_file, y_min=-8e3)
