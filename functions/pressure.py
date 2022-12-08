@@ -450,46 +450,47 @@ def plot_pressure(
 
 
 if __name__ == "__main__":
+    # Extra imports
+    import dask.array as da
+
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
     pressure_dir = f"{script_dir}/tests/pres"
     pressure_file = f"{pressure_dir}/pressure"
     os.makedirs(pressure_dir, exist_ok=True)
 
-    pressure_file = f"{PATH_MAIN}/reproduction-an-2012/pressure/repr_10"
+    # Define function for computing 'pressure'
+    def f(x, y, t):
+        return (
+            1.0
+            * (1.0 - da.exp(-t / (3.0 * 3600.0)))
+            * da.sin(x * np.pi / 2000.0)
+            * da.sin(y * np.pi / 2000.0)
+            * da.exp(-(y**2.0) / (3e3) ** 2.0)
+        )
 
-    # # Define function for computing 'pressure'
-    # def f(x, y, t):
-    #     return (
-    #         1.0
-    #         * (1.0 - da.exp(-t / (3.0 * 3600.0)))
-    #         * da.sin(x * np.pi / 2000.0)
-    #         * da.sin(y * np.pi / 2000.0)
-    #         * da.exp(-(y**2.0) / (3e3) ** 2.0)
-    #     )
+    # Define grid
+    x = np.linspace(-5000, 5000, 101, dtype=np.float32)
+    y = np.linspace(-15000, 15000, 200, dtype=np.float32)
+    t = np.linspace(0, 10, 21, dtype=np.float32) * 3600.0
 
-    # # Define grid
-    # x = np.linspace(-5000, 5000, 101, dtype=np.float32)
-    # y = np.linspace(-15000, 15000, 200, dtype=np.float32)
-    # t = np.linspace(0, 10, 21, dtype=np.float32) * 3600.0
+    tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
+    tt = tt.rechunk("auto")
+    yy = yy.rechunk(tt.chunksize)
+    xx = xx.rechunk(tt.chunksize)
 
-    # tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
-    # tt = tt.rechunk("auto")
-    # yy = yy.rechunk(tt.chunksize)
-    # xx = xx.rechunk(tt.chunksize)
+    # Compute data
+    p = f(xx, yy, tt)
 
-    # # Compute data
-    # p = f(xx, yy, tt)
-
-    # # Convert data
-    # convert_to_xarray(t, x, y, p, savename=pressure_file, close=True)
-    # del t, x, y, p
+    # Convert data
+    convert_to_xarray(t, x, y, p, savename=pressure_file, close=True)
+    del t, x, y, p
 
     # Read data from .nc-file
     data = xr.open_dataarray(f"{pressure_file}.nc", chunks="auto")
 
-    # # Write data to .amp-file
-    # write_pressure(data, filename=pressure_file)
+    # Write data to .amp-file
+    write_pressure(data, filename=pressure_file)
 
     # Visualise data
     plot_pressure(data, filename=pressure_file, y_min=-8e3)
