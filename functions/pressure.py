@@ -347,12 +347,12 @@ def plot_pressure(
     ix_single = data.argmax(["x", "y", "t"])["x"]
 
     p_max = np.ceil(np.max([p.max(), np.abs(p.min())]))
-    p_min = -1.0 * p_max
 
     if x_scales is None:
         x_scales = [x.min() / 1000.0, x.max() / 1000.0]
 
     cmap = cmo.cm.curl
+    cbar_ticks = np.linspace(np.round(p.min()), np.round(p.max()), 11)
 
     # figure 1
     savename = f"{filename}_field"
@@ -380,7 +380,7 @@ def plot_pressure(
             p[i, :, :],
             # levels=np.linspace(np.round(p.min()), np.round(p.max()), 100),
             cmap=cmap,
-            vmin=p_min,
+            vmin=-p_max,
             vmax=p_max,
             rasterized=True,
         )
@@ -399,9 +399,10 @@ def plot_pressure(
     ax_1[-1].yaxis.major = matplotlib.axis.Ticker()
     ax_1[-1].yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
     ax_1[-1].yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    cbar = fig_1.colorbar(im[-2], cax=ax_1[-1],)
+    cbar = fig_1.colorbar(im[-2], cax=ax_1[-1])
     cbar.set_label("Pressure Disturbance [Pa]")
-    cbar.set_ticks(np.linspace(np.round(p.min()), np.round(p.max()), 11))
+    cbar.set_ticks(cbar_ticks)
+    cbar.ax.set_ylim(cbar_ticks.min(), cbar_ticks.max())
 
     fig_1.get_layout_engine().execute(fig_1)
     save_figure(fig_1, savename)
