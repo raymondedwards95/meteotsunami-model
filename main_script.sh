@@ -291,7 +291,7 @@ function func_comparison ()
 
     cd ./reproduction-an-2012
     echo "# Creating figures in '$PWD'"
-    python3 $PWD/create_comparison.py 1> "${LogFolder}/repr_comparison_00.log" 2>&1 &
+    python3 $PWD/create_comparison.py 1> "${LogFolder}/comparison_repr_00.log" 2>&1 &
     wait
     cd ..
     echo "# Returned to '$PWD'"
