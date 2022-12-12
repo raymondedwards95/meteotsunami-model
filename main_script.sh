@@ -14,6 +14,7 @@ Options:
 \n  -f, --figures            \t\t    Create figures
 \n  -v, --visualisations     \t      Create visualisations, applies -f, -v and -t
 \n  -t, --theory             \t\t    Create figures for theory
+\n  -t, --compare            \t\t    Create figures for comparison between repr and an-2012
 \n\n
 Folders:
 \n  -r, --repr               \t\t    Apply options to the reproduction
@@ -34,6 +35,7 @@ create_parameters=false
 create_animations=false
 create_figures=false
 create_theory=false
+create_comparison=false
 
 FolderList=()
 
@@ -48,6 +50,7 @@ while [[ "$#" -gt 0 ]]; do
         -r|--repr) echo "Got argument '--repr'" ; FolderList+=("./reproduction-an-2012") ;;
         -e|--exp) echo "Got argument '--exp'" ; FolderList+=("./thesis") ;;
         -t|--theory) echo "Got argument '--theory'" ; create_theory=true ;;
+        -c|--compare) echo "Got argument '--compare'" ; create_comparison=true ;;
         -h|--help) echo -e $TextHelp ; exit 1 ;;
         *) echo "Unknown parameter $1" ; exit 1 ;;
     esac
@@ -73,6 +76,9 @@ if [ "$create_figures" = true ] ; then
 fi
 if [ "$create_theory" = true ] ; then
     echo "# Theory"
+fi
+if [ "$create_compare" = true ] ; then
+    echo "# Comparison"
 fi
 
 # Default list of folders with input files
@@ -273,11 +279,43 @@ function func_theory ()
     echo "$(date) - Finished figures for theory" >> $LogFile
 }
 
+# Define comparison
+function func_comparison ()
+{
+    # Start timer
+    local TStart=$(date +%s)
+
+    # Create comparison
+    echo "# Creating figures for comparison"
+    echo "$(date) - Creating figures for comparison" >> $LogFile
+
+    cd ./reproduction-an-2012
+    echo "# Creating figures in '$PWD'"
+    python3 $PWD/create_comparison.py 1> "${LogFolder}/repr_comparison_00.log" 2>&1 &
+    wait
+    cd ..
+    echo "# Returned to '$PWD'"
+
+    # End
+    local TEnd=$(date +%s)
+    local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
+
+    echo "# Finished figures for comparison in $dTTotal minutes"
+    echo "$(date) - Finished figures for comparison" >> $LogFile
+}
+
 # Create theory
 if [ "$create_theory" = true ] ; then
     echo "### Create figures theory"
     func_theory
     echo "### Finished theory"
+fi
+
+# Create comparison
+if [ "$create_comparison" = true ] ; then
+    echo "### Create figures comparison"
+    func_comparison
+    echo "### Finished comparison"
 fi
 
 # Loop over all folders
