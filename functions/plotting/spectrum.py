@@ -541,14 +541,11 @@ class plot_spectrum_2d:
 
 if __name__ == "__main__":
     # Define paths
-    script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    figure_dir = f"{script_dir}/tests/figures/"
-    os.makedirs(figure_dir, exist_ok=True)
+    figure_dir = f"{PATH_TEST}"
 
     # Get data
-    main_dir = os.path.dirname(script_dir)
-    data_a = f"{main_dir}/reproduction-an-2012/output/data_repr_00.nc"
-    data_b = f"{main_dir}/reproduction-an-2012/output/data_repr_01.nc"
+    data_a = f"{PATH_MAIN}/reproduction-an-2012/output/data_repr_00.nc"
+    data_b = f"{PATH_MAIN}/reproduction-an-2012/output/data_repr_01.nc"
 
     data_a = xr.open_dataset(data_a, chunks="auto")
     data_b = xr.open_dataset(data_b, chunks="auto")
