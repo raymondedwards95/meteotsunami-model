@@ -45,7 +45,7 @@ Numeric: TypeAlias = Union[int, float, np.integer, np.floating]
 # Paths
 PATH_FUNCTIONS = os.path.dirname(os.path.realpath(__file__))
 PATH_MAIN = os.path.dirname(PATH_FUNCTIONS)
-PATH_TEST = f"{PATH_FUNCTIONS}/tests"
+PATH_TEST = f"{PATH_MAIN}/tests"
 PATH_FIGURES = f"{PATH_MAIN}/figures"
 PATH_PNG = f"{PATH_MAIN}/figures/png"
 PATH_PGF = f"{PATH_MAIN}/figures/pgf"
