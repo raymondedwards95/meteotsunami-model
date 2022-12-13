@@ -186,10 +186,10 @@ def plot_bathymetry(
     if filename.endswith(".jpg"):
         filename.replace(".jpg", "")
 
-    figsize=FIGSIZE_NORMAL
+    figsize = FIGSIZE_NORMAL
     if half_width:
         figsize = FIGSIZE_SMALL
-        filename+="_small"
+        filename += "_small"
 
     print(f"# Visualizing bathymetry in '{filename}'")
 
@@ -217,9 +217,20 @@ def plot_bathymetry(
     fig_1.set_size_inches(figsize)
     fig_1.set_dpi(FIG_DPI)
     fig_1.set_layout_engine("compressed")
-    ax_1.plot(x / 1e6, b[i, :], rasterized=False, label=f"$y={y[i]/1e6:0.0f}$ Mm")
+    ax_1.plot(
+        x / 1e6,
+        b[i, :],
+        rasterized=False,
+        label=f"$y={y[i]/1e6:0.0f}$ Mm",
+    )
     _ylims = ax_1.get_ylim()
-    ax_1.fill_between(x / 1e6, _ylims[0], b[i, :], alpha=0.1, rasterized=False,)
+    ax_1.fill_between(
+        x / 1e6,
+        _ylims[0],
+        b[i, :],
+        alpha=0.1,
+        rasterized=False,
+    )
     ax_1.axhline(color="black", linewidth=1, alpha=0.5)
     ax_1.set_title(f"Bottom Profile - Cross-section")
     ax_1.set_xlim(0, xmax)
@@ -252,7 +263,13 @@ def plot_bathymetry(
         rasterized=True,
     )
     # cbar = fig_2.colorbar(cont, cax=cax)
-    cbar = fig_2.colorbar(cont, ax=ax_2, fraction=0.1, aspect=25, pad=0.01)
+    cbar = fig_2.colorbar(
+        cont,
+        ax=ax_2,
+        fraction=0.1,
+        aspect=25,
+        pad=0.01,
+    )
     cbar.set_label("Water Depth [m]")
     cbar.set_ticks(np.linspace(0, b_min, 6))
     cbar.set_ticklabels(
