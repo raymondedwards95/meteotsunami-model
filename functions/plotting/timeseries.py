@@ -239,13 +239,11 @@ if __name__ == "__main__":
         return f.format_data(x)
 
     # Define paths
-    script_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    figure_dir = f"{script_dir}/tests/figures/"
-    os.makedirs(figure_dir, exist_ok=True)
+    script_dir = f"{PATH_PLOTTING}"
+    figure_dir = f"{PATH_TEST}"
 
     # Get data
-    main_dir = os.path.dirname(script_dir)
-    data_a = f"{main_dir}/reproduction-an-2012/output/data_repr_00.nc"
+    data_a = f"{PATH_MAIN}/reproduction-an-2012/output/data_repr_00.nc"
     data_a = xr.open_dataset(data_a, chunks="auto")
 
     # Make figures
