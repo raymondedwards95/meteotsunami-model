@@ -263,9 +263,7 @@ def plot_observations(
 
 if __name__ == "__main__":
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    obs_dir = f"{script_dir}/tests/obs"
-    obs_file = f"{obs_dir}/observations"
-    os.makedirs(obs_dir, exist_ok=True)
+    obs_file = f"{PATH_TEST}/observations"
 
     obs_0 = ObservationPoint(
         name="Center",
