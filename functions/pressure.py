@@ -413,7 +413,7 @@ def plot_pressure(
     savename = f"{filename}_profile"
     print(f"# Visualizing pressure profile in '{savename}'")
 
-    fig_2, ax_2 = plt.subplots(1,1)
+    fig_2, ax_2 = plt.subplots(1, 1)
     fig_2.set_size_inches(FIGSIZE_WIDE)
     fig_2.set_dpi(FIG_DPI)
     fig_2.set_layout_engine("compressed")
@@ -421,8 +421,16 @@ def plot_pressure(
 
     for i in range(t_num):
         idx = t.size * i // t_num
-        ax_2.plot(y / 1e3, p[i, :, ix_single], label=f"$t = {t[idx]/3600.:0.0f}$h",)
-        ax_2.fill_between(y / 1e3, p[i, :, ix_single], alpha=0.1,)
+        ax_2.plot(
+            y / 1e3,
+            p[i, :, ix_single],
+            label=f"$t = {t[idx]/3600.:0.0f}$h",
+        )
+        ax_2.fill_between(
+            y / 1e3,
+            p[i, :, ix_single],
+            alpha=0.1,
+        )
 
     ax_2.axhline(
         color="black",
@@ -455,9 +463,7 @@ if __name__ == "__main__":
 
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    pressure_dir = f"{script_dir}/tests/pres"
-    pressure_file = f"{pressure_dir}/pressure"
-    os.makedirs(pressure_dir, exist_ok=True)
+    pressure_dir = f"{PATH_TEST}/pressure"
 
     # Define function for computing 'pressure'
     def f(x, y, t):
@@ -483,14 +489,14 @@ if __name__ == "__main__":
     p = f(xx, yy, tt)
 
     # Convert data
-    convert_to_xarray(t, x, y, p, savename=pressure_file, close=True)
+    convert_to_xarray(t, x, y, p, savename=pressure_dir, close=True)
     del t, x, y, p
 
     # Read data from .nc-file
-    data = xr.open_dataarray(f"{pressure_file}.nc", chunks="auto")
+    data = xr.open_dataarray(f"{pressure_dir}.nc", chunks="auto")
 
     # Write data to .amp-file
-    write_pressure(data, filename=pressure_file)
+    write_pressure(data, filename=pressure_dir)
 
     # Visualise data
-    plot_pressure(data, filename=pressure_file, y_min=-8e3)
+    plot_pressure(data, filename=pressure_dir, y_min=-8e3)
