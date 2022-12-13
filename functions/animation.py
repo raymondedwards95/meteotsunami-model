@@ -652,8 +652,7 @@ def animation_crossshore(
 if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
-    anim_dir = f"{script_dir}/tests/anim/anim"
-    os.makedirs(anim_dir, exist_ok=True)
+    anim_dir = f"{PATH_TEST}/anim"
 
     # Read data
     data = xr.open_dataset(
