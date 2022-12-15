@@ -44,6 +44,7 @@ Numeric: TypeAlias = Union[int, float, np.integer, np.floating]
 
 # Paths
 PATH_FUNCTIONS = os.path.dirname(os.path.realpath(__file__))
+PATH_PLOTTING = f"{PATH_FUNCTIONS}/plotting"
 PATH_MAIN = os.path.dirname(PATH_FUNCTIONS)
 PATH_TEST = f"{PATH_MAIN}/tests"
 PATH_FIGURES = f"{PATH_MAIN}/figures"
@@ -56,6 +57,7 @@ os.makedirs(PATH_PNG, exist_ok=True)
 os.makedirs(PATH_PGF, exist_ok=True)
 
 assert PATH_FUNCTIONS.endswith("functions")
+assert PATH_PLOTTING.endswith("plotting")
 assert PATH_TEST.endswith("tests")
 assert PATH_FIGURES.endswith("figures")
 assert PATH_PNG.endswith("png")
@@ -111,3 +113,21 @@ def save_figure(fig: mpl.figure, name: str, path: str = None) -> None:
     print(f"## Saved pgf figure as '{pgf_file}'")
 
     return
+
+
+if __name__ == "__main__":
+    import subprocess
+
+    subprocess.run(["python", f"{PATH_FUNCTIONS}/analysis.py"])
+    subprocess.run(["python", f"{PATH_FUNCTIONS}/animation.py"])
+    subprocess.run(["python", f"{PATH_FUNCTIONS}/bathymetry.py"])
+    subprocess.run(["python", f"{PATH_FUNCTIONS}/observations.py"])
+    subprocess.run(["python", f"{PATH_FUNCTIONS}/pressure.py"])
+    subprocess.run(["python", f"{PATH_FUNCTIONS}/theory.py"])
+    subprocess.run(["python", f"{PATH_FUNCTIONS}/utilities.py"])
+
+    subprocess.run(["python", f"{PATH_PLOTTING}/__init__.py"])
+    subprocess.run(["python", f"{PATH_PLOTTING}/contour.py"])
+    subprocess.run(["python", f"{PATH_PLOTTING}/profiles.py"])
+    subprocess.run(["python", f"{PATH_PLOTTING}/spectrum.py"])
+    subprocess.run(["python", f"{PATH_PLOTTING}/timeseries.py"])
