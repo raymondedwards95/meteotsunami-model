@@ -71,8 +71,8 @@ class ObservationPoint:
             ax:     existing Axes object
         """
         ax.plot(
-            self.x / 1000.0,
-            self.y / 1000.0,
+            self.x / 1e6,
+            self.y / 1e6,
             "o",
             markersize=5,
             label=self.name,
@@ -134,10 +134,11 @@ class ObservationCrossSection:
             ax:     existing Axes object
         """
         ax.plot(
-            self.x / 1000.0,
-            self.y / 1000.0,
+            self.x / 1e6,
+            self.y / 1e6,
             "-o",
             markersize=5,
+            linewidth=1.2,
             label=self.name,
         )
         return ax
@@ -234,9 +235,9 @@ def plot_observations(
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
+    fig.suptitle("Observation Points and Lines", va="top", ha="left", x=0.01)
 
     # Layout
-    ax.set_title("Observation Points and Lines")
     ax.axhline(color="black", linewidth=1, alpha=0.5)
     ax.axvline(color="black", linewidth=1, alpha=0.5)
 
@@ -247,8 +248,8 @@ def plot_observations(
     # Layout part 2
     ax.grid()
     ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
-    ax.set_xlabel("$x$ [km]")
-    ax.set_ylabel("$y$ [km]")
+    ax.set_xlabel("$x$ [Mm]")
+    ax.set_ylabel("$y$ [Mm]")
 
     # End
     fig.get_layout_engine().execute(fig)
@@ -269,37 +270,37 @@ if __name__ == "__main__":
         name="Center",
         x=0,
         y=0,
-        scale=1e3,
+        scale=1e5,
     )
     obs_1 = ObservationPoint(
         name="Point",
-        x=1,
-        y=1,
-        scale=1e3,
+        x=1.2,
+        y=1.8,
+        scale=1e5,
     )
     obs_2 = ObservationCrossSection(
         name="Line",
-        x=[-3, 3],
+        x=[-2.5, 2.5],
         y=[3, 3],
-        scale=1e3,
+        scale=1e5,
     )
     obs_3 = ObservationCrossSection(
         name="Diagonal",
         x=[-2, 3],
         y=[-4, 1],
-        scale=1e3,
+        scale=1e5,
     )
     obs_4 = ObservationCrossSection(
         name="Curve",
-        x=[-2, 0, -1],
-        y=[-3, 1, 2],
-        scale=1e3,
+        x=[-3, -1.5, -1, 0, -1, -2, -3.5],
+        y=[-3, -2.5, -2, 1, 2, 2, 1.5],
+        scale=1e5,
     )
     obs_5 = ObservationCrossSection(
         name="Square",
         x=[-4, -4, 4, 4],
         y=[-4, 4, 4, -4],
-        scale=1e3,
+        scale=1e5,
     )
 
     data = [obs_0, obs_1, obs_2, obs_3, obs_4, obs_5]

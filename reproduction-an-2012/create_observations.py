@@ -6,6 +6,7 @@ import sys
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 import functions.observations as fo
 # fmt: on
 
@@ -36,7 +37,7 @@ for i in range(4):
     _x = i * 1e4
     obs.append(
         fo.ObservationCrossSection(
-            name=f"Along Shore x={_x/1000 :0.0f}km",
+            name=f"Along: $x={_x/1e3 :0.0f}$ km",
             x=[_x, _x],
             y=[y_min, y_max],
         )
@@ -46,7 +47,7 @@ for i in range(5):
     _y = i * y_max / 4
     obs.append(
         fo.ObservationCrossSection(
-            name=f"Cross Shore y={_y/1000:0.0f}km",
+            name=f"Cross: $y={_y/1e6:0.1f}$ Mm",
             x=[x_min, x_max],
             y=[_y, _y],
         )
