@@ -217,6 +217,8 @@ def plot_bathymetry(
     fig_1.set_size_inches(figsize)
     fig_1.set_dpi(FIG_DPI)
     fig_1.set_layout_engine("compressed")
+    fig_1.suptitle("Bottom Profile - Cross-section", va="top", ha="left", x=0.01)
+
     ax_1.plot(
         x / 1e6,
         b[i, :],
@@ -231,14 +233,15 @@ def plot_bathymetry(
         alpha=0.1,
         rasterized=False,
     )
+
     ax_1.axhline(color="black", linewidth=1, alpha=0.5)
-    ax_1.set_title(f"Bottom Profile - Cross-section")
     ax_1.set_xlim(0, xmax)
     ax_1.set_ylim(_ylims)
     ax_1.set_xlabel("$x$ [Mm]")
     ax_1.set_ylabel("Bed Level [m]")
     ax_1.grid()
     ax_1.legend(loc="upper right")
+
     fig_1.get_layout_engine().execute(fig_1)
     save_figure(fig_1, savename)
     if not keep_open:
@@ -250,6 +253,8 @@ def plot_bathymetry(
     fig_2.set_size_inches(figsize)
     fig_2.set_dpi(FIG_DPI)
     fig_2.set_layout_engine("compressed")
+    fig_2.suptitle("Bottom Profile - Contours", va="top", ha="left", x=0.01)
+
     # div = make_axes_locatable(ax_2)
     # cax = div.append_axes("right", "5%", "5%")
     cont = ax_2.contourf(
@@ -262,6 +267,7 @@ def plot_bathymetry(
         vmax=b_max,
         rasterized=True,
     )
+
     # cbar = fig_2.colorbar(cont, cax=cax)
     cbar = fig_2.colorbar(
         cont,
@@ -275,10 +281,11 @@ def plot_bathymetry(
     cbar.set_ticklabels(
         [f"{ticklabel:0.0f}" for ticklabel in np.linspace(0, -1.0 * b_min, 6)]
     )
-    ax_2.set_title(f"Bottom Profile - Contours")
+
     ax_2.set_xlim(0, xmax)
     ax_2.set_xlabel("$x$ [Mm]")
     ax_2.set_ylabel("$y$ [Mm]")
+
     fig_2.get_layout_engine().execute(fig_2)
     save_figure(fig_2, savename)
     if not keep_open:
