@@ -180,7 +180,7 @@ for case_number in range(num_cases):
 
     # Visualise field
     print(f"Plotting pressure field for {case=:02.0f}")
-    fp.plot_pressure(data, filename=figurename)
+    fp.plot_pressure(data, filename=figurename, scale="km")
 
     # End
     tb = time.perf_counter()

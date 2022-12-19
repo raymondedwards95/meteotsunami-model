@@ -302,6 +302,7 @@ def plot_pressure(
     x_max: Numeric = None,
     y_min: Numeric = None,
     y_max: Numeric = None,
+    scale: str = "Mm",
 ) -> tuple[plt.Figure, plt.Figure]:
     """Function to visualize pressure data
 
@@ -315,6 +316,7 @@ def plot_pressure(
         `x_max`:        upper limit of x
         `y_min`:        lower limit of y
         `y_max`:        upper limit of y
+        `scale`:        scale of plots ('m', 'km' or 'Mm')
     """
     # prepare
     t0 = time.perf_counter_ns()
@@ -326,6 +328,24 @@ def plot_pressure(
         filename.replace(".jpg", "")
 
     t_num = 5
+
+    unit: str
+    scale_factor: float
+
+    match scale:
+        case "m":
+            unit = "m"
+            scale_factor = 1e0
+        case "km":
+            unit = "km"
+            scale_factor = 1e3
+        case "Mm":
+            unit = "Mm"
+            scale_factor = 1e6
+        case _:
+            raise ValueError(
+                f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
+            )
 
     # filter data
     if x_min is None:
@@ -349,7 +369,7 @@ def plot_pressure(
     p_max = np.ceil(np.max([p.max(), np.abs(p.min())]))
 
     if x_scales is None:
-        x_scales = [x.min() / 1000.0, x.max() / 1000.0]
+        x_scales = [x.min() / scale_factor, x.max() / scale_factor]
 
     cmap = cmo.cm.curl
     cbar_ticks = np.linspace(np.round(p.min()), np.round(p.max()), 11)
@@ -368,15 +388,15 @@ def plot_pressure(
     fig_1.set_size_inches(FIGSIZE_WIDE)
     fig_1.set_dpi(FIG_DPI)
     fig_1.set_layout_engine("compressed")
-    fig_1.suptitle("Pressure Disturbance", va="top", ha="left", x=0.01)
+    fig_1.suptitle("Pressure Disturbance - Contours", va="top", ha="left", x=0.01)
     ax_1 = np.ravel(ax_1)
 
     im = [None] * t_num
     for i in range(t_num):
         idx = t.size * i // t_num
         im[i] = ax_1[i].pcolormesh(
-            x / 1e3,
-            y / 1e3,
+            x / scale_factor,
+            y / scale_factor,
             p[i, :, :],
             # levels=np.linspace(np.round(p.min()), np.round(p.max()), 100),
             cmap=cmap,
@@ -391,8 +411,8 @@ def plot_pressure(
         # for pathcoll in im[i].collections:
         #     pathcoll.set_rasterized(True)
 
-    fig_1.supxlabel("$x$ [km]")
-    fig_1.supylabel("$y$ [km]")
+    fig_1.supxlabel(f"$x$ [{unit}]")
+    fig_1.supylabel(f"$y$ [{unit}]")
 
     # remove sharey from last subplot for colorbar
     ax_1[-1].get_shared_y_axes().remove(ax_1[-1])
@@ -417,17 +437,17 @@ def plot_pressure(
     fig_2.set_size_inches(FIGSIZE_WIDE)
     fig_2.set_dpi(FIG_DPI)
     fig_2.set_layout_engine("compressed")
-    fig_2.suptitle("Pressure Disturbance", va="top", ha="left", x=0.01)
+    fig_2.suptitle("Pressure Disturbance - Time Series", va="top", ha="left", x=0.01)
 
     for i in range(t_num):
         idx = t.size * i // t_num
         ax_2.plot(
-            y / 1e3,
+            y / scale_factor,
             p[i, :, ix_single],
             label=f"$t = {t[idx]/3600.:0.0f}$h",
         )
         ax_2.fill_between(
-            y / 1e3,
+            y / scale_factor,
             p[i, :, ix_single],
             alpha=0.1,
         )
@@ -438,11 +458,11 @@ def plot_pressure(
         alpha=0.5,
     )
 
-    ax_2.set_xlabel("$y$ [km]")
+    ax_2.set_xlabel(f"$y$ [{unit}]")
     ax_2.set_ylabel("Pressure Disturbance [Pa]")
     ax_2.grid()
     ax_2.legend()
-    ax_2.set_xlim(y.min() / 1e3, y.max() / 1e3)
+    ax_2.set_xlim(y.min() / scale_factor, y.max() / scale_factor)
     ax_2.set_ylim(np.floor(p.min()), np.ceil(p.max()))
 
     fig_2.get_layout_engine().execute(fig_2)
@@ -466,18 +486,20 @@ if __name__ == "__main__":
     pressure_dir = f"{PATH_TEST}/pressure"
 
     # Define function for computing 'pressure'
+    scale_factor = 1e0
+
     def f(x, y, t):
         return (
-            1.0
+            5.0
             * (1.0 - da.exp(-t / (3.0 * 3600.0)))
-            * da.sin(x * np.pi / 2000.0)
-            * da.sin(y * np.pi / 2000.0)
-            * da.exp(-(y**2.0) / (3e3) ** 2.0)
+            * da.sin(x * np.pi / (2.0 * scale_factor))
+            * da.sin(y * np.pi / (2.0 * scale_factor))
+            * da.exp(-(y**2.0) / (3.0 * scale_factor) ** 2.0)
         )
 
     # Define grid
-    x = np.linspace(-5000, 5000, 101, dtype=np.float32)
-    y = np.linspace(-15000, 15000, 200, dtype=np.float32)
+    x = np.linspace(-5, 5, 101, dtype=np.float32) * scale_factor
+    y = np.linspace(-15, 15, 200, dtype=np.float32) * scale_factor
     t = np.linspace(0, 10, 21, dtype=np.float32) * 3600.0
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
@@ -499,4 +521,4 @@ if __name__ == "__main__":
     write_pressure(data, filename=pressure_dir)
 
     # Visualise data
-    plot_pressure(data, filename=pressure_dir, y_min=-8e3)
+    plot_pressure(data, filename=pressure_dir, y_min=-10e0, scale="m")

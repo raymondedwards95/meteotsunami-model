@@ -1500,7 +1500,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=0.118330in,y=3.016660in,left,top]{\color{textcolor}\sffamily\fontsize{12.000000}{14.400000}\selectfont Pressure Disturbance}%
+\pgftext[x=0.118330in,y=3.016660in,left,top]{\color{textcolor}\sffamily\fontsize{12.000000}{14.400000}\selectfont Pressure Disturbance - Contours}%
 \end{pgfscope}%
 \begin{pgfscope}%
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%

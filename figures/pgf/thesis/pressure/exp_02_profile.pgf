@@ -13026,7 +13026,7 @@
 \definecolor{textcolor}{rgb}{0.000000,0.000000,0.000000}%
 \pgfsetstrokecolor{textcolor}%
 \pgfsetfillcolor{textcolor}%
-\pgftext[x=0.122871in,y=2.965486in,left,top]{\color{textcolor}\sffamily\fontsize{12.000000}{14.400000}\selectfont Pressure Disturbance}%
+\pgftext[x=0.122871in,y=2.965486in,left,top]{\color{textcolor}\sffamily\fontsize{12.000000}{14.400000}\selectfont Pressure Disturbance - Time Series}%
 \end{pgfscope}%
 \end{pgfpicture}%
 \makeatother%
