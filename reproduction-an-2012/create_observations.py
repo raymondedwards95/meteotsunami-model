@@ -13,7 +13,7 @@ import functions.observations as fo
 
 # Parameters
 x_min = 0.0
-x_max = 1e6
+x_max = 1e7
 
 y_min = -1e7
 y_max = +1e7
@@ -53,6 +53,6 @@ for i in range(5):
         )
     )
 
-fo.write_observations(obs, filename=f"{obs_dir}/repr_00")
-fo.plot_observations(obs, savename=f"{obs_dir}/repr_00")
+fo.write_observations(obs, filename=f"{obs_dir}/repr_00",)
+fo.plot_observations(obs, savename=f"{obs_dir}/repr_00", scale="Mm",)
 print("Finished creating observation-files")

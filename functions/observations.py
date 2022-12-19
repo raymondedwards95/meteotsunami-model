@@ -64,15 +64,19 @@ class ObservationPoint:
     def plot(
         self,
         ax: plt.Axes,
+        scale_factor: Numeric = 1.0,
     ) -> plt.Axes:
         """Plot point on an existing Axes object
 
         Input:
             ax:     existing Axes object
+
+        Options:
+            scale_factor:   scale factor for coordinates
         """
         ax.plot(
-            self.x / 1e6,
-            self.y / 1e6,
+            self.x / scale_factor,
+            self.y / scale_factor,
             "o",
             markersize=5,
             label=self.name,
@@ -127,15 +131,19 @@ class ObservationCrossSection:
     def plot(
         self,
         ax: plt.Axes,
+        scale_factor: Numeric = 1.0,
     ) -> plt.Axes:
         """Plot lines on an existing Axes object
 
         Input:
-            ax:     existing Axes object
+            ax:             existing Axes object
+
+        Options:
+            scale_factor:   scale factor for coordinates
         """
         ax.plot(
-            self.x / 1e6,
-            self.y / 1e6,
+            self.x / scale_factor,
+            self.y / scale_factor,
             "-o",
             markersize=5,
             linewidth=1.2,
@@ -218,6 +226,7 @@ def plot_observations(
     data: npt.ArrayLike,
     savename: str,
     keep_open: bool = False,
+    scale: str = "Mm",
 ) -> plt.Figure:
     """Visualise observation points and lines
 
@@ -227,8 +236,27 @@ def plot_observations(
     Options:
         `savename`:     name of figure
         `keep_open`:    keep figures open after finishing
+        `scale`:        scale of plots ('m', 'km' or 'Mm')
     """
     t0 = time.perf_counter_ns()
+
+    unit: str
+    scale_factor: float
+
+    match scale:
+        case "m":
+            unit = "m"
+            scale_factor = 1e0
+        case "km":
+            unit = "km"
+            scale_factor = 1e3
+        case "Mm":
+            unit = "Mm"
+            scale_factor = 1e6
+        case _:
+            raise ValueError(
+                f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
+            )
 
     # Figure
     fig, ax = plt.subplots(1, 1)
@@ -243,13 +271,13 @@ def plot_observations(
 
     ## Points and lines
     for element in data:
-        ax = element.plot(ax)
+        ax = element.plot(ax, scale_factor=scale_factor)
 
     # Layout part 2
     ax.grid()
     ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
-    ax.set_xlabel("$x$ [Mm]")
-    ax.set_ylabel("$y$ [Mm]")
+    ax.set_xlabel(f"$x$ [{unit}]")
+    ax.set_ylabel(f"$y$ [{unit}]")
 
     # End
     fig.get_layout_engine().execute(fig)
@@ -270,40 +298,40 @@ if __name__ == "__main__":
         name="Center",
         x=0,
         y=0,
-        scale=1e5,
+        scale=1e2,
     )
     obs_1 = ObservationPoint(
         name="Point",
         x=1.2,
         y=1.8,
-        scale=1e5,
+        scale=1e2,
     )
     obs_2 = ObservationCrossSection(
         name="Line",
         x=[-2.5, 2.5],
         y=[3, 3],
-        scale=1e5,
+        scale=1e2,
     )
     obs_3 = ObservationCrossSection(
         name="Diagonal",
         x=[-2, 3],
         y=[-4, 1],
-        scale=1e5,
+        scale=1e2,
     )
     obs_4 = ObservationCrossSection(
         name="Curve",
         x=[-3, -1.5, -1, 0, -1, -2, -3.5],
         y=[-3, -2.5, -2, 1, 2, 2, 1.5],
-        scale=1e5,
+        scale=1e2,
     )
     obs_5 = ObservationCrossSection(
         name="Square",
         x=[-4, -4, 4, 4],
         y=[-4, 4, 4, -4],
-        scale=1e5,
+        scale=1e2,
     )
 
     data = [obs_0, obs_1, obs_2, obs_3, obs_4, obs_5]
 
     write_observations(data, filename=obs_file)
-    plot_observations(data, savename=obs_file)
+    plot_observations(data, savename=obs_file, scale="km")
