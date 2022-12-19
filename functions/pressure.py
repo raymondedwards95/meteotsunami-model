@@ -11,6 +11,9 @@ import sys
 import time
 
 import cmocean as cmo
+import matplotlib as mpl
+import matplotlib.cm
+import matplotlib.colors
 import matplotlib.pyplot as plt
 import matplotlib.ticker
 import numpy as np
@@ -373,6 +376,8 @@ def plot_pressure(
 
     cmap = cmo.cm.curl
     cbar_ticks = np.linspace(np.round(p.min()), np.round(p.max()), 11)
+    norm = mpl.colors.Normalize(vmin=-p_max, vmax=p_max)
+    imag = mpl.cm.ScalarMappable(norm=norm, cmap=cmap)
 
     # figure 1
     savename = f"{filename}_field"
@@ -380,10 +385,9 @@ def plot_pressure(
 
     fig_1, ax_1 = plt.subplots(
         1,
-        t_num + 1,
+        t_num,
         sharey=True,
         squeeze=False,
-        gridspec_kw={"width_ratios": [4] * t_num + [1]},
     )
     fig_1.set_size_inches(FIGSIZE_WIDE)
     fig_1.set_dpi(FIG_DPI)
@@ -407,19 +411,10 @@ def plot_pressure(
         ax_1[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
         ax_1[i].set_xlim(x_scales)  # make it automatic?
 
-        # # rasterize contourf
-        # for pathcoll in im[i].collections:
-        #     pathcoll.set_rasterized(True)
-
     fig_1.supxlabel(f"$x$ [{unit}]")
     fig_1.supylabel(f"$y$ [{unit}]")
 
-    # remove sharey from last subplot for colorbar
-    ax_1[-1].get_shared_y_axes().remove(ax_1[-1])
-    ax_1[-1].yaxis.major = matplotlib.axis.Ticker()
-    ax_1[-1].yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
-    ax_1[-1].yaxis.set_major_formatter(matplotlib.ticker.ScalarFormatter())
-    cbar = fig_1.colorbar(im[-2], cax=ax_1[-1])
+    cbar = fig_1.colorbar(imag, ax=ax_1[:], pad=0.03, aspect=10)
     cbar.set_label("Pressure Disturbance [Pa]")
     cbar.set_ticks(cbar_ticks)
     cbar.ax.set_ylim(cbar_ticks.min(), cbar_ticks.max())
