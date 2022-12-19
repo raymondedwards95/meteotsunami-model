@@ -53,6 +53,13 @@ for i in range(5):
         )
     )
 
-fo.write_observations(obs, filename=f"{obs_dir}/repr_00",)
-fo.plot_observations(obs, savename=f"{obs_dir}/repr_00", scale="Mm",)
+fo.write_observations(
+    obs,
+    filename=f"{obs_dir}/repr_00",
+)
+fo.plot_observations(
+    obs,
+    savename=f"{obs_dir}/repr_00",
+    scale="Mm",
+)
 print("Finished creating observation-files")
