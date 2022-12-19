@@ -74,13 +74,26 @@ for i in range(len(cases)):
 
     # Write to file
     data = fb.convert_to_xarray(
-        x, y, zz, savename=f"{bathymetry_dir}/repr_{case:02.0f}.nc"
+        x,
+        y,
+        zz,
+        savename=f"{bathymetry_dir}/repr_{case:02.0f}.nc",
     )
-    fb.write_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}.xyb")
+    fb.write_bathymetry(
+        data,
+        f"{bathymetry_dir}/repr_{case:02.0f}.xyb",
+    )
 
     # Visualize
-    fb.plot_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}")
-    fb.plot_bathymetry(data, f"{bathymetry_dir}/repr_{case:02.0f}", half_width=True)
+    fb.plot_bathymetry(
+        data,
+        f"{bathymetry_dir}/repr_{case:02.0f}",
+    )
+    fb.plot_bathymetry(
+        data,
+        f"{bathymetry_dir}/repr_{case:02.0f}",
+        half_width=True,
+    )
 
     # End
     tb = time.perf_counter()

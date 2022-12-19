@@ -164,6 +164,7 @@ def plot_bathymetry(
     xmax: Numeric = None,
     keep_open: bool = False,
     half_width: bool = False,
+    scale: str = "Mm",
 ) -> Tuple[plt.Figure, plt.Figure]:
     """Function to visualize bathymetry data
 
@@ -175,6 +176,7 @@ def plot_bathymetry(
         `xmax`:         upper limit of x
         `keep_open`:    keep figures open after finishing
         `half_width`:   make figures for use in columns, i.e. side-by-side
+        `scale`:        scale of plots ('m', 'km' or 'Mm')
     """
     # Prepare
     t0 = time.perf_counter_ns()
@@ -190,6 +192,24 @@ def plot_bathymetry(
     if half_width:
         figsize = FIGSIZE_SMALL
         filename += "_small"
+
+    unit: str
+    scale_factor: float
+
+    match scale:
+        case "m":
+            unit = "m"
+            scale_factor = 1e0
+        case "km":
+            unit = "km"
+            scale_factor = 1e3
+        case "Mm":
+            unit = "Mm"
+            scale_factor = 1e6
+        case _:
+            raise ValueError(
+                f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
+            )
 
     print(f"# Visualizing bathymetry in '{filename}'")
 
@@ -209,7 +229,7 @@ def plot_bathymetry(
 
     if xmax is None:
         xmax = x.max()
-    xmax /= 1e6
+    xmax /= scale_factor
 
     # Figure 1 - cross-section
     savename = f"{filename}_cross"
@@ -220,14 +240,14 @@ def plot_bathymetry(
     fig_1.suptitle("Bottom Profile - Cross-section", va="top", ha="left", x=0.01)
 
     ax_1.plot(
-        x / 1e6,
+        x / scale_factor,
         b[i, :],
         rasterized=False,
-        label=f"$y={y[i]/1e6:0.0f}$ Mm",
+        label=f"$y={y[i]/scale_factor:0.0f}$ {unit}",
     )
     _ylims = ax_1.get_ylim()
     ax_1.fill_between(
-        x / 1e6,
+        x / scale_factor,
         _ylims[0],
         b[i, :],
         alpha=0.1,
@@ -237,7 +257,7 @@ def plot_bathymetry(
     ax_1.axhline(color="black", linewidth=1, alpha=0.5)
     ax_1.set_xlim(0, xmax)
     ax_1.set_ylim(_ylims)
-    ax_1.set_xlabel("$x$ [Mm]")
+    ax_1.set_xlabel(f"$x$ [{unit}]")
     ax_1.set_ylabel("Bed Level [m]")
     ax_1.grid()
     ax_1.legend(loc="upper right")
@@ -258,8 +278,8 @@ def plot_bathymetry(
     # div = make_axes_locatable(ax_2)
     # cax = div.append_axes("right", "5%", "5%")
     cont = ax_2.contourf(
-        x / 1e6,
-        y / 1e6,
+        x / scale_factor,
+        y / scale_factor,
         b,
         levels=np.sort(np.linspace(0, b_min, 21)),
         cmap=cmo.tools.crop(cmo.cm.topo, b_min, b_max, 0),
@@ -283,8 +303,8 @@ def plot_bathymetry(
     )
 
     ax_2.set_xlim(0, xmax)
-    ax_2.set_xlabel("$x$ [Mm]")
-    ax_2.set_ylabel("$y$ [Mm]")
+    ax_2.set_xlabel(f"$x$ [{unit}]")
+    ax_2.set_ylabel(f"$y$ [{unit}]")
 
     fig_2.get_layout_engine().execute(fig_2)
     save_figure(fig_2, savename)
@@ -321,5 +341,5 @@ if __name__ == "__main__":
     write_bathymetry(data, filename=bathymetry_file)
 
     # Visualise data
-    plot_bathymetry(data, filename=bathymetry_file)
+    plot_bathymetry(data, filename=bathymetry_file, scale="km")
     plot_bathymetry(data, filename=bathymetry_file, half_width=True)
