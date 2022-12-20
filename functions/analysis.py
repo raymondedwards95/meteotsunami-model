@@ -10,7 +10,6 @@ Main functions:
 
 import os
 import sys
-from typing import List, Tuple, Union
 
 import numpy as np
 import numpy.typing as npt
@@ -69,7 +68,7 @@ def exp_decay(
 
 def compute_decay_parameter(
     dataset: xr.Dataset, y: Numeric, t: Numeric, variable: str = "wl"
-) -> Tuple[Numeric]:
+) -> tuple[Numeric, Numeric]:
     """Computes the decay parameter and scaling parameter for data at given y and t
 
     Input:
@@ -97,7 +96,7 @@ def compute_wave_periods(
     x: Numeric = None,
     crests: bool = True,
     no_result: Numeric = np.nan,
-) -> List[Numeric]:
+) -> np.ndarray:
     """Computes the wave period at given x,y
 
     Input:
@@ -133,7 +132,7 @@ def compute_wave_lengths(
     x: Numeric = None,
     crests: bool = True,
     no_result: Numeric = np.nan,
-) -> List[Numeric]:
+) -> np.ndarray:
     """Computes the wave length at given x,t
 
     Input:
@@ -166,7 +165,7 @@ def spectral_analysis_1d(
     x: Numeric = 1e4,
     variable: str = "wl",
     demean: bool = False,
-) -> Tuple[np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray]:
     """Apply fourier transform on timeseries
 
     Input:
@@ -202,7 +201,7 @@ def spectral_analysis_2d(
     x: Numeric = 1e4,
     variable: str = "wl",
     demean: bool = False,
-) -> Tuple[np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Apply fourier transform on spatial and temporal varying data
 
     Input:
@@ -237,7 +236,7 @@ def spectral_analysis_2d(
     wavenumber = np.fft.fftfreq(var.shape[1], dy)
     wavenumber = np.fft.fftshift(wavenumber)
 
-    return wavenumber, freqs, power
+    return (wavenumber, freqs, power)
 
 
 if __name__ == "__main__":
@@ -259,15 +258,15 @@ if __name__ == "__main__":
             y=52e5,
             t=3600.0 * 42.0,
         )
-        print("compute_decay_parameter", [x for x in test_a])
+        print("### compute_decay_parameter", [x for x in test_a])
 
         test_b = spectral_analysis_1d(
             data,
             y=52e5,
         )
-        print("spectral_analysis_1d", [np.mean(x) for x in test_b])
+        print("### spectral_analysis_1d", [np.mean(x) for x in test_b])
 
         test_c = spectral_analysis_2d(
             data,
         )
-        print("spectral_analysis_2d", [np.mean(x) for x in test_c])
+        print("### spectral_analysis_2d", [np.mean(x) for x in test_c])
