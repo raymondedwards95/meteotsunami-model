@@ -9,7 +9,6 @@ Main functions:
 import os
 import sys
 import time
-from typing import Tuple
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
@@ -165,7 +164,7 @@ def plot_bathymetry(
     keep_open: bool = False,
     half_width: bool = False,
     scale: str = "Mm",
-) -> Tuple[plt.Figure, plt.Figure]:
+) -> tuple[plt.Figure, plt.Figure]:
     """Function to visualize bathymetry data
 
     Input:
