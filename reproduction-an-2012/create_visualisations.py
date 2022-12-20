@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
@@ -17,45 +18,35 @@ import functions.animation as anim
 import functions.regrid as fr
 import functions.utilities as fu
 import functions.visualisation as fv
+# fmt: on
+
+
+warnings.warn("This is an old script and should not be used!")
 
 
 ### Parameters
 parser = argparse.ArgumentParser(
     description="Process model outputs and create visualisations for a specific case"
 )
-parser.add_argument(
-    "case",
-    help="Case number",
-    nargs="?",
-    default="00",
-    type=int
-)
+parser.add_argument("case", help="Case number", nargs="?", default="00", type=int)
 parser.add_argument(
     "--reprocess",
     "-r",
     help="Force processing of original data.",
     default=False,
-    type=bool
+    type=bool,
 )
 parser.add_argument(
-    "--show",
-    "-s",
-    help="Show figures after creation.",
-    default=False,
-    type=bool
+    "--show", "-s", help="Show figures after creation.", default=False, type=bool
 )
 parser.add_argument(
-    "--animate",
-    "-a",
-    help="Create animation.",
-    default=True,
-    type=bool
+    "--animate", "-a", help="Create animation.", default=True, type=bool
 )
 parser.add_argument(
     "--delete-original-model-output",
     help="Delete original model output.",
     default=False,
-    type=bool
+    type=bool,
 )
 args = parser.parse_args()
 
@@ -75,7 +66,7 @@ if delete_original_model_output:
 file_dir = os.path.dirname(os.path.realpath(__file__))
 parent_dir = file_dir + "/output/"
 output_dir = parent_dir + f"repr_{case}/"
-figure_dir = file_dir + f"/visualisations/repr_{case}/"
+figure_dir = file_dir + f"/visualisations_old/repr_{case}/"
 
 filename_output = output_dir + "FlowFM_map.nc"
 filename_processed = parent_dir + f"data_repr_{case}.nc"
@@ -107,7 +98,9 @@ if delete_original_model_output:
     os.remove(filename_output)
     print("Original model output is deleted!")
     with open(filename_log, "a+") as _file:
-        _file.write(f"\tRemoved original model output for case {case}: {filename_output}\n")
+        _file.write(
+            f"\tRemoved original model output for case {case}: {filename_output}\n"
+        )
 
 # Create folder for figures
 os.makedirs(figure_dir, exist_ok=True)
@@ -153,7 +146,9 @@ with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
             local_waveperiods = fa.compute_wave_periods(data, y_moment, x=x_moment)
             waveperiods[i] = np.nanmean(local_waveperiods)
 
-            file.write(f"\n\nWave Period at y={y_moment/1000:0.0f} km and x={x_moment/1000:0.0f} km: {waveperiods[i]:0.1f} s\n")
+            file.write(
+                f"\n\nWave Period at y={y_moment/1000:0.0f} km and x={x_moment/1000:0.0f} km: {waveperiods[i]:0.1f} s\n"
+            )
             for waveperiod in local_waveperiods:
                 file.write(f"{waveperiod:0.1f}\t")
 
@@ -168,7 +163,9 @@ with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
             local_wavelengths = fa.compute_wave_lengths(data, t_moment, x=x_moment)
             wavelengths[j] = np.nanmean(local_wavelengths)
 
-            file.write(f"\n\nWave Lengths at t={t_moment/3600:0.1f} h and x={x_moment/1000:0.0f} km: {wavelengths[j]:0.1f} m\n")
+            file.write(
+                f"\n\nWave Lengths at t={t_moment/3600:0.1f} h and x={x_moment/1000:0.0f} km: {wavelengths[j]:0.1f} m\n"
+            )
             for wavelength in local_wavelengths:
                 file.write(f"{wavelength:0.1f}\t")
 
@@ -181,9 +178,13 @@ with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
         for j in range(t_moments.size):
             try:
                 wavespeeds[j, i] = wavelengths[j] / wavelengths[i]
-                file.write(f"y={y_moments[i]/1000:0.0f} km, t={t_moments[j]/3600:0.1f}h: {wavespeeds[j, i]:0.2f} m/s\n")
+                file.write(
+                    f"y={y_moments[i]/1000:0.0f} km, t={t_moments[j]/3600:0.1f}h: {wavespeeds[j, i]:0.2f} m/s\n"
+                )
             except:
-                print(f"*** Error in computing wavespeed for {case=}, {t_moments[j]=} and {y_moments[i]=}")
+                print(
+                    f"*** Error in computing wavespeed for {case=}, {t_moments[j]=} and {y_moments[i]=}"
+                )
 
 
 ### Figure bathymetry
@@ -193,7 +194,7 @@ try:
     print("Figure: bathymetry")
     plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
 
-    plt.contourf(x/1000, y/1000, b)
+    plt.contourf(x / 1000, y / 1000, b)
     plt.colorbar()
 
     plt.title("Water depth [m]")
@@ -225,14 +226,22 @@ try:
     fig.set_tight_layout(True)
 
     for i in range(4):
-        _ax = ax[i//2, i%2]
-        im = _ax.contourf(x/1000, y/1000, p.interp(t=fu.to_timestr(plot_times[i])), vmin=0, vmax=2000)
+        _ax = ax[i // 2, i % 2]
+        im = _ax.contourf(
+            x / 1000,
+            y / 1000,
+            p.interp(t=fu.to_timestr(plot_times[i])),
+            vmin=0,
+            vmax=2000,
+        )
         _ax.set_xlim([0, 300])
-        _ax.set_ylim([0, y.max()/1000])
+        _ax.set_ylim([0, y.max() / 1000])
         _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
 
-        if i//2: _ax.set_xlabel("$x$ [km]")
-        if not i%2: _ax.set_ylabel("$y$ [km]")
+        if i // 2:
+            _ax.set_xlabel("$x$ [km]")
+        if not i % 2:
+            _ax.set_ylabel("$y$ [km]")
 
         fig.colorbar(im, ax=_ax)
 
@@ -257,14 +266,22 @@ try:
     fig.set_dpi(FIG_DPI)
     fig.suptitle("Sea Surface Elevation [m]")
     for i in range(4):
-        _ax = ax[i//2, i%2]
-        im = _ax.contourf(x/1000, y/1000, wl.interp(t=fu.to_timestr(plot_times[i])), vmin=-0.8, vmax=0.8)
+        _ax = ax[i // 2, i % 2]
+        im = _ax.contourf(
+            x / 1000,
+            y / 1000,
+            wl.interp(t=fu.to_timestr(plot_times[i])),
+            vmin=-0.8,
+            vmax=0.8,
+        )
         _ax.set_xlim([0, 300])
-        _ax.set_ylim([0, y.max()/1000])
+        _ax.set_ylim([0, y.max() / 1000])
         _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
 
-        if i//2: _ax.set_xlabel("$x$ [km]")
-        if not i%2: _ax.set_ylabel("$y$ [km]")
+        if i // 2:
+            _ax.set_xlabel("$x$ [km]")
+        if not i % 2:
+            _ax.set_ylabel("$y$ [km]")
 
         fig.colorbar(im, ax=_ax)
 
@@ -289,14 +306,16 @@ try:
     fig.set_dpi(FIG_DPI)
     fig.suptitle("Along-shore profile of Sea Surface Elevation [m]")
     for i in range(4):
-        _ax = ax[i//2, i%2]
-        im = _ax.plot(y/1000, wl.interp(t=fu.to_timestr(plot_times[i]), x=10e3))
+        _ax = ax[i // 2, i % 2]
+        im = _ax.plot(y / 1000, wl.interp(t=fu.to_timestr(plot_times[i]), x=10e3))
         _ax.set_xlim(plot_ylims[i])
         _ax.set_ylim([-1, 1])
         _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
 
-        if i//2: _ax.set_xlabel("$y$ [km]")
-        if not i%2: _ax.set_ylabel("$SSE$ [m]")
+        if i // 2:
+            _ax.set_xlabel("$y$ [km]")
+        if not i % 2:
+            _ax.set_ylabel("$SSE$ [m]")
 
         _ax.axvline(7.56e3, linestyle="--", color="gray", linewidth=1)
         _ax.axhline(color="black", linewidth=1)
@@ -315,7 +334,11 @@ y_slices = np.array([7.56]) * 1e6
 try:
     plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
     for i in range(len(y_slices)):
-        plt.plot(x/1000, wl.interp(t=fu.to_timestr(1.6e5), y=y_slices[i]), label=f"$y={y_slices[i]/1000 : 0.0f}$ km")
+        plt.plot(
+            x / 1000,
+            wl.interp(t=fu.to_timestr(1.6e5), y=y_slices[i]),
+            label=f"$y={y_slices[i]/1000 : 0.0f}$ km",
+        )
     plt.legend()
     plt.axhline(color="black", linewidth=1)
     plt.axvline(color="black", linewidth=1)
@@ -345,15 +368,15 @@ try:
     plt.title("Along-shore profile of Sea Surface Elevation [m]")
     for i in range(len(x_slices)):
         plt.plot(
-            y/1000,
+            y / 1000,
             wl.interp(t=fu.to_timestr(1.6e5), x=x_slices[i]),
             label=f"$x={x_slices[i]/1000 : 0.0f}$ km",
-            linestyle=linestyles[i]
+            linestyle=linestyles[i],
         )
     plt.legend()
     plt.axhline(color="black", linewidth=1)
     plt.axvline(color="black", linewidth=1)
-    plt.xlim([0, y.max()/1000])
+    plt.xlim([0, y.max() / 1000])
     plt.axvline(7.56e3, linestyle="--", color="gray", linewidth=1)
     plt.xlabel("$y$ [km]")
     plt.ylabel("$SSE$ [m]")

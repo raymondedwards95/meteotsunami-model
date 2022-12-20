@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 
+# fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 import functions.analysis as fa
@@ -16,45 +17,35 @@ import functions.animation as anim
 import functions.regrid as fr
 import functions.utilities as fu
 import functions.visualisation as fv
+# fmt: on
+
+
+warnings.warn("This is an old script and should not be used!")
 
 
 ### Parameters
 parser = argparse.ArgumentParser(
     description="Process model outputs and create visualisations for a specific case"
 )
-parser.add_argument(
-    "case",
-    help="Case number",
-    nargs="?",
-    default="00",
-    type=int
-)
+parser.add_argument("case", help="Case number", nargs="?", default="00", type=int)
 parser.add_argument(
     "--reprocess",
     "-r",
     help="Force processing of original data.",
     default=False,
-    type=bool
+    type=bool,
 )
 parser.add_argument(
-    "--show",
-    "-s",
-    help="Show figures after creation.",
-    default=False,
-    type=bool
+    "--show", "-s", help="Show figures after creation.", default=False, type=bool
 )
 parser.add_argument(
-    "--animate",
-    "-a",
-    help="Create animation.",
-    default=True,
-    type=bool
+    "--animate", "-a", help="Create animation.", default=True, type=bool
 )
 parser.add_argument(
     "--delete-original-model-output",
     help="Delete original model output.",
     default=False,
-    type=bool
+    type=bool,
 )
 args = parser.parse_args()
 
@@ -74,7 +65,7 @@ if delete_original_model_output:
 file_dir = os.path.dirname(os.path.realpath(__file__))
 parent_dir = file_dir + "/output/"
 output_dir = parent_dir + f"exp_{case}/"
-figure_dir = file_dir + f"/visualisations/exp_{case}/"
+figure_dir = file_dir + f"/visualisations_old/exp_{case}/"
 
 filename_output = output_dir + "FlowFM_map.nc"
 filename_processed = parent_dir + f"data_exp_{case}.nc"
@@ -106,7 +97,9 @@ if delete_original_model_output:
     os.remove(filename_output)
     print("Original model output is deleted!")
     with open(filename_log, "a+") as _file:
-        _file.write(f"\tRemoved original model output for case {case}: {filename_output}\n")
+        _file.write(
+            f"\tRemoved original model output for case {case}: {filename_output}\n"
+        )
 
 # Create folder for figures
 os.makedirs(figure_dir, exist_ok=True)
@@ -115,7 +108,7 @@ os.makedirs(figure_dir, exist_ok=True)
 ### Get data
 data = xr.open_dataset(filename_processed)
 
-t_moments = np.array([8, 16, 24, 32, 40]) * 3600.
+t_moments = np.array([8, 16, 24, 32, 40]) * 3600.0
 x_moment = 1e4
 x_offset = 5e4
 
@@ -138,7 +131,9 @@ with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
             local_waveperiods = fa.compute_wave_periods(data, y_moment, x=x_moment)
             waveperiods[i] = np.nanmean(local_waveperiods)
 
-            file.write(f"\n\nWave Period at y={y_moment/1000:0.0f} km and x={x_moment/1000:0.0f} km: {waveperiods[i]:0.1f} s\n")
+            file.write(
+                f"\n\nWave Period at y={y_moment/1000:0.0f} km and x={x_moment/1000:0.0f} km: {waveperiods[i]:0.1f} s\n"
+            )
             for waveperiod in local_waveperiods:
                 file.write(f"{waveperiod:0.1f}\t")
 
@@ -153,7 +148,9 @@ with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
             local_wavelengths = fa.compute_wave_lengths(data, t_moment, x=x_moment)
             wavelengths[j] = np.nanmean(local_wavelengths)
 
-            file.write(f"\n\nWave Lengths at t={t_moment/3600:0.1f} h and x={x_moment/1000:0.0f} km: {wavelengths[j]:0.1f} m\n")
+            file.write(
+                f"\n\nWave Lengths at t={t_moment/3600:0.1f} h and x={x_moment/1000:0.0f} km: {wavelengths[j]:0.1f} m\n"
+            )
             for wavelength in local_wavelengths:
                 file.write(f"{wavelength:0.1f}\t")
 
@@ -166,9 +163,13 @@ with open(f"{figure_dir}/computed_parameters.txt", "w") as file:
         for j in range(t_moments.size):
             try:
                 wavespeeds[j, i] = wavelengths[j] / wavelengths[i]
-                file.write(f"y={y_moments[i]/1000:0.0f} km, t={t_moments[j]/3600:0.1f}h: {wavespeeds[j, i]:0.2f} m/s\n")
+                file.write(
+                    f"y={y_moments[i]/1000:0.0f} km, t={t_moments[j]/3600:0.1f}h: {wavespeeds[j, i]:0.2f} m/s\n"
+                )
             except:
-                print(f"*** Error in computing wavespeed for {case=}, {t_moments[j]=} and {y_moments[i]=}")
+                print(
+                    f"*** Error in computing wavespeed for {case=}, {t_moments[j]=} and {y_moments[i]=}"
+                )
 
 
 ### Figures
@@ -182,17 +183,42 @@ for j in range(t_moments.size):
 
         ## Cross-shore
         for i in range(np.min([y_idx_max.size, y_idx_min.size, 5])):
-            fv.vis_crossshore(data, y=data["y"][y_idx_max[i]].values, t=t_moment, saveloc=figure_dir)
-            fv.vis_crossshore(data, y=data["y"][y_idx_min[i]].values, t=t_moment, saveloc=figure_dir)
+            fv.vis_crossshore(
+                data, y=data["y"][y_idx_max[i]].values, t=t_moment, saveloc=figure_dir
+            )
+            fv.vis_crossshore(
+                data, y=data["y"][y_idx_min[i]].values, t=t_moment, saveloc=figure_dir
+            )
     except:
         print(f"*** Error in cross-shore visualisation {case=}")
 
 
 ### Figures - Contour
 try:
-    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="wl", xlims=[0, 1000], ylims=[0, 120])
-    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="u", xlims=[0, 1000], ylims=[0, 120])
-    fv.vis_contour(data, t=t_moments, saveloc=figure_dir, variable="v", xlims=[0, 1000], ylims=[0, 120])
+    fv.vis_contour(
+        data,
+        t=t_moments,
+        saveloc=figure_dir,
+        variable="wl",
+        xlims=[0, 1000],
+        ylims=[0, 120],
+    )
+    fv.vis_contour(
+        data,
+        t=t_moments,
+        saveloc=figure_dir,
+        variable="u",
+        xlims=[0, 1000],
+        ylims=[0, 120],
+    )
+    fv.vis_contour(
+        data,
+        t=t_moments,
+        saveloc=figure_dir,
+        variable="v",
+        xlims=[0, 1000],
+        ylims=[0, 120],
+    )
 except:
     print(f"*** Error in contour visualisation {case=}")
 
@@ -200,10 +226,10 @@ except:
 ### Figures - Alongshore
 try:
     fv.vis_alongshore(data, x=x_moment, t=t_moments, saveloc=figure_dir)
-    fv.vis_alongshore(data, x=x_moment+x_offset, t=t_moments, saveloc=figure_dir)
+    fv.vis_alongshore(data, x=x_moment + x_offset, t=t_moments, saveloc=figure_dir)
     for t_ in t_moments:
         fv.vis_alongshore(data, x=x_moment, t=t_, saveloc=figure_dir)
-        fv.vis_alongshore(data, x=x_moment+x_offset, t=t_, saveloc=figure_dir)
+        fv.vis_alongshore(data, x=x_moment + x_offset, t=t_, saveloc=figure_dir)
 except:
     print(f"*** Error in alongshore visualisation {case=}")
 
@@ -213,9 +239,9 @@ try:
     fv.vis_timeseries(data, x=x_moment, y=y_list_0, saveloc=figure_dir)
     fv.vis_timeseries(data, x=x_moment, y=y_list_1, saveloc=figure_dir)
     fv.vis_timeseries(data, x=x_moment, y=y_moments, saveloc=figure_dir)
-    fv.vis_timeseries(data, x=x_moment+x_offset, y=y_list_0, saveloc=figure_dir)
-    fv.vis_timeseries(data, x=x_moment+x_offset, y=y_list_1, saveloc=figure_dir)
-    fv.vis_timeseries(data, x=x_moment+x_offset, y=y_moments, saveloc=figure_dir)
+    fv.vis_timeseries(data, x=x_moment + x_offset, y=y_list_0, saveloc=figure_dir)
+    fv.vis_timeseries(data, x=x_moment + x_offset, y=y_list_1, saveloc=figure_dir)
+    fv.vis_timeseries(data, x=x_moment + x_offset, y=y_moments, saveloc=figure_dir)
 except:
     print(f"*** Error in timeseries visualisation {case=}")
 
@@ -224,7 +250,7 @@ except:
 try:
     for _y in y_moments:
         fv.vis_spectrum_1d(data, x=x_moment, y=_y, saveloc=figure_dir)
-        fv.vis_spectrum_1d(data, x=x_moment+x_offset, y=_y, saveloc=figure_dir)
+        fv.vis_spectrum_1d(data, x=x_moment + x_offset, y=_y, saveloc=figure_dir)
 except:
     print(f"*** Error in spectrum-1d visualisation {case=}")
 
@@ -232,9 +258,9 @@ try:
     fv.vis_spectrum_1d(data, x=x_moment, y=y_list_0, saveloc=figure_dir)
     fv.vis_spectrum_1d(data, x=x_moment, y=y_list_1, saveloc=figure_dir)
     fv.vis_spectrum_1d(data, x=x_moment, y=y_moments, saveloc=figure_dir)
-    fv.vis_spectrum_1d(data, x=x_moment+x_offset, y=y_list_0, saveloc=figure_dir)
-    fv.vis_spectrum_1d(data, x=x_moment+x_offset, y=y_list_1, saveloc=figure_dir)
-    fv.vis_spectrum_1d(data, x=x_moment+x_offset, y=y_moments, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=x_moment + x_offset, y=y_list_0, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=x_moment + x_offset, y=y_list_1, saveloc=figure_dir)
+    fv.vis_spectrum_1d(data, x=x_moment + x_offset, y=y_moments, saveloc=figure_dir)
 except:
     print(f"*** Error in spectrum-1d visualisation {case=}")
 

@@ -11,6 +11,7 @@ Main functions:
 
 import os
 import sys
+import warnings
 from typing import Union
 
 import cmocean as cmo
@@ -32,6 +33,9 @@ import functions.utilities as fu
 # fmt: on
 
 
+warnings.warn("This is an old script and should not be used!")
+
+
 def vis_timeseries(
     data: xr.Dataset,
     y: Union[Numeric, npt.ArrayLike],
@@ -40,7 +44,7 @@ def vis_timeseries(
     saveloc: str = None,
     keep_open: bool = False,
 ) -> None:
-    """ Make timeseries plots of water level and pressure for given x and y
+    """Make timeseries plots of water level and pressure for given x and y
     Plots water level vs time and pressure vs time
 
     Input:
@@ -100,10 +104,12 @@ def vis_timeseries(
     if y_num < 1:
         raise ValueError("Input 'y' has no values on the domain of data")
 
-    wl_t_idx = [fu.find_peaks_const_y(
-        data, y, x=x, crests=False, variable="wl") for y in y_arr]
-    p_t_idx = [fu.find_peaks_const_y(
-        data, y, x=x, crests=True, variable="p") for y in y_arr]
+    wl_t_idx = [
+        fu.find_peaks_const_y(data, y, x=x, crests=False, variable="wl") for y in y_arr
+    ]
+    p_t_idx = [
+        fu.find_peaks_const_y(data, y, x=x, crests=True, variable="p") for y in y_arr
+    ]
 
     # Figure a
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
@@ -125,7 +131,7 @@ def vis_timeseries(
                     ha="left",
                     va="top",
                     color=f"C{i}",
-                    rotation=90
+                    rotation=90,
                 )
         except:
             pass
@@ -138,7 +144,7 @@ def vis_timeseries(
                     ha="left",
                     va="bottom",
                     color=f"C{i}",
-                    rotation=90
+                    rotation=90,
                 )
         except:
             pass
@@ -155,16 +161,17 @@ def vis_timeseries(
     ax[0].set_ylim(np.array([-1.1, 1.1]) * wl_max)
     ax[0].legend(
         [f"$y={y/1000:0.0f}$ km" for y in y_arr],
-        bbox_to_anchor=(0., 1.02, 1., .102),
+        bbox_to_anchor=(0.0, 1.02, 1.0, 0.102),
         loc="lower left",
         ncol=4,
         mode="expand",
-        borderaxespad=0.
+        borderaxespad=0.0,
     )
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename + "_a", bbox_inches="tight",
-                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(
+        savename + "_a", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS
+    )
     print(f"Saved figure {savename}_a")
 
     # Figure b
@@ -198,7 +205,7 @@ def vis_timeseries(
             xy=(0.01, 0.99),
             xycoords="axes fraction",
             ha="left",
-            va="top"
+            va="top",
         )
 
         try:
@@ -210,7 +217,7 @@ def vis_timeseries(
                     ha="left",
                     va="bottom",
                     color="C0",
-                    rotation=90
+                    rotation=90,
                 )
         except:
             pass
@@ -223,14 +230,15 @@ def vis_timeseries(
                     ha="right",
                     va="top",
                     color="C1",
-                    rotation=90
+                    rotation=90,
                 )
         except:
             pass
     ax[-1].set_xlabel("Time since start [hours]")
 
-    fig.savefig(savename + "_b", bbox_inches="tight",
-                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(
+        savename + "_b", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS
+    )
     print(f"Saved figure {savename}_b")
 
     # End
@@ -245,7 +253,7 @@ def vis_alongshore(
     saveloc: str = None,
     keep_open: bool = False,
 ) -> None:
-    """ Make along-shore plots of water level x and t
+    """Make along-shore plots of water level x and t
     Plots water level vs along-shore coordinate y
 
     Input:
@@ -296,21 +304,16 @@ def vis_alongshore(
     ax = np.ravel(ax)
 
     for i in range(t_num):
-        ax[i].plot(
-            y / 1000.,
-            wl[i]
-        )
+        ax[i].plot(y / 1000.0, wl[i])
         ax[i].axhline(color="black", linewidth=1)
-        ax[i].set_xlim(0, y.max() / 1000.)
+        ax[i].set_xlim(0, y.max() / 1000.0)
         ax[i].set_ylabel("$SSE$ [m]")
-        ax[i].set_title(
-            f"$x={x/1000:0.0f}$ km and $t={t_list[i]/3600:0.1f}$ hours")
+        ax[i].set_title(f"$x={x/1000:0.0f}$ km and $t={t_list[i]/3600:0.1f}$ hours")
         ax[i].grid()
     ax[-1].set_xlabel("$y$ [km]")
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight",
-                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     # End
@@ -325,7 +328,7 @@ def vis_crossshore(
     saveloc: str = None,
     keep_open: bool = False,
 ) -> None:
-    """ Make cross-shore plots of water level for given y and t
+    """Make cross-shore plots of water level for given y and t
     Plots water level vs cross-shore coordinate x
 
     Input:
@@ -366,8 +369,7 @@ def vis_crossshore(
     elif (t_num > 1) and (y_num > 1):
         figsize = FIGSIZE_SQUARE
     else:
-        raise ValueError(
-            f"Error in determining figsize for {y_num=} and {t_num=}")
+        raise ValueError(f"Error in determining figsize for {y_num=} and {t_num=}")
 
     # Paths
     if saveloc is None:
@@ -389,8 +391,7 @@ def vis_crossshore(
         savename += f"tn{t_num}"
 
     # Figure
-    fig, ax = plt.subplots(t_num, y_num, squeeze=False,
-                           sharex=True, sharey=True)
+    fig, ax = plt.subplots(t_num, y_num, squeeze=False, sharex=True, sharey=True)
     fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
@@ -403,27 +404,28 @@ def vis_crossshore(
 
             # Plot data
             ax[i, j].plot(
-                data["x"] / 1000.,
+                data["x"] / 1000.0,
                 data["wl"].interp(y=y_list[j], t=fu.to_timestr(t_list[i])),
                 color="C0",
-                label="Waterlevel"
+                label="Waterlevel",
             )
 
             # Plot best fit
             ax[i, j].plot(
-                data["x"] / 1000.,
+                data["x"] / 1000.0,
                 wl_model,
                 color="C0",
                 linestyle="--",
-                label=f"Best fit with $1/k0={1./k0/1000.:0.1f}$ km"
+                label=f"Best fit with $1/k0={1./k0/1000.:0.1f}$ km",
             )
 
             #
             ax[i, j].axhline(color="black", linewidth=1)
             ax[i, j].legend()
-            ax[i, j].set_xlim(0, data["x"].max() / 1000.)
+            ax[i, j].set_xlim(0, data["x"].max() / 1000.0)
             ax[i, j].set_title(
-                f"$y={y_list[j]/1000:0.0f}$ km; $t={t_list[i]/3600:0.1f}$ hours")
+                f"$y={y_list[j]/1000:0.0f}$ km; $t={t_list[i]/3600:0.1f}$ hours"
+            )
             ax[i, j].grid()
 
     for i in range(t_num):
@@ -433,8 +435,7 @@ def vis_crossshore(
         ax[-1, j].set_xlabel("$x$ [km]")
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight",
-                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     # End
@@ -451,7 +452,7 @@ def vis_spectrum_1d(
     variable: str = "wl",
     demean: bool = True,
 ) -> None:
-    """ Make plots of the pewer-frequency spectrum of a variable at given x and y
+    """Make plots of the pewer-frequency spectrum of a variable at given x and y
     Plots power vs frequency
 
     Input:
@@ -510,32 +511,21 @@ def vis_spectrum_1d(
     power_all = [None] * y_num
     for i in range(y_num):
         freqs_all[i], power_all[i] = fa.spectral_analysis_1d(
-            data, y_list[i], x=x, variable=variable, demean=demean)
+            data, y_list[i], x=x, variable=variable, demean=demean
+        )
 
     # Figure
     fig, ax = plt.subplots(y_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
-    fig.suptitle(
-        f"Power Spectrum - {variable_name}",
-        va="top",
-        ha="left",
-        x=0.01
-    )
+    fig.suptitle(f"Power Spectrum - {variable_name}", va="top", ha="left", x=0.01)
     ax = np.ravel(ax)
 
     for i in range(y_num):
-        ax[i].plot(
-            freqs_all[i] * 3600.,
-            power_all[i] / 3600.,
-            color=f"C{i}"
-        )
+        ax[i].plot(freqs_all[i] * 3600.0, power_all[i] / 3600.0, color=f"C{i}")
         ax[i].fill_between(
-            freqs_all[i] * 3600,
-            power_all[i] / 3600,
-            alpha=0.1,
-            color=f"C{i}"
+            freqs_all[i] * 3600, power_all[i] / 3600, alpha=0.1, color=f"C{i}"
         )
         ax[i].axhline(color="black", linewidth=1)
         ax[i].set_ylim(0, None)
@@ -548,8 +538,7 @@ def vis_spectrum_1d(
     ax[-1].set_xlabel("Frequency [cycles / hour]")
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight",
-                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     # End
@@ -568,7 +557,7 @@ def vis_spectrum_2d(
     autolim: Numeric = 1e-3,
     demean: bool = True,
 ) -> None:
-    """ Make a plot of the 2d power spectrum for a given x
+    """Make a plot of the 2d power spectrum for a given x
     Plots power as a function of frequency and wavenumber
 
     Input:
@@ -595,7 +584,8 @@ def vis_spectrum_2d(
 
     # Compute spectrum
     wavenumber, freqs, power = fa.spectral_analysis_2d(
-        data, x=x, variable=variable, demean=demean)
+        data, x=x, variable=variable, demean=demean
+    )
 
     # Compute plot limits
     if (xlims is None) or (ylims is None):
@@ -608,7 +598,7 @@ def vis_spectrum_2d(
         xlims = [0, xmax]
     if ylims is None:
         i = np.any(valid, axis=1)
-        ymax = 3600. * np.nanmin([freqs.max(), 1.5*np.nanmax(freqs[i])])
+        ymax = 3600.0 * np.nanmin([freqs.max(), 1.5 * np.nanmax(freqs[i])])
         ylims = [0, ymax]
 
     # Figure
@@ -622,11 +612,11 @@ def vis_spectrum_2d(
 
     im = ax[0].pcolormesh(  # note: contourf is an option
         np.flip(wavenumber) * 1e6,
-        freqs * 3600.,
+        freqs * 3600.0,
         power,
         shading="nearest",
         cmap=cmo.cm.matter,
-        vmin=5.*power.min()
+        vmin=5.0 * power.min(),
     )
     cbar = fig.colorbar(im, cax=cax)
     cbar.set_label("Spectral Power")
@@ -634,9 +624,9 @@ def vis_spectrum_2d(
     for i in range(5):
         ax[0].plot(
             wavenumber * 1e6,
-            fa.dispersion_relation(wavenumber, n=i, alpha=1/400) * 3600.,
+            fa.dispersion_relation(wavenumber, n=i, alpha=1 / 400) * 3600.0,
             linewidth=1,
-            color="black"
+            color="black",
         )
     ax[0].axvline(color="black", linewidth=1)
     ax[0].set_xlim(xlims)
@@ -646,8 +636,7 @@ def vis_spectrum_2d(
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$ km")
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight",
-                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     # End
@@ -664,7 +653,7 @@ def vis_contour(
     xlims: Numeric = None,
     ylims: Numeric = None,
 ) -> None:
-    """ Make a contour plot of a given variable at a given time t
+    """Make a contour plot of a given variable at a given time t
     Plots power as a function of frequency and wavenumber
 
     Input:
@@ -711,10 +700,10 @@ def vis_contour(
 
     x = x - x.min()
     var_max = float(np.nanmax([np.abs([var.max(), var.min()])]))
-    var_min = -1. * var_max
+    var_min = -1.0 * var_max
 
     if xlims is None:
-        xlims = [y.min() / 1000. / 10., y.max() / 1000.]
+        xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
 
     if ylims is None:
         ylims = [0, 200]
@@ -739,7 +728,7 @@ def vis_contour(
             cmap=cmap,
             norm=norm,
             vmin=var_min,
-            vmax=var_max
+            vmax=var_max,
         )
         ax[i].set_ylabel("$x$ [km]")
         # ax[i].set_title(f"$t = {t_arr[i] / 3600:0.1f}$h")
@@ -748,23 +737,19 @@ def vis_contour(
             xy=(0.99, 0.98),
             xycoords="axes fraction",
             ha="right",
-            va="top"
+            va="top",
         )
         ax[i].set_xlim(xlims)
         ax[i].set_ylim(ylims)
 
     ax[-1].set_xlabel("$y$ [km]")
     fig.colorbar(
-        im,
-        ax=ax.ravel().tolist(),
-        label="Sea Surface Elevation [m]",
-        aspect=50
+        im, ax=ax.ravel().tolist(), label="Sea Surface Elevation [m]", aspect=50
     )
 
     # Save figure
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight",
-                dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     # End
@@ -774,9 +759,7 @@ def vis_contour(
 
 if __name__ == "__main__":
     mainpath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    data = xr.open_dataset(
-        f"{mainpath}/reproduction-an-2012/output/data_repr_17.nc"
-    )
+    data = xr.open_dataset(f"{mainpath}/reproduction-an-2012/output/data_repr_17.nc")
 
     # fmt: off
     vis_contour(data, t=5*3600, keep_open=True)
