@@ -11,7 +11,6 @@ import os
 import sys
 import time
 import warnings
-from typing import Union, Tuple
 
 import numpy as np
 import numpy.typing as npt
@@ -37,7 +36,7 @@ __regrid_error = (
 def _convert_coordinate_to_regular_grid(
     coordinate: npt.ArrayLike,
     numsteps: Integer = None,
-) -> Tuple[np.ndarray, Numeric]:
+) -> tuple[np.ndarray, Numeric]:
     """Creates an equally spaced array of coordinates
 
     Input:
