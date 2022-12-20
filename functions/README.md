@@ -10,8 +10,12 @@ This folder contains functions to help setting up simulations, to process model 
 * `regrid.py` contains functions to convert D3D-FM output from a flexible mesh to a fixed regular grid (it can also be used as standalone);
 * `theory.py` contains theoretical relationships;
 * `utilities.py` provides some useful general functions;
-* `visualisation.py` provides functions to make figures, but it is an old module.
 
 Importing this folder, i.e. `__init__.py` provides some general parameters and options.
 
-Functions for visualising are contained in the folder `plotting`.
+Functions for visualising are contained in the folder `plotting`. These are
+
+* `plotting/contour.py` for visualising spatial variations;
+* `plotting/profiles.py` for graphing profiles;
+* `plotting/spectrum.py` for computing and visulalising 1d and 2d power spectra;
+* `plotting/timeseries.py` for visualising temporal variations.
