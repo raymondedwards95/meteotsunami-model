@@ -215,10 +215,6 @@ class plot_contour:
                     va="top",
                 )
 
-                # # rasterize contourf
-                # for coll in cont.collections:
-                #     coll.set_rasterized(True)
-
         # Add colorbars
         for var_idx, var in enumerate(variable_list):
             cb = self.fig.colorbar(
@@ -283,7 +279,6 @@ if __name__ == "__main__":
 
     # Get data
     data_a = f"{PATH_MAIN}/reproduction-an-2012/output/data_repr_00.nc"
-
     data_a = xr.open_dataset(data_a, chunks={"t": "auto", "x": -1, "y": -1})
 
     # Make figures
