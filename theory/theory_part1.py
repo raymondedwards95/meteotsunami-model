@@ -222,24 +222,24 @@ def theory_figure_map(savename: str = None) -> None:
     fig.suptitle("Area of Interest", va="top", ha="left", x=0.01)
 
     ax = fig.add_subplot(projection=ccrs.PlateCarree())
-    ax.coastlines("50m")
-    ax.add_feature(
+    coastlines = ax.coastlines("10m")
+    landsurface = ax.add_feature(
         cfeature.NaturalEarthFeature(
-            "physical", "land", "50m", edgecolor="black", facecolor="gray"
+            "physical", "land", "10m", edgecolor="black", facecolor="gray"
         )
     )
     ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True)
-    ax.set_xlim([-10, 10])
+    ax.set_xlim([-12.5, 12.5])
     ax.set_ylim([45, 60])
-    # plt.xlabel("Longitude")
-    # plt.ylabel("Latitude")
+    ax.set_aspect(1)
+    # ax.set_xlabel("Longitude")
+    # ax.set_ylabel("Latitude")
+
+    coastlines.set(rasterized=True)
+    landsurface.set(rasterized=True)
+
     fig.get_layout_engine().execute(fig)
-    plt.savefig(
-        savename,
-        bbox_inches="tight",
-        dpi=FIG_DPI,
-        pil_kwargs=FIG_PIL_KWARGS,
-    )
+    save_figure(fig, savename)
 
     print(f"Saved figure {savename}")
     return
