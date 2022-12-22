@@ -232,6 +232,7 @@ def find_local_maxima_y(
     return y_idx_valid
 
 
+@np.vectorize
 def relative_ceil(x: Floating) -> Floating:
     """Takes closest ceiling of a number
 
@@ -283,3 +284,15 @@ if __name__ == "__main__":
     print(f"{from_timestr(np.datetime64('1970-01-03T00:00:00.000000000'))=}")
     print(f"{from_timestr(np.datetime64('1970-01-03T01:00:00.000000000'))=}")
     print(f"{from_timestr(np.datetime64('1970-01-03T01:00:01.000000000'))=}")
+
+    print(f"{relative_ceil(1.2)=}")
+    print(f"{relative_ceil(0.12)=}")
+    print(f"{relative_ceil(0.02)=}")
+    print(f"{relative_ceil([1.4, 3.14, 0.14])=}")
+
+    print(f"{none_multiply(2, 3)=}")
+    print(f"{none_multiply(2, None)=}")
+    print(f"{none_multiply(None, 3)=}")
+
+    # print(f"{none_multiply([1, 2, 3], [4, 5, 6])=}")
+    # print(f"{none_multiply([1, None, 3], [4, 5, None])=}")
