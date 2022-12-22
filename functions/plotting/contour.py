@@ -28,8 +28,15 @@ class plot_contour:
 
     number = 0
 
-    def __init__(self, scale="Mm",):
-        """Create and setup a figure for time-slices"""
+    def __init__(
+        self,
+        scale="Mm",
+    ):
+        """Create and setup a figure for time-slices
+
+        Options:
+            `scale`:    scale of plots ('m', 'km' or 'Mm')
+        """
         plot_contour.number += 1
 
         self.figsize = FIGSIZE_LONG
@@ -77,8 +84,14 @@ class plot_contour:
 
         # All
         for ax in self.axes.ravel():
-            ax.set_xlim(fu.none_multiply(self.x_min, 1. / self.scale_factor), fu.none_multiply(self.x_max, 1. / self.scale_factor),)
-            ax.set_ylim(fu.none_multiply(self.y_min, 1. / self.scale_factor), fu.none_multiply(self.y_max, 1. / self.scale_factor),)
+            ax.set_xlim(
+                fu.none_multiply(self.x_min, 1.0 / self.scale_factor),
+                fu.none_multiply(self.x_max, 1.0 / self.scale_factor),
+            )
+            ax.set_ylim(
+                fu.none_multiply(self.y_min, 1.0 / self.scale_factor),
+                fu.none_multiply(self.y_max, 1.0 / self.scale_factor),
+            )
             # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
             ax.grid()
 
@@ -148,7 +161,7 @@ class plot_contour:
         x_max: Numeric = None,
         y_min: Numeric = None,
         y_max: Numeric = None,
-        scale: str = None
+        scale: str = None,
     ):
         """Adds a subplot with data
 
@@ -179,8 +192,6 @@ class plot_contour:
 
         if scale is not None:
             self.set_scale(scale)
-
-        print(self.scale_factor, self.unit)
 
         self.x_max = x_max
         self.x_min = x_min
