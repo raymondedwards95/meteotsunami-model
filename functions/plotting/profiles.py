@@ -32,6 +32,7 @@ class plot_alongshore:
         variable: str,
         y_min: Numeric = None,
         y_max: Numeric = None,
+        scale="Mm",
     ):
         """Create and setup a figure for along-shore profiles
 
@@ -39,8 +40,9 @@ class plot_alongshore:
             `variable`:     name of variable to plot
 
         Options:
-            `y_min`:        lower limit for y (in kilometers)
-            `y_max`:        upper limit for y (in kilometers)
+            `y_min`:        lower limit for y (in meters)
+            `y_max`:        upper limit for y (in meters)
+            `scale`:        scale of plots ('m', 'km' or 'Mm')
         """
         plot_alongshore.number += 1
 
@@ -65,28 +67,14 @@ class plot_alongshore:
         self.axes = []
         self.title = None
 
+        self.unit = None
+        self.scale_factor = None
+        self.set_scale(scale)
+
         self.variable: str
         self.variable_long: str
         self.variable_unit: str
-        match variable.lower().strip():
-            case "wl":
-                self.variable = "wl"
-                self.variable_long = "Water level"
-                self.variable_unit = "m"
-            case "u":
-                self.variable = "u"
-                self.variable_long = "Cross shore water velocity"
-                self.variable_unit = "m/s"
-            case "v":
-                self.variable = "v"
-                self.variable_long = "Along shore water velocity"
-                self.variable_unit = "m/s"
-            case "p":
-                self.variable = "p"
-                self.variable_long = "Surface air pressure"
-                self.variable_unit = "Pa"
-            case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+        self._set_variable(variable)
 
         print(f"\n# Initiated figure for along-shore profiles")
 
@@ -132,12 +120,64 @@ class plot_alongshore:
             ax.axvline(color="black", linewidth=1, alpha=0.5)
             ax.legend(loc="upper right")
             ax.grid()
-            ax.set_xlim(self.y_min, self.y_max)
+            ax.set_xlim(
+                fu.none_multiply(self.y_min, 1.0 / self.scale_factor),
+                fu.none_multiply(self.y_max, 1.0 / self.scale_factor),
+            )
             ax.set_ylim(-1.0 * max_lim, max_lim)
             # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
 
-        self.axes[-1].set_xlabel(f"$y$ [km]")
+        self.axes[-1].set_xlabel(f"$y$ [{self.unit}]")
         self.fig.supylabel(f"{self.variable_long} [{self.variable_unit}]")
+
+    def _set_variable(self, variable: str):
+        match variable.lower().strip():
+            case "wl":
+                self.variable = "wl"
+                self.variable_long = "Water level"
+                self.variable_unit = "m"
+            case "u":
+                self.variable = "u"
+                self.variable_long = "Cross shore water velocity"
+                self.variable_unit = "m/s"
+            case "v":
+                self.variable = "v"
+                self.variable_long = "Along shore water velocity"
+                self.variable_unit = "m/s"
+            case "p":
+                self.variable = "p"
+                self.variable_long = "Surface air pressure"
+                self.variable_unit = "Pa"
+            case _:
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+
+        return self
+
+    def set_scale(self, scale: str):
+        """Set the scale of all subplots
+
+        Input:
+            `scale`:    scale of plots ('m', 'km' or 'Mm')
+        """
+        self.unit: str
+        self.scale_factor: float
+
+        match scale:
+            case "m":
+                self.unit = "m"
+                self.scale_factor = 1e0
+            case "km":
+                self.unit = "km"
+                self.scale_factor = 1e3
+            case "Mm":
+                self.unit = "Mm"
+                self.scale_factor = 1e6
+            case _:
+                raise ValueError(
+                    f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
+                )
+
+        return self
 
     def add_subplot(
         self,
@@ -147,6 +187,7 @@ class plot_alongshore:
         label: str = None,
         y_min: Numeric = None,
         y_max: Numeric = None,
+        scale: str = None,
     ):
         """Adds a subplot to the figure
 
@@ -161,6 +202,7 @@ class plot_alongshore:
             `label`:    label for plot
             `y_min`:    lower limit for y (in kilometers)
             `y_max`:    upper limit for y (in kilometers)
+            `scale`:    scale of plots ('m', 'km' or 'Mm')
         """
         # Checks
         self._check_if_closed()
@@ -178,6 +220,7 @@ class plot_alongshore:
                 label=label,
                 y_min=y_min,
                 y_max=y_max,
+                scale=scale,
             )
 
         # End
@@ -191,18 +234,20 @@ class plot_alongshore:
         label: str = None,
         y_min: Numeric = None,
         y_max: Numeric = None,
+        scale: str = None,
     ):
         """Adds data to a plot
 
         Input:
             `dataset`:  dataset containing gridded model output
-            `x`:        x-coordinate
+            `x`:        x-coordinate (in meters)
             `t`:        t-coordinate
 
         Options:
             `label`:    label for plot
-            `y_min`:    lower limit for y (in kilometers)
-            `y_max`:    upper limit for y (in kilometers)
+            `y_min`:    lower limit for y (in meters)
+            `y_max`:    upper limit for y (in meters)
+            `scale`:    scale of plots ('m', 'km' or 'Mm')
         """
         # Checks
         self._check_if_closed()
@@ -245,19 +290,21 @@ class plot_alongshore:
         if label is None:
             label = f"{dataset_name}"
 
+        if scale is not None:
+            self.set_scale(scale)
+
         # Extract data
-        y = dataset["y"] / 1000.0
         data = dataset[self.variable].interp(x=x, t=fu.to_timestr(t))
 
         # Plot
         self.axes[-1].plot(
-            y,
+            dataset["y"] / self.scale_factor,
             data,
             label=label,
             rasterized=True,
         )
         self.axes[-1].fill_between(
-            y,
+            dataset["y"] / self.scale_factor,
             data,
             alpha=0.1,
             rasterized=True,
@@ -271,7 +318,7 @@ class plot_alongshore:
                 self.y_min_fixed = True
                 self.y_min = y_min
             else:
-                y_min_data = y[np.abs(data) > 0.1 * data.std()][0]
+                y_min_data = dataset["y"][np.abs(data) > 0.1 * data.std()][0]
                 if self.y_min > (y_min_data):
                     self.y_min = y_min_data
 
@@ -282,7 +329,7 @@ class plot_alongshore:
                 self.y_max_fixed = True
                 self.y_max = y_max
             else:
-                y_max_data = y[np.abs(data) > 0.1 * data.std()][-1]
+                y_max_data = dataset["y"][np.abs(data) > 0.1 * data.std()][-1]
                 if self.y_max < (y_max_data):
                     self.y_max = y_max_data
 
@@ -352,6 +399,7 @@ class plot_crossshore:
         self,
         variable: str,
         x_max: Numeric = None,
+        scale="Mm",
     ):
         """Create and setup a figure for cross-shore profiles
 
@@ -359,7 +407,8 @@ class plot_crossshore:
             `variable`:     name of variable to plot
 
         Options:
-            `x_max`:        upper limit for x (in kilometers)
+            `x_max`:        upper limit for x (in meters)
+            `scale`:        scale of plots ('m', 'km' or 'Mm')
         """
         plot_crossshore.number += 1
 
@@ -377,28 +426,14 @@ class plot_crossshore:
         self.axes = []
         self.title = None
 
+        self.unit = None
+        self.scale_factor = None
+        self.set_scale(scale)
+
         self.variable: str
         self.variable_long: str
         self.variable_unit: str
-        match variable.lower().strip():
-            case "wl":
-                self.variable = "wl"
-                self.variable_long = "Water level"
-                self.variable_unit = "m"
-            case "u":
-                self.variable = "u"
-                self.variable_long = "Cross shore water velocity"
-                self.variable_unit = "m/s"
-            case "v":
-                self.variable = "v"
-                self.variable_long = "Along shore water velocity"
-                self.variable_unit = "m/s"
-            case "p":
-                self.variable = "p"
-                self.variable_long = "Surface air pressure"
-                self.variable_unit = "Pa"
-            case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+        self._set_variable(variable)
 
         print(f"\n# Initiated figure for cross-shore profiles")
 
@@ -444,12 +479,61 @@ class plot_crossshore:
             ax.axvline(color="black", linewidth=1, alpha=0.5)
             ax.legend(loc="upper right")
             ax.grid()
-            ax.set_xlim(0, self.x_max)
+            ax.set_xlim(0, fu.none_multiply(self.x_max, 1.0 / self.scale_factor))
             ax.set_ylim(-1.0 * max_lim, max_lim)
             # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
 
-        self.axes[-1].set_xlabel(f"$x$ [km]")
+        self.axes[-1].set_xlabel(f"$x$ [{self.unit}]")
         self.fig.supylabel(f"{self.variable_long} [{self.variable_unit}]")
+
+    def _set_variable(self, variable: str):
+        match variable.lower().strip():
+            case "wl":
+                self.variable = "wl"
+                self.variable_long = "Water level"
+                self.variable_unit = "m"
+            case "u":
+                self.variable = "u"
+                self.variable_long = "Cross shore water velocity"
+                self.variable_unit = "m/s"
+            case "v":
+                self.variable = "v"
+                self.variable_long = "Along shore water velocity"
+                self.variable_unit = "m/s"
+            case "p":
+                self.variable = "p"
+                self.variable_long = "Surface air pressure"
+                self.variable_unit = "Pa"
+            case _:
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+
+        return self
+
+    def set_scale(self, scale: str):
+        """Set the scale of all subplots
+
+        Input:
+            `scale`:    scale of plots ('m', 'km' or 'Mm')
+        """
+        self.unit: str
+        self.scale_factor: float
+
+        match scale:
+            case "m":
+                self.unit = "m"
+                self.scale_factor = 1e0
+            case "km":
+                self.unit = "km"
+                self.scale_factor = 1e3
+            case "Mm":
+                self.unit = "Mm"
+                self.scale_factor = 1e6
+            case _:
+                raise ValueError(
+                    f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
+                )
+
+        return self
 
     def plot_peaks(
         self,
@@ -459,6 +543,7 @@ class plot_crossshore:
         x_max: Numeric = None,
         sort: bool = False,
         number: Integer = None,
+        scale: str = None,
     ):
         """Finds local maxima for fixed t and plots the cross-shore profiles in separate subplots
 
@@ -468,9 +553,10 @@ class plot_crossshore:
 
         Options:
             `fit_curve`:    apply a curve fit on the data
-            `x_max`:        upper limit for x (in kilometers)
+            `x_max`:        upper limit for x (in meters)
             `sort`:         sort plots by highest values in data
             `number`:       number of waves to plot
+            `scale`:        scale of plots ('m', 'km' or 'Mm')
         """
         # Checks
         self._check_if_closed()
@@ -502,6 +588,7 @@ class plot_crossshore:
                 fit_curve=fit_curve,
                 label=None,
                 x_max=x_max,
+                scale=scale,
             )
 
         # End
@@ -516,6 +603,7 @@ class plot_crossshore:
         fit_curve: bool = True,
         label: str = None,
         x_max: Numeric = None,
+        scale: str = None,
     ):
         """Adds a subplot to the figure
 
@@ -529,7 +617,8 @@ class plot_crossshore:
         Options:
             `fit_curve`:    apply a curve fit on the data
             `label`:        label for plot
-            `x_max`:        upper limit for x (in kilometers)
+            `x_max`:        upper limit for x (in meters)
+            `scale`:        scale of plots ('m', 'km' or 'Mm')
         """
         # Checks
         self._check_if_closed()
@@ -547,6 +636,7 @@ class plot_crossshore:
                 fit_curve=fit_curve,
                 label=label,
                 x_max=x_max,
+                scale=scale,
             )
 
         # End
@@ -560,6 +650,7 @@ class plot_crossshore:
         fit_curve: bool = True,
         label: str = None,
         x_max: Numeric = None,
+        scale: str = None,
     ):
         """Adds data to a plot
 
@@ -571,7 +662,8 @@ class plot_crossshore:
         Options:
             `fit_curve`:    apply a curve fit on the data
             `label`:        label for plot
-            `x_max`:        upper limit for x (in kilometers)
+            `x_max`:        upper limit for x (in meters)
+            `scale`:        scale of plots ('m', 'km' or 'Mm')
         """
         # Checks
         self._check_if_closed()
@@ -586,6 +678,7 @@ class plot_crossshore:
                     fit_curve=fit_curve,
                     label=label,
                     x_max=x_max,
+                    scale=scale,
                 )
             return self
 
@@ -599,6 +692,7 @@ class plot_crossshore:
                     fit_curve=fit_curve,
                     label=label,
                     x_max=x_max,
+                    scale=scale,
                 )
             return self
 
@@ -614,19 +708,21 @@ class plot_crossshore:
         if label is None:
             label = f"{dataset_name}: $y = {y/1e3:0.0f}$km"
 
+        if scale is not None:
+            self.set_scale(scale)
+
         # Extract data
-        x = dataset["x"] / 1000.0
         data = dataset[self.variable].interp(y=y, t=fu.to_timestr(t))
 
         # Plot
         self.axes[-1].plot(
-            x,
+            dataset["x"] / self.scale_factor,
             data,
             label=label,
             rasterized=False,
         )
         self.axes[-1].fill_between(
-            x,
+            dataset["x"] / self.scale_factor,
             data,
             alpha=0.1,
             rasterized=False,
@@ -642,13 +738,13 @@ class plot_crossshore:
             label_fit = f"$A e^{{-k_0 x}}$ with $1/k_0 = {1/k0/1e3:0.0f}$km"
 
             self.axes[-1].plot(
-                x,
+                dataset["x"] / self.scale_factor,
                 fit,
                 "--",
                 label=label_fit,
                 rasterized=False,
             )
-            # self.axes[-1].fill_between(x, fit, alpha=0.1, rasterized=False,)
+            # self.axes[-1].fill_between(dataset["x"] / self.scale_factor, fit, alpha=0.1, rasterized=False,)
 
         # Update plot-limits
         if self.x_max_fixed:
@@ -658,7 +754,7 @@ class plot_crossshore:
                 self.x_max_fixed = True
                 self.x_max = x_max
             else:
-                x_max_data = x.max()
+                x_max_data = dataset["x"].max()
                 if self.x_max < (x_max_data):
                     self.x_max = x_max_data
 
@@ -735,7 +831,7 @@ if __name__ == "__main__":
     def test_alongshore():
         x = 1e4
         t = 36000
-        plot_alongshore(variable="wl") \
+        plot_alongshore(variable="wl", scale="Mm") \
             .add_plot(data_a, x=x, t=t, label=f"a - t={t}") \
             .add_plot(data_a, x=x, t=2*t, label=f"a - t={2*t}") \
             .save(figure_dir)
@@ -744,14 +840,14 @@ if __name__ == "__main__":
             .add_plot(data_a, x=[x, 2*x], t=t) \
             .save(figure_dir)
 
-        plot_alongshore(variable="wl", y_max=5e3) \
+        plot_alongshore(variable="wl", y_max=5e6) \
             .add_subplot() \
             .add_plot(data_a, x=x, t=t, label=f"a - t={t}") \
             .add_subplot() \
             .add_plot(data_b, x=x, t=t, label=f"b - t={t}") \
             .save(figure_dir)
 
-        plot_alongshore(variable="wl", y_min=0) \
+        plot_alongshore(variable="wl", y_min=0, scale="km") \
             .add_subplot(data_a, x=x, t=t, label=f"a - t={t}") \
             .add_subplot(data_a, x=x, t=2*t, label=f"a - t={2*t}") \
             .add_subplot(data_a, x=x, t=3*t, label=f"a - t={3*t}") \
@@ -759,7 +855,7 @@ if __name__ == "__main__":
             .save(figure_dir)
 
         plot_alongshore(variable="wl", y_min=0) \
-            .add_subplot(data_a, x=x, t=np.linspace(0, t, 5)) \
+            .add_subplot(data_a, x=x, t=np.linspace(0, t, 5), scale="km") \
             .save(figure_dir)
 
         plot_alongshore(variable="wl", y_min=0) \
@@ -769,24 +865,28 @@ if __name__ == "__main__":
     def test_crossshore():
         y = [52e5, 72e5]
         t = 3600*42
-        plot_crossshore(variable="wl") \
+        plot_crossshore(variable="wl", scale="km") \
             .add_plot(data_a, t=t, y=y[0], label=f"a - y={y[0]}") \
             .add_plot(data_a, t=t, y=y[1], label=f"a - y={y[1]}") \
             .save(figure_dir)
 
-        plot_crossshore(variable="wl", x_max=5e2) \
-            .add_subplot(data_a, t=t, y=y) \
+        plot_crossshore(variable="wl", x_max=5e5) \
+            .add_subplot(data_a, t=t, y=y, scale="km") \
             .save(figure_dir)
 
-        plot_crossshore(variable="wl", x_max=5e2) \
+        plot_crossshore(variable="wl", x_max=3e5) \
             .plot_peaks(data_a, t) \
             .save(figure_dir)
 
-        plot_crossshore(variable="wl", x_max=5e2) \
-            .plot_peaks(data_a, t, number=3) \
+        plot_crossshore(variable="wl", x_max=5e5) \
+            .plot_peaks(data_a, t, number=3, scale="km") \
             .save(figure_dir)
 
-        plot_crossshore(variable="wl", x_max=5e2) \
+        plot_crossshore(variable="wl", x_max=7e5) \
+            .plot_peaks(data_a, t, number=7, scale="m") \
+            .save(figure_dir)
+
+        plot_crossshore(variable="wl", x_max=3.5e5) \
             .plot_peaks(data_a, t, number=3, sort=True) \
             .save(figure_dir)
     # fmt: on
