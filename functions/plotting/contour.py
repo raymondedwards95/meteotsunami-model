@@ -35,12 +35,19 @@ def _relative_ceil(x: Floating) -> Floating:
     return np.round(x, s) + np.power(10.0, -1.0 * s)
 
 
+def _none_multiply(x: Numeric | None, y: Numeric | None) -> Numeric | None:
+    """Returns None if x or y is None, else return x * y"""
+    if x is None or y is None:
+        return None
+    return x * y
+
+
 class plot_contour:
     """Methods to create visualisations of time-slices"""
 
     number = 0
 
-    def __init__(self):
+    def __init__(self, scale="Mm",):
         """Create and setup a figure for time-slices"""
         plot_contour.number += 1
 
@@ -52,6 +59,10 @@ class plot_contour:
         self.x_min = None
         self.y_max = None
         self.y_min = None
+
+        self.unit = None
+        self.scale_factor = None
+        self.set_scale(scale)
 
         print(f"\n# Initiated figure for contour-levels")
 
@@ -85,17 +96,17 @@ class plot_contour:
 
         # All
         for ax in self.axes.ravel():
-            ax.set_xlim(self.x_min, self.x_max)
-            ax.set_ylim(self.y_min, self.y_max)
+            ax.set_xlim(_none_multiply(self.x_min, 1. / self.scale_factor), _none_multiply(self.x_max, 1. / self.scale_factor),)
+            ax.set_ylim(_none_multiply(self.y_min, 1. / self.scale_factor), _none_multiply(self.y_max, 1. / self.scale_factor),)
             # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
             ax.grid()
 
         # Left
-        self.fig.supylabel(f"$y$ [km]")
+        self.fig.supylabel(f"$y$ [{self.unit}]")
 
         # Bottom
         for j in range(self.axes.shape[1]):
-            self.axes[-1, j].set_xlabel("$x$ [km]")
+            self.axes[-1, j].set_xlabel(f"$x$ [{self.unit}]")
 
     def _pick_cmap(self, variable: str):
         match variable.lower().strip():
@@ -121,6 +132,32 @@ class plot_contour:
             case _:
                 raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
+    def set_scale(self, scale: str):
+        """Set the scale of all subplots
+
+        Input:
+            `scale`:    scale of plots ('m', 'km' or 'Mm')
+        """
+        self.unit: str
+        self.scale_factor: float
+
+        match scale:
+            case "m":
+                self.unit = "m"
+                self.scale_factor = 1e0
+            case "km":
+                self.unit = "km"
+                self.scale_factor = 1e3
+            case "Mm":
+                self.unit = "Mm"
+                self.scale_factor = 1e6
+            case _:
+                raise ValueError(
+                    f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
+                )
+
+        return self
+
     def add_plots(
         self,
         dataset: xr.Dataset,
@@ -130,6 +167,7 @@ class plot_contour:
         x_max: Numeric = None,
         y_min: Numeric = None,
         y_max: Numeric = None,
+        scale: str = None
     ):
         """Adds a subplot with data
 
@@ -139,10 +177,11 @@ class plot_contour:
             `t_list`:           list of t-coordinates
 
         Options:
-            `x_min`:            lower limit for x (in kilometers)
-            `x_max`:            upper limit for x (in kilometers)
-            `y_min`:            lower limit for y (in kilometers)
-            `y_max`:            upper limit for y (in kilometers)
+            `x_min`:            lower limit for x (in meters)
+            `x_max`:            upper limit for x (in meters)
+            `y_min`:            lower limit for y (in meters)
+            `y_max`:            upper limit for y (in meters)
+            `scale`:            scale of plots ('m', 'km' or 'Mm')
         """
         # Checks
         self._check_if_closed()
@@ -156,6 +195,11 @@ class plot_contour:
             raise ValueError(
                 f"Variables in `variable_list` should be 'wl', 'u', 'v' or 'p'"
             )
+
+        if scale is not None:
+            self.set_scale(scale)
+
+        print(self.scale_factor, self.unit)
 
         self.x_max = x_max
         self.x_min = x_min
@@ -197,8 +241,8 @@ class plot_contour:
             for var_idx, var in enumerate(variable_list):
                 print(f"# Adding data for {var:2} and t={t}")
                 cont = self.axes[t_idx, var_idx].pcolormesh(
-                    dataset["x"] / 1000.0,
-                    dataset["y"] / 1000.0,
+                    dataset["x"] / self.scale_factor,
+                    dataset["y"] / self.scale_factor,
                     dataset[var].interp(t=fu.to_timestr(t)),
                     # levels=101,
                     cmap=cmap_list[var_idx],
@@ -284,11 +328,12 @@ if __name__ == "__main__":
     # Make figures
     # fmt: off
     def test_contours():
-        plot_contour() \
+        plot_contour(scale="Mm") \
             .add_plots(
                 dataset=data_a,
                 variable_list=["wl"],
                 t_list=[10 * 3600 * i for i in range(1, 5)],
+                y_min=0,
             ) \
             .save(figure_dir)
 
@@ -297,7 +342,7 @@ if __name__ == "__main__":
                 dataset=data_a,
                 variable_list=["u", "v"],
                 t_list=[10 * 3600 * i for i in range(1, 5)],
-                x_max=400,
+                x_max=4e5,
             ) \
             .save(figure_dir)
 
@@ -306,9 +351,10 @@ if __name__ == "__main__":
                 dataset=data_a,
                 variable_list=["wl", "p"],
                 t_list=[10 * 3600],
-                x_max=500,
-                y_min=-500,
-                y_max=3500,
+                x_max=5e5,
+                y_min=-5e5,
+                y_max=35e5,
+                scale="km",
             ) \
             .save(figure_dir)
     # fmt: on
