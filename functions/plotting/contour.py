@@ -23,25 +23,6 @@ import functions.utilities as fu
 # fmt: on
 
 
-def _relative_ceil(x: Floating) -> Floating:
-    """Takes closest ceiling of a number
-
-    Examples:
-        1.2 -> 2
-        0.12 -> 0.2
-        0.02 -> 0.1
-    """
-    s = -1 * int(np.floor(np.log10(np.abs(x))))
-    return np.round(x, s) + np.power(10.0, -1.0 * s)
-
-
-def _none_multiply(x: Numeric | None, y: Numeric | None) -> Numeric | None:
-    """Returns None if x or y is None, else return x * y"""
-    if x is None or y is None:
-        return None
-    return x * y
-
-
 class plot_contour:
     """Methods to create visualisations of time-slices"""
 
@@ -96,8 +77,8 @@ class plot_contour:
 
         # All
         for ax in self.axes.ravel():
-            ax.set_xlim(_none_multiply(self.x_min, 1. / self.scale_factor), _none_multiply(self.x_max, 1. / self.scale_factor),)
-            ax.set_ylim(_none_multiply(self.y_min, 1. / self.scale_factor), _none_multiply(self.y_max, 1. / self.scale_factor),)
+            ax.set_xlim(fu.none_multiply(self.x_min, 1. / self.scale_factor), fu.none_multiply(self.x_max, 1. / self.scale_factor),)
+            ax.set_ylim(fu.none_multiply(self.y_min, 1. / self.scale_factor), fu.none_multiply(self.y_max, 1. / self.scale_factor),)
             # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
             ax.grid()
 
@@ -223,7 +204,7 @@ class plot_contour:
         # Find plot limits
         var_max = np.zeros(var_num)
         for var_idx, var in enumerate(variable_list):
-            var_max[var_idx] = _relative_ceil(np.nanmax(np.fabs(dataset[var])))
+            var_max[var_idx] = fu.relative_ceil(np.nanmax(np.fabs(dataset[var])))
 
         # Set colormaps
         cmap_list = []

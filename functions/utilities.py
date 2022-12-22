@@ -232,6 +232,25 @@ def find_local_maxima_y(
     return y_idx_valid
 
 
+def relative_ceil(x: Floating) -> Floating:
+    """Takes closest ceiling of a number
+
+    Examples:
+        1.2 -> 2
+        0.12 -> 0.2
+        0.02 -> 0.1
+    """
+    s = -1 * int(np.floor(np.log10(np.abs(x))))
+    return np.round(x, s) + np.power(10.0, -1.0 * s)
+
+
+def none_multiply(x: Numeric | None, y: Numeric | None) -> Numeric | None:
+    """Returns None if x or y is None, else return x * y"""
+    if x is None or y is None:
+        return None
+    return x * y
+
+
 if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
