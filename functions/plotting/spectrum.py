@@ -19,6 +19,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from functions import *
 import functions.analysis as fa
+import functions.utilities as fu
 # fmt: on
 
 
@@ -58,25 +59,12 @@ class plot_spectrum_1d:
         self.f_max = f_max
 
         self.variable: str
-        self.variable_name: str
-        match variable.lower().strip():
-            case "wl":
-                self.variable = "wl"
-                self.variable_name = "Water level"
-            case "u":
-                self.variable = "u"
-                self.variable_name = "x-component of water velocity"
-            case "v":
-                self.variable = "v"
-                self.variable_name = "y-component of water velocity"
-            case "p":
-                self.variable = "p"
-                self.variable_name = "Surface air pressure"
-            case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+        self.variable_long: str
+        self.variable_unit: str
+        self._set_variable(variable)
 
         print(
-            f"\n# Initiated figure for spectrum_1d with variable '{self.variable}' ({self.variable_name.lower()})"
+            f"\n# Initiated figure for spectrum_1d with variable '{self.variable}' ({self.variable_long.lower()})"
         )
 
     def _check_if_closed(self):
@@ -96,7 +84,7 @@ class plot_spectrum_1d:
 
         # Figure specific
         self.fig.suptitle(
-            f"Power Spectrum - {self.variable_name}", va="top", ha="left", x=0.01
+            f"Power Spectrum - {self.variable_long}", va="top", ha="left", x=0.01
         )
 
     def _setup_plot(self):
@@ -115,7 +103,7 @@ class plot_spectrum_1d:
         self.ax.xaxis.set_ticks(np.arange(0, self.f_max, 0.01), minor=True)
 
         # y-axis
-        self.ax.set_ylabel("Spectral Power [m$^2$ hr]")
+        self.ax.set_ylabel(f"Spectral Power [{self.variable_unit}$^2$ hr]")
         self.ax.set_ylim(0, None)
         self.ax.ticklabel_format(
             axis="y",
@@ -123,6 +111,29 @@ class plot_spectrum_1d:
             scilimits=(0, 0),
             useMathText=True,
         )
+
+    def _set_variable(self, variable: str):
+        match variable.lower().strip():
+            case "wl":
+                self.variable = "wl"
+                self.variable_long = "Water level"
+                self.variable_unit = "m"
+            case "u":
+                self.variable = "u"
+                self.variable_long = "Cross shore water velocity"
+                self.variable_unit = "m/s"
+            case "v":
+                self.variable = "v"
+                self.variable_long = "Along shore water velocity"
+                self.variable_unit = "m/s"
+            case "p":
+                self.variable = "p"
+                self.variable_long = "Surface air pressure"
+                self.variable_unit = "Pa"
+            case _:
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+
+        return self
 
     def add_plot(
         self,
@@ -252,6 +263,7 @@ class plot_spectrum_2d:
         label: str = "",
         k_max: Numeric = None,
         f_max: Numeric = None,
+        scale="Mm",
     ):
         """Create and setup a figure for the 2d spectrum
 
@@ -263,6 +275,7 @@ class plot_spectrum_2d:
             `label`:            label for plot
             `k_max`:            upper limit for wavenumber k
             `f_max`:            upper limit for frequency f
+            `scale`:            scale of plots ('m', 'km' or 'Mm')
 
         Methods:
             `add_plot`:         add data to the figure
@@ -270,7 +283,6 @@ class plot_spectrum_2d:
             `save`:             writes the figure to disk
         """
         plot_spectrum_2d.number += 1
-        self.x_scale = 1e6
         self.y_scale = 3600.0
 
         self.figsize = FIGSIZE_NORMAL
@@ -288,26 +300,17 @@ class plot_spectrum_2d:
 
         self.data_label = label
 
+        self.unit = None
+        self.scale_factor = None
+        self.set_scale(scale)
+
         self.variable: str
-        self.variable_name: str
-        match variable.lower().strip():
-            case "wl":
-                self.variable = "wl"
-                self.variable_name = "Water level"
-            case "u":
-                self.variable = "u"
-                self.variable_name = "x-component of water velocity"
-            case "v":
-                self.variable = "v"
-                self.variable_name = "y-component of water velocity"
-            case "p":
-                self.variable = "p"
-                self.variable_name = "Surface air pressure"
-            case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+        self.variable_long: str
+        self.variable_unit: str
+        self._set_variable(variable)
 
         print(
-            f"\n# Initiated figure for spectrum_2d with variable '{self.variable}' ({self.variable_name.lower()})"
+            f"\n# Initiated figure for spectrum_2d with variable '{self.variable}' ({self.variable_long.lower()})"
         )
 
     def _check_if_closed(self):
@@ -332,7 +335,7 @@ class plot_spectrum_2d:
 
         # Figure specific
         self.fig.suptitle(
-            f"Power Spectrum - {self.variable_name} - $x = {self.x / 1000:0.1f}$ km",
+            f"Power Spectrum - {self.variable_long} - $x = {self.x / 1000:0.1f}$ km",
             va="top",
             ha="left",
             x=0.01,
@@ -350,12 +353,12 @@ class plot_spectrum_2d:
         # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
 
         # x-axis
-        self.ax.set_xlabel("Wavenumber [1 / (1000 km)]")
-        self.ax.set_xlim(0, np.round(self.k_max * self.x_scale, 1))
+        self.ax.set_xlabel(f"Wavenumber [1 / {self.unit}]")
+        self.ax.set_xlim(0, fu.relative_ceil(self.k_max * self.scale_factor))
 
         # y-axis
         self.ax.set_ylabel("Frequency [cycles / hour]")
-        self.ax.set_ylim(0, np.round(self.f_max * self.y_scale, 1))
+        self.ax.set_ylim(0, fu.relative_ceil(self.f_max * self.y_scale))
 
     def _setup_cax(self):
         """Colorbar location setup
@@ -370,6 +373,55 @@ class plot_spectrum_2d:
         div = make_axes_locatable(self.ax)
         self.cax = div.append_axes(position="right", size="5%", pad="5%")
 
+    def _set_variable(self, variable: str):
+        match variable.lower().strip():
+            case "wl":
+                self.variable = "wl"
+                self.variable_long = "Water level"
+                self.variable_unit = "m"
+            case "u":
+                self.variable = "u"
+                self.variable_long = "Cross shore water velocity"
+                self.variable_unit = "m/s"
+            case "v":
+                self.variable = "v"
+                self.variable_long = "Along shore water velocity"
+                self.variable_unit = "m/s"
+            case "p":
+                self.variable = "p"
+                self.variable_long = "Surface air pressure"
+                self.variable_unit = "Pa"
+            case _:
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+
+        return self
+
+    def set_scale(self, scale: str):
+        """Set the scale of all subplots
+
+        Input:
+            `scale`:    scale of plots ('m', 'km' or 'Mm')
+        """
+        self.unit: str
+        self.scale_factor: float
+
+        match scale:
+            case "m":
+                self.unit = "m"
+                self.scale_factor = 1e0
+            case "km":
+                self.unit = "km"
+                self.scale_factor = 1e3
+            case "Mm":
+                self.unit = "Mm"
+                self.scale_factor = 1e6
+            case _:
+                raise ValueError(
+                    f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
+                )
+
+        return self
+
     def add_plot(
         self,
         dataset: xr.Dataset,
@@ -377,6 +429,7 @@ class plot_spectrum_2d:
         label: str = "",
         k_max: Numeric = None,
         f_max: Numeric = None,
+        scale: str = None,
     ):
         """Adds data to a plot
 
@@ -388,6 +441,7 @@ class plot_spectrum_2d:
             `label`:    label for plot
             `k_max`:    upper limit for wavenumber k
             `f_max`:    upper limit for frequency f
+            `scale`:    scale of plots ('m', 'km' or 'Mm')
         """
         # Checks
         self._check_if_closed()
@@ -396,6 +450,9 @@ class plot_spectrum_2d:
         self.k_max = k_max
         self.f_max = f_max
         self.x = x
+
+        if scale is not None:
+            self.set_scale(scale)
 
         # Compute spectrum
         wavenumber, freqs, power = fa.spectral_analysis_2d(
@@ -424,7 +481,7 @@ class plot_spectrum_2d:
 
         # Plot data
         self.im = self.ax.pcolormesh(
-            wavenumber * self.x_scale,
+            wavenumber * self.scale_factor,
             freqs * self.y_scale,
             power,
             shading="nearest",  # "gouraud",
@@ -438,8 +495,8 @@ class plot_spectrum_2d:
         self.cbar.set_label("Spectral power")
 
         # Set plot limits
-        self.ax.set_xlim(0, np.round(self.k_max * self.x_scale, 1))
-        self.ax.set_ylim(0, np.round(self.f_max * self.y_scale, 1))
+        self.ax.set_xlim(0, fu.relative_ceil(self.k_max * self.scale_factor))
+        self.ax.set_ylim(0, fu.relative_ceil(self.f_max * self.y_scale))
 
         # Log
         self.data_label = label
@@ -453,7 +510,8 @@ class plot_spectrum_2d:
         print(f"# Added data from {dataset_name} for {x=}")
         return self
 
-    def add_dispersion(self, n: Numeric, alpha: Numeric = 1.0 / 400.0):
+    def add_dispersion(self, n: Numeric, alpha: Numeric = 1.0 / 400.0,
+        scale: str = None,):
         """Adds the dispersion relation to a plot
 
         Input:
@@ -461,18 +519,25 @@ class plot_spectrum_2d:
 
         Options:
             `alpha`:    slope for computing dispersion relation
+            `scale`:    scale of plots ('m', 'km' or 'Mm')
         """
+        # Cheks
+        self._check_if_closed()
+
+        if scale is not None:
+            self.set_scale(scale)
+
         # Get limits from figure
         xlims = self.ax.get_xlim()
         ylims = self.ax.get_ylim()
 
         # Compute and plot dispersion relation
-        wavenumber = np.linspace(np.min(xlims), np.max(xlims), 100) / self.x_scale
+        wavenumber = np.linspace(np.min(xlims), np.max(xlims), 100) / self.scale_factor
 
         for i in range(n):
             dispersion = fa.dispersion_relation(wavenumber, n=i, alpha=alpha)
             self.ax.plot(
-                self.x_scale * wavenumber,
+                self.scale_factor * wavenumber,
                 self.y_scale * dispersion,
                 linewidth=1,
                 linestyle="--",
@@ -481,12 +546,12 @@ class plot_spectrum_2d:
             )
             self.ax.annotate(
                 text=f"$n={i}$",
-                xytext=(-20, -40),
-                xy=(self.x_scale * wavenumber[-1], self.y_scale * dispersion[-1]),
+                xytext=(0.99 * self.scale_factor * wavenumber[-1], 1.02 * self.y_scale * dispersion[-1]),
+                xy=(self.scale_factor * wavenumber[-1], self.y_scale * dispersion[-1]),
                 xycoords="data",
-                textcoords="offset pixels",
+                textcoords="data",
                 ha="right",
-                va="top",
+                va="bottom",
             )
 
         # Reset limits of figure
@@ -566,14 +631,26 @@ if __name__ == "__main__":
             .add_plot(data_a, x, y*3, label=f"y={y*3}") \
             .save(figure_dir)
 
+        plot_spectrum_1d(variable="wl", demean=False) \
+            .add_plot(data_b, x, y, label=f"y={y}") \
+            .add_plot(data_b, x, y*3, label=f"y={y*3}") \
+            .add_plot(data_b, x, y*5, label=f"y={y*5}") \
+            .add_plot(data_b, x, y*7, label=f"y={y*7}") \
+            .save(figure_dir)
+
     def test_spectrum_2d():
         x = 1e4
         plot_spectrum_2d(variable="wl", demean=True) \
-            .add_plot(data_a, x=x) \
+            .add_plot(data_a, x=x, scale="Mm") \
             .add_dispersion(n=3) \
             .save(figure_dir)
 
-        plot_spectrum_2d(variable="p", demean=False) \
+        plot_spectrum_2d(variable="wl", demean=True) \
+            .add_plot(data_b, x=x*2) \
+            .add_dispersion(n=2) \
+            .save(figure_dir)
+
+        plot_spectrum_2d(variable="p", demean=False, scale="km") \
             .add_plot(data_a, x=x) \
             .save(figure_dir)
     # fmt: on
