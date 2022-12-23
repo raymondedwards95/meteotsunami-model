@@ -239,7 +239,7 @@ def relative_ceil(x: Floating) -> Floating:
     Examples:
         1.2 -> 2
         0.12 -> 0.2
-        0.02 -> 0.1
+        0.002 -> 0.01
     """
     s = -1 * int(np.floor(np.log10(np.abs(x))))
     return np.round(x, s) + np.power(10.0, -1.0 * s)
@@ -287,12 +287,15 @@ if __name__ == "__main__":
 
     print(f"{relative_ceil(1.2)=}")
     print(f"{relative_ceil(0.12)=}")
-    print(f"{relative_ceil(0.02)=}")
+    print(f"{relative_ceil(0.002)=}")
+    print(f"{relative_ceil([1.2, -1.2])=}")
+    print(f"{relative_ceil([0.12, -0.12])=}")
+    print(f"{relative_ceil([0.002, -0.002])=}")
     print(f"{relative_ceil([1.4, 3.14, 0.14])=}")
+    print(f"{relative_ceil([3.14e0, 2.5e7, 3.1415e3])=}")
+    print(f"{relative_ceil([5.412e-4, 5.4e-4, 7.32e-10])=}")
 
     print(f"{none_multiply(2, 3)=}")
     print(f"{none_multiply(2, None)=}")
     print(f"{none_multiply(None, 3)=}")
-
-    # print(f"{none_multiply([1, 2, 3], [4, 5, 6])=}")
-    # print(f"{none_multiply([1, None, 3], [4, 5, None])=}")
+    print(f"{none_multiply(None, None)=}")
