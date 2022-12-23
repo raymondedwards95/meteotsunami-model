@@ -510,8 +510,12 @@ class plot_spectrum_2d:
         print(f"# Added data from {dataset_name} for {x=}")
         return self
 
-    def add_dispersion(self, n: Numeric, alpha: Numeric = 1.0 / 400.0,
-        scale: str = None,):
+    def add_dispersion(
+        self,
+        n: Numeric,
+        alpha: Numeric = 1.0 / 400.0,
+        scale: str = None,
+    ):
         """Adds the dispersion relation to a plot
 
         Input:
@@ -546,8 +550,14 @@ class plot_spectrum_2d:
             )
             self.ax.annotate(
                 text=f"$n={i}$",
-                xytext=(0.99 * self.scale_factor * wavenumber[-1], 1.02 * self.time_scale_factor * dispersion[-1]),
-                xy=(self.scale_factor * wavenumber[-1], self.time_scale_factor * dispersion[-1]),
+                xytext=(
+                    0.99 * self.scale_factor * wavenumber[-1],
+                    1.02 * self.time_scale_factor * dispersion[-1],
+                ),
+                xy=(
+                    self.scale_factor * wavenumber[-1],
+                    self.time_scale_factor * dispersion[-1],
+                ),
                 xycoords="data",
                 textcoords="data",
                 ha="right",
