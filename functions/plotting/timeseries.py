@@ -244,7 +244,10 @@ if __name__ == "__main__":
 
     # Get data
     data_a = f"{PATH_MAIN}/reproduction-an-2012/output/data_repr_00.nc"
+    data_b = f"{PATH_MAIN}/reproduction-an-2012/output/data_repr_01.nc"
+
     data_a = xr.open_dataset(data_a, chunks="auto")
+    data_b = xr.open_dataset(data_b, chunks="auto")
 
     # Make figures
     # fmt: off
@@ -253,13 +256,13 @@ if __name__ == "__main__":
         y = 1e6
         plot_timeseries() \
             .add_plot(data_a, "wl", x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "wl", x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "wl", x=x, y=2*y, label=f"$y={fmt(2*y)}$") \
             .add_plot(data_a, "p",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "p",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "p",  x=x, y=2*y, label=f"$y={fmt(2*y)}$") \
             .add_plot(data_a, "u",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "u",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "u",  x=x, y=2*y, label=f"$y={fmt(2*y)}$") \
             .add_plot(data_a, "v",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "v",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "v",  x=x, y=2*y, label=f"$y={fmt(2*y)}$") \
             .save(figure_dir)
 
         plot_timeseries() \
@@ -268,18 +271,33 @@ if __name__ == "__main__":
             .save(figure_dir)
 
         plot_timeseries() \
-            .add_plot(data_a, "wl", x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "wl", x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
             .add_plot(data_a, "u",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
+            .add_plot(data_a, "u",  x=x, y=3*y, label=f"$y={fmt(3*y)}$") \
             .add_plot(data_a, "u",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
             .add_plot(data_a, "v",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
+            .add_plot(data_a, "v",  x=x, y=3*y, label=f"$y={fmt(3*y)}$") \
             .add_plot(data_a, "v",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
             .save(figure_dir)
 
         plot_timeseries() \
             .add_plot(data_a, "wl", x=x, y=1*y) \
             .add_plot(data_a, "wl", x=x, y=3*y) \
+            .save(figure_dir)
+
+        plot_timeseries() \
+            .add_plot(data_a, "wl", x=x, y=1*y) \
+            .add_plot(data_a, "p", x=x, y=1*y) \
+            .add_plot(data_a, "wl", x=x, y=3*y) \
+            .add_plot(data_a, "p", x=x, y=3*y) \
             .add_plot(data_a, "wl", x=x, y=5*y) \
+            .add_plot(data_a, "p", x=x, y=5*y) \
+            .save(figure_dir)
+
+        plot_timeseries() \
+            .add_plot(data_a, "wl", x=x, y=np.pi*y) \
+            .add_plot(data_a, "p",  x=x, y=np.pi*y) \
+            .add_plot(data_b, "wl",  x=x, y=np.pi*y) \
+            .add_plot(data_b, "p",  x=x, y=np.pi*y) \
             .save(figure_dir)
     # fmt: on
 
