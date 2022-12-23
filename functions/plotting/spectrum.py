@@ -283,7 +283,7 @@ class plot_spectrum_2d:
             `save`:             writes the figure to disk
         """
         plot_spectrum_2d.number += 1
-        self.y_scale = 3600.0
+        self.time_scale_factor = 3600.0
 
         self.figsize = FIGSIZE_NORMAL
         self.closed = False
@@ -358,7 +358,7 @@ class plot_spectrum_2d:
 
         # y-axis
         self.ax.set_ylabel("Frequency [cycles / hour]")
-        self.ax.set_ylim(0, fu.relative_ceil(self.f_max * self.y_scale))
+        self.ax.set_ylim(0, fu.relative_ceil(self.f_max * self.time_scale_factor))
 
     def _setup_cax(self):
         """Colorbar location setup
@@ -482,7 +482,7 @@ class plot_spectrum_2d:
         # Plot data
         self.im = self.ax.pcolormesh(
             wavenumber * self.scale_factor,
-            freqs * self.y_scale,
+            freqs * self.time_scale_factor,
             power,
             shading="nearest",  # "gouraud",
             cmap=cmo.cm.matter,
@@ -496,7 +496,7 @@ class plot_spectrum_2d:
 
         # Set plot limits
         self.ax.set_xlim(0, fu.relative_ceil(self.k_max * self.scale_factor))
-        self.ax.set_ylim(0, fu.relative_ceil(self.f_max * self.y_scale))
+        self.ax.set_ylim(0, fu.relative_ceil(self.f_max * self.time_scale_factor))
 
         # Log
         self.data_label = label
@@ -538,7 +538,7 @@ class plot_spectrum_2d:
             dispersion = fa.dispersion_relation(wavenumber, n=i, alpha=alpha)
             self.ax.plot(
                 self.scale_factor * wavenumber,
-                self.y_scale * dispersion,
+                self.time_scale_factor * dispersion,
                 linewidth=1,
                 linestyle="--",
                 color="black",
@@ -546,8 +546,8 @@ class plot_spectrum_2d:
             )
             self.ax.annotate(
                 text=f"$n={i}$",
-                xytext=(0.99 * self.scale_factor * wavenumber[-1], 1.02 * self.y_scale * dispersion[-1]),
-                xy=(self.scale_factor * wavenumber[-1], self.y_scale * dispersion[-1]),
+                xytext=(0.99 * self.scale_factor * wavenumber[-1], 1.02 * self.time_scale_factor * dispersion[-1]),
+                xy=(self.scale_factor * wavenumber[-1], self.time_scale_factor * dispersion[-1]),
                 xycoords="data",
                 textcoords="data",
                 ha="right",
