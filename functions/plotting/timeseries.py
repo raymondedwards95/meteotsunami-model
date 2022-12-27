@@ -45,14 +45,23 @@ class plot_timeseries(plot_base):
 
         self.fig, self.axes = plt.subplots(4, 1)
         self.title = title
+        self.figure_type = "Time Series"
 
         self._check_if_closed()
         print(f"\n# Initiated figure for time-series")
 
-    def _check_if_closed(self):
-        """Raises an error if the figure is supposed to be closed"""
-        if self.closed:
-            raise TypeError(f"Figure is cleared and closed: it can not be edited")
+    def _match_variable(self, variable: str) -> int:
+        match variable.lower().strip():
+            case "wl":
+                return 0
+            case "u":
+                return 1
+            case "v":
+                return 2
+            case "p":
+                return 3
+            case _:
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
     def _setup_figure(self):
         """Figure setup"""
@@ -62,14 +71,7 @@ class plot_timeseries(plot_base):
             self.figsize = FIGSIZE_HIGH
 
         # General
-        self.fig.set_size_inches(self.figsize)
-        self.fig.set_dpi(FIG_DPI)
-        self.fig.set_layout_engine("compressed")
-
-        # Figure specific
-        if self.title is None:
-            self.title = f"Time Series"
-        self.fig.suptitle(self.title, va="top", ha="left", x=0.01)
+        super()._base_setup_figure()
 
     def _setup_plot(self):
         """Plot setup"""
@@ -100,19 +102,6 @@ class plot_timeseries(plot_base):
         # p
         self.axes[3].set_ylabel("$p$ [Pa]")
         self.axes[3].set_ylim(0, None)
-
-    def _match_variable(self, variable: str) -> int:
-        match variable.lower().strip():
-            case "wl":
-                return 0
-            case "u":
-                return 1
-            case "v":
-                return 2
-            case "p":
-                return 3
-            case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
     def add_plot(
         self,
@@ -220,14 +209,6 @@ class plot_timeseries(plot_base):
         print(f"# Saved time-series figure as {savename}")
         if close:
             self.close()
-        return
-
-    def close(self):
-        """Close the figure"""
-        self.closed = True
-        self.fig.clear()
-        plt.close(self.fig)
-        print(f"# Figure time-series is closed")
         return
 
 
