@@ -16,10 +16,11 @@ from matplotlib import gridspec
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from functions import *
+from functions.plotting.base import plot_base
 # fmt: on
 
 
-class plot_timeseries:
+class plot_timeseries(plot_base):
     """Methods to create a visualisation of time-series"""
 
     number = 0
@@ -38,13 +39,14 @@ class plot_timeseries:
         """
         plot_timeseries.number += 1
 
+        super().__init__()
         self.figsize = FIGSIZE_NORMAL
-        self.closed = False
         self.lines = np.array([0, 0, 0, 0])
 
         self.fig, self.axes = plt.subplots(4, 1)
         self.title = title
 
+        self._check_if_closed()
         print(f"\n# Initiated figure for time-series")
 
     def _check_if_closed(self):

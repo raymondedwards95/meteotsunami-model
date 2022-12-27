@@ -18,12 +18,13 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from functions import *
+from functions.plotting.base import plot_base
 import functions.analysis as fa
 import functions.utilities as fu
 # fmt: on
 
 
-class plot_spectrum_1d:
+class plot_spectrum_1d(plot_base):
     """Methods to create a visualisation of the 1d spectrum"""
 
     number = 0
@@ -49,9 +50,8 @@ class plot_spectrum_1d:
         """
         plot_spectrum_1d.number += 1
 
+        super().__init__()
         self.figsize = FIGSIZE_NORMAL
-        self.closed = False
-        self._check_if_closed()
 
         self.fig, self.ax = plt.subplots(1, 1)
 
@@ -63,6 +63,7 @@ class plot_spectrum_1d:
         self.variable_unit: str
         self._set_variable(variable)
 
+        self._check_if_closed()
         print(
             f"\n# Initiated figure for spectrum_1d with variable '{self.variable}' ({self.variable_long.lower()})"
         )

@@ -19,11 +19,12 @@ from matplotlib.colors import Normalize
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from functions import *
+from functions.plotting.base import plot_base
 import functions.utilities as fu
 # fmt: on
 
 
-class plot_contour:
+class plot_contour(plot_base):
     """Methods to create visualisations of time-slices"""
 
     number = 0
@@ -39,9 +40,8 @@ class plot_contour:
         """
         plot_contour.number += 1
 
+        super().__init__()
         self.figsize = FIGSIZE_LONG
-        self.closed = False
-        self.filled = False
 
         self.x_max = None
         self.x_min = None
@@ -52,6 +52,7 @@ class plot_contour:
         self.scale_factor = None
         self.set_scale(scale)
 
+        self._check_if_closed()
         print(f"\n# Initiated figure for contour-levels")
 
     def _check_if_closed(self):

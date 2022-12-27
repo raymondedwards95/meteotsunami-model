@@ -17,12 +17,13 @@ from matplotlib import gridspec
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from functions import *
+from functions.plotting.base import plot_base
 import functions.analysis as fa
 import functions.utilities as fu
 # fmt: on
 
 
-class plot_alongshore:
+class plot_alongshore(plot_base):
     """Methods to create a visualisation of the along-shore profiles"""
 
     number = 0
@@ -46,8 +47,8 @@ class plot_alongshore:
         """
         plot_alongshore.number += 1
 
+        super().__init__()
         self.figsize = FIGSIZE_NORMAL
-        self.closed = False
 
         if y_min is None:
             self.y_min = 0
@@ -76,6 +77,7 @@ class plot_alongshore:
         self.variable_unit: str
         self._set_variable(variable)
 
+        self._check_if_closed()
         print(f"\n# Initiated figure for along-shore profiles")
 
     def _check_if_closed(self):
