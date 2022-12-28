@@ -31,17 +31,27 @@ class plot_contour(plot_base):
 
     def __init__(
         self,
-        scale="Mm",
+        scale: str = "Mm",
+        title: str = None,
     ):
         """Create and setup a figure for time-slices
 
         Options:
-            `scale`:    scale of plots ('m', 'km' or 'Mm')
+            `scale`:        scale of plots ('m', 'km' or 'Mm')
+            `title`:        figure title
+
+        Methods:
+            `add_plots`:    add data to the figure
+            `save`:         writes the figure to disk
         """
         plot_contour.number += 1
 
         super().__init__()
         self.figsize = FIGSIZE_LONG
+
+        self.title = title
+        self.figure_type = "Contours"
+        self.figure_num = plot_contour.number
 
         self.x_max = None
         self.x_min = None
@@ -53,17 +63,7 @@ class plot_contour(plot_base):
         self.set_scale(scale)
 
         self._check_if_closed()
-        print(f"\n# Initiated figure for contour-levels")
-
-    def _check_if_closed(self):
-        """Raises an error if the figure is supposed to be closed"""
-        if self.closed:
-            raise TypeError(f"Figure is cleared and closed: it can not be edited")
-
-    def _check_if_filled(self):
-        """Raises an error if the figure is filled with data already"""
-        if self.filled:
-            raise TypeError(f"Figure contains data already: it cannot be edited")
+        print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
 
     def _setup_figure(self):
         """Figure setup"""
@@ -71,12 +71,7 @@ class plot_contour(plot_base):
         self._check_if_closed()
 
         # General
-        self.fig.set_size_inches(self.figsize)
-        self.fig.set_dpi(FIG_DPI)
-        self.fig.set_layout_engine("compressed")
-
-        # Figure specific
-        self.fig.suptitle(f"Contours", va="top", ha="left", x=0.01)
+        super()._base_setup_figure()
 
     def _setup_plot(self):
         """Plot setup"""
@@ -112,7 +107,9 @@ class plot_contour(plot_base):
             case "p":
                 return cmo.cm.curl
             case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+                raise ValueError(
+                    f"'{self.figure_type} {self.figure_num}' - {variable=} should be 'wl', 'u', 'v' or 'p'"
+                )
 
     def _pick_label(self, variable: str):
         match variable.lower().strip():
@@ -125,33 +122,9 @@ class plot_contour(plot_base):
             case "p":
                 return "Surface air pressure [Pa]"
             case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
-
-    def set_scale(self, scale: str):
-        """Set the scale of all subplots
-
-        Input:
-            `scale`:    scale of plots ('m', 'km' or 'Mm')
-        """
-        self.unit: str
-        self.scale_factor: float
-
-        match scale:
-            case "m":
-                self.unit = "m"
-                self.scale_factor = 1e0
-            case "km":
-                self.unit = "km"
-                self.scale_factor = 1e3
-            case "Mm":
-                self.unit = "Mm"
-                self.scale_factor = 1e6
-            case _:
                 raise ValueError(
-                    f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
+                    f"'{self.figure_type} {self.figure_num}' - {variable=} should be 'wl', 'u', 'v' or 'p'"
                 )
-
-        return self
 
     def add_plots(
         self,
@@ -181,14 +154,14 @@ class plot_contour(plot_base):
         # Checks
         self._check_if_closed()
         self._check_if_filled()
-        print(f"# Adding plots to figure...")
+        print(f"# Adding plots to '{self.figure_type} {self.figure_num}'...")
 
         t_list = np.sort(np.array(t_list))
         variable_list = np.char.lower(np.char.strip(np.array(variable_list)))
 
         if not np.all(np.isin(variable_list, np.array(["wl", "u", "v", "p"]))):
             raise ValueError(
-                f"Variables in `variable_list` should be 'wl', 'u', 'v' or 'p'"
+                f"'{self.figure_type} {self.figure_num}' - Variables in `variable_list` should be 'wl', 'u', 'v' or 'p'"
             )
 
         if scale is not None:
@@ -296,17 +269,9 @@ class plot_contour(plot_base):
         save_figure(self.fig, savename)
 
         # End
-        print(f"# Saved contour figure as {savename}")
+        print(f"# Saved figure '{self.figure_type} {self.figure_num}' as {savename}")
         if close:
             self.close()
-        return
-
-    def close(self):
-        """Close the figure"""
-        self.closed = True
-        self.fig.clear()
-        plt.close(self.fig)
-        print(f"# Figure contour is closed")
         return
 
 
