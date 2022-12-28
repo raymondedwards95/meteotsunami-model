@@ -129,5 +129,6 @@ if __name__ == "__main__":
     subprocess.run(["python", f"{PATH_PLOTTING}/__init__.py"])
     subprocess.run(["python", f"{PATH_PLOTTING}/contour.py"])
     subprocess.run(["python", f"{PATH_PLOTTING}/profiles.py"])
-    subprocess.run(["python", f"{PATH_PLOTTING}/spectrum.py"])
+    subprocess.run(["python", f"{PATH_PLOTTING}/spectrum1d.py"])
+    subprocess.run(["python", f"{PATH_PLOTTING}/spectrum2d.py"])
     subprocess.run(["python", f"{PATH_PLOTTING}/timeseries.py"])
