@@ -46,9 +46,10 @@ class plot_timeseries(plot_base):
         self.fig, self.axes = plt.subplots(4, 1)
         self.title = title
         self.figure_type = "Time Series"
+        self.figure_num = plot_timeseries.number
 
         self._check_if_closed()
-        print(f"\n# Initiated figure for time-series")
+        print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
 
     def _match_variable(self, variable: str) -> int:
         match variable.lower().strip():
@@ -206,7 +207,7 @@ class plot_timeseries(plot_base):
         save_figure(self.fig, savename)
 
         # End
-        print(f"# Saved time-series figure as {savename}")
+        print(f"# Saved figure '{self.figure_type} {self.figure_num}' as {savename}")
         if close:
             self.close()
         return
