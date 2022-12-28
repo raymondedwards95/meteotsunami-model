@@ -34,6 +34,7 @@ class plot_spectrum_1d(plot_base):
         variable: str,
         demean: bool = True,
         f_max: Numeric = None,
+        title: str = None,
     ):
         """Create and setup a figure for the 1d spectrum
 
@@ -43,6 +44,7 @@ class plot_spectrum_1d(plot_base):
         Options:
             `demean`:   remove mean from data
             `f_max`:    upper limit for frequency f (units: cycles per hour)
+            `title`:    figure title
 
         Methods:
             `add_plot`: add data to the figure
@@ -54,6 +56,9 @@ class plot_spectrum_1d(plot_base):
         self.figsize = FIGSIZE_NORMAL
 
         self.fig, self.ax = plt.subplots(1, 1)
+        self.title = title
+        self.figure_type = "Spectrum 1D"
+        self.figure_num = plot_spectrum_1d.number
 
         self.demean = demean
         self.f_max = f_max
@@ -65,13 +70,8 @@ class plot_spectrum_1d(plot_base):
 
         self._check_if_closed()
         print(
-            f"\n# Initiated figure for spectrum_1d with variable '{self.variable}' ({self.variable_long.lower()})"
+            f"\n# Initiated figure '{self.figure_type} {self.figure_num}' with variable '{self.variable}' ({self.variable_long.lower()})"
         )
-
-    def _check_if_closed(self):
-        """Raises an error if the figure is supposed to be closed"""
-        if self.closed:
-            raise TypeError(f"Figure is cleared and closed: it can not be edited")
 
     def _setup_figure(self):
         """Figure setup"""
@@ -79,14 +79,8 @@ class plot_spectrum_1d(plot_base):
         self._check_if_closed()
 
         # General
-        self.fig.set_size_inches(self.figsize)
-        self.fig.set_dpi(FIG_DPI)
-        self.fig.set_layout_engine("compressed")
-
-        # Figure specific
-        self.fig.suptitle(
-            f"Power Spectrum - {self.variable_long}", va="top", ha="left", x=0.01
-        )
+        self.title = f"Power Spectrum - {self.variable_long}"
+        super()._base_setup_figure()
 
     def _setup_plot(self):
         """Plot setup"""
@@ -112,29 +106,6 @@ class plot_spectrum_1d(plot_base):
             scilimits=(0, 0),
             useMathText=True,
         )
-
-    def _set_variable(self, variable: str):
-        match variable.lower().strip():
-            case "wl":
-                self.variable = "wl"
-                self.variable_long = "Water level"
-                self.variable_unit = "m"
-            case "u":
-                self.variable = "u"
-                self.variable_long = "Cross shore water velocity"
-                self.variable_unit = "m/s"
-            case "v":
-                self.variable = "v"
-                self.variable_long = "Along shore water velocity"
-                self.variable_unit = "m/s"
-            case "p":
-                self.variable = "p"
-                self.variable_long = "Surface air pressure"
-                self.variable_unit = "Pa"
-            case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
-
-        return self
 
     def add_plot(
         self,
@@ -238,21 +209,13 @@ class plot_spectrum_1d(plot_base):
         save_figure(self.fig, savename)
 
         # End
-        print(f"# Saved 1d-spectrum figure as {savename}")
+        print(f"# Saved figure '{self.figure_type} {self.figure_num}' figure as {savename}")
         if close:
             self.close()
         return
 
-    def close(self):
-        """Close the figure"""
-        self.closed = True
-        self.fig.clear()
-        plt.close(self.fig)
-        print(f"# Figure 1d-spectrum is closed")
-        return
 
-
-class plot_spectrum_2d:
+class plot_spectrum_2d(plot_base):
     """Methods to create a visualisation of the 2d spectrum"""
 
     number = 0
@@ -265,6 +228,7 @@ class plot_spectrum_2d:
         k_max: Numeric = None,
         f_max: Numeric = None,
         scale="Mm",
+        title: str = None,
     ):
         """Create and setup a figure for the 2d spectrum
 
@@ -277,6 +241,7 @@ class plot_spectrum_2d:
             `k_max`:            upper limit for wavenumber k
             `f_max`:            upper limit for frequency f
             `scale`:            scale of plots ('m', 'km' or 'Mm')
+            `title`:            figure title
 
         Methods:
             `add_plot`:         add data to the figure
@@ -286,12 +251,13 @@ class plot_spectrum_2d:
         plot_spectrum_2d.number += 1
         self.time_scale_factor = 3600.0
 
+        super().__init__()
         self.figsize = FIGSIZE_NORMAL
-        self.closed = False
-        self.filled = False
-        self._check_if_closed()
 
         self.fig, self.ax = plt.subplots(1, 1)
+        self.title = title
+        self.figure_type = "Spectrum 2D"
+        self.figure_num = plot_spectrum_2d.number
         self._setup_cax()
 
         self.demean = demean
@@ -310,19 +276,10 @@ class plot_spectrum_2d:
         self.variable_unit: str
         self._set_variable(variable)
 
+        self._check_if_closed()
         print(
-            f"\n# Initiated figure for spectrum_2d with variable '{self.variable}' ({self.variable_long.lower()})"
+            f"\n# Initiated figure '{self.figure_type} {self.figure_num}' with variable '{self.variable}' ({self.variable_long.lower()})"
         )
-
-    def _check_if_closed(self):
-        """Raises an error if the figure is supposed to be closed"""
-        if self.closed:
-            raise TypeError(f"Figure is cleared and closed: it can not be edited")
-
-    def _check_if_filled(self):
-        """Raises an error if the figure is filled with data already"""
-        if self.filled:
-            raise TypeError(f"Figure contains data already: it cannot be edited")
 
     def _setup_figure(self):
         """Figure setup"""
@@ -330,17 +287,10 @@ class plot_spectrum_2d:
         self._check_if_closed()
 
         # General
-        self.fig.set_size_inches(self.figsize)
-        self.fig.set_dpi(FIG_DPI)
-        self.fig.set_layout_engine("compressed")
-
-        # Figure specific
-        self.fig.suptitle(
-            f"Power Spectrum - {self.variable_long} - $x = {self.x / 1000:0.1f}$ km",
-            va="top",
-            ha="left",
-            x=0.01,
+        self.title = (
+            f"Power Spectrum - {self.variable_long} - $x = {self.x / 1000:0.1f}$ km"
         )
+        super()._base_setup_figure()
 
     def _setup_plot(self):
         """Plot setup"""
@@ -373,55 +323,6 @@ class plot_spectrum_2d:
         # Make space for colorbar
         div = make_axes_locatable(self.ax)
         self.cax = div.append_axes(position="right", size="5%", pad="5%")
-
-    def _set_variable(self, variable: str):
-        match variable.lower().strip():
-            case "wl":
-                self.variable = "wl"
-                self.variable_long = "Water level"
-                self.variable_unit = "m"
-            case "u":
-                self.variable = "u"
-                self.variable_long = "Cross shore water velocity"
-                self.variable_unit = "m/s"
-            case "v":
-                self.variable = "v"
-                self.variable_long = "Along shore water velocity"
-                self.variable_unit = "m/s"
-            case "p":
-                self.variable = "p"
-                self.variable_long = "Surface air pressure"
-                self.variable_unit = "Pa"
-            case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
-
-        return self
-
-    def set_scale(self, scale: str):
-        """Set the scale of all subplots
-
-        Input:
-            `scale`:    scale of plots ('m', 'km' or 'Mm')
-        """
-        self.unit: str
-        self.scale_factor: float
-
-        match scale:
-            case "m":
-                self.unit = "m"
-                self.scale_factor = 1e0
-            case "km":
-                self.unit = "km"
-                self.scale_factor = 1e3
-            case "Mm":
-                self.unit = "Mm"
-                self.scale_factor = 1e6
-            case _:
-                raise ValueError(
-                    f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
-                )
-
-        return self
 
     def add_plot(
         self,
@@ -601,17 +502,9 @@ class plot_spectrum_2d:
         save_figure(self.fig, savename)
 
         # End
-        print(f"# Saved 2d-spectrum figure as {savename}")
+        print(f"# Saved figure '{self.figure_type} {self.figure_num}' as {savename}")
         if close:
             self.close()
-        return
-
-    def close(self):
-        """Close the figure"""
-        self.closed = True
-        self.fig.clear()
-        plt.close(self.fig)
-        print(f"# Figure 2d-spectrum is closed")
         return
 
 
