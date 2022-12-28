@@ -7,6 +7,8 @@ Main classes:
 import os
 import sys
 
+import matplotlib.pyplot as plt
+
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
@@ -23,19 +25,20 @@ class plot_base:
         self.filled = False
         self.title = None
         self.figure_type = "Base"
+        self.figure_num = -1
 
     def _check_if_closed(self):
         """Raises an error if the figure is supposed to be closed"""
         if self.closed:
             raise TypeError(
-                f"Figure '{self.figure_type}' is cleared and closed: it can not be edited"
+                f"Figure '{self.figure_type} {self.figure_num}' is cleared and closed: it can not be edited"
             )
 
     def _check_if_filled(self):
         """Raises an error if the figure is filled with data already"""
         if self.filled:
             raise TypeError(
-                f"Figure '{self.figure_type}' contains data already: it cannot be edited"
+                f"Figure '{self.figure_type} {self.figure_num}' contains data already: it cannot be edited"
             )
 
     def _base_setup_figure(self):
@@ -75,3 +78,39 @@ class plot_base:
                 raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
         return self
+
+    def set_scale(self, scale: str):
+        """Set the scale of all subplots
+
+        Input:
+            `scale`:    scale of plots ('m', 'km' or 'Mm')
+        """
+        self.unit: str
+        self.scale_factor: float
+
+        match scale:
+            case "m":
+                self.unit = "m"
+                self.scale_factor = 1e0
+            case "km":
+                self.unit = "km"
+                self.scale_factor = 1e3
+            case "Mm":
+                self.unit = "Mm"
+                self.scale_factor = 1e6
+            case _:
+                raise ValueError(
+                    f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
+                )
+
+        print(f"# Set scale of '{self.figure_type} {self.figure_num}' to {self.unit} (=1/{self.scale_factor})")
+
+        return self
+
+    def close(self):
+        """Close the figure"""
+        self.closed = True
+        self.fig.clear()
+        plt.close(self.fig)
+        print(f"# Figure '{self.figure_type} {self.figure_num}' is closed")
+        return
