@@ -64,7 +64,7 @@ class plot_spectrum_2d(plot_base):
 
         self.fig, self.ax = plt.subplots(1, 1)
         self.title = title
-        self.figure_type = "Spectrum 2D"
+        self.figure_type = "2D Power Spectrum"
         self.figure_num = plot_spectrum_2d.number
         self._setup_cax()
 
@@ -95,9 +95,10 @@ class plot_spectrum_2d(plot_base):
         self._check_if_closed()
 
         # General
-        self.title = (
-            f"Power Spectrum - {self.variable_long} - $x = {self.x / 1000:0.1f}$ km"
-        )
+        if self.title is None:
+            self.title = (
+                f"Power Spectrum - {self.variable_long} - $x = {self.x / 1000:0.1f}$ km"
+            )
         super()._base_setup_figure()
 
     def _setup_plot(self):
