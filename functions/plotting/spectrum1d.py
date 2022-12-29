@@ -53,7 +53,7 @@ class plot_spectrum_1d(plot_base):
 
         self.fig, self.ax = plt.subplots(1, 1)
         self.title = title
-        self.figure_type = "Spectrum 1D"
+        self.figure_type = "1D Power Spectrum"
         self.figure_num = plot_spectrum_1d.number
 
         self.demean = demean
@@ -75,7 +75,8 @@ class plot_spectrum_1d(plot_base):
         self._check_if_closed()
 
         # General
-        self.title = f"Power Spectrum - {self.variable_long}"
+        if self.title is None:
+            self.title = f"Power Spectrum - {self.variable_long}"
         super()._base_setup_figure()
 
     def _setup_plot(self):
