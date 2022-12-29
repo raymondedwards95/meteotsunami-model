@@ -26,19 +26,22 @@ class plot_base:
         self.title = None
         self.figure_type = "Base"
         self.figure_num = -1
+        self.fig = plt.figure()
 
     def _check_if_closed(self):
         """Raises an error if the figure is supposed to be closed"""
         if self.closed:
             raise TypeError(
-                f"Figure '{self.figure_type} {self.figure_num}' is cleared and closed: it can not be edited"
+                f"Figure '{self.figure_type} {self.figure_num}' is cleared and closed: "
+                + f"it can not be edited"
             )
 
     def _check_if_filled(self):
         """Raises an error if the figure is filled with data already"""
         if self.filled:
             raise TypeError(
-                f"Figure '{self.figure_type} {self.figure_num}' contains data already: it cannot be edited"
+                f"Figure '{self.figure_type} {self.figure_num}' contains data already: "
+                + f"it cannot be edited"
             )
 
     def _base_setup_figure(self):
@@ -77,6 +80,11 @@ class plot_base:
             case _:
                 raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
+        print(
+            f"# Variable in '{self.figure_type} {self.figure_num}' "
+            + f"is '{self.variable}' with units '{self.variable_unit}'"
+        )
+
         return self
 
     def set_scale(self, scale: str):
@@ -100,10 +108,14 @@ class plot_base:
                 self.scale_factor = 1e6
             case _:
                 raise ValueError(
-                    f"Scale should be either 'm', 'km', or 'Mm', instead of '{scale}'"
+                    f"Scale should be either 'm', 'km', or 'Mm' "
+                    + f"instead of '{scale}'"
                 )
 
-        print(f"# Set scale of '{self.figure_type} {self.figure_num}' to {self.unit} (=1/{self.scale_factor})")
+        print(
+            f"# Set scale of '{self.figure_type} {self.figure_num}' "
+            + f"to {self.unit} (=1/{self.scale_factor})"
+        )
 
         return self
 
@@ -114,3 +126,15 @@ class plot_base:
         plt.close(self.fig)
         print(f"# Figure '{self.figure_type} {self.figure_num}' is closed")
         return
+
+
+if __name__ == "__main__":
+    figure = plot_base()
+    figure._check_if_closed()
+    for unit in ["m", "km", "Mm"]:
+        figure.set_scale(unit)
+    figure._check_if_filled()
+    for var in ["p", "u", "v", "wl"]:
+        figure._set_variable(var)
+    figure._base_setup_figure()
+    figure.close()
