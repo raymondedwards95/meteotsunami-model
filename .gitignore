@@ -41,3 +41,6 @@ functions/tests
 *output*
 *.cache
 *.dia
+
+# Figures
+figures/pgf
