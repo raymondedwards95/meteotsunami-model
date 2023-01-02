@@ -206,7 +206,7 @@ class plot_crossshore(plot_base):
 
         # Add subplot
         self.axes.append(self.fig.add_subplot())
-        print(f"# Added subplot for cross-shore profiles")
+        print(f"# Added subplot for '{self.figure_type} {self.figure_num}'")
 
         # Add data
         if (dataset is not None) and (y is not None) and (t is not None):
@@ -371,11 +371,9 @@ class plot_crossshore(plot_base):
         for ax_idx, ax in enumerate(self.axes):
             ax.set_subplotspec(gs[ax_idx])
 
-        # update x-ticks
-        self.axes[0].get_shared_x_axes().join(self.axes[0], *self.axes[1:])
-        for ax in self.axes[:-1]:
-            ax.set_xlabel("")
-            ax.set_xticklabels([])
+        # update ticks
+        for ax in self.axes:
+            ax.label_outer()
 
         # Save
         self.fig.get_layout_engine().execute(self.fig)
