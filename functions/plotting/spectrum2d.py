@@ -114,11 +114,11 @@ class plot_spectrum_2d(plot_base):
 
         # x-axis
         self.ax.set_xlabel(f"Wavenumber [1 / {self.unit}]")
-        self.ax.set_xlim(0, fu.relative_ceil(self.k_max * self.scale_factor))
+        self.ax.set_xlim(0, fu.relative_ceil(0.8 * self.k_max_scaled))
 
         # y-axis
         self.ax.set_ylabel("Frequency [cycles / hour]")
-        self.ax.set_ylim(0, fu.relative_ceil(self.f_max * self.time_scale_factor))
+        self.ax.set_ylim(0, fu.relative_ceil(0.8 * self.f_max_scaled))
 
     def _setup_cax(self):
         """Colorbar location setup
@@ -206,8 +206,8 @@ class plot_spectrum_2d(plot_base):
         self.cbar.set_label("Spectral power")
 
         # Set plot limits
-        self.ax.set_xlim(0, fu.relative_ceil(self.k_max * self.scale_factor))
-        self.ax.set_ylim(0, fu.relative_ceil(self.f_max * self.time_scale_factor))
+        self.k_max_scaled = np.min([np.max(wavenumber) * self.scale_factor, fu.relative_ceil(self.k_max * self.scale_factor)])
+        self.f_max_scaled = np.min([np.max(freqs) * self.time_scale_factor, fu.relative_ceil(self.f_max * self.time_scale_factor)])
 
         # Log
         self.data_label = label
@@ -337,13 +337,28 @@ if __name__ == "__main__":
             .add_dispersion(n=3) \
             .save(figure_dir)
 
-        plot_spectrum_2d(variable="wl", demean=True) \
+        plot_spectrum_2d(variable="wl", demean=True, scale="m") \
             .add_plot(data_b, x=x*2) \
             .add_dispersion(n=2) \
             .save(figure_dir)
 
         plot_spectrum_2d(variable="p", demean=False, scale="km") \
             .add_plot(data_a, x=x) \
+            .save(figure_dir)
+
+        plot_spectrum_2d(variable="u", demean=True) \
+            .add_plot(data_a, x=x, scale="Mm") \
+            .add_dispersion(n=2) \
+            .save(figure_dir)
+
+        plot_spectrum_2d(variable="v", demean=True) \
+            .add_plot(data_a, x=x) \
+            .add_dispersion(n=2) \
+            .save(figure_dir)
+
+        plot_spectrum_2d(variable="wl", demean=True) \
+            .add_plot(data_a, x=x) \
+            .add_dispersion(n=5) \
             .save(figure_dir)
     # fmt: on
 
