@@ -248,19 +248,25 @@ class plot_alongshore(plot_base):
             if skip_on_error:
                 print(f"## {x=:0.1f} is outside the domain! Skipping...")
                 return self
-            print(f"## {x=:0.1f} is outside the domain! Increasing x towards the domain.")
+            print(
+                f"## {x=:0.1f} is outside the domain!",
+                f"Increasing x towards the domain.",
+            )
             x = np.min(dataset["x"].values)
         if x > dataset["x"].max():
             if skip_on_error:
                 print(f"## {x=:0.1f} is outside the domain! Skipping...")
                 return self
-            print(f"## {x=:0.1f} is outside the domain! Decreasing x towards the domain.")
+            print(
+                f"## {x=:0.1f} is outside the domain!",
+                f"Decreasing x towards the domain.",
+            )
             x = np.max(dataset["x"].values)
 
-        if (x,t) in self.tx_done:
+        if (x, t) in self.tx_done:
             print(f"## {x=:0.1f} and {t=:0.1f} is plotted before! Skipping...")
             return self
-        self.tx_done.add((x,t))
+        self.tx_done.add((x, t))
 
         # Extract data
         data = dataset[self.variable].interp(x=x, t=fu.to_timestr(t))
@@ -304,7 +310,8 @@ class plot_alongshore(plot_base):
 
         # Log
         print(
-            f"# Added {self.variable} data from {dataset_name} for {x=} and {t=}, labeled by {label=}"
+            f"# Added {self.variable} data from {dataset_name}",
+            f"for {x=} and {t=}, labeled by {label=}",
         )
         return self
 
