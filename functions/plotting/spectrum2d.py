@@ -86,7 +86,8 @@ class plot_spectrum_2d(plot_base):
 
         self._check_if_closed()
         print(
-            f"\n# Initiated figure '{self.figure_type} {self.figure_num}' with variable '{self.variable}' ({self.variable_long.lower()})"
+            f"\n# Initiated figure '{self.figure_type} {self.figure_num}'",
+            f"with variable '{self.variable}' ({self.variable_long.lower()})",
         )
 
     def _setup_figure(self):
@@ -206,8 +207,18 @@ class plot_spectrum_2d(plot_base):
         self.cbar.set_label("Spectral power")
 
         # Set plot limits
-        self.k_max_scaled = np.min([np.max(wavenumber) * self.scale_factor, fu.relative_ceil(self.k_max * self.scale_factor)])
-        self.f_max_scaled = np.min([np.max(freqs) * self.time_scale_factor, fu.relative_ceil(self.f_max * self.time_scale_factor)])
+        self.k_max_scaled = np.min(
+            [
+                np.max(wavenumber) * self.scale_factor,
+                fu.relative_ceil(self.k_max * self.scale_factor),
+            ]
+        )
+        self.f_max_scaled = np.min(
+            [
+                np.max(freqs) * self.time_scale_factor,
+                fu.relative_ceil(self.f_max * self.time_scale_factor),
+            ]
+        )
 
         # Log
         self.data_label = label
@@ -280,7 +291,7 @@ class plot_spectrum_2d(plot_base):
         self.ax.set_ylim(ylims)
 
         # End
-        print(f"# Added dispersion relations to plot")
+        print(f"# Added dispersion relation")
         return self
 
     def save(
