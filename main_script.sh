@@ -36,6 +36,7 @@ create_animations=false
 create_figures=false
 create_theory=false
 create_comparison=false
+test_functions=false
 
 FolderList=()
 
@@ -51,6 +52,7 @@ while [[ "$#" -gt 0 ]]; do
         -e|--exp) echo "Got argument '--exp'" ; FolderList+=("./thesis") ;;
         -t|--theory) echo "Got argument '--theory'" ; create_theory=true ;;
         -c|--compare) echo "Got argument '--compare'" ; create_comparison=true ;;
+        --test) echo "Got argument '--test'" ; test_functions=true ;;
         -h|--help) echo -e $TextHelp ; exit 1 ;;
         *) echo "Unknown parameter $1" ; exit 1 ;;
     esac
@@ -77,8 +79,11 @@ fi
 if [ "$create_theory" = true ] ; then
     echo "# Theory"
 fi
-if [ "$create_compare" = true ] ; then
+if [ "$create_comparison" = true ] ; then
     echo "# Comparison"
+fi
+if [ "$test_functions" = true ] ; then
+    echo "# Tests"
 fi
 
 # Default list of folders with input files
@@ -304,6 +309,38 @@ function func_comparison ()
     echo "$(date) - Finished figures for comparison" >> $LogFile
 }
 
+# Define tests
+function func_tests ()
+{
+    # Start timer
+    local TStart=$(date +%s)
+
+    # Create comparison
+    echo "# Doing simple tests of functions"
+    echo "$(date) - Doing simple tests of functions" >> $LogFile
+
+    cd ./functions
+    echo "# Doing tests in '$PWD'"
+    python3 $PWD/__init__.py 1> "${LogFolder}/test_functions.log" 2>&1 &
+    wait
+    cd ..
+    echo "# Returned to '$PWD'"
+
+    # End
+    local TEnd=$(date +%s)
+    local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
+
+    echo "# Finished doing tests in $dTTotal minutes"
+    echo "$(date) - Finished simple tests" >> $LogFile
+}
+
+# Create theory
+if [ "$test_functions" = true ] ; then
+    echo "### Test functions"
+    func_tests
+    echo "### Finished tests of functions"
+fi
+
 # Create theory
 if [ "$create_theory" = true ] ; then
     echo "### Create figures theory"
@@ -368,7 +405,7 @@ do
         # Wait for simulations to finish
         wait
         echo "### Finished simulations in $PWD"
-    fi  # end if run_model
+    fi  # end if_run_model
 
     # Create animations
     if [ "$create_animations" = true ] ; then
@@ -391,7 +428,7 @@ do
         # Wait for simulations to finish
         wait
         echo "### Finished animations in $PWD"
-    fi  # end if create_animations
+    fi  # end if_create_animations
 
     # Create figures
     if [ "$create_figures" = true ] ; then
@@ -414,7 +451,7 @@ do
         # Wait for simulations to finish
         wait
         echo "### Finished visualising in $PWD"
-    fi  # end if create_figures
+    fi  # end if_create_figures
 
     # Return
     cd $BaseDir
