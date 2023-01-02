@@ -15,7 +15,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import numpy.typing as npt
 import xarray as xr
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 # fmt: off
 # fix for importing functions below
@@ -274,8 +273,6 @@ def plot_bathymetry(
     fig_2.set_layout_engine("compressed")
     fig_2.suptitle("Bottom Profile - Contours", va="top", ha="left", x=0.01)
 
-    # div = make_axes_locatable(ax_2)
-    # cax = div.append_axes("right", "5%", "5%")
     cont = ax_2.contourf(
         x / scale_factor,
         y / scale_factor,
@@ -284,10 +281,8 @@ def plot_bathymetry(
         cmap=cmo.tools.crop(cmo.cm.topo, b_min, b_max, 0),
         vmin=b_min,
         vmax=b_max,
-        rasterized=True,
     )
 
-    # cbar = fig_2.colorbar(cont, cax=cax)
     cbar = fig_2.colorbar(
         cont,
         ax=ax_2,
