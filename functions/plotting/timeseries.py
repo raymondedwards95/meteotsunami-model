@@ -196,11 +196,9 @@ class plot_timeseries(plot_base):
         for ax_idx, ax in enumerate(self.axes):
             ax.set_subplotspec(gs[ax_idx])
 
-        # update x-ticks
-        self.axes[0].get_shared_x_axes().join(self.axes[0], *self.axes[1:])
-        for ax in self.axes[:-1]:
-            ax.set_xlabel("")
-            ax.set_xticklabels([])
+        # update ticks
+        for ax in self.axes:
+            ax.label_outer()
 
         # Save
         self.fig.get_layout_engine().execute(self.fig)
