@@ -68,6 +68,8 @@ class plot_alongshore(plot_base):
             self.y_max = y_max
             self.y_max_fixed = True
 
+        self.tx_done = set()
+
         self.fig = plt.figure()
         self.axes = []
         self.title = title
@@ -156,7 +158,7 @@ class plot_alongshore(plot_base):
 
         # Add subplot
         self.axes.append(self.fig.add_subplot())
-        print(f"# Added subplot for along-shore profiles")
+        print(f"# Added subplot for '{self.figure_type} {self.figure_num}'")
 
         # Add data
         if (dataset is not None) and (x is not None) and (t is not None):
@@ -182,19 +184,21 @@ class plot_alongshore(plot_base):
         y_min: Numeric = None,
         y_max: Numeric = None,
         scale: str = None,
+        skip_on_error: bool = False,
     ):
         """Adds data to a plot
 
         Input:
-            `dataset`:  dataset containing gridded model output
-            `x`:        x-coordinate (in meters)
-            `t`:        t-coordinate
+            `dataset`:          dataset containing gridded model output
+            `x`:                x-coordinate (in meters)
+            `t`:                t-coordinate
 
         Options:
-            `label`:    label for plot
-            `y_min`:    lower limit for y (in meters)
-            `y_max`:    upper limit for y (in meters)
-            `scale`:    scale of plots ('m', 'km' or 'Mm')
+            `label`:            label for plot
+            `y_min`:            lower limit for y (in meters)
+            `y_max`:            upper limit for y (in meters)
+            `scale`:            scale of plots ('m', 'km' or 'Mm')
+            `skip_on_error`:    skip plots when an error is catched
         """
         # Checks
         self._check_if_closed()
@@ -239,6 +243,24 @@ class plot_alongshore(plot_base):
 
         if scale is not None:
             self.set_scale(scale)
+
+        if x < dataset["x"].min():
+            if skip_on_error:
+                print(f"## {x=:0.1f} is outside the domain! Skipping...")
+                return self
+            print(f"## {x=:0.1f} is outside the domain! Increasing x towards the domain.")
+            x = np.min(dataset["x"].values)
+        if x > dataset["x"].max():
+            if skip_on_error:
+                print(f"## {x=:0.1f} is outside the domain! Skipping...")
+                return self
+            print(f"## {x=:0.1f} is outside the domain! Decreasing x towards the domain.")
+            x = np.max(dataset["x"].values)
+
+        if (x,t) in self.tx_done:
+            print(f"## {x=:0.1f} and {t=:0.1f} is plotted before! Skipping...")
+            return self
+        self.tx_done.add((x,t))
 
         # Extract data
         data = dataset[self.variable].interp(x=x, t=fu.to_timestr(t))
@@ -312,11 +334,9 @@ class plot_alongshore(plot_base):
         for ax_idx, ax in enumerate(self.axes):
             ax.set_subplotspec(gs[ax_idx])
 
-        # update x-ticks
-        self.axes[0].get_shared_x_axes().join(self.axes[0], *self.axes[1:])
-        for ax in self.axes[:-1]:
-            ax.set_xlabel("")
-            ax.set_xticklabels([])
+        # update ticks
+        for ax in self.axes:
+            ax.label_outer()
 
         # Save
         self.fig.get_layout_engine().execute(self.fig)
@@ -373,7 +393,7 @@ if __name__ == "__main__":
             .save(figure_dir)
 
         plot_alongshore(variable="wl", y_min=0) \
-            .add_subplot(data_a, x=np.arange(x, 5*x, x), t=np.linspace(0, t, 5)) \
+            .add_subplot(data_a, x=(x * np.arange(-5, 5, 2)), t=np.linspace(0, t, 5)) \
             .save(figure_dir)
     # fmt: on
 
