@@ -126,7 +126,6 @@ if __name__ == "__main__":
     subprocess.run(["python", f"{PATH_FUNCTIONS}/theory.py"])
     subprocess.run(["python", f"{PATH_FUNCTIONS}/utilities.py"])
 
-    subprocess.run(["python", f"{PATH_PLOTTING}/__init__.py"])
     subprocess.run(["python", f"{PATH_PLOTTING}/base.py"])
 
     subprocess.run(["python", f"{PATH_PLOTTING}/alongshore.py"])
