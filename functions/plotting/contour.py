@@ -44,7 +44,7 @@ class plot_contour(plot_base):
             `save`:         writes the figure to disk
         """
         plot_contour.number += 1
-        print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
+        print("\n# Creating new figure")
 
         super().__init__()
         self.figsize = FIGSIZE_LONG
@@ -52,6 +52,7 @@ class plot_contour(plot_base):
         self.title = title
         self.figure_type = "Contours"
         self.figure_num = plot_contour.number
+        print(f"# Initiated figure '{self.figure_type} {self.figure_num}'")
 
         self.x_max = None
         self.x_min = None
@@ -287,7 +288,7 @@ if __name__ == "__main__":
             .add_plots(
                 dataset=data_a,
                 variable_list=["u", "v"],
-                t_list=[10 * 3600 * i for i in range(1, 5)],
+                t_list=[12 * 3600 * i for i in range(1, 4)],
                 x_max=4e5,
             ) \
             .save(figure_dir)
