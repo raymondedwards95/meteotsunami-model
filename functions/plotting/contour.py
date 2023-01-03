@@ -7,7 +7,6 @@ Main classes:
 import os
 import sys
 
-import cmocean as cmo
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
@@ -45,6 +44,7 @@ class plot_contour(plot_base):
             `save`:         writes the figure to disk
         """
         plot_contour.number += 1
+        print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
 
         super().__init__()
         self.figsize = FIGSIZE_LONG
@@ -63,7 +63,6 @@ class plot_contour(plot_base):
         self.set_scale(scale)
 
         self._check_if_closed()
-        print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
 
     def _setup_figure(self):
         """Figure setup"""
@@ -97,19 +96,6 @@ class plot_contour(plot_base):
         # Bottom
         for j in range(self.axes.shape[1]):
             self.axes[-1, j].set_xlabel(f"$x$ [{self.unit}]")
-
-    def _pick_cmap(self, variable: str):
-        match variable.lower().strip():
-            case "wl":
-                return cmo.cm.balance
-            case ("u" | "v"):
-                return cmo.cm.delta
-            case "p":
-                return cmo.cm.curl
-            case _:
-                raise ValueError(
-                    f"'{self.figure_type} {self.figure_num}' - {variable=} should be 'wl', 'u', 'v' or 'p'"
-                )
 
     def _pick_label(self, variable: str):
         match variable.lower().strip():
@@ -198,7 +184,7 @@ class plot_contour(plot_base):
         for var_idx, var in enumerate(variable_list):
             _var_max = var_max[var_idx]
             _var_min = -1.0 * _var_max
-            cmap_list.append(self._pick_cmap(var))
+            cmap_list.append(self._select_cmap(var))
             norm_list.append(Normalize(_var_min, _var_max))
             im_list.append(cm.ScalarMappable(norm=norm_list[-1], cmap=cmap_list[-1]))
 

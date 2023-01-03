@@ -7,6 +7,7 @@ Main classes:
 import os
 import sys
 
+import cmocean as cmo
 import matplotlib.pyplot as plt
 
 # fmt: off
@@ -78,14 +79,31 @@ class plot_base:
                 self.variable_long = "Surface air pressure"
                 self.variable_unit = "Pa"
             case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+                raise ValueError(
+                    f"'{self.figure_type} {self.figure_num}' - "
+                    + f"{variable=} should be 'wl', 'u', 'v' or 'p'"
+                )
 
         print(
-            f"# Variable in '{self.figure_type} {self.figure_num}' "
-            + f"is '{self.variable}' with units '{self.variable_unit}'"
+            f"# Variable in '{self.figure_type} {self.figure_num}'",
+            f"is '{self.variable}' with units '{self.variable_unit}'",
         )
 
         return self
+
+    def _select_cmap(self, variable: str):
+        match variable.lower().strip():
+            case "wl":
+                return cmo.cm.balance
+            case ("u" | "v"):
+                return cmo.cm.delta
+            case "p":
+                return cmo.cm.curl
+            case _:
+                raise ValueError(
+                    f"'{self.figure_type} {self.figure_num}' - "
+                    + f"{variable=} should be 'wl', 'u', 'v' or 'p'"
+                )
 
     def set_scale(self, scale: str):
         """Set the scale of all subplots
@@ -113,8 +131,8 @@ class plot_base:
                 )
 
         print(
-            f"# Set scale of '{self.figure_type} {self.figure_num}' "
-            + f"to {self.unit} (=1/{self.scale_factor})"
+            f"# Set scale of '{self.figure_type} {self.figure_num}'",
+            f"to {self.unit} (=1/{self.scale_factor})",
         )
 
         return self
