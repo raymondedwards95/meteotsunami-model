@@ -47,7 +47,7 @@ class plot_contour(plot_base):
         print("\n# Creating new figure")
 
         super().__init__()
-        self.figsize = FIGSIZE_LONG
+        self.figsize = FIGSIZE_WIDE
 
         self.title = title
         self.figure_type = "Contours"
@@ -79,6 +79,8 @@ class plot_contour(plot_base):
         self._check_if_closed()
 
         # All
+        self.fig.align_labels()
+
         for ax in self.axes.ravel():
             ax.set_xlim(
                 fu.none_multiply(self.x_min, 1.0 / self.scale_factor),
@@ -88,11 +90,12 @@ class plot_contour(plot_base):
                 fu.none_multiply(self.y_min, 1.0 / self.scale_factor),
                 fu.none_multiply(self.y_max, 1.0 / self.scale_factor),
             )
-            # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
+            ax.ticklabel_format(scilimits=(-4, 4), useMathText=True)
             ax.grid()
 
         # Left
-        self.fig.supylabel(f"$y$ [{self.unit}]")
+        for i in range(self.axes.shape[0]):
+            self.axes[i, 0].set_ylabel(f"$y$ [{self.unit}]")
 
         # Bottom
         for j in range(self.axes.shape[1]):
@@ -167,9 +170,12 @@ class plot_contour(plot_base):
         print(f"# Variables:", *variable_list)
         print(f"# t:", *t_list)
 
+        if var_num > 1:
+            self.figsize = FIGSIZE_HIGH
+
         self.fig, self.axes = plt.subplots(
-            t_num,
             var_num,
+            t_num,
             sharex=True,
             sharey=True,
             squeeze=False,
@@ -195,38 +201,40 @@ class plot_contour(plot_base):
         for t_idx, t in enumerate(t_list):
             for var_idx, var in enumerate(variable_list):
                 print(f"# Adding data for {var:2} and t={t}")
-                cont = self.axes[t_idx, var_idx].pcolormesh(
+                cont = self.axes[var_idx, t_idx].pcolormesh(
                     dataset["x"] / self.scale_factor,
                     dataset["y"] / self.scale_factor,
                     dataset[var].interp(t=fu.to_timestr(t)),
-                    # levels=101,
                     cmap=cmap_list[var_idx],
                     vmin=(-1.0 * var_max[var_idx]),
                     vmax=var_max[var_idx],
                     rasterized=True,
                 )
 
-                self.axes[t_idx, var_idx].annotate(
-                    f"$t = {t / 3600:0.1f}$h",
-                    xy=(0.99, 0.98),
-                    xycoords="axes fraction",
-                    ha="right",
-                    va="top",
-                )
+                # self.axes[var_idx, t_idx].annotate(
+                #     f"$t = {t / 3600:0.1f}$h",
+                #     xy=(0.99, 0.98),
+                #     xycoords="axes fraction",
+                #     ha="right",
+                #     va="top",
+                # )
+            self.axes[0, t_idx].set_title(
+                f"$t = {t / 3600:0.1f}$h",
+            )
 
         # Add colorbars
         for var_idx, var in enumerate(variable_list):
             cb = self.fig.colorbar(
                 im_list[var_idx],
-                ax=self.axes[:, var_idx],
-                location="top",
-                orientation="horizontal",
+                ax=self.axes[var_idx, :],
+                location="right",
+                orientation="vertical",
                 label=self._pick_label(var),
-                shrink=0.8,
                 pad=0.01,
+                aspect=25,
             )
-            cb.ax.xaxis.set_label_position("top")
-            cb.ax.xaxis.set_ticks_position("bottom")
+            # cb.ax.xaxis.set_label_position("top")
+            # cb.ax.xaxis.set_ticks_position("bottom")
 
         # End
         self.filled = True
@@ -287,6 +295,18 @@ if __name__ == "__main__":
         plot_contour() \
             .add_plots(
                 dataset=data_a,
+                variable_list=["wl"],
+                t_list=[40*3600],
+                y_min=2e6,
+                y_max=8e6,
+                x_max=4e5,
+                scale="m",
+            ) \
+            .save(figure_dir)
+
+        plot_contour() \
+            .add_plots(
+                dataset=data_a,
                 variable_list=["u", "v"],
                 t_list=[12 * 3600 * i for i in range(1, 4)],
                 x_max=4e5,
@@ -296,12 +316,35 @@ if __name__ == "__main__":
         plot_contour() \
             .add_plots(
                 dataset=data_a,
+                variable_list=["wl", "u", "v"],
+                t_list=[15*3600, 30*3600],
+                x_max=3e5,
+                y_min=0,
+                y_max=75e5,
+            ) \
+            .save(figure_dir)
+
+        plot_contour() \
+            .add_plots(
+                dataset=data_a,
                 variable_list=["wl", "p"],
-                t_list=[10 * 3600],
+                t_list=np.linspace(1, 20, 7, dtype=int) * 3600,
                 x_max=5e5,
-                y_min=-5e5,
+                y_min=0,
                 y_max=35e5,
                 scale="km",
+            ) \
+            .save(figure_dir)
+
+        plot_contour() \
+            .add_plots(
+                dataset=data_a,
+                variable_list=["wl", "p"],
+                t_list=np.linspace(1, 20, 3) * 3600.0,
+                x_max=4e5,
+                y_min=-5e5,
+                y_max=35e5,
+                scale="Mm",
             ) \
             .save(figure_dir)
     # fmt: on
