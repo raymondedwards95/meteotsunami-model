@@ -109,7 +109,8 @@ class plot_contour(plot_base):
                 return "Surface air pressure [Pa]"
             case _:
                 raise ValueError(
-                    f"'{self.figure_type} {self.figure_num}' - {variable=} should be 'wl', 'u', 'v' or 'p'"
+                    f"'{self.figure_type} {self.figure_num}' - "
+                    + f"{variable=} should be 'wl', 'u', 'v' or 'p'"
                 )
 
     def add_plots(
@@ -147,7 +148,8 @@ class plot_contour(plot_base):
 
         if not np.all(np.isin(variable_list, np.array(["wl", "u", "v", "p"]))):
             raise ValueError(
-                f"'{self.figure_type} {self.figure_num}' - Variables in `variable_list` should be 'wl', 'u', 'v' or 'p'"
+                f"'{self.figure_type} {self.figure_num}' - "
+                + f"Variables in `variable_list` should be 'wl', 'u', 'v' or 'p'"
             )
 
         if scale is not None:
@@ -162,7 +164,7 @@ class plot_contour(plot_base):
         var_num = len(variable_list)
         t_num = len(t_list)
         print(f"# Variables:", *variable_list)
-        print(f"# t:        ", *t_list)
+        print(f"# t:", *t_list)
 
         self.fig, self.axes = plt.subplots(
             t_num,
