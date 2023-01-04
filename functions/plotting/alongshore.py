@@ -6,8 +6,8 @@ Main classes:
 
 import os
 import sys
+from typing import Self
 
-import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
 from matplotlib import gridspec
@@ -15,9 +15,9 @@ from matplotlib import gridspec
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+import functions.utilities as fu
 from functions import *
 from functions.plotting.base import plot_base
-import functions.utilities as fu
 # fmt: on
 
 
@@ -33,7 +33,7 @@ class plot_alongshore(plot_base):
         y_max: Numeric = None,
         scale="Mm",
         title: str = None,
-    ):
+    ) -> None:
         """Create and setup a figure for along-shore profiles
 
         Input:
@@ -50,9 +50,16 @@ class plot_alongshore(plot_base):
             `add_plot`:     add data to the figure
         """
         plot_alongshore.number += 1
+        print("\n# Creating new figure")
 
         super().__init__()
         self.figsize = FIGSIZE_NORMAL
+
+        self.axes = []
+        self.title = title
+        self.figure_type = "Along Shore"
+        self.figure_num = plot_alongshore.number
+        print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
 
         if y_min is None:
             self.y_min = 0
@@ -70,12 +77,6 @@ class plot_alongshore(plot_base):
 
         self.tx_done = set()
 
-        self.fig = plt.figure()
-        self.axes = []
-        self.title = title
-        self.figure_type = "Along Shore"
-        self.figure_num = plot_alongshore.number
-
         self.unit = None
         self.scale_factor = None
         self.set_scale(scale)
@@ -86,9 +87,8 @@ class plot_alongshore(plot_base):
         self._set_variable(variable)
 
         self._check_if_closed()
-        print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
 
-    def _setup_figure(self):
+    def _setup_figure(self) -> None:
         """Figure setup"""
         # Checks
         self._check_if_closed()
@@ -100,7 +100,7 @@ class plot_alongshore(plot_base):
         # General
         super()._base_setup_figure()
 
-    def _setup_plot(self):
+    def _setup_plot(self) -> None:
         """Plot setup"""
         # Checks
         self._check_if_closed()
@@ -137,7 +137,7 @@ class plot_alongshore(plot_base):
         y_min: Numeric = None,
         y_max: Numeric = None,
         scale: str = None,
-    ):
+    ) -> Self:
         """Adds a subplot to the figure
 
         Can also add data to the new subplot using the following arguments:
@@ -185,7 +185,7 @@ class plot_alongshore(plot_base):
         y_max: Numeric = None,
         scale: str = None,
         skip_on_error: bool = False,
-    ):
+    ) -> Self:
         """Adds data to a plot
 
         Input:
@@ -319,7 +319,7 @@ class plot_alongshore(plot_base):
         self,
         saveloc: str,
         close: bool = True,
-    ):
+    ) -> None:
         """Saves the figure
 
         Input:
