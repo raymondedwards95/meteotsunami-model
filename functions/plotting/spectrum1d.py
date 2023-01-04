@@ -6,6 +6,7 @@ Main classes:
 
 import os
 import sys
+from typing import Self
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,9 +15,9 @@ import xarray as xr
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+import functions.analysis as fa
 from functions import *
 from functions.plotting.base import plot_base
-import functions.analysis as fa
 # fmt: on
 
 
@@ -31,7 +32,7 @@ class plot_spectrum_1d(plot_base):
         demean: bool = True,
         f_max: Numeric = None,
         title: str = None,
-    ):
+    ) -> None:
         """Create and setup a figure for the 1d spectrum
 
         Input:
@@ -69,7 +70,7 @@ class plot_spectrum_1d(plot_base):
             f"\n# Initiated figure '{self.figure_type} {self.figure_num}' with variable '{self.variable}' ({self.variable_long.lower()})"
         )
 
-    def _setup_figure(self):
+    def _setup_figure(self) -> None:
         """Figure setup"""
         # Checks
         self._check_if_closed()
@@ -79,7 +80,7 @@ class plot_spectrum_1d(plot_base):
             self.title = f"Power Spectrum - {self.variable_long}"
         super()._base_setup_figure()
 
-    def _setup_plot(self):
+    def _setup_plot(self) -> None:
         """Plot setup"""
         # Checks
         self._check_if_closed()
@@ -110,7 +111,7 @@ class plot_spectrum_1d(plot_base):
         x: Numeric,
         y: Numeric,
         label: str = "",
-    ):
+    ) -> Self:
         """Adds data to a plot
 
         Input:
@@ -182,7 +183,7 @@ class plot_spectrum_1d(plot_base):
         self,
         saveloc: str,
         close: bool = True,
-    ):
+    ) -> None:
         """Saves the figure
 
         Input:
