@@ -6,8 +6,10 @@ Main classes:
 
 import os
 import sys
+from typing import Self
 
 import cmocean as cmo
+import matplotlib.colors
 import matplotlib.pyplot as plt
 
 # fmt: off
@@ -20,7 +22,7 @@ from functions import *
 class plot_base:
     """Base class for plots containing common methods"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.figsize = FIGSIZE_NORMAL
         self.closed = False
         self.filled = False
@@ -29,7 +31,7 @@ class plot_base:
         self.figure_num = -1
         self.fig = plt.figure()
 
-    def _check_if_closed(self):
+    def _check_if_closed(self) -> None:
         """Raises an error if the figure is supposed to be closed"""
         if self.closed:
             raise TypeError(
@@ -37,7 +39,7 @@ class plot_base:
                 + f"it can not be edited"
             )
 
-    def _check_if_filled(self):
+    def _check_if_filled(self) -> None:
         """Raises an error if the figure is filled with data already"""
         if self.filled:
             raise TypeError(
@@ -45,7 +47,7 @@ class plot_base:
                 + f"it cannot be edited"
             )
 
-    def _base_setup_figure(self):
+    def _base_setup_figure(self) -> None:
         """Base settings for figure"""
         # Checks
         self._check_if_closed()
@@ -60,7 +62,7 @@ class plot_base:
             self.title = self.figure_type
         self.fig.suptitle(self.title, va="top", ha="left", x=0.01)
 
-    def _set_variable(self, variable: str):
+    def _set_variable(self, variable: str) -> Self:
         match variable.lower().strip():
             case "wl":
                 self.variable = "wl"
@@ -91,7 +93,7 @@ class plot_base:
 
         return self
 
-    def _select_cmap(self, variable: str):
+    def _select_cmap(self, variable: str) -> matplotlib.colors.Colormap:
         match variable.lower().strip():
             case "wl":
                 return cmo.cm.balance
@@ -105,7 +107,7 @@ class plot_base:
                     + f"{variable=} should be 'wl', 'u', 'v' or 'p'"
                 )
 
-    def set_scale(self, scale: str):
+    def set_scale(self, scale: str) -> Self:
         """Set the scale of all subplots
 
         Input:
@@ -137,7 +139,7 @@ class plot_base:
 
         return self
 
-    def close(self):
+    def close(self) -> None:
         """Close the figure"""
         self.closed = True
         self.fig.clear()
