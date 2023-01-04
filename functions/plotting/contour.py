@@ -6,6 +6,7 @@ Main classes:
 
 import os
 import sys
+from typing import Self
 
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
@@ -17,9 +18,9 @@ from matplotlib.colors import Normalize
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+import functions.utilities as fu
 from functions import *
 from functions.plotting.base import plot_base
-import functions.utilities as fu
 # fmt: on
 
 
@@ -32,7 +33,7 @@ class plot_contour(plot_base):
         self,
         scale: str = "Mm",
         title: str = None,
-    ):
+    ) -> None:
         """Create and setup a figure for time-slices
 
         Options:
@@ -65,7 +66,7 @@ class plot_contour(plot_base):
 
         self._check_if_closed()
 
-    def _setup_figure(self):
+    def _setup_figure(self) -> None:
         """Figure setup"""
         # Checks
         self._check_if_closed()
@@ -73,7 +74,7 @@ class plot_contour(plot_base):
         # General
         super()._base_setup_figure()
 
-    def _setup_plot(self):
+    def _setup_plot(self) -> None:
         """Plot setup"""
         # Checks
         self._check_if_closed()
@@ -101,7 +102,7 @@ class plot_contour(plot_base):
         for j in range(self.axes.shape[1]):
             self.axes[-1, j].set_xlabel(f"$x$ [{self.unit}]")
 
-    def _pick_label(self, variable: str):
+    def _pick_label(self, variable: str) -> str:
         match variable.lower().strip():
             case "wl":
                 return "Water level [m]"
@@ -127,7 +128,7 @@ class plot_contour(plot_base):
         y_min: Numeric = None,
         y_max: Numeric = None,
         scale: str = None,
-    ):
+    ) -> Self:
         """Adds a subplot with data
 
         Input:
@@ -244,7 +245,7 @@ class plot_contour(plot_base):
         self,
         saveloc: str,
         close: bool = True,
-    ):
+    ) -> None:
         """Saves the figure
 
         Input:
