@@ -6,6 +6,7 @@ Main classes:
 
 import os
 import sys
+from typing import Self
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,10 +16,10 @@ from matplotlib import gridspec
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-from functions import *
-from functions.plotting.base import plot_base
 import functions.analysis as fa
 import functions.utilities as fu
+from functions import *
+from functions.plotting.base import plot_base
 # fmt: on
 
 
@@ -33,7 +34,7 @@ class plot_crossshore(plot_base):
         x_max: Numeric = None,
         scale="Mm",
         title: str = None,
-    ):
+    ) -> None:
         """Create and setup a figure for cross-shore profiles
 
         Input:
@@ -79,7 +80,7 @@ class plot_crossshore(plot_base):
         self._check_if_closed()
         print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
 
-    def _setup_figure(self):
+    def _setup_figure(self) -> None:
         """Figure setup"""
         # Checks
         self._check_if_closed()
@@ -91,7 +92,7 @@ class plot_crossshore(plot_base):
         # General
         super()._base_setup_figure()
 
-    def _setup_plot(self):
+    def _setup_plot(self) -> None:
         """Plot setup"""
         # Checks
         self._check_if_closed()
@@ -125,7 +126,7 @@ class plot_crossshore(plot_base):
         sort: bool = False,
         number: Integer = None,
         scale: str = None,
-    ):
+    ) -> Self:
         """Finds local maxima for fixed t and plots the cross-shore profiles in separate subplots
 
         Input:
@@ -185,7 +186,7 @@ class plot_crossshore(plot_base):
         label: str = None,
         x_max: Numeric = None,
         scale: str = None,
-    ):
+    ) -> Self:
         """Adds a subplot to the figure
 
         Can also add data to the new subplot using the following arguments:
@@ -232,7 +233,7 @@ class plot_crossshore(plot_base):
         label: str = None,
         x_max: Numeric = None,
         scale: str = None,
-    ):
+    ) -> Self:
         """Adds data to a plot
 
         Input:
@@ -349,7 +350,7 @@ class plot_crossshore(plot_base):
         self,
         saveloc: str,
         close: bool = True,
-    ):
+    ) -> None:
         """Saves the figure
 
         Input:
