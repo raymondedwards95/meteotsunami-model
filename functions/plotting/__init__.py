@@ -7,8 +7,8 @@ import sys
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
 from functions import *
-from functions.plotting.base import plot_base
 from functions.plotting.alongshore import plot_alongshore
+from functions.plotting.base import plot_base
 from functions.plotting.contour import plot_contour
 from functions.plotting.crossshore import plot_crossshore
 from functions.plotting.spectrum1d import plot_spectrum_1d
