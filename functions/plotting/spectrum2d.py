@@ -6,6 +6,7 @@ Main classes:
 
 import os
 import sys
+from typing import Self
 
 import cmocean as cmo
 import matplotlib.pyplot as plt
@@ -16,10 +17,10 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
-from functions import *
-from functions.plotting.base import plot_base
 import functions.analysis as fa
 import functions.utilities as fu
+from functions import *
+from functions.plotting.base import plot_base
 # fmt: on
 
 
@@ -37,7 +38,7 @@ class plot_spectrum_2d(plot_base):
         f_max: Numeric = None,
         scale: str = "Mm",
         title: str = None,
-    ):
+    ) -> None:
         """Create and setup a figure for the 2d spectrum
 
         Input:
@@ -90,7 +91,7 @@ class plot_spectrum_2d(plot_base):
             f"with variable '{self.variable}' ({self.variable_long.lower()})",
         )
 
-    def _setup_figure(self):
+    def _setup_figure(self) -> None:
         """Figure setup"""
         # Checks
         self._check_if_closed()
@@ -102,7 +103,7 @@ class plot_spectrum_2d(plot_base):
             )
         super()._base_setup_figure()
 
-    def _setup_plot(self):
+    def _setup_plot(self) -> None:
         """Plot setup"""
         # Checks
         self._check_if_closed()
@@ -121,7 +122,7 @@ class plot_spectrum_2d(plot_base):
         self.ax.set_ylabel("Frequency [cycles / hour]")
         self.ax.set_ylim(0, fu.relative_ceil(0.8 * self.f_max_scaled))
 
-    def _setup_cax(self):
+    def _setup_cax(self) -> None:
         """Colorbar location setup
 
         Should be run after creating the figure and before adding data
@@ -142,7 +143,7 @@ class plot_spectrum_2d(plot_base):
         k_max: Numeric = None,
         f_max: Numeric = None,
         scale: str = None,
-    ):
+    ) -> Self:
         """Adds data to a plot
 
         Input:
@@ -237,7 +238,7 @@ class plot_spectrum_2d(plot_base):
         n: Numeric,
         alpha: Numeric = 1.0 / 400.0,
         scale: str = None,
-    ):
+    ) -> Self:
         """Adds the dispersion relation to a plot
 
         Input:
@@ -298,7 +299,7 @@ class plot_spectrum_2d(plot_base):
         self,
         saveloc: str,
         close: bool = True,
-    ):
+    ) -> None:
         """Saves the figure
 
         Input:
