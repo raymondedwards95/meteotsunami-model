@@ -6,6 +6,7 @@ Main classes:
 
 import os
 import sys
+from typing import Self
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -28,7 +29,7 @@ class plot_timeseries(plot_base):
     def __init__(
         self,
         title: str = None,
-    ):
+    ) -> None:
         """Create and setup a figure for time-series
 
         Options:
@@ -64,7 +65,7 @@ class plot_timeseries(plot_base):
             case _:
                 raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
 
-    def _setup_figure(self):
+    def _setup_figure(self) -> None:
         """Figure setup"""
         # Checks
         self._check_if_closed()
@@ -74,7 +75,7 @@ class plot_timeseries(plot_base):
         # General
         super()._base_setup_figure()
 
-    def _setup_plot(self):
+    def _setup_plot(self) -> None:
         """Plot setup"""
         # Checks
         self._check_if_closed()
@@ -111,7 +112,7 @@ class plot_timeseries(plot_base):
         x: Numeric,
         y: Numeric,
         label: str = None,
-    ):
+    ) -> Self:
         """Adds data to a plot
 
         Input:
@@ -166,7 +167,7 @@ class plot_timeseries(plot_base):
         self,
         saveloc: str,
         close: bool = True,
-    ):
+    ) -> None:
         """Saves the figure
 
         Input:
