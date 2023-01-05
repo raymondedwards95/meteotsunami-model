@@ -313,6 +313,8 @@ def plot_bathymetry(
 
 
 if __name__ == "__main__":
+    print("\nRunning inside 'bathymetry.py'")
+
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
     bathymetry_file = f"{PATH_TEST}/bathymetry"
@@ -337,3 +339,5 @@ if __name__ == "__main__":
     # Visualise data
     plot_bathymetry(data, filename=bathymetry_file, scale="km")
     plot_bathymetry(data, filename=bathymetry_file, half_width=True)
+
+    print("Closing 'bathymetry.py'")
