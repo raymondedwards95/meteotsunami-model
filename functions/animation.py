@@ -7,13 +7,6 @@ Main functions:
     animation_crossshore
 """
 
-__all__ = [
-    "animation_contour",
-    "animation_contour_uv",
-    "animation_alongshore",
-    "animation_crossshore",
-]
-
 import os
 import sys
 import time
