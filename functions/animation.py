@@ -676,44 +676,51 @@ if __name__ == "__main__":
     anim_dir = f"{PATH_TEST}/anim"
 
     # Read data
-    data = xr.open_dataset(
-        f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc",
-        # chunks={"y": -1, "x": -1, "t": "auto"},
-    )
-    print(f"Grid size: {data.sizes}")
-    # print(f"Chunksize: {data.chunksizes}")
+    skip_data = False
+    try:
+        data = xr.open_dataset(
+            f"{script_dir}/../reproduction-an-2012/output/data_repr_17.nc",
+            # chunks={"y": -1, "x": -1, "t": "auto"},
+        )
+        print(f"Grid size: {data.sizes}")
+        # print(f"Chunksize: {data.chunksizes}")
+    except FileNotFoundError:
+        skip_data = True
+        print("Data not found; skipping some tests!")
 
     # Make animations
-    animation_contour(
-        data,
-        savedir=anim_dir,
-        _test_i_max=25,
-        static=True,
-    )
+    if skip_data is False:
+        animation_contour(
+            data,
+            savedir=anim_dir,
+            _test_i_max=25,
+            static=True,
+        )
 
-    animation_contour_uv(
-        data,
-        savedir=anim_dir,
-        _test_i_max=25,
-        static=True,
-    )
+        animation_contour_uv(
+            data,
+            savedir=anim_dir,
+            _test_i_max=25,
+            static=True,
+        )
 
-    animation_alongshore(
-        data,
-        savedir=anim_dir,
-        _test_i_max=25,
-        static=True,
-    )
+        animation_alongshore(
+            data,
+            savedir=anim_dir,
+            _test_i_max=25,
+            static=True,
+        )
 
-    animation_crossshore(
-        data,
-        savedir=anim_dir,
-        _test_i_max=15,
-        fps=10,
-        static=True,
-    )
+        animation_crossshore(
+            data,
+            savedir=anim_dir,
+            _test_i_max=15,
+            fps=10,
+            static=True,
+        )
 
     # End
+    if skip_data is False:
+        data.close()
     plt.close("all")
-    data.close()
     print("Closing 'animation.py'")
