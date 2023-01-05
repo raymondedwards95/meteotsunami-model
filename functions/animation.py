@@ -7,6 +7,13 @@ Main functions:
     animation_crossshore
 """
 
+__all__ = [
+    "animation_contour",
+    "animation_contour_uv",
+    "animation_alongshore",
+    "animation_crossshore",
+]
+
 import os
 import sys
 import time
@@ -169,7 +176,9 @@ def animation_contour(
         if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"# Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+                f"# Frame {i+1:4.0f} of {num_frames:0.0f}",
+                f"({(i+1)/num_frames*100:0.1f}%)",
+                f"({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)",
             )
 
         # remove data in contour plots
@@ -193,14 +202,15 @@ def animation_contour(
         frames=frames,
         interval=1000 / fps,
     )
-    print(f"# Creating animation '{savename}'")
+    print(f"\n# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     if static:
         plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
-        f"# Finished contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+        f"# Finished contour-animation in {(t1-t0) * 1e-9:0.1f} seconds",
+        f"(average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)",
     )
     print(f"# Saved animation as '{savename}'")
 
@@ -339,7 +349,9 @@ def animation_contour_uv(
         if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"# Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+                f"# Frame {i+1:4.0f} of {num_frames:0.0f}",
+                f"({(i+1)/num_frames*100:0.1f}%)",
+                f"({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)",
             )
 
         # remove data in contour plots
@@ -363,14 +375,15 @@ def animation_contour_uv(
         frames=frames,
         interval=1000 / fps,
     )
-    print(f"# Creating animation '{savename}'")
+    print(f"\n# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     if static:
         plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
-        f"# Finished uv-contour-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+        f"# Finished uv-contour-animation in {(t1-t0) * 1e-9:0.1f} seconds",
+        f"(average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)",
     )
     print(f"# Saved animation as '{savename}'")
 
@@ -477,7 +490,9 @@ def animation_alongshore(
         if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"# Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+                f"# Frame {i+1:4.0f} of {num_frames:0.0f}",
+                f"({(i+1)/num_frames*100:0.1f}%)",
+                f"({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)",
             )
 
         # new data
@@ -496,14 +511,15 @@ def animation_alongshore(
         frames=frames,
         interval=1000 / fps,
     )
-    print(f"# Creating animation '{savename}'")
+    print(f"\n# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     if static:
         plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
-        f"# Finished alongshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+        f"# Finished alongshore-animation in {(t1-t0) * 1e-9:0.1f} seconds",
+        f"(average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)",
     )
     print(f"# Saved animation as '{savename}'")
 
@@ -610,7 +626,9 @@ def animation_crossshore(
         if not (num_frames - i - 1) % (num_frames // 5):
             t0_interval = time.perf_counter_ns()
             print(
-                f"# Frame {i+1:4.0f} of {num_frames:0.0f} ({(i+1)/num_frames*100:0.1f}%) ({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)"
+                f"# Frame {i+1:4.0f} of {num_frames:0.0f}",
+                f"({(i+1)/num_frames*100:0.1f}%)",
+                f"({(i+1) / ((t0_interval-t0) * 1e-9):0.1f} fps)",
             )
 
         # new data
@@ -629,14 +647,15 @@ def animation_crossshore(
         frames=frames,
         interval=1000 / fps,
     )
-    print(f"# Creating animation '{savename}'")
+    print(f"\n# Creating animation '{savename}'")
     t0 = time.perf_counter_ns()
     if static:
         plt.savefig(savename_static)
     anim.save(savename, extra_args=FFMPEG_ARGS)
     t1 = time.perf_counter_ns()
     print(
-        f"# Finished crossshore-animation in {(t1-t0) * 1e-9:0.1f} seconds (average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)"
+        f"# Finished crossshore-animation in {(t1-t0) * 1e-9:0.1f} seconds",
+        f"(average {num_frames / ((t1-t0) * 1e-9):0.1f} frames per second)",
     )
     print(f"# Saved animation as '{savename}'")
 
@@ -650,6 +669,8 @@ def animation_crossshore(
 
 
 if __name__ == "__main__":
+    print("\nRunning inside 'animation.py'")
+
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
     anim_dir = f"{PATH_TEST}/anim"
@@ -669,6 +690,7 @@ if __name__ == "__main__":
         _test_i_max=25,
         static=True,
     )
+
     animation_contour_uv(
         data,
         savedir=anim_dir,
@@ -682,6 +704,7 @@ if __name__ == "__main__":
         _test_i_max=25,
         static=True,
     )
+
     animation_crossshore(
         data,
         savedir=anim_dir,
@@ -693,3 +716,4 @@ if __name__ == "__main__":
     # End
     plt.close("all")
     data.close()
+    print("Closing 'animation.py'")

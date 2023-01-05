@@ -1,4 +1,5 @@
-""" Global options """
+"""Global options and functions used in this project"""
+
 import os
 from typing import TypeAlias, Union
 
@@ -14,7 +15,7 @@ sns.set_palette(sns.color_palette("muted"))
 
 
 # Matplotlib video options
-mpl.rcParams["animation.codec"] = "vp8"
+mpl.rcParams["animation.codec"] = "librav1e"
 ANIM_EXT = "webm"
 FFMPEG_ARGS = [
     "-auto-alt-ref",
