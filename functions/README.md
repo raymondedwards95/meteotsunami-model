@@ -11,11 +11,15 @@ This folder contains functions to help setting up simulations, to process model 
 * `theory.py` contains theoretical relationships;
 * `utilities.py` provides some useful general functions;
 
-Importing this folder, i.e. `__init__.py` provides some general parameters and options.
+Importing this folder `.`, i.e. `__init__.py`, provides some general parameters and options.
 
 Functions for visualising are contained in the folder `plotting`. These are
 
+* `plotting/alongshore.py` for graphing along-shore profiles;
 * `plotting/contour.py` for visualising spatial variations;
-* `plotting/profiles.py` for graphing profiles;
-* `plotting/spectrum.py` for computing and visulalising 1d and 2d power spectra;
+* `plotting/crossshore.py` for graphing cross-shore profiles;
+* `plotting/spectrum1d.py` for computing and visualising 1d power spectra;
+* `plotting/spectrum2d.py` for computing and visualising 2d power spectra;
 * `plotting/timeseries.py` for visualising temporal variations.
+
+Importing the folder `./plotting` provides all of the plotting functions.
