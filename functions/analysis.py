@@ -4,6 +4,8 @@ Main functions:
     compute_decay_parameter
     compute_wave_periods
     compute_wave_lengths
+    dispersion_relation
+    exp_decay
     spectral_analysis_1d
     spectral_analysis_2d
 """
@@ -20,8 +22,8 @@ import xarray as xr
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-from functions import *
 import functions.utilities as fu
+from functions import *
 # fmt: on
 
 
@@ -75,6 +77,13 @@ def compute_decay_parameter(
         `dataset`:  dataset containing water level data
         `y`:        y-coordinate
         `t`:        t-coordinate in seconds
+
+    Options:
+        `variable`: name of variable ('wl', 'u', 'v' or 'p')
+
+    Output:
+        `k0`:       decay parameter
+        `y0`:       vertical scale
     """
     data = dataset[variable].interp(t=fu.to_timestr(t), y=y)
     if np.all(np.isnan(data)):
@@ -240,33 +249,53 @@ def spectral_analysis_2d(
 
 
 if __name__ == "__main__":
+    print("\nRunning inside 'analysis.py'")
+
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
 
     # Read data
-    data_a = xr.open_dataset(
-        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc"
-    )
-    data_b = xr.open_dataset(
-        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc", chunks="auto"
-    )
+    skip_data = False
+    try:
+        data_a = xr.open_dataset(
+            f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc"
+        )
+        data_b = xr.open_dataset(
+            f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc",
+            chunks="auto",
+        )
+    except FileNotFoundError:
+        skip_data = True
+        print("Data not found; skipping some tests!")
+
+    x = np.linspace(0, 10, 15)
 
     # Test functions
-    for data in [data_a, data_b]:
-        test_a = compute_decay_parameter(
-            data,
-            y=52e5,
-            t=3600.0 * 42.0,
-        )
-        print("### compute_decay_parameter", [x for x in test_a])
+    print("### x", np.round(x, 2))
+    print("### exp_decay", np.round(exp_decay(x, 0.5, 0.8), 2))
+    print(
+        "### dispersion_relation", np.round(dispersion_relation(x, 1, 1.0 / 235.0), 2)
+    )
 
-        test_b = spectral_analysis_1d(
-            data,
-            y=52e5,
-        )
-        print("### spectral_analysis_1d", [np.mean(x) for x in test_b])
+    # Test functions on data
+    if skip_data is False:
+        for data in [data_a, data_b]:
+            test_a = compute_decay_parameter(
+                data,
+                y=52e5,
+                t=3600.0 * 42.0,
+            )
+            print("### compute_decay_parameter", [value for value in test_a])
 
-        test_c = spectral_analysis_2d(
-            data,
-        )
-        print("### spectral_analysis_2d", [np.mean(x) for x in test_c])
+            test_b = spectral_analysis_1d(
+                data,
+                y=52e5,
+            )
+            print("### spectral_analysis_1d", [np.mean(value) for value in test_b])
+
+            test_c = spectral_analysis_2d(
+                data,
+            )
+            print("### spectral_analysis_2d", [np.mean(value) for value in test_c])
+
+    print("Closing 'analysis.py'")
