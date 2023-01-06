@@ -84,7 +84,9 @@ def theory_figure_speed_vs_size(
 
 # Wavelength
 def theory_figure_wavelength_vs_size(
-    a: npt.ArrayLike, alpha: npt.ArrayLike, savename: str = None
+    a: npt.ArrayLike,
+    alpha: npt.ArrayLike,
+    savename: str = None,
 ) -> None:
     """Plots the relation between wavelength and pressure disturbance size
 
@@ -151,7 +153,9 @@ def theory_figure_wavelength_vs_size(
 
 # Wavelength
 def theory_figure_wavelength_vs_velocity(
-    velocity: npt.ArrayLike, alpha: npt.ArrayLike, savename: str = None
+    velocity: npt.ArrayLike,
+    alpha: npt.ArrayLike,
+    savename: str = None,
 ) -> None:
     """Plots the relation between wavelength and velocity
 
@@ -204,7 +208,9 @@ def theory_figure_wavelength_vs_velocity(
 
 
 # Map
-def theory_figure_map(savename: str = None) -> None:
+def theory_figure_map(
+    savename: str = None,
+) -> None:
     """Create figure of the area of interest
 
     Options:

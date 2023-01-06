@@ -20,7 +20,9 @@ import functions.theory as ft
 
 # Critical Velocity
 def theory_figure_speed_vs_size_alpha(
-    a: npt.ArrayLike, alpha: npt.ArrayLike, savename: str = None
+    a: npt.ArrayLike,
+    alpha: npt.ArrayLike,
+    savename: str = None,
 ) -> None:
     """Plots the relation between critical wave velocity and pressure disturbance size and the slope of a flat sloped bottom topography
 
@@ -109,7 +111,9 @@ def theory_figure_speed_vs_size_alpha(
 
 # Wavelength fundamental mode
 def theory_figure_wavelength_vs_alpha_speed(
-    alpha: npt.ArrayLike, velocity: npt.ArrayLike, savename: str = None
+    alpha: npt.ArrayLike,
+    velocity: npt.ArrayLike,
+    savename: str = None,
 ) -> None:
     """Plots the relation between wavelength and bottom slope and pressure disturbance velocity
 
