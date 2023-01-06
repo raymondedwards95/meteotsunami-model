@@ -13,8 +13,8 @@ import scipy.constants
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-from functions import *
 import functions.utilities as fu
+from functions import *
 # fmt: on
 
 
@@ -51,6 +51,8 @@ def fundamental_wavelength_sloped(velocity: Numeric, alpha: Numeric) -> Numeric:
 
 
 if __name__ == "__main__":
+    print("\nRunning inside 'theory.py'")
+
     a = np.geomspace(1, 1e6, 50)
     alpha = np.geomspace(1e-1, 1e-4, 100)
     vel = np.linspace(0, 100, 30)
@@ -73,3 +75,5 @@ if __name__ == "__main__":
 
     test_critical_velocity_sloped()
     test_fundamental_wavelength_sloped()
+
+    print("Closing 'theory.py'")
