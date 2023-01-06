@@ -15,7 +15,7 @@ sns.set_palette(sns.color_palette("muted"))
 
 
 # Matplotlib video options
-mpl.rcParams["animation.codec"] = "librav1e"
+mpl.rcParams["animation.codec"] = "libsvtav1"
 ANIM_EXT = "webm"
 FFMPEG_ARGS = [
     "-auto-alt-ref",
