@@ -291,9 +291,13 @@ def plot_observations(
 
 
 if __name__ == "__main__":
+    print("\nRunning inside 'observations.py'")
+
+    # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
     obs_file = f"{PATH_TEST}/observations"
 
+    # Define points and lines
     obs_0 = ObservationPoint(
         name="Center",
         x=0,
@@ -331,7 +335,10 @@ if __name__ == "__main__":
         scale=1e2,
     )
 
+    # Write and plot lines
     data = [obs_0, obs_1, obs_2, obs_3, obs_4, obs_5]
 
     write_observations(data, filename=obs_file)
     plot_observations(data, savename=obs_file, scale="km")
+
+    print("Closing 'observations.py'")
