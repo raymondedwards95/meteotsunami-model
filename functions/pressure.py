@@ -473,7 +473,8 @@ def plot_pressure(
 
 
 if __name__ == "__main__":
-    # Extra imports
+    print("\nRunning inside 'pressure.py'")
+
     import dask.array as da
 
     # Define paths
@@ -517,3 +518,5 @@ if __name__ == "__main__":
 
     # Visualise data
     plot_pressure(data, filename=pressure_dir, y_min=-10e0, scale="m")
+
+    print("Closing 'pressure.py'")
