@@ -11,12 +11,11 @@ import datetime
 import os
 import sys
 import time
+from typing import Union
 
 import numpy as np
 import numpy.typing as npt
 import xarray as xr
-
-from typing import Union
 
 # fmt: off
 # fix for importing functions below
@@ -253,27 +252,35 @@ def none_multiply(x: Numeric | None, y: Numeric | None) -> Numeric | None:
 
 
 if __name__ == "__main__":
+    print("\nRunning inside 'utilities.py'")
+
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
 
     # Read data
-    data_a = xr.open_dataset(
-        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc",
-    )
-    data_b = xr.open_dataset(
-        f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc",
-        chunks="auto",
-    )
+    skip_data = False
+    try:
+        data_a = xr.open_dataset(
+            f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc",
+        )
+        data_b = xr.open_dataset(
+            f"{script_dir}/../reproduction-an-2012/output/data_repr_00.nc",
+            chunks="auto",
+        )
+    except FileNotFoundError:
+        skip_data = True
+        print("Data not found; skipping some tests!")
 
     # Test functions
-    for data in [data_a, data_b]:
-        test_a = find_local_maxima_y(
-            dataset=data,
-            t=3600.0 * 42.0,
-            x=1e4,
-            show_timing=True,
-        )
-        print(test_a)
+    if skip_data is False:
+        for data in [data_a, data_b]:
+            test_a = find_local_maxima_y(
+                dataset=data,
+                t=3600.0 * 42.0,
+                x=1e4,
+                show_timing=True,
+            )
+            print(test_a)
 
     print(f"{to_timestr(100)=}")
     print(f"{to_timestr([100])=}")
@@ -299,3 +306,8 @@ if __name__ == "__main__":
     print(f"{none_multiply(2, None)=}")
     print(f"{none_multiply(None, 3)=}")
     print(f"{none_multiply(None, None)=}")
+
+    # End
+    if skip_data is False:
+        data.close()
+    print("Closing 'utilities.py'")
