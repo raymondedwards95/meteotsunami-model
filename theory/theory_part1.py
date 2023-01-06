@@ -208,7 +208,7 @@ def theory_figure_map(savename: str = None) -> None:
     """Create figure of the area of interest
 
     Options:
-        savename    figure name
+        `savename`: figure name
     """
     # Arguments
     if savename is None:
