@@ -7,17 +7,18 @@ An other goal is to investigate the effects of the different model parameters on
 
 ### Structure
 
-Scripts are used to create certain fields:
-* `create_bathymetry.py` creates `.xyb` files in `bathymetry/` that contain the bathymetry;
-* `create_pressure.py` sets up a space and time varying pressure field in `pressure/*.amp` and also creates corresponding `forcing*.ext` files to activate the pressure fields in the model;
-* `create_grid.py` creates a grid in `grid/*.nc` using macros in `Delta Shell` (note that `Delta Shell` should be used to run this file);
-* `create_observations.py` creates observation points and observation cross sections in the files `obs/*.xyn` and `obs/*_crs.pli`.
+Scripts are used to create all different fields:
+* `create_bathymetry.py` creates `*.xyb` (and additional `*.nc`) files in `./bathymetry/` that contain the bathymetry;
+* `create_grid.py` creates all grids in `./grid/` using macros in `Delta Shell` (this also means that `Delta Shell` is necessary to run this file);
+* `create_observations.py` creates `*.xyn` and `*_crs.pli` in `./obs/` that contain points and cross-sections for data aquisition during simulation;
+* `create_pressure.py` sets up a space and time varying pressure field and writes them to `.amp` (and additionally in `*.nc`) files in `./pressure/` and also creates corresponding `forcing_*.ext` files in that location to activate the pressure fields in the model.
 
 The `input*.mdu` are the main files that contain all parameters for simulations. They also specify what additional files are used, like bathymetry, pressure and grid.
 
-Two scripts are used to visualize data:
-* `create_visualisations.py` creates figures and animations for each case separately;
-* `create_comparison.py` is used to compare two or more simulations.
+Three scripts are used to visualize data:
+* `create_animations.py` for animations;
+* `create_comparison.py` for comparisons with the paper by An et al. (2012);
+* `create_figures.py` for figures.
 
 
 ### Running experiments
