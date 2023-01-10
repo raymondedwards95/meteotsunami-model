@@ -8,13 +8,15 @@ TextHelp="
 Main script for simulating and visualising.
 \n\n
 Options:
+\n      -all                 \t      Do all, applies --test -t -p -s -a -f -c --repr --exp
 \n  -p, --parameters         \t      Create parameter files
 \n  -s, --simulations        \t      Run simulations, also applies -p
 \n  -a, --animations         \t      Create animations
 \n  -f, --figures            \t\t    Create figures
 \n  -v, --visualisations     \t      Create visualisations, applies -f, -v and -t
 \n  -t, --theory             \t\t    Create figures for theory
-\n  -t, --compare            \t\t    Create figures for comparison between repr and an-2012
+\n  -c, --compare            \t\t    Create figures for comparison between repr and an-2012
+\n      --test               \t\t    Test all methods
 \n\n
 Folders:
 \n  -r, --repr               \t\t    Apply options to the reproduction
@@ -43,6 +45,7 @@ FolderList=()
 # Commandline arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
+        --all) echo "Got argument '--all'" ; test_functions=true ; create_theory=true ; create_parameters=true ; run_model=true ; create_animations=true ; create_figures=true ; create_comparison=true ; FolderList+=("./reproduction-an-2012") ; FolderList+=("./thesis") ;;
         -p|--parameters) echo "Got argument '--parameters'" ; create_parameters=true ;;
         -s|--simulations) echo "Got argument '--simulations'" ; run_model=true ;;
         -a|--animations) echo "Got argument '--animations'" ; create_animations=true ;;
