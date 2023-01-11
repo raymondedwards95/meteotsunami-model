@@ -30,3 +30,13 @@ To run a single experiment with D3D-FM, use for example:
 ```
 /path/to/d3d-fm/lnx64/bin/run_dflowfm.sh /path/to/mdufile.mdu
 ```
+
+
+### Versions used
+
+The following versions of software are used. The project may run on other versions, but that might give different results or even errors.
+
+* Delft3D-FM 0.9.1 (8 July 2020);
+* Python 3.11;
+
+and the packages in `requirements.txt`:
