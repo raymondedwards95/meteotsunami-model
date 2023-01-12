@@ -48,7 +48,7 @@ def pressure(x, y, t, t0=10000.0, U=50.0, a=200000.0, p0=2000.0, x0=0.0):
 
 # pressure distribution
 t0_value = 10000
-U_list = np.array([5, 15, 25], dtype=np.float32)
+U_list = np.array([5, 10, 15, 20, 25], dtype=np.float32)
 a_list = np.array([10000, 20000, 30000], dtype=np.float32)
 p0_list = np.array([2000], dtype=np.float32)
 x0_list = np.array([0, 50000], dtype=np.float32)
@@ -118,9 +118,10 @@ with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
 x_num = int((x_max - x_min) / x_step + 1)
 y_num = int((y_max - y_min) / y_step + 1)
 
-x = da.linspace(x_min, x_max, x_num, chunks=-1, dtype=np.float32)
-y = da.linspace(y_min, y_max, y_num, chunks=-1, dtype=np.float32)
+x, dx = da.linspace(x_min, x_max, x_num, chunks=-1, dtype=np.float32, retstep=True)
+y, dy = da.linspace(y_min, y_max, y_num, chunks=-1, dtype=np.float32, retstep=True)
 t = da.arange(t_min, t_max + 1, t_step, chunks=-1, dtype=np.float32)
+dt = t_step
 
 t_num = t.size
 
@@ -131,6 +132,7 @@ tt, yy, xx = da.meshgrid(t, y, x, indexing="ij", sparse=True)
 
 print("Grid parameters:")
 print(f"{t.size=}\t\t{y.size=}\t\t{x.size=}")
+print(f"{dt=:0.1f}\t\t{dy=:0.1f}\t\t{dx=:0.1f}")
 print(f"{tt.chunksize=}")
 print(f"{xx.chunksize=}")
 print(f"{yy.chunksize=}")
@@ -149,6 +151,8 @@ for case_number in range(num_cases):
 
     # Set paths
     filename = f"{pressure_dir}/exp_{case:02.0f}"
+    file_input_mdu = f"{current_dir}/input_exp_{case:02.0f}.mdu"
+    file_forcing_ext = f"{pressure_dir}/forcing_exp_{case:02.0f}.ext"
     figurename = f"{pressure_dir}/exp_{case:02.0f}"
 
     # Compute pressure
@@ -169,14 +173,36 @@ for case_number in range(num_cases):
     fp.write_pressure(data, filename)
 
     # Write forcing file
-    print(f"Overwriting forcing file for {case=:02.0f}")
-    with open(f"{pressure_dir}/forcing_exp_{case:02.0f}.ext", "w") as file:
+    print(f"Overwriting forcing file for {case=:02.0f} - '{file_forcing_ext}'")
+    with open(file_forcing_ext, "w") as file:
         file.write("* Meteo forcing \n")
         file.write("QUANTITY = atmosphericpressure \n")
         file.write(f"FILENAME = exp_{case:02.0f}.amp \n")
         file.write("FILETYPE = 4 \n")
         file.write("METHOD   = 1 \n")
         file.write("OPERAND  = O \n")
+
+    # Write input_*.mdu for D3D-FM
+    if int(case) != 0:
+        print(f"Overwriting input file for {case=:02.0f} - '{file_input_mdu}'")
+
+        # use case exp_00 as template
+        with open(f"{current_dir}/input_exp_00.mdu", "r") as file:
+            file_contents = file.read()
+
+        # replace lines with forcing and output
+        file_contents = file_contents.replace(
+            "forcing_exp_00.ext",
+            f"forcing_exp_{case:02.0f}.ext",
+        )
+        file_contents = file_contents.replace(
+            "output/exp_00",
+            f"output/exp_{case:02.0f}",
+        )
+
+        # write to new file
+        with open(file_input_mdu, "w") as file:
+            file.write(file_contents)
 
     # Visualise field
     print(f"Plotting pressure field for {case=:02.0f}")
