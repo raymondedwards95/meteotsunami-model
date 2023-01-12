@@ -158,9 +158,10 @@ for case_number in range(num_cases):
     x_num = int((x_max - x_min) / x_step + 1)
     y_num = int((y_max - y_min) / y_step + 1)
 
-    x = da.linspace(x_min, x_max, x_num, chunks=-1, dtype=np.float32)
-    y = da.linspace(y_min, y_max, y_num, chunks=-1, dtype=np.float32)
+    x, dx = da.linspace(x_min, x_max, x_num, chunks=-1, dtype=np.float32, retstep=True)
+    y, dy = da.linspace(y_min, y_max, y_num, chunks=-1, dtype=np.float32, retstep=True)
     t = da.arange(t_min, t_max + 1, t_step, chunks=-1, dtype=np.float32)
+    dt = t_step
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
     tt = tt.rechunk("auto")
@@ -169,6 +170,7 @@ for case_number in range(num_cases):
 
     print("Grid parameters:")
     print(f"{t.size=}\t\t{y.size=}\t\t{x.size=}")
+    print(f"{dt=:0.1f}\t\t{dy=:0.1f}\t\t{dx=:0.1f}")
     print(f"{tt.chunksize=}")
     print(f"{xx.chunksize=}")
     print(f"{yy.chunksize=}")
