@@ -107,8 +107,21 @@ def filter_pressure(
     ymin: Numeric = None,
     ymax: Numeric = None,
     offset: Numeric = 1,
+    decimals: Integer = 2,
 ) -> xr.DataArray:
-    """Rounds data and remove columns and rows that only contain zeros"""
+    """Rounds data and remove columns and rows that only contain zeros
+
+    Input:
+        `data`:     DataArray containing pressure data
+
+    Options:
+        `xmin`:     force minimum x-coordinate
+        `xmax`:     force maximum x-coordinate
+        `ymin`:     force minimum y-coordinate
+        `ymax`:     force maximum y-coordinate
+        `offset`:   add extra rows and columns with zeros
+        `decimals`: round to specific number of decimals
+    """
     t0 = time.perf_counter_ns()
     print(f"# Start filtering data")
     shape = data.shape
@@ -129,7 +142,7 @@ def filter_pressure(
         iymax = np.searchsorted(data["y"].values, ymax)
 
     # Round
-    data = data.round(2)
+    data = data.round(decimals)
 
     # Find cols and rows where all values are close to 0
     ix = np.argwhere(~np.all(np.isclose(data, 0), axis=(0, 1)))
@@ -188,12 +201,16 @@ def filter_pressure(
 def write_pressure(
     data: xr.DataArray,
     filename: str,
+    filter: bool = True,
 ) -> None:
     """Function to write a pressure field to a `pressure.amp` file for use with Delft3D-FM
 
     Input:
         `data`:     pressure field and coordinate data
         `filename`: name of .amp file
+
+    Options:
+        `filter`:   skip rows and columns without any perturbation from 0
     """
     # prepare
     t0 = time.perf_counter_ns()
@@ -204,7 +221,8 @@ def write_pressure(
     print(f"# Writing pressure data to '{filename}'")
 
     # remove zero columns and rows
-    data = filter_pressure(data)
+    if filter:
+        data = filter_pressure(data)
 
     # prepare data
     x_num = data["x"].size
@@ -302,6 +320,7 @@ def plot_pressure(
     y_min: Numeric = None,
     y_max: Numeric = None,
     scale: str = "Mm",
+    filter: bool = True,
 ) -> tuple[plt.Figure, plt.Figure]:
     """Function to visualize pressure data
 
@@ -316,6 +335,7 @@ def plot_pressure(
         `y_min`:        lower limit of y
         `y_max`:        upper limit of y
         `scale`:        scale of plots ('m', 'km' or 'Mm')
+        `filter`:       skip rows and columns without any perturbation from 0
     """
     # prepare
     t0 = time.perf_counter_ns()
@@ -349,13 +369,15 @@ def plot_pressure(
     # filter data
     if x_min is None:
         x_min = data["x"].values.min()
-    data = filter_pressure(
-        data,
-        xmin=x_min,
-        xmax=x_max,
-        ymin=y_min,
-        ymax=y_max,
-    )
+
+    if filter:
+        data = filter_pressure(
+            data,
+            xmin=x_min,
+            xmax=x_max,
+            ymin=y_min,
+            ymax=y_max,
+        )
 
     # extract data
     x = data["x"].values
@@ -476,6 +498,7 @@ if __name__ == "__main__":
     # Define paths
     script_dir = os.path.dirname(os.path.realpath(__file__))
     pressure_dir = f"{PATH_TEST}/pressure"
+    filtered_dir = f"{PATH_TEST}/pressure-filtered"
 
     # Define function for computing 'pressure'
     scale_factor = 1e0
@@ -503,16 +526,51 @@ if __name__ == "__main__":
     p = f(xx, yy, tt)
 
     # Convert data
-    convert_to_xarray(t, x, y, p, savename=pressure_dir, close=True)
+    convert_to_xarray(
+        t,
+        x,
+        y,
+        p,
+        savename=pressure_dir,
+        close=True,
+    )
     del t, x, y, p
 
     # Read data from .nc-file
-    data = xr.open_dataarray(f"{pressure_dir}.nc", chunks="auto")
+    data = xr.open_dataarray(
+        f"{pressure_dir}.nc",
+        chunks="auto",
+    )
+
+    # Filter data
+    filtered_data = filter_pressure(data, decimals=5)
 
     # Write data to .amp-file
-    write_pressure(data, filename=pressure_dir)
+    write_pressure(
+        data,
+        filename=pressure_dir,
+        filter=False,
+    )
+    write_pressure(
+        filtered_data,
+        filename=filtered_dir,
+        filter=True,
+    )
 
     # Visualise data
-    plot_pressure(data, filename=pressure_dir, y_min=-10e0, scale="m")
+    plot_pressure(
+        data,
+        filename=pressure_dir,
+        y_min=-10e0,
+        scale="m",
+        filter=False,
+    )
+    plot_pressure(
+        filtered_data,
+        filename=filtered_dir,
+        y_min=-10e0,
+        scale="m",
+        filter=True,
+    )
 
     print("Closing 'pressure.py'")

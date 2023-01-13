@@ -168,9 +168,12 @@ for case_number in range(num_cases):
     print(f"Read data for {case=:02.0f}")
     data = xr.open_dataarray(f"{filename}.nc", chunks="auto")
 
+    # Filter data
+    data = fp.filter_pressure(data, decimals=3)
+
     # Write field
     print(f"Writing pressure field for {case=:02.0f}")
-    fp.write_pressure(data, filename)
+    fp.write_pressure(data, filename, filter=False)
 
     # Write forcing file
     print(f"Overwriting forcing file for {case=:02.0f} - '{file_forcing_ext}'")
@@ -206,7 +209,7 @@ for case_number in range(num_cases):
 
     # Visualise field
     print(f"Plotting pressure field for {case=:02.0f}")
-    fp.plot_pressure(data, filename=figurename, scale="km")
+    fp.plot_pressure(data, filename=figurename, scale="km", filter=False)
 
     # End
     tb = time.perf_counter()
