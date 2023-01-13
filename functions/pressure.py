@@ -222,6 +222,8 @@ def write_pressure(
     t = data["t"].values
     p = data.chunk({"t": "auto", "x": -1, "y": -1}).data.compute()
 
+    t_factor = np.min([t_num, 10])  # for checking progress
+
     # header
     # fmt: off
     header = f"""### START OF HEADER
@@ -242,53 +244,46 @@ unit1           = Pa
 """
     # fmt: on
 
-    # write
-    t_factor = np.min([t_num, 10])
+    # convert data to plaintext
+    textdata = str()
+    for i in range(t_num):
+        # progress
+        if not (t_num - i - 1) % (t_num // t_factor):
+            print(f"# Step {i+1:4.0f} of {t_num:0.0f} ({(i+1)/t_num*100:0.1f}%)")
 
+        # time
+        textdata += f"TIME = {t[i]/3600.:0.6f} hours ".replace(".000000", ".0")
+        textdata += f"since 1970-01-01 00:00:00 +00:00"
+        textdata += f"\n"
+
+        # put nothing if all values are close to reference
+        # if ((i != 0) and (np.all(np.isclose(data.values[i, :, :].round(2), 0.)))):  # maybe set rtol and atol?
+        # if (i > 0) and np.all(p[i,:,:].round(3) == p[i-1,:,:].round(3)):  # round to 3 numbers?
+        # NOTE: it does seem it doesn't always work in d3dfm, so for now just write all data, even if it is all zeros
+        if False:
+            print(f"# \nSkip writing for hour {t[i]/3600.:0.3f} ({i=})")
+            continue
+
+        # data
+        for n in range(y_num):
+            # NOTE: negative y-index for p (i.e. -1*n) to fix coordinate-system
+            # replacement rules:
+            # 0.: values are rounded to two digits
+            # 1.: -0.00 -> 0.00 (remove minus)
+            # 2.: 0.00 -> 0 (remove .00)
+
+            p_ty = p[i, -1 * n, :]
+            textdata += (
+                " ".join(f"{elem:0.02f}" for elem in p_ty)
+                .replace("-0.00", "0.00")
+                .replace("0.00", "0")
+            )
+            textdata += "\n"
+
+    # write
     with open(filename, "w") as file:
         file.write(header)
-
-        # loop over time
-        for i in range(t_num):
-            # fmt: off
-            # progress
-            if not (t_num-i-1) % (t_num // t_factor):
-                print(f"# Step {i+1:4.0f} of {t_num:0.0f} ({(i+1)/t_num*100:0.1f}%)")
-
-            file.write(
-                f"TIME = {t[i]/3600.:0.6f} hours since 1970-01-01 00:00:00 +00:00\n".replace(".000000", ".0")
-            )
-            # fmt: on
-
-            textdata = str()
-
-            # put nothing if all values are close to reference
-            # if ((i != 0) and (np.all(np.isclose(data.values[i, :, :].round(2), 0.)))):  # maybe set rtol and atol?
-            # if (i > 0) and np.all(p[i,:,:].round(3) == p[i-1,:,:].round(3)):  # round to 3 numbers?
-            # NOTE: it does seem it doesn't always work in d3dfm, so for now just write all data, even if it is all zeros
-            if False:
-                print(f"# \nSkip writing for hour {t[i]/3600.:0.3f} ({i=})")
-                pass
-
-            # write if there are values other than reference
-            else:
-                # loop over y (rows)
-                for n in range(y_num):
-                    # NOTE: negative y-index for p (i.e. -1*n) to fix coordinate-system
-                    # replacement rules:
-                    # 0.: values are rounded to two digits
-                    # 1.: -0.00 -> 0.00 (remove minus)
-                    # 2.: 0.00 -> 0 (remove .00)
-
-                    p_ty = p[i, -1 * n, :]
-                    textdata += (
-                        " ".join(f"{elem:0.02f}" for elem in p_ty)
-                        .replace("-0.00", "0.00")
-                        .replace("0.00", "0")
-                    )
-                    textdata += "\n"
-
-            file.write(textdata)
+        file.write(textdata)
 
     # End
     t1 = time.perf_counter_ns()
