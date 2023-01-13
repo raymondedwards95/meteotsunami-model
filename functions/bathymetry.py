@@ -138,19 +138,22 @@ def write_bathymetry(
     y = data.y.values
     b = data.values
 
+    # convert data to plaintext
+    textdata = str()
+
+    for i in range(x.size):
+        # loop over x
+        _x = x[i]
+
+        for j in range(y.size):
+            # loop over y
+
+            # write a set of x y b on one line + remove trailing zeros
+            textdata += f"{_x:0.2f} {y[j]:0.2f} {b[j, i]:0.2f}\n".replace(".00", "")
+
     # write
     with open(filename, "w") as file:
-        file.write("")
-
-        # loop over x
-        for i in range(x.size):
-            _x = x[i]
-
-            # loop over y
-            for j in range(y.size):
-
-                # write a set of x y b on one line + remove trailing zeros
-                file.write(f"{_x:0.2f} {y[j]:0.2f} {b[j, i]:0.2f}\n".replace(".00", ""))
+        file.write(textdata)
 
     t1 = time.perf_counter_ns()
     print(f"# Finished writing to '{filename}' in {(t1-t0)*1e-9:0.3f} seconds")
@@ -325,8 +328,8 @@ if __name__ == "__main__":
         return -1.0 * np.min([x / 1000.0, 200.0])
 
     # Create grid and compute data
-    x = np.linspace(0.0, 1e6, 5, dtype=float)
-    y = np.linspace(-1e7, +1e7, 5, dtype=float)
+    x = np.linspace(0.0, 1e6, 7, dtype=float)
+    y = np.linspace(-1e7, +1e7, 9, dtype=float)
     xx, yy = np.meshgrid(x, y)
     b = function(xx, yy)
 
