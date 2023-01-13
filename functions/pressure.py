@@ -260,6 +260,8 @@ unit1           = Pa
             )
             # fmt: on
 
+            textdata = str()
+
             # put nothing if all values are close to reference
             # if ((i != 0) and (np.all(np.isclose(data.values[i, :, :].round(2), 0.)))):  # maybe set rtol and atol?
             # if (i > 0) and np.all(p[i,:,:].round(3) == p[i-1,:,:].round(3)):  # round to 3 numbers?
@@ -279,15 +281,14 @@ unit1           = Pa
                     # 2.: 0.00 -> 0 (remove .00)
 
                     p_ty = p[i, -1 * n, :]
-                    s = (
+                    textdata += (
                         " ".join(f"{elem:0.02f}" for elem in p_ty)
                         .replace("-0.00", "0.00")
                         .replace("0.00", "0")
                     )
+                    textdata += "\n"
 
-                    # write lines
-                    file.write(s)
-                    file.write("\n")
+            file.write(textdata)
 
     # End
     t1 = time.perf_counter_ns()
@@ -494,9 +495,9 @@ if __name__ == "__main__":
         )
 
     # Define grid
-    x = np.linspace(-5, 5, 101, dtype=np.float32) * scale_factor
-    y = np.linspace(-15, 15, 200, dtype=np.float32) * scale_factor
-    t = np.linspace(0, 10, 21, dtype=np.float32) * 3600.0
+    x = np.linspace(-5, 5, 201, dtype=np.float32) * scale_factor
+    y = np.linspace(-15, 15, 300, dtype=np.float32) * scale_factor
+    t = np.linspace(0, 10, 41, dtype=np.float32) * 3600.0
 
     tt, yy, xx = da.meshgrid(t, y, x, indexing="ij")
     tt = tt.rechunk("auto")
