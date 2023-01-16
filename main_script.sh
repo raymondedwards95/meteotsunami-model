@@ -64,29 +64,38 @@ done
 
 echo ""
 echo "### Running from: main_script.sh"
+echo "$(date) - Start run of main_script.sh" >> $LogFile
+echo "$(date) - Reading options" >> $LogFile
 
 echo "## The following sub-tasks will be done:"
 if [ "$run_model" = true ] ; then
     create_parameters=true
     echo "# Simulations"
+    echo "$(date) - Do simulations" >> $LogFile
 fi
 if [ "$create_parameters" = true ] ; then
     echo "# Parameter-files"
+    echo "$(date) - Create parameter files" >> $LogFile
 fi
 if [ "$create_animations" = true ] ; then
     echo "# Animations"
+    echo "$(date) - Create animations" >> $LogFile
 fi
 if [ "$create_figures" = true ] ; then
     echo "# Figures"
+    echo "$(date) - Create figures" >> $LogFile
 fi
 if [ "$create_theory" = true ] ; then
     echo "# Theory"
+    echo "$(date) - Do theory" >> $LogFile
 fi
 if [ "$create_comparison" = true ] ; then
     echo "# Comparison"
+    echo "$(date) - Create comparisons" >> $LogFile
 fi
 if [ "$test_functions" = true ] ; then
     echo "# Tests"
+    echo "$(date) - Test functions" >> $LogFile
 fi
 
 # Default list of folders with input files
