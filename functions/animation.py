@@ -466,8 +466,8 @@ def animation_alongshore(
         ax[0].set_ylim([-1.0 * wl_max, wl_max])
         ax[1].set_ylim([p_min, p_max])
         ax[1].set_xlabel("$y$ [km]")
-        ax[0].set_ylabel("Sea Surface Elevation [m]")
-        ax[1].set_ylabel("Surface Air Pressure [Pa]")
+        ax[0].set_ylabel("Sea Surface \nElevation [m]")
+        ax[1].set_ylabel("Surface Air \nPressure [Pa]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
     initfig()
