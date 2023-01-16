@@ -8,7 +8,7 @@ TextHelp="
 Main script for simulating and visualising.
 \n\n
 Options:
-\n      -all                 \t      Do all, applies --test -t -p -s -a -f -c --repr --exp
+\n      -all                 \t\t\t  Do all, applies --test -t -p -s -a -f -c --repr --exp
 \n  -p, --parameters         \t      Create parameter files
 \n  -s, --simulations        \t      Run simulations, also applies -p
 \n  -a, --animations         \t      Create animations
