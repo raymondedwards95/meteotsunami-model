@@ -27,6 +27,19 @@ Help:
 \n\n
 "
 
+# Global settings
+if [ ! -f ./settings.sh ] ; then
+    echo "./settings.sh does not exist. Creating file... Probably it needs to be adjusted manually."
+    cp ./setup/settings.sh.template ./settings.sh
+    exit 1
+fi
+
+BaseDir="${PWD}"
+LogFile="${PWD}/last_runs.log"
+LogFolder="${PWD}/logs"
+
+mkdir -p "${LogFolder}"
+
 # Maximum number of simultanious tasks
 Ntasks=5
 Ntasks_half=$(python3 -c "print(f'{max([3, $Ntasks // 3]):0.0f}')")
@@ -111,19 +124,7 @@ done
 
 sleep 2
 
-# Global settings
-if [ ! -f ./settings.sh ] ; then
-    echo "./settings.sh does not exist. Creating file... Probably it needs to be adjusted manually."
-    cp ./setup/settings.sh.template ./settings.sh
-    exit 1
-fi
-
-BaseDir="${PWD}"
-LogFile="${PWD}/last_runs.log"
-LogFolder="${PWD}/logs"
-
-mkdir -p "${LogFolder}"
-
+# Start
 echo ""
 echo "### Prepare script"
 echo "## Reading './settings.sh'"
