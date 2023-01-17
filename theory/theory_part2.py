@@ -67,7 +67,7 @@ def theory_figure_speed_vs_size_alpha(
         cmap=cmo.cm.speed,
     )
 
-    # rasterize contourf
+    # # Rasterize contourf
     # for pathcoll in cl.collections:
     #     pathcoll.set_rasterized(True)
     for pathcoll in cf.collections:
@@ -159,7 +159,7 @@ def theory_figure_wavelength_vs_alpha_speed(
         # extend="max",
     )
 
-    # rasterize contourf
+    # # Rasterize contourf
     # for pathcoll in cl.collections:
     #     pathcoll.set_rasterized(True)
     for pathcoll in cf.collections:
