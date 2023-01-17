@@ -21,8 +21,8 @@ except:
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-from functions import *
 import functions.theory as ft
+from functions import *
 # fmt: on
 
 
