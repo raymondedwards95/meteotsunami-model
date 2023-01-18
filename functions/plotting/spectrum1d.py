@@ -102,7 +102,6 @@ class plot_spectrum_1d(plot_base):
             axis="y",
             style="sci",
             scilimits=(0, 0),
-            useMathText=True,
         )
 
     def add_plot(

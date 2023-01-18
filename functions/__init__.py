@@ -12,7 +12,7 @@ import seaborn as sns
 sns.set_palette(sns.color_palette("muted"))
 
 # Matplotlib figure options
-
+mpl.rcParams["axes.formatter.use_mathtext"] = True  # write x10^p instead of 1ep
 
 # Matplotlib video options
 mpl.rcParams["animation.codec"] = "libsvtav1"

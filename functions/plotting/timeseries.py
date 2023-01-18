@@ -85,7 +85,7 @@ class plot_timeseries(plot_base):
             ax.axhline(color="black", linewidth=1, alpha=0.5)
             ax.legend(loc="upper right")
             ax.grid()
-            # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
+            # ax.ticklabel_format(scilimits=(-2, 2))
 
             max_lim = np.max(np.abs(ax.get_ylim()))
             ax.set_ylim(-1.0 * max_lim, max_lim)
@@ -216,7 +216,7 @@ if __name__ == "__main__":
     # Additional imports
     import matplotlib.ticker as mticker
 
-    f = mticker.ScalarFormatter(useOffset=False, useMathText=True)
+    f = mticker.ScalarFormatter(useOffset=False)
 
     def fmt(x):
         return f.format_data(x)

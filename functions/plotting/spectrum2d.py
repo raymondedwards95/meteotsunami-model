@@ -112,7 +112,7 @@ class plot_spectrum_2d(plot_base):
         self.ax.axhline(color="black", linewidth=1, alpha=0.5)
         self.ax.axvline(color="black", linewidth=1, alpha=0.5)
         self.ax.grid()
-        # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
+        # ax.ticklabel_format(scilimits=(-2, 2))
 
         # x-axis
         self.ax.set_xlabel(f"Wavenumber [1 / {self.unit}]")

@@ -91,7 +91,7 @@ class plot_contour(plot_base):
                 fu.none_multiply(self.y_min, 1.0 / self.scale_factor),
                 fu.none_multiply(self.y_max, 1.0 / self.scale_factor),
             )
-            ax.ticklabel_format(scilimits=(-4, 4), useMathText=True)
+            ax.ticklabel_format(scilimits=(-4, 4))
             ax.grid()
 
         # Left

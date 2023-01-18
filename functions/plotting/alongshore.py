@@ -123,7 +123,7 @@ class plot_alongshore(plot_base):
                 fu.none_multiply(self.y_max, 1.0 / self.scale_factor),
             )
             ax.set_ylim(-1.0 * max_lim, max_lim)
-            # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
+            # ax.ticklabel_format(scilimits=(-2, 2))
 
         self.axes[-1].set_xlabel(f"$y$ [{self.unit}]")
         self.fig.supylabel(f"{self.variable_long} [{self.variable_unit}]")
