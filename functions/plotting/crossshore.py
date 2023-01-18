@@ -112,7 +112,7 @@ class plot_crossshore(plot_base):
             ax.grid()
             ax.set_xlim(0, fu.none_multiply(self.x_max, 1.0 / self.scale_factor))
             ax.set_ylim(-1.0 * max_lim, max_lim)
-            # ax.ticklabel_format(scilimits=(-2, 2), useMathText=True)
+            ax.ticklabel_format(scilimits=(-3, 3), useMathText=True)
 
         self.axes[-1].set_xlabel(f"$x$ [{self.unit}]")
         self.fig.supylabel(f"{self.variable_long} [{self.variable_unit}]")
