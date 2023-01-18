@@ -94,7 +94,7 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
 
         ax.set_xticks(np.arange(0, 0.4, 0.1))
         ax.set_yticks(np.arange(y_min_list[i], y_max_list[i] + 1, 1))
-        ax.ticklabel_format(useMathText=True, scilimits=(-2, 2))
+        ax.ticklabel_format(scilimits=(-2, 2))
 
     # Colorbar
     cb = fig.colorbar(im, ax=axes, fraction=0.1, aspect=25, pad=0.01)
@@ -182,7 +182,7 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
 
         ax.set_xticks(np.arange(y_min_list[i], y_max_list[i] + 1, 1))
         ax.set_yticks([-1.0, -0.5, 0, 0.5, 1.0])
-        ax.ticklabel_format(useMathText=True, scilimits=(-2, 2))
+        ax.ticklabel_format(scilimits=(-2, 2))
 
     # End
     tb = time.perf_counter_ns()
@@ -293,7 +293,6 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
 
     ax.set_xticks([10, 100, 200, 300, 400, 500, 600])
     ax.set_yticks(np.arange(0, 0.9, 0.1))
-    ax.ticklabel_format(useMathText=True)
 
     ax.legend(fontsize="small")
 
