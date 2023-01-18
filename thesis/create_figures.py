@@ -62,7 +62,7 @@ t_list = np.linspace(
 )
 y_list = np.linspace(
     0.0,
-    data["y"].max(),
+    np.ceil(data["y"].max() / 1e4) * 1e4,
     5,
 )
 y_min = 0.0
@@ -70,7 +70,7 @@ x_max = np.round(data["x"].values.max() / 2.0 / 1000.0, -1)
 x_ref = np.ceil(data["x"].values.min() * 2.0 / 1e3) * 1e3
 
 # Contour
-_contour_a = fpl.plot_contour()
+_contour_a = fpl.plot_contour(scale="km")
 _contour_a.add_plots(
     dataset=data,
     variable_list=["wl"],
@@ -80,7 +80,7 @@ _contour_a.add_plots(
 )
 _contour_a.save(figure_dir)
 
-_contour_b = fpl.plot_contour()
+_contour_b = fpl.plot_contour(scale="km")
 _contour_b.add_plots(
     dataset=data,
     variable_list=["wl", "p"],
@@ -90,7 +90,7 @@ _contour_b.add_plots(
 )
 _contour_b.save(figure_dir)
 
-_contour_c = fpl.plot_contour()
+_contour_c = fpl.plot_contour(scale="km")
 _contour_c.add_plots(
     dataset=data,
     variable_list=["u", "v"],
@@ -101,7 +101,7 @@ _contour_c.add_plots(
 _contour_c.save(figure_dir)
 
 # Alongshore
-_along_shore = fpl.plot_alongshore(variable="wl")
+_along_shore = fpl.plot_alongshore(variable="wl", scale="km")
 _along_shore.add_subplot(
     dataset=data,
     x=x_ref,
@@ -112,7 +112,7 @@ _along_shore.save(figure_dir)
 
 # Crossshore
 for t_single in t_list:
-    _cross_shore = fpl.plot_crossshore(variable="wl")
+    _cross_shore = fpl.plot_crossshore(variable="wl", scale="km")
     _cross_shore.plot_peaks(
         dataset=data,
         t=t_single,
@@ -121,7 +121,7 @@ for t_single in t_list:
     _cross_shore.save(figure_dir)
 
 # Spectrum-1d
-_spectrum_1d = fpl.plot_spectrum_1d(variable="wl", demean=True)
+_spectrum_1d = fpl.plot_spectrum_1d(variable="wl", demean=True, f_max=2)
 for y_single in y_list:
     _spectrum_1d.add_plot(
         dataset=data,
@@ -131,7 +131,7 @@ for y_single in y_list:
 _spectrum_1d.save(figure_dir)
 
 # Spectrum-2d
-_spectrum_2d = fpl.plot_spectrum_2d(variable="wl", demean=True)
+_spectrum_2d = fpl.plot_spectrum_2d(variable="wl", demean=True, scale="km")
 _spectrum_2d.add_plot(
     dataset=data,
     x=x_ref,
