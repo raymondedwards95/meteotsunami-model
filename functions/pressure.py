@@ -101,7 +101,7 @@ def convert_to_xarray(
 
 
 def filter_pressure(
-    data: xr.DataArray,
+    data: xr.DataArray | xr.Dataset,
     xmin: Numeric = None,
     xmax: Numeric = None,
     ymin: Numeric = None,
@@ -109,10 +109,10 @@ def filter_pressure(
     offset: Numeric = 1,
     decimals: Integer = 2,
 ) -> xr.DataArray:
-    """Rounds data and remove columns and rows that only contain zeros
+    """Rounds data and remove columns and rows that only contain zeros and return a DataArray containing filtered pressure data
 
     Input:
-        `data`:     DataArray containing pressure data
+        `data`:     DataArray or Dataset containing pressure data
 
     Options:
         `xmin`:     force minimum x-coordinate
@@ -122,6 +122,30 @@ def filter_pressure(
         `offset`:   add extra rows and columns with zeros
         `decimals`: round to specific number of decimals
     """
+    if isinstance(data, xr.Dataset):
+        print(f"# Function 'filter_pressure' got a Dataset")
+        print(f"# Retrying using a subset of this Dataset")
+        return filter_pressure(data["p"])
+
+    if isinstance(data, xr.DataArray):
+        pass
+    elif isinstance(data, xr.Dataset):
+        print(f"# Input for 'filter_pressure' is a {type(data)}")
+        print(f"# Retrying with a subset")
+        return filter_pressure(
+            data=data["p"],
+            xmin=xmin,
+            xmax=xmax,
+            ymin=ymin,
+            ymax=ymax,
+            offset=offset,
+            decimals=decimals,
+        )
+    else:
+        raise TypeError(
+            f"Input for 'filter_pressure' is not a DataArray, instead it is {type(data)}"
+        )
+
     t0 = time.perf_counter_ns()
     print(f"# Start filtering data")
     shape = data.shape
@@ -214,7 +238,17 @@ def write_pressure(
     """
     # prepare
     t0 = time.perf_counter_ns()
-    assert type(data) == xr.DataArray, "Input is not a DataArray"
+
+    if isinstance(data, xr.DataArray):
+        pass
+    elif isinstance(data, xr.Dataset):
+        print(f"# Input for 'write_pressure' is a {type(data)}")
+        print(f"# Retrying with a subset")
+        return write_pressure(data=data["p"], filename=filename, filter=filter)
+    else:
+        raise TypeError(
+            f"Input for 'write_pressure' is not a DataArray, instead it is {type(data)}"
+        )
 
     if not filename.endswith(".amp"):
         filename += ".amp"
@@ -339,7 +373,28 @@ def plot_pressure(
     """
     # prepare
     t0 = time.perf_counter_ns()
-    assert type(data) == xr.DataArray, "Input is not a DataArray"
+
+    if isinstance(data, xr.DataArray):
+        pass
+    elif isinstance(data, xr.Dataset):
+        print(f"# Input for 'plot_pressure' is a {type(data)}")
+        print(f"# Retrying with a subset")
+        return plot_pressure(
+            data=data["p"],
+            filename=filename,
+            x_scales=x_scales,
+            keep_open=keep_open,
+            x_min=x_min,
+            x_max=x_max,
+            y_min=y_min,
+            y_max=y_max,
+            scale=scale,
+            filter=filter,
+        )
+    else:
+        raise TypeError(
+            f"Input for 'plot_pressure' is not a DataArray, instead it is {type(data)}"
+        )
 
     if filename is None:
         filename = f"{os.path.dirname(os.path.realpath(__file__))}/tests/fig_pressure"
@@ -537,7 +592,7 @@ if __name__ == "__main__":
     del t, x, y, p
 
     # Read data from .nc-file
-    data = xr.open_dataarray(
+    data = xr.open_dataset(
         f"{pressure_dir}.nc",
         chunks="auto",
     )
