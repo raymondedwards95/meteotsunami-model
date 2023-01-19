@@ -243,13 +243,13 @@ def relative_ceil(x: Floating) -> Floating:
     return np.round(x, s) + np.power(10.0, -1.0 * s)
 
 
-def relative_ceil(x: float, e: float = None, o: float = 1) -> float:
+def relative_ceil(x: float, e: float = None, s: float = 1) -> float:
     """Takes closest ceiling of a number
 
     Input:
         x:  number to use
         e:  force specific exponent
-        o:  apply offset, i.e. give more significant digits
+        s:  number of significant digits
 
     Examples:
         1.2 -> 2
@@ -259,13 +259,19 @@ def relative_ceil(x: float, e: float = None, o: float = 1) -> float:
         -1.2 -> -2
         -0.12 -> -0.2
         -0.002 -> -0.01
+
+        0.1234, o=1 -> 0.2
+        0.1234, o=2 -> 0.13
+        0.1234, o=3 -> 0.124
     """
-    o = np.abs(o) - 1
+    if s <= 0:
+        s = 1
+    s = s - 1
 
     if e is None:
         e = np.floor(np.log10(np.abs(x)))
     s = np.sign(x)
-    return s * np.ceil(np.abs(x) / np.power(10.0, e - o)) * np.power(10.0, e - o)
+    return s * np.ceil(np.abs(x) / np.power(10.0, e - s)) * np.power(10.0, e - s)
 
 
 relative_ceil = np.vectorize(relative_ceil)
@@ -322,6 +328,9 @@ if __name__ == "__main__":
     print(f"{relative_ceil(1.2)=}")
     print(f"{relative_ceil(0.12)=}")
     print(f"{relative_ceil(0.002)=}")
+    print(f"{relative_ceil(0.1234, o=1)=}")
+    print(f"{relative_ceil(0.1234, o=2)=}")
+    print(f"{relative_ceil(0.1234, o=3)=}")
     print(f"{relative_ceil([1.2, -1.2])=}")
     print(f"{relative_ceil([0.12, -0.12])=}")
     print(f"{relative_ceil([0.002, -0.002])=}")
