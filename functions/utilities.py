@@ -231,7 +231,6 @@ def find_local_maxima_y(
     return y_idx_valid
 
 
-@np.vectorize
 def relative_ceil(x: Floating) -> Floating:
     """Takes closest ceiling of a number
 
@@ -242,6 +241,34 @@ def relative_ceil(x: Floating) -> Floating:
     """
     s = -1 * int(np.floor(np.log10(np.abs(x))))
     return np.round(x, s) + np.power(10.0, -1.0 * s)
+
+
+def relative_ceil(x: float, e: float = None, o: float = 1) -> float:
+    """Takes closest ceiling of a number
+
+    Input:
+        x:  number to use
+        e:  force specific exponent
+        o:  apply offset, i.e. give more significant digits
+
+    Examples:
+        1.2 -> 2
+        0.12 -> 0.2
+        0.002 -> 0.01
+
+        -1.2 -> -2
+        -0.12 -> -0.2
+        -0.002 -> -0.01
+    """
+    o = np.abs(o) - 1
+
+    if e is None:
+        e = np.floor(np.log10(np.abs(x)))
+    s = np.sign(x)
+    return s * np.ceil(np.abs(x) / np.power(10.0, e - o)) * np.power(10.0, e - o)
+
+
+relative_ceil = np.vectorize(relative_ceil)
 
 
 def none_multiply(x: Numeric | None, y: Numeric | None) -> Numeric | None:
@@ -298,9 +325,10 @@ if __name__ == "__main__":
     print(f"{relative_ceil([1.2, -1.2])=}")
     print(f"{relative_ceil([0.12, -0.12])=}")
     print(f"{relative_ceil([0.002, -0.002])=}")
-    print(f"{relative_ceil([1.4, 3.14, 0.14])=}")
-    print(f"{relative_ceil([3.14e0, 2.5e7, 3.1415e3])=}")
-    print(f"{relative_ceil([5.412e-4, 5.4e-4, 7.32e-10])=}")
+    print(f"{relative_ceil([5.123e-4, -5.9876e-4, 7.123456789e-10])=}")
+    print(f"{relative_ceil([5.123e-4, -5.9876e-4, 7.123456789e-10], e=-6)=}")
+    print(f"{relative_ceil([5.123e-4, -5.9876e-4, 7.123456789e-10], o=2)=}")
+    print(f"{relative_ceil([5.123e-4, -5.9876e-4, 7.123456789e-10], o=4)=}")
 
     print(f"{none_multiply(2, 3)=}")
     print(f"{none_multiply(2, None)=}")
