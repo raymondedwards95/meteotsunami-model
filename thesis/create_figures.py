@@ -65,17 +65,35 @@ y_list = np.linspace(
     np.ceil(data["y"].max() / 1e4) * 1e4,
     5,
 )
-y_min = 0.0
-x_max = np.round(data["x"].values.max() / 2.0 / 1000.0, -1)
 x_ref = np.ceil(data["x"].values.min() * 2.0 / 1e3) * 1e3
+
+# Find limits
+data_ref = np.max(np.abs(data["wl"].values))
+
+ix = np.argwhere(~np.all(data["wl"].values < 1.5e-2 * data_ref, axis=(0, 1))).ravel()
+iy = np.argwhere(~np.all(data["wl"].values < 1e-3 * data_ref, axis=(0, 2))).ravel()
+
+x_min = np.floor(data["x"].values.min())
+x_max = fu.relative_ceil(data["x"][np.max(ix)] / 2.0, s=2)
+
+y_min = 0.0
+y_max = fu.relative_ceil(data["y"][np.max(iy)] / 2.0, s=2)
+
+# print(f"{x_ref=}")
+# print(f"{x_min=}")
+# print(f"{x_max=}")
+# print(f"{y_min=}")
+# print(f"{y_max=}")
+
 
 # Contour
 _contour_a = fpl.plot_contour(scale="km")
 _contour_a.add_plots(
     dataset=data,
-    variable_list=["wl"],
+    variable_list=["p"],
     t_list=t_list,
     y_min=y_min,
+    y_max=y_max,
     x_max=x_max,
 )
 _contour_a.save(figure_dir)
@@ -83,9 +101,10 @@ _contour_a.save(figure_dir)
 _contour_b = fpl.plot_contour(scale="km")
 _contour_b.add_plots(
     dataset=data,
-    variable_list=["wl", "p"],
+    variable_list=["wl"],
     t_list=t_list,
     y_min=y_min,
+    y_max=y_max,
     x_max=x_max,
 )
 _contour_b.save(figure_dir)
@@ -93,12 +112,24 @@ _contour_b.save(figure_dir)
 _contour_c = fpl.plot_contour(scale="km")
 _contour_c.add_plots(
     dataset=data,
-    variable_list=["u", "v"],
+    variable_list=["wl", "p"],
     t_list=t_list,
     y_min=y_min,
+    y_max=y_max,
     x_max=x_max,
 )
 _contour_c.save(figure_dir)
+
+_contour_d = fpl.plot_contour(scale="km")
+_contour_d.add_plots(
+    dataset=data,
+    variable_list=["u", "v"],
+    t_list=t_list,
+    y_min=y_min,
+    y_max=y_max,
+    x_max=x_max,
+)
+_contour_d.save(figure_dir)
 
 # Alongshore
 _along_shore = fpl.plot_alongshore(variable="wl", scale="km")
@@ -107,6 +138,7 @@ _along_shore.add_subplot(
     x=x_ref,
     t=t_list,
     y_min=0,
+    y_max=y_max,
 )
 _along_shore.save(figure_dir)
 
