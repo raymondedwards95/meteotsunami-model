@@ -69,59 +69,100 @@ y_min = 0.0
 x_max = np.round(data["x"].values.max() / 2.0 / 1000.0, -1)
 x_ref = np.ceil(data["x"].values.min() * 2.0 / 1e3) * 1e3
 
+print(f"{x_max=}")
+print(f"{x_ref=}")
+
+# Find limits
+data_ref = np.max(np.abs(data["wl"].values))
+
+ix = np.argwhere(
+    ~np.all(np.abs(data["wl"].values) < 1e-2 * data_ref, axis=(0, 1))
+).ravel()
+iy = np.argwhere(
+    ~np.all(np.abs(data["wl"].values) < 1e-2 * data_ref, axis=(0, 2))
+).ravel()
+
+x_min = np.floor(data["x"].values.min())
+x_max = fu.relative_ceil(data["x"][np.max(ix)] / 2.0, s=2)
+
+y_min = 0.0
+y_max = fu.relative_ceil(data["y"][np.max(iy)], s=2)
+
+# print(f"{x_ref=}")
+# print(f"{x_min=}")
+# print(f"{x_max=}")
+# print(f"{y_min=}")
+# print(f"{y_max=}")
+
 # Contour
-_contour_a = fpl.plot_contour()
+_contour_a = fpl.plot_contour(scale="Mm")
 _contour_a.add_plots(
     dataset=data,
-    variable_list=["wl"],
+    variable_list=["p"],
     t_list=t_list,
     y_min=y_min,
+    y_max=y_max,
     x_max=x_max,
 )
 _contour_a.save(figure_dir)
 
-_contour_b = fpl.plot_contour()
+_contour_b = fpl.plot_contour(scale="Mm")
 _contour_b.add_plots(
     dataset=data,
-    variable_list=["wl", "p"],
+    variable_list=["wl"],
     t_list=t_list,
     y_min=y_min,
+    y_max=y_max,
     x_max=x_max,
 )
 _contour_b.save(figure_dir)
 
-_contour_c = fpl.plot_contour()
+_contour_c = fpl.plot_contour(scale="Mm")
 _contour_c.add_plots(
     dataset=data,
-    variable_list=["u", "v"],
+    variable_list=["wl", "p"],
     t_list=t_list,
     y_min=y_min,
+    y_max=y_max,
     x_max=x_max,
 )
 _contour_c.save(figure_dir)
 
+_contour_d = fpl.plot_contour(scale="Mm")
+_contour_d.add_plots(
+    dataset=data,
+    variable_list=["u", "v"],
+    t_list=t_list,
+    y_min=y_min,
+    y_max=y_max,
+    x_max=x_max,
+)
+_contour_d.save(figure_dir)
+
 # Alongshore
-_along_shore = fpl.plot_alongshore(variable="wl")
+_along_shore = fpl.plot_alongshore(variable="wl", scale="Mm")
 _along_shore.add_subplot(
     dataset=data,
     x=x_ref,
     t=t_list,
     y_min=0,
+    y_max=y_max,
 )
 _along_shore.save(figure_dir)
 
 # Crossshore
 for t_single in t_list:
-    _cross_shore = fpl.plot_crossshore(variable="wl")
+    _cross_shore = fpl.plot_crossshore(variable="wl", scale="Mm")
     _cross_shore.plot_peaks(
         dataset=data,
         t=t_single,
         number=5,
+        x_max=x_max,
     )
     _cross_shore.save(figure_dir)
 
 # Spectrum-1d
-_spectrum_1d = fpl.plot_spectrum_1d(variable="wl", demean=True)
+_spectrum_1d = fpl.plot_spectrum_1d(variable="wl", demean=True, f_max=2)
 for y_single in y_list:
     _spectrum_1d.add_plot(
         dataset=data,
@@ -131,7 +172,7 @@ for y_single in y_list:
 _spectrum_1d.save(figure_dir)
 
 # Spectrum-2d
-_spectrum_2d = fpl.plot_spectrum_2d(variable="wl", demean=True)
+_spectrum_2d = fpl.plot_spectrum_2d(variable="wl", demean=True, scale="Mm")
 _spectrum_2d.add_plot(
     dataset=data,
     x=x_ref,
