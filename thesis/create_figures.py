@@ -70,14 +70,18 @@ x_ref = np.ceil(data["x"].values.min() * 2.0 / 1e3) * 1e3
 # Find limits
 data_ref = np.max(np.abs(data["wl"].values))
 
-ix = np.argwhere(~np.all(data["wl"].values < 1.5e-2 * data_ref, axis=(0, 1))).ravel()
-iy = np.argwhere(~np.all(data["wl"].values < 1e-3 * data_ref, axis=(0, 2))).ravel()
+ix = np.argwhere(
+    ~np.all(np.abs(data["wl"].values) < 1e-2 * data_ref, axis=(0, 1))
+).ravel()
+iy = np.argwhere(
+    ~np.all(np.abs(data["wl"].values) < 1e-2 * data_ref, axis=(0, 2))
+).ravel()
 
 x_min = np.floor(data["x"].values.min())
-x_max = fu.relative_ceil(data["x"][np.max(ix)] / 2.0, s=2)
+x_max = fu.relative_ceil(data["x"][np.max(ix)] / 5.0, s=2)
 
 y_min = 0.0
-y_max = fu.relative_ceil(data["y"][np.max(iy)] / 2.0, s=2)
+y_max = fu.relative_ceil(data["y"][np.max(iy)], s=2)
 
 # print(f"{x_ref=}")
 # print(f"{x_min=}")
@@ -149,6 +153,7 @@ for t_single in t_list:
         dataset=data,
         t=t_single,
         number=5,
+        x_max=x_max,
     )
     _cross_shore.save(figure_dir)
 
