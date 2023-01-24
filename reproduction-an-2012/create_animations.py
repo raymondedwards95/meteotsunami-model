@@ -12,6 +12,7 @@ import xarray as xr
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
 import functions.animation as anim
+import functions.utilities as fu
 # fmt: on
 
 
@@ -53,15 +54,33 @@ data = xr.open_dataset(data_file)  # , chunks={"y": -1, "x": -1, "t": "auto"})
 print(f"Initial grid size:     {data.sizes}")
 # print(f"Chunksize: {data.chunksizes}")
 
+# Reduce data by skipping rows and columns with zeros
+data_ref = np.max(np.abs(data["wl"].values))
+
+ix = np.argwhere(
+    ~np.all(np.abs(data["wl"].values) < 1e-2 * data_ref, axis=(0, 1))
+).ravel()
+iy = np.argwhere(
+    ~np.all(np.abs(data["wl"].values) < 1e-2 * data_ref, axis=(0, 2))
+).ravel()
+
+x_min = np.floor(data["x"].values.min())
+x_max = fu.relative_ceil(data["x"][np.max(ix)] / 2.0, s=2)
+
+y_min = 0.0
+y_max = fu.relative_ceil(data["y"][np.max(iy)], s=2)
+
+data = data.sel(x=slice(x_min, x_max), y=slice(y_min, y_max))
+
 # Downsample data
-data = data.resample(t="1800s").interpolate()
+data = data.resample(t="600s").interpolate()
 print(f"Downsampled grid size: {data.sizes}")
 # print(f"Chunksize: {data.chunksizes}")
 
 # Create animations
-anim.animation_alongshore(data, savedir=anim_dir, fps=10.0)
-anim.animation_contour(data, savedir=anim_dir, fps=10.0)
-anim.animation_contour_uv(data, savedir=anim_dir, fps=10.0)
+anim.animation_alongshore(data, savedir=anim_dir, fps=30.0)
+anim.animation_contour(data, savedir=anim_dir, fps=30.0)
+anim.animation_contour_uv(data, savedir=anim_dir, fps=30.0)
 
 # Close data
 data.close()
