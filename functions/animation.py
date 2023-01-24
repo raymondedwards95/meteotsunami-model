@@ -30,6 +30,7 @@ def animation_contour(
     data: xr.Dataset,
     savedir: str,
     xlims: Numeric = None,
+    ylims: Numeric = None,
     _test_i_max: Integer = None,
     close: bool = True,
     fps: Numeric = 20,
@@ -43,6 +44,7 @@ def animation_contour(
 
     Options:
         `xlims`:    x-limits for the figure
+        `ylims`:    y-limits for the figure
         `close`:    close figure after finishing
         `fps`:      number of frames per second in the video
         `static`:   save first frame as image
@@ -94,6 +96,9 @@ def animation_contour(
     if xlims is None:
         xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
 
+    if ylims is None:
+        ylims = [0.0, y.max() / 1000.0]
+
     # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
     fig.set_dpi(200)
@@ -110,8 +115,8 @@ def animation_contour(
 
     def set_plotdata(i=0):
         plotdata[0] = ax[0].contourf(
-            y / 1000,
-            x / 1000,
+            y / 1000.0,
+            x / 1000.0,
             wl.isel(t=i).T,
             vmin=-1.0 * wl_max,
             vmax=wl_max,
@@ -119,8 +124,8 @@ def animation_contour(
             levels=wl_levels,
         )
         plotdata[1] = ax[1].contourf(
-            y / 1000,
-            x / 1000,
+            y / 1000.0,
+            x / 1000.0,
             p.isel(t=i).T,
             vmin=-1.0 * p_max,
             vmax=p_max,
@@ -142,7 +147,7 @@ def animation_contour(
             ax[i].axhline(color="black", linewidth=1, alpha=0.5)
             ax[i].axvline(color="black", linewidth=1, alpha=0.5)
             ax[i].set_ylabel("$x$ [km]")
-            ax[i].set_ylim([0, 200])
+            ax[i].set_ylim(ylims)
             ax[i].set_xlim(xlims)
 
             # colorbar
@@ -220,6 +225,7 @@ def animation_contour_uv(
     data: xr.Dataset,
     savedir: str,
     xlims: Numeric = None,
+    ylims: Numeric = None,
     _test_i_max: Integer = None,
     close: bool = True,
     fps: Numeric = 20,
@@ -233,6 +239,7 @@ def animation_contour_uv(
 
     Options:
         `xlims`:    x-limits for the figure
+        `ylims`:    y-limits for the figure
         `close`:    close figure after finishing
         `fps`:      number of frames per second in the video
         `static`:   save first frame as image
@@ -264,6 +271,9 @@ def animation_contour_uv(
     if xlims is None:
         xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
 
+    if ylims is None:
+        ylims = [0.0, y.max() / 1000.0]
+
     uv_levels = np.linspace(-1.0 * uv_max, uv_max, 101)
     uv_ticks = np.linspace(-1.0 * uv_max, uv_max, 5)
 
@@ -283,8 +293,8 @@ def animation_contour_uv(
 
     def set_plotdata(i=0):
         plotdata[0] = ax[0].contourf(
-            y / 1000,
-            x / 1000,
+            y / 1000.0,
+            x / 1000.0,
             u.isel(t=i).T,
             vmin=-1.0 * uv_max,
             vmax=uv_max,
@@ -292,8 +302,8 @@ def animation_contour_uv(
             levels=uv_levels,
         )
         plotdata[1] = ax[1].contourf(
-            y / 1000,
-            x / 1000,
+            y / 1000.0,
+            x / 1000.0,
             v.isel(t=i).T,
             vmin=-1.0 * uv_max,
             vmax=uv_max,
@@ -315,7 +325,7 @@ def animation_contour_uv(
             ax[i].axhline(color="black", linewidth=1, alpha=0.5)
             ax[i].axvline(color="black", linewidth=1, alpha=0.5)
             ax[i].set_ylabel("$x$ [km]")
-            ax[i].set_ylim([0, 200])
+            ax[i].set_ylim(ylims)
             ax[i].set_xlim(xlims)
 
             # colorbar
@@ -445,8 +455,10 @@ def animation_alongshore(
     plottext = np.zeros(1, dtype=object)
 
     def set_plotdata(i=0):
-        plotdata[0] = ax[0].plot(y / 1000, wl.isel(t=i).interp(x=10000), color="C0")[0]
-        plotdata[1] = ax[1].plot(y / 1000, p.isel(t=i).interp(x=10000), color="C1")[0]
+        plotdata[0] = ax[0].plot(y / 1000.0, wl.isel(t=i).interp(x=10000), color="C0")[
+            0
+        ]
+        plotdata[1] = ax[1].plot(y / 1000.0, p.isel(t=i).interp(x=10000), color="C1")[0]
 
     def set_plottext(i=0):
         plottext[0] = ax[0].set_title(
@@ -579,7 +591,7 @@ def animation_crossshore(
     def set_plotdata(i=0):
         for j in range(slices):
             plotdata[j] = ax[j].plot(
-                x / 1000,
+                x / 1000.0,
                 wl.isel(t=i).interp(y=_y[j]),
                 color="C0",
                 label=f"$y={_y[j]/1000:0.0f}$ km",
