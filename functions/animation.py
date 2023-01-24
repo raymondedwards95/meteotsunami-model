@@ -97,7 +97,7 @@ def animation_contour(
         xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
 
     if ylims is None:
-        ylims = [0.0, y.max() / 1000.0]
+        ylims = [0.0, x.max() / 1000.0]
 
     # Figure options
     fig, ax = plt.subplots(2, 1, sharey=True)
@@ -272,7 +272,7 @@ def animation_contour_uv(
         xlims = [y.min() / 1000.0 / 10.0, y.max() / 1000.0]
 
     if ylims is None:
-        ylims = [0.0, y.max() / 1000.0]
+        ylims = [0.0, x.max() / 1000.0]
 
     uv_levels = np.linspace(-1.0 * uv_max, uv_max, 101)
     uv_ticks = np.linspace(-1.0 * uv_max, uv_max, 5)
