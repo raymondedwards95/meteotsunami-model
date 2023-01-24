@@ -231,18 +231,6 @@ def find_local_maxima_y(
     return y_idx_valid
 
 
-def relative_ceil(x: Floating) -> Floating:
-    """Takes closest ceiling of a number
-
-    Examples:
-        1.2 -> 2
-        0.12 -> 0.2
-        0.002 -> 0.01
-    """
-    s = -1 * int(np.floor(np.log10(np.abs(x))))
-    return np.round(x, s) + np.power(10.0, -1.0 * s)
-
-
 def relative_ceil(x: float, e: float = None, s: float = 1) -> float:
     """Takes closest ceiling of a number
 
@@ -270,8 +258,8 @@ def relative_ceil(x: float, e: float = None, s: float = 1) -> float:
 
     if e is None:
         e = np.floor(np.log10(np.abs(x)))
-    s = np.sign(x)
-    return s * np.ceil(np.abs(x) / np.power(10.0, e - s)) * np.power(10.0, e - s)
+    p = np.sign(x)
+    return p * np.ceil(np.abs(x) / np.power(10.0, e - s)) * np.power(10.0, e - s)
 
 
 relative_ceil = np.vectorize(relative_ceil)
@@ -328,16 +316,16 @@ if __name__ == "__main__":
     print(f"{relative_ceil(1.2)=}")
     print(f"{relative_ceil(0.12)=}")
     print(f"{relative_ceil(0.002)=}")
-    print(f"{relative_ceil(0.1234, o=1)=}")
-    print(f"{relative_ceil(0.1234, o=2)=}")
-    print(f"{relative_ceil(0.1234, o=3)=}")
+    print(f"{relative_ceil(-0.1234, s=1)=}")
+    print(f"{relative_ceil(-0.1234, s=2)=}")
+    print(f"{relative_ceil(-0.1234, s=3)=}")
     print(f"{relative_ceil([1.2, -1.2])=}")
     print(f"{relative_ceil([0.12, -0.12])=}")
     print(f"{relative_ceil([0.002, -0.002])=}")
     print(f"{relative_ceil([5.123e-4, -5.9876e-4, 7.123456789e-10])=}")
     print(f"{relative_ceil([5.123e-4, -5.9876e-4, 7.123456789e-10], e=-6)=}")
-    print(f"{relative_ceil([5.123e-4, -5.9876e-4, 7.123456789e-10], o=2)=}")
-    print(f"{relative_ceil([5.123e-4, -5.9876e-4, 7.123456789e-10], o=4)=}")
+    print(f"{relative_ceil([5.123e-4, -5.9876e-4, 7.123456789e-10], s=2)=}")
+    print(f"{relative_ceil([5.123e-4, -5.9876e-4, 7.123456789e-10], s=4)=}")
 
     print(f"{none_multiply(2, 3)=}")
     print(f"{none_multiply(2, None)=}")
