@@ -39,4 +39,9 @@ The following versions of software are used. The project may run on other versio
 * Delft3D-FM 0.9.1 (8 July 2020);
 * Python 3.11;
 
-and the packages in `requirements.txt`:
+and the packages in `requirements.txt`.
+
+The following optional packages are used for creating additional figures in `theory`:
+
+* Cartopy;
+* Climetlab.
