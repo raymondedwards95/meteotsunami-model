@@ -116,11 +116,11 @@ class plot_spectrum_2d(plot_base):
 
         # x-axis
         self.ax.set_xlabel(f"Wavenumber [1 / {self.unit}]")
-        self.ax.set_xlim(0, fu.relative_ceil(0.8 * self.k_max_scaled))
+        self.ax.set_xlim(0, fu.relative_ceil(0.8 * self.k_max_scaled, s=2))
 
         # y-axis
         self.ax.set_ylabel("Frequency [cycles / hour]")
-        self.ax.set_ylim(0, fu.relative_ceil(0.8 * self.f_max_scaled))
+        self.ax.set_ylim(0, fu.relative_ceil(0.8 * self.f_max_scaled, s=2))
 
     def _setup_cax(self) -> None:
         """Colorbar location setup
@@ -211,13 +211,13 @@ class plot_spectrum_2d(plot_base):
         self.k_max_scaled = np.min(
             [
                 np.max(wavenumber) * self.scale_factor,
-                fu.relative_ceil(self.k_max * self.scale_factor),
+                fu.relative_ceil(self.k_max * self.scale_factor, s=2),
             ]
         )
         self.f_max_scaled = np.min(
             [
                 np.max(freqs) * self.time_scale_factor,
-                fu.relative_ceil(self.f_max * self.time_scale_factor),
+                fu.relative_ceil(self.f_max * self.time_scale_factor, s=2),
             ]
         )
 
@@ -259,7 +259,9 @@ class plot_spectrum_2d(plot_base):
         ylims = self.ax.get_ylim()
 
         # Compute and plot dispersion relation
-        wavenumber = np.linspace(np.min(xlims), np.max(xlims), 100) / self.scale_factor
+        wavenumber = (
+            np.linspace(np.min(xlims), self.k_max_scaled, 100) / self.scale_factor
+        )
 
         for i in range(n):
             dispersion = fa.dispersion_relation(wavenumber, n=i, alpha=alpha)
@@ -274,17 +276,17 @@ class plot_spectrum_2d(plot_base):
             self.ax.annotate(
                 text=f"$n={i}$",
                 xytext=(
-                    0.99 * self.scale_factor * wavenumber[-1],
-                    1.02 * self.time_scale_factor * dispersion[-1],
+                    0.8 * 0.99 * self.scale_factor * wavenumber[-1],
+                    0.8 * 1.02 * self.time_scale_factor * dispersion[-1],
                 ),
                 xy=(
-                    self.scale_factor * wavenumber[-1],
-                    self.time_scale_factor * dispersion[-1],
+                    0.8 * self.scale_factor * wavenumber[-1],
+                    0.8 * self.time_scale_factor * dispersion[-1],
                 ),
                 xycoords="data",
                 textcoords="data",
                 ha="right",
-                va="bottom",
+                va="top",
             )
 
         # Reset limits of figure
