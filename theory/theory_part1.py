@@ -303,7 +303,7 @@ if __name__ == "__main__":
 
         data = source.to_xarray()
         data = data["wmb"].sel(time=data["time"].min())
-        data = -1. * data
+        data = -1.0 * data
         data = data.fillna(0.0)
 
     # Parameters
