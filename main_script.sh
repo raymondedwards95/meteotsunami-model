@@ -285,6 +285,7 @@ function func_theory ()
     echo "# Creating figures in '$PWD'"
     python3 $PWD/theory_part1.py 1> "${LogFolder}/theory_part1.log" 2>&1 &
     python3 $PWD/theory_part2.py 1> "${LogFolder}/theory_part2.log" 2>&1 &
+    python3 $PWD/theory_part3.py 1> "${LogFolder}/theory_part3.log" 2>&1 &
     wait
     cd ..
     echo "# Returned to '$PWD'"
