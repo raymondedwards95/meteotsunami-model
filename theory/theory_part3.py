@@ -120,6 +120,22 @@ if __name__ == "__main__":
         data = -1.0 * data
         data = data.fillna(0.0)
 
+        interpolate = 5
+        data = data.interp(
+            longitude=np.linspace(
+                data["longitude"].min(),
+                data["longitude"].max(),
+                (data["longitude"].size - 1) * interpolate + 1,
+            )
+        )
+        data = data.interp(
+            latitude=np.linspace(
+                data["latitude"].min(),
+                data["latitude"].max(),
+                (data["latitude"].size - 1) * interpolate + 1,
+            )
+        )
+
     # Parameters
 
     # Figures
