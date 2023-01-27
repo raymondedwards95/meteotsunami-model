@@ -126,14 +126,12 @@ if __name__ == "__main__":
                 data["longitude"].min(),
                 data["longitude"].max(),
                 (data["longitude"].size - 1) * interpolate + 1,
-            )
-        )
-        data = data.interp(
+            ),
             latitude=np.linspace(
                 data["latitude"].min(),
                 data["latitude"].max(),
                 (data["latitude"].size - 1) * interpolate + 1,
-            )
+            ),
         )
 
     # Parameters
