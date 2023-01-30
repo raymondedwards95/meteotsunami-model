@@ -33,6 +33,23 @@ from functions import *
 # fmt: on
 
 
+# Data
+LOCATIONS = {
+    "Vlissingen": {
+        "lon": 3.566667,
+        "lat": 51.45,
+    },
+    "Scheveningen": {
+        "lon": 4.273056,
+        "lat": 52.108056,
+    },
+    "Den Helder": {
+        "lon": 4.75,
+        "lat": 52.933333,
+    },
+}
+
+
 # Map
 def theory_figure_map(
     savename: str = None,
@@ -84,15 +101,15 @@ def theory_figure_map(
 
     if locations:
         ax.plot(
-            [3.566667],
-            [51.45],
+            [LOCATIONS["Vlissingen"]["lon"]],
+            [LOCATIONS["Vlissingen"]["lat"]],
             "*",
             label="Vlissingen",
             color="C0",
         )
         ax.annotate(
             text="Vlissingen",
-            xy=[3.566667, 51.45],
+            xy=[LOCATIONS["Vlissingen"]["lon"], LOCATIONS["Vlissingen"]["lat"]],
             xytext=[0.98, 0.03],
             textcoords="axes fraction",
             color="C0",
@@ -102,15 +119,15 @@ def theory_figure_map(
             backgroundcolor="white",
         )
         ax.plot(
-            [4.273056],
-            [52.108056],
+            [LOCATIONS["Scheveningen"]["lon"]],
+            [LOCATIONS["Scheveningen"]["lat"]],
             "*",
             label="Scheveningen",
             color="C1",
         )
         ax.annotate(
             text="Scheveningen",
-            xy=[4.273056, 52.108056],
+            xy=[LOCATIONS["Scheveningen"]["lon"], LOCATIONS["Scheveningen"]["lat"]],
             xytext=[0.98, 0.11],
             textcoords="axes fraction",
             color="C1",
@@ -120,15 +137,15 @@ def theory_figure_map(
             backgroundcolor="white",
         )
         ax.plot(
-            [4.75],
-            [52.933333],
+            [LOCATIONS["Den Helder"]["lon"]],
+            [LOCATIONS["Den Helder"]["lat"]],
             "*",
             label="Den Helder",
             color="C2",
         )
         ax.annotate(
             text="Den Helder",
-            xy=[4.75, 52.933333],
+            xy=[LOCATIONS["Den Helder"]["lon"], LOCATIONS["Den Helder"]["lat"]],
             xytext=[0.98, 0.19],
             textcoords="axes fraction",
             color="C2",
