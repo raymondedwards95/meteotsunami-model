@@ -67,12 +67,6 @@ def theory_figure_map(
     if savename is None:
         savename = f"{figure_dir}/map"
 
-    # Options
-    arrowprops = dict(
-        arrowstyle="->",
-        connectionstyle="angle,angleA=180,angleB=90",
-    )
-
     # Figure
     fig = plt.figure()
     fig.set_size_inches(FIGSIZE_NORMAL)
@@ -100,65 +94,40 @@ def theory_figure_map(
         ax.tick_params(labelright=False)
 
     if locations:
-        ax.plot(
-            [LOCATIONS["Vlissingen"]["lon"]],
-            [LOCATIONS["Vlissingen"]["lat"]],
-            "*",
-            label="Vlissingen",
-            color="C0",
-        )
-        ax.annotate(
-            text="Vlissingen",
-            xy=[LOCATIONS["Vlissingen"]["lon"], LOCATIONS["Vlissingen"]["lat"]],
-            xytext=[0.98, 0.03],
-            textcoords="axes fraction",
-            color="C0",
-            ha="right",
-            va="bottom",
-            arrowprops=arrowprops,
-            backgroundcolor="white",
-        )
-        ax.plot(
-            [LOCATIONS["Scheveningen"]["lon"]],
-            [LOCATIONS["Scheveningen"]["lat"]],
-            "*",
-            label="Scheveningen",
-            color="C1",
-        )
-        ax.annotate(
-            text="Scheveningen",
-            xy=[LOCATIONS["Scheveningen"]["lon"], LOCATIONS["Scheveningen"]["lat"]],
-            xytext=[0.98, 0.11],
-            textcoords="axes fraction",
-            color="C1",
-            ha="right",
-            va="bottom",
-            arrowprops=arrowprops,
-            backgroundcolor="white",
-        )
-        ax.plot(
-            [LOCATIONS["Den Helder"]["lon"]],
-            [LOCATIONS["Den Helder"]["lat"]],
-            "*",
-            label="Den Helder",
-            color="C2",
-        )
-        ax.annotate(
-            text="Den Helder",
-            xy=[LOCATIONS["Den Helder"]["lon"], LOCATIONS["Den Helder"]["lat"]],
-            xytext=[0.98, 0.19],
-            textcoords="axes fraction",
-            color="C2",
-            ha="right",
-            va="bottom",
-            arrowprops=arrowprops,
-            backgroundcolor="white",
-        )
+        for i, loc in enumerate(["Vlissingen", "Scheveningen", "Den Helder"]):
+            ax.plot(
+                [LOCATIONS[loc]["lon"]],
+                [LOCATIONS[loc]["lat"]],
+                "*",
+                label=f"{loc}",
+                color=f"C{i}",
+            )
+            ax.annotate(
+                text=f"{loc}",
+                xy=[LOCATIONS[loc]["lon"], LOCATIONS[loc]["lat"]],
+                xytext=[0.98, 0.03 + i * 0.08],
+                textcoords="axes fraction",
+                color=f"C{i}",
+                ha="right",
+                va="bottom",
+                arrowprops=dict(
+                    arrowstyle="->",
+                    connectionstyle="angle,angleA=180,angleB=90",
+                ),
+                bbox=dict(
+                    facecolor="white",
+                    edgecolor="white",
+                ),
+            )
 
     coastlines = ax.coastlines("10m")
     landsurface = ax.add_feature(
         cfeature.NaturalEarthFeature(
-            "physical", "land", "10m", edgecolor="black", facecolor="gray"
+            "physical",
+            "land",
+            "10m",
+            edgecolor="black",
+            facecolor="silver",
         )
     )
     ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True)
