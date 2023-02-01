@@ -362,6 +362,11 @@ if __name__ == "__main__":
     print(f"{none_multiply(None, 3)=}")
     print(f"{none_multiply(None, None)=}")
 
+    print(f"{haversine(0)=}")
+    print(f"{haversine(1)=}")
+    print(f"{haversine(np.pi)=}")
+    print(f"{haversine(2.0 * np.pi)=}")
+
     # End
     if skip_data is False:
         data.close()
