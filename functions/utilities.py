@@ -272,6 +272,36 @@ def none_multiply(x: Numeric | None, y: Numeric | None) -> Numeric | None:
     return x * y
 
 
+def haversine(angle: Numeric) -> Floating:
+    """Computes the haversine of the angle"""
+    return (1.0 - np.cos(angle)) / 2.0
+
+
+def haversine_distance(
+    lon_1: Numeric, lat_1: Numeric, lon_2: Numeric, lat_2: Numeric
+) -> Floating:
+    """Computes the distance between points on a sphere
+
+    Input:
+        `lon_1`:    longitude of point 1 in degrees
+        `lat_1`:    latitude of point 1 in degrees
+        `lon_2`:    longitude of point 2 in degrees
+        `lat_2`:    latitude of point 2 in degrees
+    """
+    R = 6371000.0  # radius earth
+
+    lon_1 = np.deg2rad(lon_1)
+    lat_1 = np.deg2rad(lat_1)
+    lon_2 = np.deg2rad(lon_2)
+    lat_2 = np.deg2rad(lat_2)
+
+    h = haversine(lat_2 - lat_1) + np.cos(lat_1) * np.cos(lat_2) * haversine(
+        lon_2 - lon_1
+    )
+
+    return 2.0 * R * np.arcsin(np.power(h, 1 / 2.0))
+
+
 if __name__ == "__main__":
     print("\nRunning inside 'utilities.py'")
 
