@@ -273,7 +273,7 @@ def none_multiply(x: Numeric | None, y: Numeric | None) -> Numeric | None:
 
 
 def haversine(angle: Numeric) -> Floating:
-    """Computes the haversine of the angle"""
+    """Computes the haversine of the angle in radians"""
     return (1.0 - np.cos(angle)) / 2.0
 
 
@@ -366,6 +366,13 @@ if __name__ == "__main__":
     print(f"{haversine(1)=}")
     print(f"{haversine(np.pi)=}")
     print(f"{haversine(2.0 * np.pi)=}")
+
+    print(f"{haversine_distance(0, 0, 0, 1)=}")
+    print(f"{haversine_distance(0, 0, 1, 0)=}")
+    print(f"{haversine_distance(45, 45, 45, 46)=}")
+    print(f"{haversine_distance(45, 45, 46, 45)=}")
+    print(f"{haversine_distance(0, 0, 0, 0.01)=}")
+    print(f"{haversine_distance(0, 0, 0.01, 0)=}")
 
     # End
     if skip_data is False:
