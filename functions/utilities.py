@@ -369,6 +369,8 @@ if __name__ == "__main__":
 
     print(f"{haversine_distance(0, 0, 0, 1)=}")
     print(f"{haversine_distance(0, 0, 1, 0)=}")
+    print(f"{haversine_distance(0, 0, 0, -1)=}")
+    print(f"{haversine_distance(0, 0, -1, 0)=}")
     print(f"{haversine_distance(45, 45, 45, 46)=}")
     print(f"{haversine_distance(45, 45, 46, 45)=}")
     print(f"{haversine_distance(0, 0, 0, 0.01)=}")
