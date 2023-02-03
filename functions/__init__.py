@@ -67,6 +67,7 @@ assert PATH_PGF.endswith("pgf")
 # Dask options
 dask.config.set({"array.chunk-size": "512MiB"})
 
+
 # General functions
 def save_figure(fig: mpl.figure, name: str, path: str = None) -> None:
     """Saves figure as a low-res png-file and a high res pgf-file
