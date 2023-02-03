@@ -30,6 +30,7 @@ except:
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from functions import *
+import functions.utilities as fu
 # fmt: on
 
 
@@ -148,6 +149,94 @@ def theory_figure_map(
     return
 
 
+# Cross-section bathymetry
+def theory_figure_cross(
+    bathymetry: xr.DataArray,
+    savename: str = None,
+) -> None:
+    """Create figure of cross sections of bathymetry
+
+    Input:
+        `bathymetry`:   data with bathymetry
+
+    Options:
+        `savename`:     figure name
+    """
+    # Arguments
+    if savename is None:
+        savename = f"{figure_dir}/map-cross-section"
+
+    if isinstance(bathymetry, xr.Dataset):
+        raise TypeError(
+            f"Parameter `bathymetry` should be xr.DataArray instead of `{type(bathymetry)}`"
+        )
+
+    dist_max = 2e5
+
+    # Figure
+    fig, ax = plt.subplots(1, 1)
+    fig.set_size_inches(FIGSIZE_NORMAL)
+    fig.set_dpi(FIG_DPI)
+    fig.set_layout_engine("compressed")
+    fig.suptitle("Cross-sections of bottom topography", va="top", ha="left", x=0.01)
+
+    for i, loc in enumerate(["Vlissingen", "Scheveningen", "Den Helder"]):
+        # Select longitude
+        lon_max = LOCATIONS[loc]["lon"]
+        lon_min = LOCATIONS[loc]["lon"] - 5
+        lons = bathymetry["longitude"].sel(longitude=slice(lon_min, lon_max)).values
+        # lons = np.linspace(lon_min, lon_max, 500)
+        lons = xr.DataArray(lons, dims="distance")
+
+        # Select latitude
+        lat_max = LOCATIONS[loc]["lat"] + 5
+        lat_min = LOCATIONS[loc]["lat"]
+        lats = bathymetry["latitude"].sel(latitude=slice(lat_min, lat_max)).values[::-1]
+        # lats = np.linspace(lat_min, lat_max, 500)[::-1]
+        lats = xr.DataArray(lats, dims="distance")
+
+        # Interpolate over section
+        cross = bathymetry.interp(latitude=lats, longitude=lons)
+
+        # Compute distance from reference
+        cross["distance"] = fu.haversine_distance(
+            LOCATIONS[loc]["lon"],
+            LOCATIONS[loc]["lat"],
+            lons.values,
+            lats.values,
+        )
+
+        # Selecting data by distance
+        cross = cross.where(cross["distance"] <= dist_max)
+
+        # Plot
+        ax.plot(
+            cross["distance"] / 1e3,
+            cross,
+            label=loc,
+            rasterized=False,
+        )
+        # ax.fill_between(
+        #     cross["distance"] / 1e3,
+        #     cross,
+        #     alpha=0.1,
+        #     rasterized=False,
+        # )
+
+    ax.legend()
+    ax.grid()
+    ax.set_xlabel("Distance from Location [km]")
+    ax.set_ylabel("Water Depth [m]")
+    ax.axhline(color="black", linewidth=1, alpha=0.5)
+    ax.set_xlim(0.0, dist_max / 1e3)
+
+    fig.get_layout_engine().execute(fig)
+    save_figure(fig, savename)
+
+    print(f"Saved figure {savename}")
+    return
+
+
 if __name__ == "__main__":
     # Settings
     show_figures = False
@@ -169,24 +258,26 @@ if __name__ == "__main__":
             format="netcdf",
         )
 
-        data = source.to_xarray()
-        data = data["wmb"].sel(time=data["time"].min())
+        data = source.to_xarray(chunks="auto")
+        data = data["wmb"].sel(time=data["time"].min()).drop_vars("time")
+        data = data.astype(float)
         data = -1.0 * data
         data = data.fillna(0.0)
 
         interpolate = 5
-        data = data.interp(
-            longitude=np.linspace(
-                data["longitude"].min(),
-                data["longitude"].max(),
-                (data["longitude"].size - 1) * interpolate + 1,
-            ),
-            latitude=np.linspace(
-                data["latitude"].min(),
-                data["latitude"].max(),
-                (data["latitude"].size - 1) * interpolate + 1,
-            ),
-        )
+        if interpolate > 1:
+            data = data.interp(
+                longitude=np.linspace(
+                    data["longitude"].min(),
+                    data["longitude"].max(),
+                    (data["longitude"].size - 1) * interpolate + 1,
+                ),
+                latitude=np.linspace(
+                    data["latitude"].min(),
+                    data["latitude"].max(),
+                    (data["latitude"].size - 1) * interpolate + 1,
+                ),
+            )
 
     # Parameters
 
@@ -195,6 +286,8 @@ if __name__ == "__main__":
         theory_figure_map()
     if create_map and fill_map:
         theory_figure_map(bathymetry=data, locations=True)
+    if fill_map:
+        theory_figure_cross(bathymetry=data)
 
     # End
     if show_figures:
