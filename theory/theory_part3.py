@@ -90,7 +90,7 @@ def theory_figure_map(
         )
 
         cb = fig.colorbar(cf, ax=ax, extend="min")
-        cb.set_label("Water Depth [m]")
+        cb.set_label("Bed Level [m]")
 
         ax.tick_params(labelright=False)
 
@@ -226,7 +226,7 @@ def theory_figure_cross(
     ax.legend()
     ax.grid()
     ax.set_xlabel("Distance from Location [km]")
-    ax.set_ylabel("Water Depth [m]")
+    ax.set_ylabel("Bed Level [m]")
     ax.axhline(color="black", linewidth=1, alpha=0.5)
     ax.set_xlim(0.0, dist_max / 1e3)
 
