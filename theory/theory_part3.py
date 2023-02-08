@@ -110,6 +110,9 @@ def theory_figure_map(
                 "*",
                 label=f"{loc}",
                 color=f"C{i}",
+                markersize=10,
+                markeredgecolor="black",
+                markeredgewidth=0.8,
             )
             ax.annotate(
                 text=f"{loc}",
@@ -122,6 +125,8 @@ def theory_figure_map(
                 arrowprops=dict(
                     arrowstyle="->",
                     connectionstyle="angle,angleA=180,angleB=90",
+                    shrinkA=0,
+                    shrinkB=5,
                 ),
                 bbox=dict(
                     facecolor="white",
