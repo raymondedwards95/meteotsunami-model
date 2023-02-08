@@ -14,6 +14,18 @@ sns.set_palette(sns.color_palette("muted"))
 # Matplotlib figure options
 mpl.rcParams["axes.formatter.use_mathtext"] = True  # write x10^p instead of 1ep
 
+mpl.rcParams["pgf.texsystem"] = "xelatex"  # set xelatex as latex engine
+mpl.rcParams["pgf.rcfonts"] = False  # unset default matplotlib fonts for pgf
+mpl.rcParams["pgf.preamble"] = "\n".join(
+    [
+        r"\usepackage{amsmath}",
+        r"\usepackage{amssymb}",
+        r"\usepackage{siunitx}",
+        r"\usepackage{kpfonts-otf}",
+    ]
+)  # apply packages for pgf
+
+
 # Matplotlib video options
 mpl.rcParams["animation.codec"] = "libsvtav1"
 ANIM_EXT = "webm"
