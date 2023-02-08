@@ -56,6 +56,7 @@ def theory_figure_map(
     savename: str = None,
     bathymetry: xr.Dataset = None,
     locations: bool = False,
+    zoom: bool = False,
 ) -> None:
     """Create figure of the area of interest
 
@@ -63,10 +64,17 @@ def theory_figure_map(
         `savename`:     figure name
         `bathymetry`:   plot data from given Dataset
         `locations`:    plot points for specific locations if true
+        `zoom`:         focus on small part of full area
     """
+    max_depth = -200.0
+
     # Arguments
     if savename is None:
         savename = f"{figure_dir}/map"
+
+    if zoom:
+        savename = f"{savename}-zoom"
+        max_depth = -50.0
 
     # Figure
     fig = plt.figure()
@@ -84,8 +92,8 @@ def theory_figure_map(
             data["longitude"],
             data["latitude"],
             data,
-            cmap=cmo.tools.crop(cmo.cm.topo, -200, 0, 0),
-            vmin=-200,
+            cmap=cmo.tools.crop(cmo.cm.topo, max_depth, 0, 0),
+            vmin=max_depth,
             rasterized=True,
         )
 
@@ -133,8 +141,12 @@ def theory_figure_map(
     )
     ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True)
 
-    ax.set_xlim([-10, 10])
-    ax.set_ylim([45, 60])
+    if zoom:
+        ax.set_xlim([1.0, 6.0])
+        ax.set_ylim([50.5, 54.5])
+    else:
+        ax.set_xlim([-10.0, 10.0])
+        ax.set_ylim([45.0, 60.0])
     ax.set_aspect(1)
     ax.set_xlabel("Longitude")
     ax.set_ylabel("Latitude")
@@ -284,8 +296,10 @@ if __name__ == "__main__":
     # Figures
     if create_map:
         theory_figure_map()
+        theory_figure_map(zoom=True)
     if create_map and fill_map:
         theory_figure_map(bathymetry=data, locations=True)
+        theory_figure_map(bathymetry=data, locations=True, zoom=True)
     if fill_map:
         theory_figure_cross(bathymetry=data)
 
