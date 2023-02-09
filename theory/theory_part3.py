@@ -40,9 +40,9 @@ LOCATIONS = {
         "lon": 3.566667,
         "lat": 51.45,
     },
-    "Scheveningen": {
-        "lon": 4.273056,
-        "lat": 52.108056,
+    "Hoek van Holland": {
+        "lon": 4.128611,
+        "lat": 51.981111,
     },
     "Den Helder": {
         "lon": 4.75,
@@ -103,7 +103,7 @@ def theory_figure_map(
         ax.tick_params(labelright=False)
 
     if locations:
-        for i, loc in enumerate(["Vlissingen", "Scheveningen", "Den Helder"]):
+        for i, loc in enumerate(["Vlissingen", "Hoek van Holland", "Den Helder"]):
             ax.plot(
                 [LOCATIONS[loc]["lon"]],
                 [LOCATIONS[loc]["lat"]],
@@ -197,7 +197,7 @@ def theory_figure_cross(
     fig.set_layout_engine("compressed")
     fig.suptitle("Cross-sections of bottom topography", va="top", ha="left", x=0.01)
 
-    for i, loc in enumerate(["Vlissingen", "Scheveningen", "Den Helder"]):
+    for i, loc in enumerate(["Vlissingen", "Hoek van Holland", "Den Helder"]):
         # Select longitude
         lon_max = LOCATIONS[loc]["lon"]
         lon_min = LOCATIONS[loc]["lon"] - 5
