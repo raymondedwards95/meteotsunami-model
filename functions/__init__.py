@@ -25,6 +25,15 @@ mpl.rcParams["pgf.preamble"] = "\n".join(
     ]
 )  # apply packages for pgf
 
+mpl.rcParams["text.usetex"] = True
+mpl.rcParams["text.latex.preamble"] = "\n".join(
+    [
+        r"\usepackage{amsmath}",
+        r"\usepackage{amssymb}",
+        r"\usepackage{siunitx}",
+        r"\usepackage{arev}",
+    ]
+)  # apply packages for png
 
 # Matplotlib video options
 mpl.rcParams["animation.codec"] = "libsvtav1"
