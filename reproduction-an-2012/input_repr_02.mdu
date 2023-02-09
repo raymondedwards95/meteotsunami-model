@@ -129,7 +129,7 @@ Gammax                            = 1               # Maximum wave height/water 
 [time]
 RefDate                           = 19700101        # Reference date [YYYY-MM-DD HH:MM:SS]
 Tzone                             = 0               # Time zone assigned to input time series
-DtUser                            = 3               # Time interval for external forcing update [Dd HH:MM:SS.ZZZ]
+DtUser                            = 60              # Time interval for external forcing update [Dd HH:MM:SS.ZZZ]
 DtNodal                           = 21600           # Time interval (s) for updating nodal factors in astronomical boundary conditions [Dd HH:MM:SS.ZZZ]
 DtMax                             = 60              # Maximal computation timestep
 DtInit                            = 1               # Initial computation timestep
