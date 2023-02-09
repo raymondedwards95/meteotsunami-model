@@ -57,7 +57,7 @@ All different cases are numbered.
 ||||
 | 20 | Set `dx` and `dy` from `10` to `20` km | Spatial resolution of model |
 | 21 | Set `dx` and `dy` from `10` to `40` km | See 20 |
-| 22 | Set `dx` and `dy` from `10` to `5` km | See 20 |
+| 22 | Set `dx` and `dy` from `10` to `5` km | See 20, skipped |
 ||||
 | 31 | Set `x0_p` from `0` km to `100` km | Position of center of pressure disturbance |
 | 32 | Set `x0_p` from `0` km to `200` km | See 31 |
