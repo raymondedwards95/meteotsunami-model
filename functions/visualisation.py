@@ -744,7 +744,10 @@ def vis_contour(
 
     ax[-1].set_xlabel("$y$ [\si{\kilo\meter}]")
     fig.colorbar(
-        im, ax=ax.ravel().tolist(), label="Sea Surface Elevation [\si{\meter}]", aspect=50
+        im,
+        ax=ax.ravel().tolist(),
+        label="Sea Surface Elevation [\si{\meter}]",
+        aspect=50,
     )
 
     # Save figure
