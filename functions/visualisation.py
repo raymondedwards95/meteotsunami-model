@@ -156,8 +156,8 @@ def vis_timeseries(
         ax[i].xaxis.set_minor_locator(MultipleLocator(1))
 
     ax[-1].set_xlabel("Time since start [hours]")
-    ax[0].set_ylabel("Sea Surface Elevation [m]")
-    ax[1].set_ylabel("Atmospheric Pressure [Pa]")
+    ax[0].set_ylabel("Sea Surface Elevation [\si{\meter}]")
+    ax[1].set_ylabel("Atmospheric Pressure [\si{\pascal}]")
     ax[0].set_ylim(np.array([-1.1, 1.1]) * wl_max)
     ax[0].legend(
         [f"$y={y/1000:0.0f}$ km" for y in y_arr],
@@ -196,8 +196,8 @@ def vis_timeseries(
         ax[i].tick_params(axis="y", labelcolor="C0")
         ax2[i].tick_params(axis="y", labelcolor="C1")
 
-        ax[i].set_ylabel("Water Level [m]", color="C0")
-        ax2[i].set_ylabel("Surface Pressure [Pa]", color="C1")
+        ax[i].set_ylabel("Water Level [\si{\meter}]", color="C0")
+        ax2[i].set_ylabel("Surface Pressure [\si{\pascal}]", color="C1")
 
         ax[i].grid()
         ax[i].annotate(
@@ -307,10 +307,10 @@ def vis_alongshore(
         ax[i].plot(y / 1000.0, wl[i])
         ax[i].axhline(color="black", linewidth=1)
         ax[i].set_xlim(0, y.max() / 1000.0)
-        ax[i].set_ylabel("$SSE$ [m]")
+        ax[i].set_ylabel("$SSE$ [\si{\meter}]")
         ax[i].set_title(f"$x={x/1000:0.0f}$ km and $t={t_list[i]/3600:0.1f}$ hours")
         ax[i].grid()
-    ax[-1].set_xlabel("$y$ [km]")
+    ax[-1].set_xlabel("$y$ [\si{\kilo\meter}]")
 
     fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
@@ -429,10 +429,10 @@ def vis_crossshore(
             ax[i, j].grid()
 
     for i in range(t_num):
-        ax[i, 0].set_ylabel("$SSE$ [m]")
+        ax[i, 0].set_ylabel("$SSE$ [\si{\meter}]")
 
     for j in range(y_num):
-        ax[-1, j].set_xlabel("$x$ [km]")
+        ax[-1, j].set_xlabel("$x$ [\si{\kilo\meter}]")
 
     fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
@@ -730,7 +730,7 @@ def vis_contour(
             vmin=var_min,
             vmax=var_max,
         )
-        ax[i].set_ylabel("$x$ [km]")
+        ax[i].set_ylabel("$x$ [\si{\kilo\meter}]")
         # ax[i].set_title(f"$t = {t_arr[i] / 3600:0.1f}$h")
         ax[i].annotate(
             f"$t = {t_arr[i] / 3600:0.1f}$h",
@@ -742,9 +742,9 @@ def vis_contour(
         ax[i].set_xlim(xlims)
         ax[i].set_ylim(ylims)
 
-    ax[-1].set_xlabel("$y$ [km]")
+    ax[-1].set_xlabel("$y$ [\si{\kilo\meter}]")
     fig.colorbar(
-        im, ax=ax.ravel().tolist(), label="Sea Surface Elevation [m]", aspect=50
+        im, ax=ax.ravel().tolist(), label="Sea Surface Elevation [\si{\meter}]", aspect=50
     )
 
     # Save figure

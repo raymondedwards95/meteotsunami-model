@@ -199,13 +199,13 @@ def plot_bathymetry(
 
     match scale:
         case "m":
-            unit = "m"
+            unit = "\si{\meter}"
             scale_factor = 1e0
         case "km":
-            unit = "km"
+            unit = "\si{\kilo\meter}"
             scale_factor = 1e3
         case "Mm":
-            unit = "Mm"
+            unit = "\si{\mega\meter}"
             scale_factor = 1e6
         case _:
             raise ValueError(
@@ -259,7 +259,7 @@ def plot_bathymetry(
     ax_1.set_xlim(0, xmax)
     ax_1.set_ylim(_ylims)
     ax_1.set_xlabel(f"$x$ [{unit}]")
-    ax_1.set_ylabel("Bed Level [m]")
+    ax_1.set_ylabel("Bed Level [\si{\meter}]")
     ax_1.grid()
     ax_1.legend(loc="upper right")
 
@@ -293,7 +293,7 @@ def plot_bathymetry(
         aspect=25,
         pad=0.01,
     )
-    cbar.set_label("Water Depth [m]")
+    cbar.set_label("Water Depth [\si{\meter}]")
     cbar.set_ticks(np.linspace(0, b_min, 6))
     cbar.set_ticklabels(
         [f"{ticklabel:0.0f}" for ticklabel in np.linspace(0, -1.0 * b_min, 6)]

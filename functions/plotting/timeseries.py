@@ -93,16 +93,16 @@ class plot_timeseries(plot_base):
             ax.set_xlabel("Time [hours]")
 
         # wl
-        ax = self.axes[0].set_ylabel("$wl$ [m]")
+        ax = self.axes[0].set_ylabel("$wl$ [\si{\meter}]")
 
         # u
-        self.axes[1].set_ylabel("$u$ [m/s]")
+        self.axes[1].set_ylabel("$u$ [\si{\meter\per\second}]")
 
         # v
-        self.axes[2].set_ylabel("$v$ [m/s]")
+        self.axes[2].set_ylabel("$v$ [\si{\meter\per\second}]")
 
         # p
-        self.axes[3].set_ylabel("$p$ [Pa]")
+        self.axes[3].set_ylabel("$p$ [\si{\pascal}]")
         self.axes[3].set_ylim(0, None)
 
     def add_plot(

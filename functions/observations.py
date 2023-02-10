@@ -245,13 +245,13 @@ def plot_observations(
 
     match scale:
         case "m":
-            unit = "m"
+            unit = "\si{\meter}"
             scale_factor = 1e0
         case "km":
-            unit = "km"
+            unit = "\si{\kilo\meter}"
             scale_factor = 1e3
         case "Mm":
-            unit = "Mm"
+            unit = "\si{\mega\meter}"
             scale_factor = 1e6
         case _:
             raise ValueError(

@@ -105,13 +105,13 @@ class plot_contour(plot_base):
     def _pick_label(self, variable: str) -> str:
         match variable.lower().strip():
             case "wl":
-                return "Water level [m]"
+                return "Water level [\si{\meter}]"
             case "u":
-                return "Cross shore water velocity [m/s]"
+                return "Cross shore water velocity [\si{\meter\per\second}]"
             case "v":
-                return "Along shore water velocity [m/s]"
+                return "Along shore water velocity [\si{\meter\per\second}]"
             case "p":
-                return "Surface air pressure [Pa]"
+                return "Surface air pressure [\si{\pascal}]"
             case _:
                 raise ValueError(
                     f"'{self.figure_type} {self.figure_num}' - "

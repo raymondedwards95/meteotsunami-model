@@ -146,7 +146,7 @@ def animation_contour(
         for i in range(2):
             ax[i].axhline(color="black", linewidth=1, alpha=0.5)
             ax[i].axvline(color="black", linewidth=1, alpha=0.5)
-            ax[i].set_ylabel("$x$ [km]")
+            ax[i].set_ylabel("$x$ [\si{\kilo\meter}]")
             ax[i].set_ylim(ylims)
             ax[i].set_xlim(xlims)
 
@@ -158,7 +158,7 @@ def animation_contour(
         cbar[0].set_ticks(wl_ticks)
         cbar[1].set_ticks(p_ticks)
 
-        ax[0].set_xlabel("$y$ [km]")
+        ax[0].set_xlabel("$y$ [\si{\kilo\meter}]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
     initfig()
@@ -324,7 +324,7 @@ def animation_contour_uv(
         for i in range(2):
             ax[i].axhline(color="black", linewidth=1, alpha=0.5)
             ax[i].axvline(color="black", linewidth=1, alpha=0.5)
-            ax[i].set_ylabel("$x$ [km]")
+            ax[i].set_ylabel("$x$ [\si{\kilo\meter}]")
             ax[i].set_ylim(ylims)
             ax[i].set_xlim(xlims)
 
@@ -336,7 +336,7 @@ def animation_contour_uv(
         cbar[0].set_ticks(uv_ticks)
         cbar[1].set_ticks(uv_ticks)
 
-        ax[0].set_xlabel("$y$ [km]")
+        ax[0].set_xlabel("$y$ [\si{\kilo\meter}]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
     initfig()
@@ -477,9 +477,9 @@ def animation_alongshore(
 
         ax[0].set_ylim([-1.0 * wl_max, wl_max])
         ax[1].set_ylim([p_min, p_max])
-        ax[1].set_xlabel("$y$ [km]")
-        ax[0].set_ylabel("Sea Surface \nElevation [m]")
-        ax[1].set_ylabel("Surface Air \nPressure [Pa]")
+        ax[1].set_xlabel("$y$ [\si{\kilo\meter}]")
+        ax[0].set_ylabel("Sea Surface \nElevation [\si{\meter}]")
+        ax[1].set_ylabel("Surface Air \nPressure [\si{\pascal}]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
     initfig()
@@ -611,11 +611,11 @@ def animation_crossshore(
             ax[i].axhline(color="black", linewidth=1, alpha=0.5)
             ax[i].axvline(color="black", linewidth=1, alpha=0.5)
             ax[i].set_xlim([0, 200])
-            ax[i].set_ylabel("SSE [m]")
+            ax[i].set_ylabel("SSE [\si{\meter}]")
             ax[i].set_ylim([wl_min, wl_max])
             ax[i].legend()
 
-        ax[-1].set_xlabel("$x$ [km]")
+        ax[-1].set_xlabel("$x$ [\si{\kilo\meter}]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
     initfig()

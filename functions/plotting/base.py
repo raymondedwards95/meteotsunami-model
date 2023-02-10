@@ -67,19 +67,19 @@ class plot_base:
             case "wl":
                 self.variable = "wl"
                 self.variable_long = "Water level"
-                self.variable_unit = "m"
+                self.variable_unit = "\si{\meter}"
             case "u":
                 self.variable = "u"
                 self.variable_long = "Cross shore water velocity"
-                self.variable_unit = "m/s"
+                self.variable_unit = "\si{\meter\per\second}"
             case "v":
                 self.variable = "v"
                 self.variable_long = "Along shore water velocity"
-                self.variable_unit = "m/s"
+                self.variable_unit = "\si{\meter\per\second}"
             case "p":
                 self.variable = "p"
                 self.variable_long = "Surface air pressure"
-                self.variable_unit = "Pa"
+                self.variable_unit = "\si{\pascal}"
             case _:
                 raise ValueError(
                     f"'{self.figure_type} {self.figure_num}' - "
@@ -118,13 +118,13 @@ class plot_base:
 
         match scale:
             case "m":
-                self.unit = "m"
+                self.unit = "\si{\meter}"
                 self.scale_factor = 1e0
             case "km":
-                self.unit = "km"
+                self.unit = "\si{\kilo\meter}"
                 self.scale_factor = 1e3
             case "Mm":
-                self.unit = "Mm"
+                self.unit = "\si{\mega\meter}"
                 self.scale_factor = 1e6
             case _:
                 raise ValueError(
