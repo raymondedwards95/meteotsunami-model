@@ -100,7 +100,7 @@ def animation_contour(
         ylims = [0.0, x.max() / 1000.0]
 
     # Figure options
-    fig, ax = plt.subplots(2, 1, sharey=True)
+    fig, ax = plt.subplots(2, 1, sharex=True, sharey=True)
     fig.set_dpi(200)
     fig.set_size_inches(1440 / fig.get_dpi(), 720 / fig.get_dpi())
     fig.set_tight_layout(True)
@@ -158,7 +158,7 @@ def animation_contour(
         cbar[0].set_ticks(wl_ticks)
         cbar[1].set_ticks(p_ticks)
 
-        ax[0].set_xlabel("$y$ [\si{\kilo\meter}]")
+        ax[-1].set_xlabel("$y$ [\si{\kilo\meter}]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
     initfig()
@@ -278,7 +278,7 @@ def animation_contour_uv(
     uv_ticks = np.linspace(-1.0 * uv_max, uv_max, 5)
 
     # Figure options
-    fig, ax = plt.subplots(2, 1, sharey=True)
+    fig, ax = plt.subplots(2, 1, sharex=True, sharey=True)
     fig.set_dpi(200)
     fig.set_size_inches(1440 / fig.get_dpi(), 720 / fig.get_dpi())
     fig.set_tight_layout(True)
@@ -336,7 +336,7 @@ def animation_contour_uv(
         cbar[0].set_ticks(uv_ticks)
         cbar[1].set_ticks(uv_ticks)
 
-        ax[0].set_xlabel("$y$ [\si{\kilo\meter}]")
+        ax[-1].set_xlabel("$y$ [\si{\kilo\meter}]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
 
     initfig()
@@ -477,7 +477,7 @@ def animation_alongshore(
 
         ax[0].set_ylim([-1.0 * wl_max, wl_max])
         ax[1].set_ylim([p_min, p_max])
-        ax[1].set_xlabel("$y$ [\si{\kilo\meter}]")
+        ax[-1].set_xlabel("$y$ [\si{\kilo\meter}]")
         ax[0].set_ylabel("Sea Surface \nElevation [\si{\meter}]")
         ax[1].set_ylabel("Surface Air \nPressure [\si{\pascal}]")
         return tuple(plotdata.flatten()) + tuple(plottext.flatten())
@@ -578,7 +578,7 @@ def animation_crossshore(
 
     # Figure options
     slices = 5
-    fig, ax = plt.subplots(slices, 1, sharex=True)
+    fig, ax = plt.subplots(slices, 1, sharex=True, sharey=True)
     fig.set_dpi(200)
     fig.set_size_inches(1440 / fig.get_dpi(), 720 / fig.get_dpi())
     fig.set_tight_layout(True)
