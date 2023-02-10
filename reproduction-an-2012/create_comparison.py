@@ -50,7 +50,7 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_layout_engine("compressed")
 
     fig.supxlabel(
-        "$x$ [Mm]",
+        "$x$ [\si{\mega\meter}]",
         x=0.8,
         y=0.0,
         va="top",
@@ -58,7 +58,7 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
         fontsize="medium",
     )
     fig.supylabel(
-        "$y$ [Mm]",
+        "$y$ [\si{\mega\meter}]",
         x=0.0,
         y=0.975,
         va="top",
@@ -98,7 +98,7 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
 
     # Colorbar
     cb = fig.colorbar(im, ax=axes, fraction=0.1, aspect=25, pad=0.01)
-    cb.set_label("SSE [m]", loc="top", va="center")
+    cb.set_label("SSE [\si{\meter}]", loc="top", va="center")
 
     # End
     tb = time.perf_counter_ns()
@@ -129,7 +129,7 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_layout_engine("compressed")
 
     fig.supxlabel(
-        "$y$ [Mm]",
+        "$y$ [\si{\mega\meter}]",
         x=0.975,
         y=0.0,
         va="top",
@@ -137,7 +137,7 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
         fontsize="medium",
     )
     fig.supylabel(
-        "SSE [m]",
+        "SSE [\si{\meter}]",
         x=0.0,
         y=0.975,
         va="top",
@@ -239,7 +239,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_layout_engine("compressed")
 
     fig.supxlabel(
-        "$x$ [km]",
+        "$x$ [\si{\kilo\meter}]",
         x=0.975,
         y=0.0,
         va="top",
@@ -247,7 +247,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
         fontsize="medium",
     )
     fig.supylabel(
-        "SSE [m]",
+        "SSE [\si{\meter}]",
         x=0.0,
         y=0.975,
         va="top",

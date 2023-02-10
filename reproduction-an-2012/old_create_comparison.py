@@ -76,9 +76,9 @@ def comp_alongshore(data_list, title, cases, savename):
         _ax.axhline(color="black", linewidth=1)
         _ax.axvline(color="black", linewidth=1)
         if i // 2:
-            _ax.set_xlabel("$y$ [km]")
+            _ax.set_xlabel("$y$ [\si{\kilo\meter}]")
         if not i % 2:
-            _ax.set_ylabel("$SSE$ [m]")
+            _ax.set_ylabel("$SSE$ [\si{\meter}]")
 
         for j in range(len(data_list)):
             data = data_list[j]
@@ -123,9 +123,9 @@ def comp_alongshore_diff(data_list, title, cases, savename):
         _ax.axhline(color="black", linewidth=1)
         _ax.axvline(color="black", linewidth=1)
         if i // 2:
-            _ax.set_xlabel("$y$ [km]")
+            _ax.set_xlabel("$y$ [\si{\kilo\meter}]")
         if not i % 2:
-            _ax.set_ylabel("$\\Delta SSE$ [m]")
+            _ax.set_ylabel("$\\Delta SSE$ [\si{\meter}]")
 
         reference = data_list[0]["wl"].interp(t=fu.to_timestr(_times[i]), x=10e3)
 
@@ -175,9 +175,9 @@ def comp_crossshore(data_list, title, cases, savename):
         _ax.set_xlim([0, 600])
         _ax.set_ylim([0, 0.9])
         _ax.set_title(f"$y = {_yslices[i]/1000.}$km")
-        _ax.set_ylabel("$SSE$ [m]")
+        _ax.set_ylabel("$SSE$ [\si{\meter}]")
         if i == ax.size:
-            _ax.set_xlabel("x [km]")
+            _ax.set_xlabel("x [\si{\kilo\meter}]")
 
         for j in range(len(data_list)):
             data = data_list[j]
@@ -237,9 +237,9 @@ def comp_crossshore_diff(data_list, title, cases, savename):
         _ax.set_xlim([0, 600])
         _ax.set_ylim([-0.2, 0.2])
         _ax.set_title(f"$y = {_yslices[i]/1000.}$km")
-        _ax.set_ylabel("$\\Delta SSE$ [m]")
+        _ax.set_ylabel("$\\Delta SSE$ [\si{\meter}]")
         if i == ax.size:
-            _ax.set_xlabel("x [km]")
+            _ax.set_xlabel("x [\si{\kilo\meter}]")
 
         reference = data_list[0]["wl"].interp(t=fu.to_timestr(_tslice), y=_yslices[i])
 

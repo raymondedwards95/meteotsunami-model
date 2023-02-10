@@ -27,7 +27,7 @@ warnings.warn("This is an old script and should not be used!")
 parser = argparse.ArgumentParser(
     description="Process model outputs and create visualisations for a specific case"
 )
-parser.add_argument("case", help="Case number", nargs="?", default="00", type=int)
+parser.add_argument("case", help="Case numbe", nargs="?", default="00", type=int)
 parser.add_argument(
     "--reprocess",
     "-r",
