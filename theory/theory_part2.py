@@ -77,13 +77,13 @@ def theory_figure_speed_vs_size_alpha(
     div = make_axes_locatable(ax)
     cax = div.append_axes(position="right", size="5%", pad="5%")
     cb = fig.colorbar(cf, cax=cax)
-    cb.set_label("$U_{cr}$ [m/s]")
+    cb.set_label("$U_{cr}$ [\si{\meter\per\second}]")
     cb.set_ticks(np.arange(0, 60 + 1, 10))
     cb.set_ticks(np.arange(0, 60 + 1, 5), minor=True)
 
     # Other
     ax.set_xlabel("$\\alpha$ [-]")
-    ax.set_ylabel("$a$ [km]")
+    ax.set_ylabel("$a$ [\si{\kilo\meter}]")
     ax.grid()
     ax.set_xscale("log")
     ax.set_yscale("log")
@@ -169,13 +169,13 @@ def theory_figure_wavelength_vs_alpha_speed(
     div = make_axes_locatable(ax)
     cax = div.append_axes(position="right", size="5%", pad="5%")
     cb = fig.colorbar(cf, cax=cax)
-    cb.set_label("$\\lambda_0$ [km]")
+    cb.set_label("$\\lambda_0$ [\si{\kilo\meter}]")
     cb.set_ticks(np.arange(0, 700 + 1, 100))
     cb.set_ticks(np.arange(0, 500 + 1, 25), minor=True)
 
     # Other
     ax.set_xlabel("$\\alpha$ [-]")
-    ax.set_ylabel("$U$ [m/s]")
+    ax.set_ylabel("$U$ [\si{\meter\per\second}]")
     ax.grid()
     ax.set_xscale("log")
 
