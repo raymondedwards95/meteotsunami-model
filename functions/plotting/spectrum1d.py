@@ -236,9 +236,9 @@ if __name__ == "__main__":
             .save(figure_dir)
 
         plot_spectrum_1d(variable="wl", demean=False) \
-            .add_plot(data_a, x, y, label=f"y={y}") \
-            .add_plot(data_a, x, y*2, label=f"y={y*2}") \
-            .add_plot(data_a, x, y*3, label=f"y={y*3}") \
+            .add_plot(data_a, x, y, label=f"y=\SI{{{y}}}{{\meter}}") \
+            .add_plot(data_a, x, y*2, label=f"y=\SI{{{y*2}}}{{\meter}}") \
+            .add_plot(data_a, x, y*3, label=f"y=\SI{{{y*3}}}{{\meter}}") \
             .save(figure_dir)
 
         plot_spectrum_1d(variable="wl", demean=False) \
