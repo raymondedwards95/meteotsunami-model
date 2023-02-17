@@ -119,7 +119,7 @@ class plot_spectrum_2d(plot_base):
         self.ax.set_xlim(0, fu.relative_ceil(0.8 * self.k_max_scaled, s=2))
 
         # y-axis
-        self.ax.set_ylabel("Frequency [cycles / hour]")
+        self.ax.set_ylabel("Frequency [cycles per hour]")
         self.ax.set_ylim(0, fu.relative_ceil(0.8 * self.f_max_scaled, s=2))
 
     def _setup_cax(self) -> None:
