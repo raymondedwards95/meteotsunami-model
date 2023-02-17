@@ -96,7 +96,7 @@ class plot_spectrum_1d(plot_base):
         self.ax.xaxis.set_ticks(np.arange(0, self.f_max, 0.01), minor=True)
 
         # y-axis
-        self.ax.set_ylabel(f"Spectral Power [{self.variable_unit}$^2$ hr]")
+        self.ax.set_ylabel(f"Spectral Power [{self.variable_unit}$^2$ \si{{\hour}}]")
         self.ax.set_ylim(0, None)
         self.ax.ticklabel_format(
             axis="y",
