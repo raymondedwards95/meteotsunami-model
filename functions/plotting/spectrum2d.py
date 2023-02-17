@@ -99,7 +99,7 @@ class plot_spectrum_2d(plot_base):
         # General
         if self.title is None:
             self.title = (
-                f"Power Spectrum - {self.variable_long} - $x = {self.x / 1000:0.1f}$ km"
+                f"Power Spectrum - {self.variable_long} - $x = \SI{{{self.x / 1000:0.1f}}}{{\kilo\meter}}$"
             )
         super()._base_setup_figure()
 
@@ -205,7 +205,7 @@ class plot_spectrum_2d(plot_base):
 
         # Colorbar
         self.cbar = self.fig.colorbar(self.im, cax=self.cax)
-        self.cbar.set_label("Spectral power")
+        self.cbar.set_label("Spectral power")  #TODO COMPUTE UNITS
 
         # Set plot limits
         self.k_max_scaled = np.min(
