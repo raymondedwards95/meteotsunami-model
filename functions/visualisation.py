@@ -530,12 +530,12 @@ def vis_spectrum_1d(
         ax[i].axhline(color="black", linewidth=1)
         ax[i].set_ylim(0, None)
         ax[i].set_xlim(0, 2.2)
-        ax[i].set_ylabel("Spectral Power [m$^2$ hr]")
+        ax[i].set_ylabel("Spectral Power [\si{\square\meter\hour}]")
         ax[i].legend([f"$y = {y_list[i]/1000:0.0f}$ km"], loc="upper right")
         ax[i].ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
         ax[i].xaxis.set_minor_locator(MultipleLocator(0.1))
         ax[i].grid()
-    ax[-1].set_xlabel("Frequency [cycles / hour]")
+    ax[-1].set_xlabel("Frequency [cycles per hour]")
 
     fig.get_layout_engine().execute(fig)
     fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
@@ -632,7 +632,7 @@ def vis_spectrum_2d(
     ax[0].set_xlim(xlims)
     ax[0].set_ylim(ylims)
     ax[0].set_xlabel("Wavenumber [1 / 1000km]")
-    ax[0].set_ylabel("Frequency [cycles / hour]")
+    ax[0].set_ylabel("Frequency [cycles per hour]")
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$ km")
 
     fig.get_layout_engine().execute(fig)
