@@ -519,7 +519,7 @@ def vis_spectrum_1d(
     fig.set_size_inches(figsize)
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
-    fig.suptitle(f"Power Spectrum - {variable_name}", va="top", ha="left", x=0.01)
+    fig.suptitle(f"Power Spectrum - {variable_name}")
     ax = np.ravel(ax)
 
     for i in range(y_num):

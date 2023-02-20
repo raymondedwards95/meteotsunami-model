@@ -60,7 +60,7 @@ class plot_base:
         # Title
         if self.title is None:
             self.title = self.figure_type
-        self.fig.suptitle(self.title, va="top", ha="left", x=0.01)
+        self.fig.suptitle(self.title)
 
     def _set_variable(self, variable: str) -> Self:
         match variable.lower().strip():

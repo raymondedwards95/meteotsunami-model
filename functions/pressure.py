@@ -465,7 +465,7 @@ def plot_pressure(
     fig_1.set_size_inches(FIGSIZE_WIDE)
     fig_1.set_dpi(FIG_DPI)
     fig_1.set_layout_engine("compressed")
-    fig_1.suptitle("Pressure Disturbance - Contours", va="top", ha="left", x=0.01)
+    fig_1.suptitle("Pressure Disturbance - Contours")
     ax_1 = np.ravel(ax_1)
 
     im = [None] * t_num
@@ -505,7 +505,7 @@ def plot_pressure(
     fig_2.set_size_inches(FIGSIZE_WIDE)
     fig_2.set_dpi(FIG_DPI)
     fig_2.set_layout_engine("compressed")
-    fig_2.suptitle("Pressure Disturbance - Time Series", va="top", ha="left", x=0.01)
+    fig_2.suptitle("Pressure Disturbance - Time Series")
 
     for i in range(t_num):
         idx = t.size * i // t_num

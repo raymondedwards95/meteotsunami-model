@@ -263,7 +263,7 @@ def plot_observations(
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
-    fig.suptitle("Observation Points and Lines", va="top", ha="left", x=0.01)
+    fig.suptitle("Observation Points and Lines")
 
     # Layout
     ax.axhline(color="black", linewidth=1, alpha=0.5)

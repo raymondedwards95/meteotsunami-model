@@ -34,6 +34,7 @@ mpl.rcParams["text.latex.preamble"] = "\n".join(
         r"\usepackage{arev}",
     ]
 )  # apply packages for png
+mpl.rcParams["figure.titleweight"] = "bold"
 
 # Matplotlib video options
 mpl.rcParams["animation.codec"] = "libsvtav1"

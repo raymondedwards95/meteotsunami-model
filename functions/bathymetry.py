@@ -238,7 +238,7 @@ def plot_bathymetry(
     fig_1.set_size_inches(figsize)
     fig_1.set_dpi(FIG_DPI)
     fig_1.set_layout_engine("compressed")
-    fig_1.suptitle("Bottom Profile - Cross-section", va="top", ha="left", x=0.01)
+    fig_1.suptitle("Bottom Profile - Cross-section")
 
     ax_1.plot(
         x / scale_factor,
@@ -274,7 +274,7 @@ def plot_bathymetry(
     fig_2.set_size_inches(figsize)
     fig_2.set_dpi(FIG_DPI)
     fig_2.set_layout_engine("compressed")
-    fig_2.suptitle("Bottom Profile - Contours", va="top", ha="left", x=0.01)
+    fig_2.suptitle("Bottom Profile - Contours")
 
     cont = ax_2.contourf(
         x / scale_factor,
