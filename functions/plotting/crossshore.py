@@ -99,10 +99,16 @@ class plot_crossshore(plot_base):
 
         # Compute y-limits
         max_lim = 0.0
+        min_lim = 0.0
         for ax in self.axes:
-            ax_max_lim = np.max(np.abs(ax.get_ylim()))
+            ax_max_lim = np.max(ax.get_ylim())
+            ax_min_lim = np.min(ax.get_ylim())
+
             if ax_max_lim > max_lim:
                 max_lim = ax_max_lim
+
+            if ax_min_lim < min_lim:
+                min_lim = ax_min_lim
 
         # General
         for ax in self.axes:
@@ -111,7 +117,7 @@ class plot_crossshore(plot_base):
             ax.legend(loc="upper right")
             ax.grid()
             ax.set_xlim(0, fu.none_multiply(self.x_max, 1.0 / self.scale_factor))
-            ax.set_ylim(-1.0 * max_lim, max_lim)
+            ax.set_ylim(min_lim, max_lim)
             ax.ticklabel_format(scilimits=(-3, 3))
 
         self.axes[-1].set_xlabel(f"$x$ [{self.unit}]")
