@@ -174,7 +174,7 @@ def comp_crossshore(data_list, title, cases, savename):
         _ax.grid()
         _ax.set_xlim([0, 600])
         _ax.set_ylim([0, 0.9])
-        _ax.set_title(f"$y = {_yslices[i]/1000.}$km")
+        _ax.set_title(f"$y = {_yslices[i]/1000.}$ km")
         _ax.set_ylabel("$SSE$ [\si{\meter}]")
         if i == ax.size:
             _ax.set_xlabel("x [\si{\kilo\meter}]")
@@ -199,7 +199,7 @@ def comp_crossshore(data_list, title, cases, savename):
                 fa.exp_decay(data["x"], k0, y0),
                 color=f"C{j}",
                 linestyle="--",
-                label=f"Best fit: $1/k_0 = {1./k0/1000.:0.1f}$km",
+                label=f"Best fit: $1/k_0 = {1./k0/1000.:0.1f}$ km",
             )
 
         _ax.legend()
@@ -236,7 +236,7 @@ def comp_crossshore_diff(data_list, title, cases, savename):
         _ax.grid()
         _ax.set_xlim([0, 600])
         _ax.set_ylim([-0.2, 0.2])
-        _ax.set_title(f"$y = {_yslices[i]/1000.}$km")
+        _ax.set_title(f"$y = {_yslices[i]/1000.}$ km")
         _ax.set_ylabel("$\\Delta SSE$ [\si{\meter}]")
         if i == ax.size:
             _ax.set_xlabel("x [\si{\kilo\meter}]")

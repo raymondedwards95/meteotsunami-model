@@ -228,7 +228,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     )
 
     fit = fa.exp_decay(dataset["x"], k0, y0)
-    label_fit = f"$A e^{{-k_0 x}}$ with $1/k_0 = {1/k0/1e3:0.0f}$km"
+    label_fit = f"$A e^{{-k_0 x}}$ with $1/k_0 = {1/k0/1e3:0.0f}$ km"
 
     # Figure
     print(f"Create figure '03_sse_cross'")
