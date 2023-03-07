@@ -294,7 +294,7 @@ class plot_crossshore(plot_base):
             dataset_name = ""
 
         if label is None:
-            label = f"{dataset_name}: $y = \\SI{{{y/1e3:0.0f}}}{{\\kilo\\meter}}$"
+            label = f"$y = \\SI{{{y/1e3:0.0f}}}{{\\kilo\\meter}}$, $t = \\SI{{{t/3600.:0.1f}}}{{\\hour}}$"
 
         if scale is not None:
             self.set_scale(scale)
