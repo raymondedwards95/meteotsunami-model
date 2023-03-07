@@ -294,7 +294,7 @@ class plot_crossshore(plot_base):
             dataset_name = ""
 
         if label is None:
-            label = f"{dataset_name}: $y = {y/1e3:0.0f}$ km"
+            label = f"{dataset_name}: $y = \\SI{{{y/1e3:0.0f}}}{{\\kilo\\meter}}$"
 
         if scale is not None:
             self.set_scale(scale)
@@ -323,7 +323,7 @@ class plot_crossshore(plot_base):
             )
 
             fit = fa.exp_decay(dataset["x"], k0, y0)
-            label_fit = f"$A e^{{-k_0 x}}$ with $1/k_0 = {1/k0/1e3:0.0f}$ km"
+            label_fit = f"$A e^{{-k_0 x}}$ with $1/k_0 = \\SI{{{1/k0/1e3:0.0f}}}{{\\kilo\\meter}}$"
 
             self.axes[-1].plot(
                 dataset["x"] / self.scale_factor,
