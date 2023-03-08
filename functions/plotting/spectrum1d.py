@@ -58,7 +58,8 @@ class plot_spectrum_1d(plot_base):
         self.figure_num = plot_spectrum_1d.number
 
         self.demean = demean
-        self.f_max = f_max
+        self.f_max = 0.0
+        self.f_max_fixed = f_max
 
         self.variable: str
         self.variable_long: str
@@ -90,10 +91,14 @@ class plot_spectrum_1d(plot_base):
         self.ax.grid()
 
         # x-axis
+        if self.f_max_fixed is not None:
+            print(f"# Resetting f-max from '{self.f_max}' to '{self.f_max_fixed}'")
+            self.f_max = self.f_max_fixed
+
         self.ax.set_xlabel("Frequency [cycles per hour]")
         self.ax.set_xlim(0, self.f_max)
         # self.ax.xaxis.set_ticks(np.arange(0, self.f_max, 0.1))
-        self.ax.xaxis.set_ticks(np.arange(0, self.f_max, 0.01), minor=True)
+        # self.ax.xaxis.set_ticks(np.arange(0, self.f_max, 0.01), minor=True)
 
         # y-axis
         self.ax.set_ylabel(f"Spectral Power [{self.variable_unit}$^2$ \si{{\hour}}]")
@@ -138,9 +143,6 @@ class plot_spectrum_1d(plot_base):
         power /= 3600.0
 
         # Set limits
-        if self.f_max is None:
-            self.f_max = 0.0
-
         new_f_max = freqs[  # take freq
             np.size(  # 'pick' last index
                 np.trim_zeros(  # help finding last index
@@ -151,7 +153,7 @@ class plot_spectrum_1d(plot_base):
         ]
 
         if new_f_max > self.f_max:
-            self.f_max = np.round(1.4 * new_f_max, 1)
+            self.f_max = np.round(new_f_max, 1)
 
         # Plot
         self.ax.plot(
@@ -230,7 +232,7 @@ if __name__ == "__main__":
     def test_spectrum_1d():
         x = 1e4
         y = 1e6
-        plot_spectrum_1d(variable="wl", demean=True) \
+        plot_spectrum_1d(variable="wl", demean=True, f_max=0.5) \
             .add_plot(data_a, x, y, label="a") \
             .add_plot(data_b, x, y, label="b") \
             .save(figure_dir)
