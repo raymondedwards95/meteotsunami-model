@@ -162,12 +162,13 @@ for t_single in t_list:
     _cross_shore.save(figure_dir)
 
 # Spectrum-1d
-_spectrum_1d = fpl.plot_spectrum_1d(variable="wl", demean=True, f_max=2)
-for y_single in y_list:
+_spectrum_1d = fpl.plot_spectrum_1d(variable="wl", demean=True)
+for y_single in y_list[1:-1]:
     _spectrum_1d.add_plot(
         dataset=data,
         x=x_ref,
         y=y_single,
+        label=f"$y = \\SI{{{y_single / 1e3:0.1f}}}{{\\kilo\\meter}}$",
     )
 _spectrum_1d.save(figure_dir)
 
