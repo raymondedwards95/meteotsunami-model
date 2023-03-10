@@ -97,19 +97,21 @@ class plot_contour(plot_base):
         # Left
         for i in range(self.axes.shape[0]):
             self.axes[i, 0].set_ylabel(f"$y$ [{self.unit}]")
+        # self.fig.supylabel(f"$y$ [{self.unit}]")
 
         # Bottom
         for j in range(self.axes.shape[1]):
             self.axes[-1, j].set_xlabel(f"$x$ [{self.unit}]")
+        # self.fig.supxlabel(f"$x$ [{self.unit}]")
 
     def _pick_label(self, variable: str) -> str:
         match variable.lower().strip():
             case "wl":
                 return "Water level [\si{\meter}]"
             case "u":
-                return "Cross shore water velocity [\si{\meter\per\second}]"
+                return "Cross-shore water\nvelocity [\si{\meter\per\second}]"
             case "v":
-                return "Along shore water velocity [\si{\meter\per\second}]"
+                return "Along-shore water\nvelocity [\si{\meter\per\second}]"
             case "p":
                 return "Surface air pressure [\si{\pascal}]"
             case _:
