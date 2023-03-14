@@ -79,7 +79,6 @@ def theory_figure_map(
     # Figure
     fig = plt.figure()
     fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
     fig.suptitle("Area of Interest")
 
@@ -193,7 +192,6 @@ def theory_figure_cross(
     # Figure
     fig, ax = plt.subplots(1, 1)
     fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
     fig.suptitle("Cross-sections of bottom topography")
 

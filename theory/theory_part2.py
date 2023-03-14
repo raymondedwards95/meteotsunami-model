@@ -44,7 +44,6 @@ def theory_figure_speed_vs_size_alpha(
     # Figure
     fig, ax = plt.subplots(1, 1)
     fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
     fig.suptitle("Critical Velocity")
 
@@ -135,7 +134,6 @@ def theory_figure_wavelength_vs_alpha_speed(
     # Figure
     fig, ax = plt.subplots(1, 1)
     fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
     fig.suptitle("Wavelength Fundamental Mode")
 
