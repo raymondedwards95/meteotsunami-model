@@ -54,7 +54,6 @@ class plot_base:
 
         # General
         self.fig.set_size_inches(self.figsize)
-        self.fig.set_dpi(FIG_DPI)
         self.fig.set_layout_engine("compressed")
 
         # Title

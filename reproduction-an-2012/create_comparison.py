@@ -46,7 +46,6 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig, axes = plt.subplots(2, 2, sharex=True, sharey=False)
 
     fig.set_size_inches(FIGSIZE_SMALL)
-    fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
     fig.supxlabel(
@@ -125,7 +124,6 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig, axes = plt.subplots(2, 2, sharex=False, sharey=True)
 
     fig.set_size_inches(FIGSIZE_SMALL)
-    fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
     fig.supxlabel(
@@ -235,7 +233,6 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig, ax = plt.subplots(1, 1, sharex=False, sharey=False)
 
     fig.set_size_inches(FIGSIZE_SMALL)
-    fig.set_dpi(FIG_DPI)
     fig.set_layout_engine("compressed")
 
     fig.supxlabel(

@@ -463,7 +463,6 @@ def plot_pressure(
         squeeze=False,
     )
     fig_1.set_size_inches(FIGSIZE_WIDE)
-    fig_1.set_dpi(FIG_DPI)
     fig_1.set_layout_engine("compressed")
     fig_1.suptitle("Pressure Disturbance - Contours")
     ax_1 = np.ravel(ax_1)
@@ -503,7 +502,6 @@ def plot_pressure(
 
     fig_2, ax_2 = plt.subplots(1, 1)
     fig_2.set_size_inches(FIGSIZE_WIDE)
-    fig_2.set_dpi(FIG_DPI)
     fig_2.set_layout_engine("compressed")
     fig_2.suptitle("Pressure Disturbance - Time Series")
 

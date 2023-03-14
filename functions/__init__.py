@@ -34,7 +34,22 @@ mpl.rcParams["text.latex.preamble"] = "\n".join(
         r"\usepackage{arev}",
     ]
 )  # apply packages for png
+
 mpl.rcParams["figure.titleweight"] = "bold"
+
+mpl.rcParams["xtick.top"] = True
+mpl.rcParams["xtick.bottom"] = True
+mpl.rcParams["xtick.direction"] = "inout"
+mpl.rcParams["xtick.minor.visible"] = True
+
+mpl.rcParams["ytick.left"] = True
+mpl.rcParams["ytick.right"] = True
+mpl.rcParams["ytick.direction"] = "inout"
+mpl.rcParams["ytick.minor.visible"] = True
+
+mpl.rcParams["grid.alpha"] = 0.8
+
+mpl.rcParams["figure.dpi"] = 300
 
 # Matplotlib video options
 mpl.rcParams["animation.codec"] = "libsvtav1"
@@ -51,8 +66,6 @@ FIGSIZE_HIGH = (6, 6)
 FIGSIZE_WIDE = (6, 3)
 FIGSIZE_SMALL = (4, 3)
 FIGSIZE_SQUARE = (6, 6)
-
-FIG_DPI = 300
 
 # Figure save options
 FIG_PIL_KWARGS = {
@@ -124,7 +137,7 @@ def save_figure(fig: mpl.figure, name: str, path: str = None) -> None:
     fig.savefig(
         png_file,
         bbox_inches="tight",
-        dpi=75,
+        dpi=100,
         pil_kwargs=FIG_PIL_KWARGS,
     )
     print(f"## Saved png figure as '{png_file}'")
