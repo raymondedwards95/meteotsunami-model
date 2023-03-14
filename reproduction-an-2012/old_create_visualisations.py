@@ -192,7 +192,7 @@ try:
     print(f"Creating figures in \n'{figure_dir}'")
     ### Figure bathymetry
     print("Figure: bathymetry")
-    plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
+    plt.figure(figsize=FIGSIZE_NORMAL, dpi=150)
 
     plt.contourf(x / 1000, y / 1000, b)
     plt.colorbar()
@@ -209,7 +209,7 @@ try:
     # plt.axvline(100, linestyle="--", color="gray", linewidth=1)
     # plt.axvline(200, linestyle="--", color="gray", linewidth=1)
 
-    plt.savefig(figure_dir + "bathymetry_contou", bbox_inches="tight", dpi=FIG_DPI)
+    plt.savefig(figure_dir + "bathymetry_contou", bbox_inches="tight", dpi=150)
 except:
     print(f"*** Error in bottom-profile visualisation {case=}")
 
@@ -221,7 +221,7 @@ plot_times = [4e4, 8e4, 12e4, 16e4]
 try:
     fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
     fig.set_size_inches(FIGSIZE_SQUARE)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.suptitle("Pressure distribution [\si{\pascal}]")
     fig.set_tight_layout(True)
 
@@ -250,7 +250,7 @@ try:
     #     _ax.axvline(100, linestyle="--", color="gray", linewidth=1)
     #     _ax.axvline(200, linestyle="--", color="gray", linewidth=1)
 
-    fig.savefig(figure_dir + "pressure_contours", bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(figure_dir + "pressure_contours", bbox_inches="tight", dpi=150)
 except:
     print(f"*** Error in pressure visualisation {case=}")
 
@@ -263,7 +263,7 @@ plot_times = [4e4, 8e4, 12e4, 16e4]
 try:
     fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
     fig.set_size_inches(FIGSIZE_SQUARE)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.suptitle("Sea Surface Elevation [\si{\meter}]")
     for i in range(4):
         _ax = ax[i // 2, i % 2]
@@ -290,7 +290,7 @@ try:
     #     _ax.axvline(100, linestyle="--", color="gray", linewidth=1)
     #     _ax.axvline(200, linestyle="--", color="gray", linewidth=1)
 
-    fig.savefig(figure_dir + "sse_contours", bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(figure_dir + "sse_contours", bbox_inches="tight", dpi=150)
 except:
     print(f"*** Error in contours visualisation {case=}")
 
@@ -303,7 +303,7 @@ plot_ylims = np.array([[0, 4], [1, 6], [2, 8], [3, 10]]) * 1e3
 try:
     fig, ax = plt.subplots(2, 2, sharex=False, sharey=False)
     fig.set_size_inches(FIGSIZE_SQUARE)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.suptitle("Along-shore profile of Sea Surface Elevation [\si{\meter}]")
     for i in range(4):
         _ax = ax[i // 2, i % 2]
@@ -321,7 +321,7 @@ try:
         _ax.axhline(color="black", linewidth=1)
         _ax.axvline(color="black", linewidth=1)
 
-    fig.savefig(figure_dir + "sse_along", bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(figure_dir + "sse_along", bbox_inches="tight", dpi=150)
 except:
     print(f"*** Error in alongshore-profile visualisation {case=}")
 
@@ -332,7 +332,7 @@ print("Figure: sse cross-shore profile")
 y_slices = np.array([7.56]) * 1e6
 
 try:
-    plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
+    plt.figure(figsize=FIGSIZE_NORMAL, dpi=150)
     for i in range(len(y_slices)):
         plt.plot(
             x / 1000,
@@ -352,7 +352,7 @@ try:
     # plt.axvline(100, linestyle="--", color="gray", linewidth=1)
     # plt.axvline(200, linestyle="--", color="gray", linewidth=1)
 
-    plt.savefig(figure_dir + "sse_cross", bbox_inches="tight", dpi=FIG_DPI)
+    plt.savefig(figure_dir + "sse_cross", bbox_inches="tight", dpi=150)
 except:
     print(f"*** Error in cross-shore-profile visualisation {case=}")
 
@@ -364,7 +364,7 @@ x_slices = np.array([10, 100, 200]) * 1e3
 linestyles = ["-", "--", "--"]
 
 try:
-    plt.figure(figsize=FIGSIZE_NORMAL, dpi=FIG_DPI)
+    plt.figure(figsize=FIGSIZE_NORMAL, dpi=150)
     plt.title("Along-shore profile of Sea Surface Elevation [\si{\meter}]")
     for i in range(len(x_slices)):
         plt.plot(
@@ -381,7 +381,7 @@ try:
     plt.xlabel("$y$ [\si{\kilo\meter}]")
     plt.ylabel("$SSE$ [\si{\meter}]")
 
-    plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight", dpi=FIG_DPI)
+    plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight", dpi=150)
 except:
     print(f"*** Error in alongshore-profile 2 visualisation {case=}")
 

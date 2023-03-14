@@ -114,7 +114,7 @@ def vis_timeseries(
     # Figure a
     fig, ax = plt.subplots(2, 1, sharex=True, squeeze=False)
     fig.set_size_inches(figsize_a)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.set_layout_engine("compressed")
 
     ax = np.ravel(ax)
@@ -170,14 +170,14 @@ def vis_timeseries(
 
     fig.get_layout_engine().execute(fig)
     fig.savefig(
-        savename + "_a", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS
+        savename + "_a", bbox_inches="tight", dpi=150, pil_kwargs=FIG_PIL_KWARGS
     )
     print(f"Saved figure {savename}_a")
 
     # Figure b
     fig, ax = plt.subplots(y_num, 1, sharex=True, squeeze=False)
     fig.set_size_inches(figsize_b)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     ax = np.ravel(ax)
     ax2 = np.array([ax[i].twinx() for i in range(ax.size)])
     for i in range(y_num):
@@ -237,7 +237,7 @@ def vis_timeseries(
     ax[-1].set_xlabel("Time since start [hours]")
 
     fig.savefig(
-        savename + "_b", bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS
+        savename + "_b", bbox_inches="tight", dpi=150, pil_kwargs=FIG_PIL_KWARGS
     )
     print(f"Saved figure {savename}_b")
 
@@ -299,7 +299,7 @@ def vis_alongshore(
     # Figure
     fig, ax = plt.subplots(t_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(figsize)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.set_layout_engine("compressed")
     ax = np.ravel(ax)
 
@@ -313,7 +313,7 @@ def vis_alongshore(
     ax[-1].set_xlabel("$y$ [\si{\kilo\meter}]")
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight", dpi=150, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     # End
@@ -393,7 +393,7 @@ def vis_crossshore(
     # Figure
     fig, ax = plt.subplots(t_num, y_num, squeeze=False, sharex=True, sharey=True)
     fig.set_size_inches(figsize)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.set_layout_engine("compressed")
 
     for i in range(t_num):
@@ -435,7 +435,7 @@ def vis_crossshore(
         ax[-1, j].set_xlabel("$x$ [\si{\kilo\meter}]")
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight", dpi=150, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     # End
@@ -517,7 +517,7 @@ def vis_spectrum_1d(
     # Figure
     fig, ax = plt.subplots(y_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(figsize)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.set_layout_engine("compressed")
     fig.suptitle(f"Power Spectrum - {variable_name}")
     ax = np.ravel(ax)
@@ -538,7 +538,7 @@ def vis_spectrum_1d(
     ax[-1].set_xlabel("Frequency [cycles per hour]")
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight", dpi=150, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     # End
@@ -604,7 +604,7 @@ def vis_spectrum_2d(
     # Figure
     fig, ax = plt.subplots(1, 1, squeeze=False)
     fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.set_layout_engine("compressed")
     ax = np.ravel(ax)
     div = make_axes_locatable(ax[0])
@@ -636,7 +636,7 @@ def vis_spectrum_2d(
     ax[0].set_title(f"Power Spectrum at $x={x/1000:0.0f}$ km")
 
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight", dpi=150, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     # End
@@ -711,7 +711,7 @@ def vis_contour(
     # Figure
     fig, ax = plt.subplots(t_num, 1, squeeze=False, sharex=True)
     fig.set_size_inches(FIGSIZE_LONG)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.set_layout_engine("compressed")
     ax = np.ravel(ax)
 
@@ -752,7 +752,7 @@ def vis_contour(
 
     # Save figure
     fig.get_layout_engine().execute(fig)
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI, pil_kwargs=FIG_PIL_KWARGS)
+    fig.savefig(savename, bbox_inches="tight", dpi=150, pil_kwargs=FIG_PIL_KWARGS)
     print(f"Saved figure {savename}")
 
     # End

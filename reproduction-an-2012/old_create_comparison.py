@@ -62,7 +62,7 @@ def comp_alongshore(data_list, title, cases, savename):
     ## Figure
     fig, ax = plt.subplots(2, 2, sharex=False, sharey=True)
     fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.set_tight_layout(True)
     fig.suptitle(f"{title}\nAlong-shore Profile of Sea Surface Elevation")
 
@@ -92,7 +92,7 @@ def comp_alongshore(data_list, title, cases, savename):
         if i == 0:
             _ax.legend()
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=150)
     print(f"Saved figure as '{savename}'")
     return
 
@@ -109,7 +109,7 @@ def comp_alongshore_diff(data_list, title, cases, savename):
     ## Figure
     fig, ax = plt.subplots(2, 2, sharex=False, sharey=True)
     fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.set_tight_layout(True)
     fig.suptitle(f"{title}\nChange in Along-shore Profile")
 
@@ -142,7 +142,7 @@ def comp_alongshore_diff(data_list, title, cases, savename):
         if i == 0:
             _ax.legend()
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=150)
     print(f"Saved figure as '{savename}'")
     return
 
@@ -159,7 +159,7 @@ def comp_crossshore(data_list, title, cases, savename):
     ## Figure
     fig, ax = plt.subplots(_yslices.size, 1)
     fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.set_tight_layout(True)
     fig.suptitle(f"{title}\nCross-shore Profile of Sea Surface Elevation")
 
@@ -204,7 +204,7 @@ def comp_crossshore(data_list, title, cases, savename):
 
         _ax.legend()
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=150)
     print(f"Saved figure as '{savename}'")
     return
 
@@ -221,7 +221,7 @@ def comp_crossshore_diff(data_list, title, cases, savename):
     ## Figure
     fig, ax = plt.subplots(_yslices.size, 1)
     fig.set_size_inches(FIGSIZE_NORMAL)
-    fig.set_dpi(FIG_DPI)
+    fig.set_dpi(150)
     fig.set_tight_layout(True)
     fig.suptitle(f"{title}\nChange in Cross-shore Profile")
 
@@ -257,7 +257,7 @@ def comp_crossshore_diff(data_list, title, cases, savename):
 
         _ax.legend()
 
-    fig.savefig(savename, bbox_inches="tight", dpi=FIG_DPI)
+    fig.savefig(savename, bbox_inches="tight", dpi=150)
     print(f"Saved figure as '{savename}'")
     return
 
