@@ -39,12 +39,12 @@ mpl.rcParams["figure.titleweight"] = "bold"
 
 mpl.rcParams["xtick.top"] = True
 mpl.rcParams["xtick.bottom"] = True
-mpl.rcParams["xtick.direction"] = "inout"
+mpl.rcParams["xtick.direction"] = "in"
 mpl.rcParams["xtick.minor.visible"] = True
 
 mpl.rcParams["ytick.left"] = True
 mpl.rcParams["ytick.right"] = True
-mpl.rcParams["ytick.direction"] = "inout"
+mpl.rcParams["ytick.direction"] = "in"
 mpl.rcParams["ytick.minor.visible"] = True
 
 mpl.rcParams["grid.alpha"] = 0.8
