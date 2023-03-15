@@ -76,13 +76,13 @@ def theory_figure_speed_vs_size_alpha(
     div = make_axes_locatable(ax)
     cax = div.append_axes(position="right", size="5%", pad="5%")
     cb = fig.colorbar(cf, cax=cax)
-    cb.set_label("$U_{cr}$ [\si{\meter\per\second}]")
+    cb.set_label("\\( U_{cr} \\) [\si{\meter\per\second}]")
     cb.set_ticks(np.arange(0, 60 + 1, 10))
     cb.set_ticks(np.arange(0, 60 + 1, 5), minor=True)
 
     # Other
-    ax.set_xlabel("$\\alpha$ [-]")
-    ax.set_ylabel("$a$ [\si{\kilo\meter}]")
+    ax.set_xlabel("\\( \\alpha \\) [-]")
+    ax.set_ylabel("\\( a \\) [\si{\kilo\meter}]")
     ax.grid()
     ax.set_xscale("log")
     ax.set_yscale("log")
@@ -94,11 +94,11 @@ def theory_figure_speed_vs_size_alpha(
         ax.text(
             _angle,
             0.01,
-            f"1/{1/_angle:0.0f}",
+            f"\\; \\( 1/{1/_angle:0.0f} \\)",
             color="red",
             transform=ax.get_xaxis_transform(),
         )
-        ax.axvline(_angle, color="red")
+        ax.axvline(_angle, color="red", alpha=0.8, linewidth=1)
 
     # Save figure
     fig.get_layout_engine().execute(fig)
@@ -167,13 +167,13 @@ def theory_figure_wavelength_vs_alpha_speed(
     div = make_axes_locatable(ax)
     cax = div.append_axes(position="right", size="5%", pad="5%")
     cb = fig.colorbar(cf, cax=cax)
-    cb.set_label("$\\lambda_0$ [\si{\kilo\meter}]")
+    cb.set_label("\\( \\lambda_0 \\) [\si{\kilo\meter}]")
     cb.set_ticks(np.arange(0, 700 + 1, 100))
     cb.set_ticks(np.arange(0, 500 + 1, 25), minor=True)
 
     # Other
-    ax.set_xlabel("$\\alpha$ [-]")
-    ax.set_ylabel("$U$ [\si{\meter\per\second}]")
+    ax.set_xlabel("\\( \\alpha \\) [-]")
+    ax.set_ylabel("\\( U \\) [\si{\meter\per\second}]")
     ax.grid()
     ax.set_xscale("log")
 
@@ -182,11 +182,11 @@ def theory_figure_wavelength_vs_alpha_speed(
         ax.text(
             _angle,
             0.01,
-            f"1/{1/_angle:0.0f}",
+            f"\\; \\( 1/{1/_angle:0.0f} \\)",
             color="blue",
             transform=ax.get_xaxis_transform(),
         )
-        ax.axvline(_angle, color="blue")
+        ax.axvline(_angle, color="blue", alpha=0.8, linewidth=1)
 
     # Save figure
     fig.get_layout_engine().execute(fig)

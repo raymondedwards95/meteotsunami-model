@@ -47,7 +47,7 @@ def theory_figure_speed_vs_size(
         plt.semilogx(
             a / 1000.0,
             u_crit[i, :],
-            label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
+            label=f"\\( \\alpha = 1/{1/alpha[i]:.0f} \\approx \\SI{{{alpha[i]:.0e}}}{{}} \\)",
         )
         plt.fill_between(
             a / 1000.0,
@@ -57,8 +57,8 @@ def theory_figure_speed_vs_size(
         )
 
     plt.legend()
-    plt.xlabel("$a$ [\si{\kilo\meter}]")
-    plt.ylabel("$U_{crit}$ [\si{\meter\per\second}]")
+    plt.xlabel("\\( a \\) [\si{\kilo\meter}]")
+    plt.ylabel("\\( U_{crit} \\) [\si{\meter\per\second}]")
     plt.grid()
     plt.ylim(0, 100)
     plt.xlim(1e0, 1e3)
@@ -105,7 +105,7 @@ def theory_figure_wavelength_vs_size(
         plt.plot(
             a / 1000.0,
             wavelength[i, :] / 1000.0,
-            label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
+            label=f"\\( \\alpha = 1/{1/alpha[i]:.0f} \\approx \\SI{{{alpha[i]:.0e}}}{{}} \\)",
         )
         plt.fill_between(
             a / 1000.0,
@@ -120,12 +120,12 @@ def theory_figure_wavelength_vs_size(
         color="black",
         linestyle="--",
         linewidth=1,
-        label="$2a$",
+        label="\\( 2 a \\)",
     )
 
     plt.legend()
-    plt.xlabel("$a$ [\si{\kilo\meter}]")
-    plt.ylabel("$\\lambda$ [\si{\kilo\meter}]")
+    plt.xlabel("\\( a \\) [\si{\kilo\meter}]")
+    plt.ylabel("\\( \\lambda \\) [\si{\kilo\meter}]")
     plt.xlim(1e0, 1e3)
     plt.ylim(0, 700)
     plt.grid()
@@ -172,7 +172,7 @@ def theory_figure_wavelength_vs_velocity(
         plt.plot(
             velocity,
             wavelength[i, :] / 1000.0,
-            label=f"$\\alpha = 1/{1/alpha[i]:.0f} \\approx {alpha[i]}$",
+            label=f"\\( \\alpha = 1/{1/alpha[i]:.0f} \\approx \\SI{{{alpha[i]:.0e}}}{{}} \\)",
         )
         plt.fill_between(
             velocity,
@@ -182,8 +182,8 @@ def theory_figure_wavelength_vs_velocity(
         )
 
     plt.legend()
-    plt.xlabel("$U$ [\si{\meter\per\second}]")
-    plt.ylabel("$\\lambda$ [\si{\kilo\meter}]")
+    plt.xlabel("\\( U \\) [\si{\meter\per\second}]")
+    plt.ylabel("\\( \\lambda \\) [\si{\kilo\meter}]")
     plt.xlim(velocity.min(), velocity.max())
     plt.ylim(0, 700)
     plt.grid()
