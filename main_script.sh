@@ -340,6 +340,20 @@ function func_tests ()
     cd ..
     echo "# Returned to '$PWD'"
 
+    cd ./reproduction-an-2012
+    echo "# Continuing tests in '$PWD'"
+    python3 $PWD/create_figures.py 1>> "${LogFolder}/test_functions.log" 2>&1 &
+    wait
+    cd ..
+    echo "# Returned to '$PWD'"
+
+    cd ./thesis
+    echo "# Continuing tests in '$PWD'"
+    python3 $PWD/create_figures.py 1>> "${LogFolder}/test_functions.log" 2>&1 &
+    wait
+    cd ..
+    echo "# Returned to '$PWD'"
+
     # End
     local TEnd=$(date +%s)
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
