@@ -12,8 +12,6 @@ import seaborn as sns
 sns.set_palette(sns.color_palette("muted"))
 
 # Matplotlib figure options
-mpl.rcParams["axes.formatter.use_mathtext"] = True  # write x10^p instead of 1ep
-
 mpl.rcParams["pgf.texsystem"] = "xelatex"  # set xelatex as latex engine
 mpl.rcParams["pgf.rcfonts"] = False  # unset default matplotlib fonts for pgf
 mpl.rcParams["pgf.preamble"] = "\n".join(
@@ -35,21 +33,32 @@ mpl.rcParams["text.latex.preamble"] = "\n".join(
     ]
 )  # apply packages for png
 
-mpl.rcParams["figure.titleweight"] = "bold"
+mpl.rcParams["axes.formatter.use_mathtext"] = True  # write x10^p instead of 1ep
+mpl.rcParams["axes.formatter.limits"] = -3, 4  # when to use scientific notation
+
+# mpl.rcParams["xaxis.labellocation"] = "right"
+# mpl.rcParams["yaxis.labellocation"] = "top"
 
 mpl.rcParams["xtick.top"] = True
 mpl.rcParams["xtick.bottom"] = True
-mpl.rcParams["xtick.direction"] = "in"
+mpl.rcParams["xtick.direction"] = "out"
 mpl.rcParams["xtick.minor.visible"] = True
+mpl.rcParams["xtick.minor.size"] = 1
 
 mpl.rcParams["ytick.left"] = True
 mpl.rcParams["ytick.right"] = True
-mpl.rcParams["ytick.direction"] = "in"
+mpl.rcParams["ytick.direction"] = "out"
 mpl.rcParams["ytick.minor.visible"] = True
+mpl.rcParams["ytick.minor.size"] = 1
 
 mpl.rcParams["grid.alpha"] = 0.8
 
+mpl.rcParams["legend.fancybox"] = False  # square box instead of rounded
+mpl.rcParams["legend.numpoints"] = 5
+mpl.rcParams["legend.scatterpoints"] = 3  # 3 points instead of 1
+
 mpl.rcParams["figure.dpi"] = 300
+mpl.rcParams["figure.titleweight"] = "bold"
 
 # Matplotlib video options
 mpl.rcParams["animation.codec"] = "libsvtav1"
