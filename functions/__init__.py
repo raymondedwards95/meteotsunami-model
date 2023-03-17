@@ -54,8 +54,8 @@ mpl.rcParams["ytick.minor.size"] = 1
 mpl.rcParams["grid.alpha"] = 0.8
 
 mpl.rcParams["legend.fancybox"] = False  # square box instead of rounded
-mpl.rcParams["legend.numpoints"] = 5
-mpl.rcParams["legend.scatterpoints"] = 3  # 3 points instead of 1
+mpl.rcParams["legend.numpoints"] = 2  # 2 points instead of 1 for plot with markers
+mpl.rcParams["legend.scatterpoints"] = 1  # 1 points instead of 1 for scatter
 
 mpl.rcParams["figure.dpi"] = 300
 mpl.rcParams["figure.titleweight"] = "bold"

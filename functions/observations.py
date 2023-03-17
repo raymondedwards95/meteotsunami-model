@@ -74,11 +74,10 @@ class ObservationPoint:
         Options:
             scale_factor:   scale factor for coordinates
         """
-        ax.plot(
+        ax.scatter(
             self.x / scale_factor,
             self.y / scale_factor,
-            "o",
-            markersize=5,
+            s=5**2,
             label=self.name,
         )
         return ax
@@ -245,13 +244,13 @@ def plot_observations(
 
     match scale:
         case "m":
-            unit = "\si{\meter}"
+            unit = "\\si{\\meter}"
             scale_factor = 1e0
         case "km":
-            unit = "\si{\kilo\meter}"
+            unit = "\\si{\\kilo\\meter}"
             scale_factor = 1e3
         case "Mm":
-            unit = "\si{\mega\meter}"
+            unit = "\\si{\\mega\\meter}"
             scale_factor = 1e6
         case _:
             raise ValueError(
@@ -275,8 +274,8 @@ def plot_observations(
     # Layout part 2
     ax.grid()
     ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
-    ax.set_xlabel(f"$x$ [{unit}]")
-    ax.set_ylabel(f"$y$ [{unit}]")
+    ax.set_xlabel(f"\\( x \\) [{unit}]")
+    ax.set_ylabel(f"\\( y \\) [{unit}]")
 
     # End
     fig.get_layout_engine().execute(fig)

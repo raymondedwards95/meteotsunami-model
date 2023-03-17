@@ -37,7 +37,7 @@ for i in range(4):
     _x = i * 1e4
     obs.append(
         fo.ObservationCrossSection(
-            name=f"Along: $x={_x/1e3 :0.0f}$ km",
+            name=f"Along: \\( x = \\SI{{{_x / 1e3 :0.0f}}}{{\\kilo\\meter}} \\)",
             x=[_x, _x],
             y=[y_min, y_max],
         )
@@ -47,7 +47,7 @@ for i in range(5):
     _y = i * y_max / 4
     obs.append(
         fo.ObservationCrossSection(
-            name=f"Cross: $y={_y/1e6:0.2f}$ Mm",
+            name=f"Cross: \\( y = \\SI{{{_y / 1e6:0.2f}}}{{\\mega\\meter}} \\)",
             x=[x_min, x_max],
             y=[_y, _y],
         )
