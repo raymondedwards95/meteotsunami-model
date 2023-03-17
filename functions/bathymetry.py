@@ -199,13 +199,13 @@ def plot_bathymetry(
 
     match scale:
         case "m":
-            unit = "\si{\meter}"
+            unit = "\\si{\\meter}"
             scale_factor = 1e0
         case "km":
-            unit = "\si{\kilo\meter}"
+            unit = "\\si{\\kilo\\meter}"
             scale_factor = 1e3
         case "Mm":
-            unit = "\si{\mega\meter}"
+            unit = "\\si{\\mega\\meter}"
             scale_factor = 1e6
         case _:
             raise ValueError(
@@ -223,7 +223,7 @@ def plot_bathymetry(
     b_min = np.floor(b.min())
 
     # fix b_max and b_min
-    b_max = np.max([1.0, b_max])
+    b_max = np.max([0.0, b_max])
     b_min = np.min([-1.0, b_min])
 
     i = y.size // 2
@@ -243,7 +243,7 @@ def plot_bathymetry(
         x / scale_factor,
         b[i, :],
         rasterized=False,
-        label=f"$y={y[i]/scale_factor:0.0f}$ {unit}",
+        label=f"\\( y = {y[i]/scale_factor:0.0f} \\) {unit}",
     )
     _ylims = ax_1.get_ylim()
     ax_1.fill_between(
@@ -256,9 +256,9 @@ def plot_bathymetry(
 
     ax_1.axhline(color="black", linewidth=1, alpha=0.5)
     ax_1.set_xlim(0, xmax)
-    ax_1.set_ylim(_ylims)
-    ax_1.set_xlabel(f"$x$ [{unit}]")
-    ax_1.set_ylabel("Bed Level [\si{\meter}]")
+    ax_1.set_ylim(_ylims[0], 0)
+    ax_1.set_xlabel(f"\\( x \\) [{unit}]")
+    ax_1.set_ylabel("Bed Level [\\si{\\meter}]")
     ax_1.grid()
     ax_1.legend(loc="upper right")
 
@@ -291,15 +291,15 @@ def plot_bathymetry(
         aspect=25,
         pad=0.01,
     )
-    cbar.set_label("Water Depth [\si{\meter}]")
+    cbar.set_label("Water Depth [\\si{\\meter}]")
     cbar.set_ticks(np.linspace(0, b_min, 6))
     cbar.set_ticklabels(
         [f"{ticklabel:0.0f}" for ticklabel in np.linspace(0, -1.0 * b_min, 6)]
     )
 
     ax_2.set_xlim(0, xmax)
-    ax_2.set_xlabel(f"$x$ [{unit}]")
-    ax_2.set_ylabel(f"$y$ [{unit}]")
+    ax_2.set_xlabel(f"\\( x \\) [{unit}]")
+    ax_2.set_ylabel(f"\\( y \\) [{unit}]")
 
     fig_2.get_layout_engine().execute(fig_2)
     save_figure(fig_2, savename)
