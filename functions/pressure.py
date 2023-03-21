@@ -408,13 +408,13 @@ def plot_pressure(
 
     match scale:
         case "m":
-            unit = "\si{\meter}"
+            unit = "\\si{\\meter}"
             scale_factor = 1e0
         case "km":
-            unit = "\si{\kilo\meter}"
+            unit = "\\si{\\kilo\\meter}"
             scale_factor = 1e3
         case "Mm":
-            unit = "\si{\mega\meter}"
+            unit = "\\si{\\mega\\meter}"
             scale_factor = 1e6
         case _:
             raise ValueError(
@@ -480,14 +480,14 @@ def plot_pressure(
             vmax=p_max,
             rasterized=True,
         )
-        ax_1[i].set_title(f"$t = {t[idx]/3600.:0.0f}$h")
+        ax_1[i].set_title(f"\\( t = {t[idx]/3600.:0.0f} \\)h")
         ax_1[i].set_xlim(x_scales)  # make it automatic?
 
-    fig_1.supxlabel(f"$x$ [{unit}]")
-    fig_1.supylabel(f"$y$ [{unit}]")
+    fig_1.supxlabel(f"\\( x \\) [{unit}]")
+    fig_1.supylabel(f"\\( y \\) [{unit}]")
 
     cbar = fig_1.colorbar(imag, ax=ax_1[:], pad=0.03, aspect=10)
-    cbar.set_label("Pressure Disturbance [\si{\pascal}]")
+    cbar.set_label("Pressure Disturbance [\\si{\\pascal}]")
     cbar.set_ticks(cbar_ticks)
     cbar.ax.set_ylim(cbar_ticks.min(), cbar_ticks.max())
 
@@ -510,7 +510,7 @@ def plot_pressure(
         ax_2.plot(
             y / scale_factor,
             p[i, :, ix_single],
-            label=f"$t = {t[idx]/3600.:0.0f}$h",
+            label=f"\\( t = {t[idx]/3600.:0.0f} \\)h",
         )
         ax_2.fill_between(
             y / scale_factor,
@@ -524,8 +524,8 @@ def plot_pressure(
         alpha=0.5,
     )
 
-    ax_2.set_xlabel(f"$y$ [{unit}]")
-    ax_2.set_ylabel("Pressure Disturbance [\si{\pascal}]")
+    ax_2.set_xlabel(f"\\( y \\) [{unit}]")
+    ax_2.set_ylabel("Pressure Disturbance [\\si{\\pascal}]")
     ax_2.grid()
     ax_2.legend()
     ax_2.set_xlim(y.min() / scale_factor, y.max() / scale_factor)
