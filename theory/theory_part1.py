@@ -57,8 +57,8 @@ def theory_figure_speed_vs_size(
         )
 
     plt.legend()
-    plt.xlabel("\\( a \\) [\si{\kilo\meter}]")
-    plt.ylabel("\\( U_{crit} \\) [\si{\meter\per\second}]")
+    plt.xlabel("\\( a \\) [\\si{\\kilo\\meter}]")
+    plt.ylabel("\\( U_{crit} \\) [\\si{\\meter\\per\\second}]")
     plt.grid()
     plt.ylim(0, 100)
     plt.xlim(1e0, 1e3)
@@ -124,8 +124,8 @@ def theory_figure_wavelength_vs_size(
     )
 
     plt.legend()
-    plt.xlabel("\\( a \\) [\si{\kilo\meter}]")
-    plt.ylabel("\\( \\lambda \\) [\si{\kilo\meter}]")
+    plt.xlabel("\\( a \\) [\\si{\\kilo\\meter}]")
+    plt.ylabel("\\( \\lambda \\) [\\si{\\kilo\\meter}]")
     plt.xlim(1e0, 1e3)
     plt.ylim(0, 700)
     plt.grid()
@@ -182,8 +182,8 @@ def theory_figure_wavelength_vs_velocity(
         )
 
     plt.legend()
-    plt.xlabel("\\( U \\) [\si{\meter\per\second}]")
-    plt.ylabel("\\( \\lambda \\) [\si{\kilo\meter}]")
+    plt.xlabel("\\( U \\) [\\si{\\meter\\per\\second}]")
+    plt.ylabel("\\( \\lambda \\) [\\si{\\kilo\\meter}]")
     plt.xlim(velocity.min(), velocity.max())
     plt.ylim(0, 700)
     plt.grid()

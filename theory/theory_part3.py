@@ -97,7 +97,7 @@ def theory_figure_map(
         )
 
         cb = fig.colorbar(cf, ax=ax, extend="min")
-        cb.set_label("Bed Level [\si{\meter}]")
+        cb.set_label("Bed Level [\\si{\\meter}]")
 
         ax.tick_params(labelright=False)
 
@@ -240,8 +240,8 @@ def theory_figure_cross(
 
     ax.legend()
     ax.grid()
-    ax.set_xlabel("Distance from Location [\si{\kilo\meter}]")
-    ax.set_ylabel("Bed Level [\si{\meter}]")
+    ax.set_xlabel("Distance from Location [\\si{\\kilo\\meter}]")
+    ax.set_ylabel("Bed Level [\\si{\\meter}]")
     ax.axhline(color="black", linewidth=1, alpha=0.5)
     ax.set_xlim(0.0, dist_max / 1e3)
 
