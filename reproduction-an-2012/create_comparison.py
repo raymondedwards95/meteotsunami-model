@@ -49,7 +49,7 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_layout_engine("compressed")
 
     fig.supxlabel(
-        "$x$ [\si{\mega\meter}]",
+        "\\( x \\) [\\si{\\mega\\meter}]",
         x=0.8,
         y=0.0,
         va="top",
@@ -57,7 +57,7 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
         fontsize="medium",
     )
     fig.supylabel(
-        "$y$ [\si{\mega\meter}]",
+        "\\( y \\) [\\si{\\mega\\meter}]",
         x=0.0,
         y=0.975,
         va="top",
@@ -97,7 +97,7 @@ def fig_1_contours_sse(dataset: xr.Dataset, saveloc: str) -> None:
 
     # Colorbar
     cb = fig.colorbar(im, ax=axes, fraction=0.1, aspect=25, pad=0.01)
-    cb.set_label("SSE [\si{\meter}]", loc="top", va="center")
+    cb.set_label("SSE [\\si{\\meter}]", loc="top", va="center")
 
     # End
     tb = time.perf_counter_ns()
@@ -127,7 +127,7 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_layout_engine("compressed")
 
     fig.supxlabel(
-        "$y$ [\si{\mega\meter}]",
+        "\\( y \\) [\\si{\\mega\\meter}]",
         x=0.975,
         y=0.0,
         va="top",
@@ -135,7 +135,7 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
         fontsize="medium",
     )
     fig.supylabel(
-        "SSE [\si{\meter}]",
+        "SSE [\\si{\\meter}]",
         x=0.0,
         y=0.975,
         va="top",
@@ -226,7 +226,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     )
 
     fit = fa.exp_decay(dataset["x"], k0, y0)
-    label_fit = f"$A e^{{-k_0 x}}$ with $1/k_0 = {1/k0/1e3:0.0f}$ km"
+    label_fit = f"\\( A e^{{-k_0 x}} \\) with \\( 1 / k_0 = \\SI{{{1 / k0 / 1e3:0.0f}}}{{\\kilo\\meter}} \\)"
 
     # Figure
     print(f"Create figure '03_sse_cross'")
@@ -236,7 +236,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
     fig.set_layout_engine("compressed")
 
     fig.supxlabel(
-        "$x$ [\si{\kilo\meter}]",
+        "\\( x \\) [\\si{\\kilo\\meter}]",
         x=0.975,
         y=0.0,
         va="top",
@@ -244,7 +244,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
         fontsize="medium",
     )
     fig.supylabel(
-        "SSE [\si{\meter}]",
+        "SSE [\\si{\\meter}]",
         x=0.0,
         y=0.975,
         va="top",

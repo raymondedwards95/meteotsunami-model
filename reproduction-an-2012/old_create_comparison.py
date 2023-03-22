@@ -72,13 +72,13 @@ def comp_alongshore(data_list, title, cases, savename):
         _ax.grid()
         _ax.set_xlim(_ylims[i])
         _ax.set_ylim([-0.9, 0.9])
-        _ax.set_title(f"$t = {_times[i]:0.0f}$s")
+        _ax.set_title(f"\\( t = {_times[i]:0.0f} \\)s")
         _ax.axhline(color="black", linewidth=1)
         _ax.axvline(color="black", linewidth=1)
         if i // 2:
-            _ax.set_xlabel("$y$ [\si{\kilo\meter}]")
+            _ax.set_xlabel("\\( y \\) [\\si{\\kilo\\meter}]")
         if not i % 2:
-            _ax.set_ylabel("$SSE$ [\si{\meter}]")
+            _ax.set_ylabel("\\( SSE \\) [\\si{\\meter}]")
 
         for j in range(len(data_list)):
             data = data_list[j]
@@ -119,13 +119,13 @@ def comp_alongshore_diff(data_list, title, cases, savename):
         _ax.grid()
         _ax.set_xlim(_ylims[i])
         _ax.set_ylim([-0.2, 0.2])
-        _ax.set_title(f"$t = {_times[i]:0.0f}$s")
+        _ax.set_title(f"\\( t = {_times[i]:0.0f} \\)s")
         _ax.axhline(color="black", linewidth=1)
         _ax.axvline(color="black", linewidth=1)
         if i // 2:
-            _ax.set_xlabel("$y$ [\si{\kilo\meter}]")
+            _ax.set_xlabel("\\( y \\) [\\si{\\kilo\\meter}]")
         if not i % 2:
-            _ax.set_ylabel("$\\Delta SSE$ [\si{\meter}]")
+            _ax.set_ylabel("\\( \\Delta SSE \\) [\\si{\\meter}]")
 
         reference = data_list[0]["wl"].interp(t=fu.to_timestr(_times[i]), x=10e3)
 
@@ -174,10 +174,10 @@ def comp_crossshore(data_list, title, cases, savename):
         _ax.grid()
         _ax.set_xlim([0, 600])
         _ax.set_ylim([0, 0.9])
-        _ax.set_title(f"$y = {_yslices[i]/1000.}$ km")
-        _ax.set_ylabel("$SSE$ [\si{\meter}]")
+        _ax.set_title(f"\\( y = \\SI{{{_yslices[i] / 1000.0}}}{{\\kilo\\meter}} \\)")
+        _ax.set_ylabel("\\( SSE \\) [\\si{\\meter}]")
         if i == ax.size:
-            _ax.set_xlabel("x [\si{\kilo\meter}]")
+            _ax.set_xlabel("x [\\si{\\kilo\\meter}]")
 
         for j in range(len(data_list)):
             data = data_list[j]
@@ -199,7 +199,7 @@ def comp_crossshore(data_list, title, cases, savename):
                 fa.exp_decay(data["x"], k0, y0),
                 color=f"C{j}",
                 linestyle="--",
-                label=f"Best fit: $1/k_0 = {1./k0/1000.:0.1f}$ km",
+                label=f"Best fit: \\( 1/k_0 = \\SI{{{1.0 / k0 / 1000.0:0.1f}}}{{\\kilo\\meter}} \\)",
             )
 
         _ax.legend()
@@ -236,10 +236,10 @@ def comp_crossshore_diff(data_list, title, cases, savename):
         _ax.grid()
         _ax.set_xlim([0, 600])
         _ax.set_ylim([-0.2, 0.2])
-        _ax.set_title(f"$y = {_yslices[i]/1000.}$ km")
-        _ax.set_ylabel("$\\Delta SSE$ [\si{\meter}]")
+        _ax.set_title(f"\\( y = {{{_yslices[i] / 1000.0}}}{{\\kilo\\meter}} \\)")
+        _ax.set_ylabel("\\( \\Delta SSE \\) [\\si{\\meter}]")
         if i == ax.size:
-            _ax.set_xlabel("x [\si{\kilo\meter}]")
+            _ax.set_xlabel("x [\\si{\\kilo\\meter}]")
 
         reference = data_list[0]["wl"].interp(t=fu.to_timestr(_tslice), y=_yslices[i])
 
