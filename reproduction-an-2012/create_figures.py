@@ -168,7 +168,7 @@ for y_single in y_list[1:-1]:
         dataset=data,
         x=x_ref,
         y=y_single,
-        label=f"$y = \\SI{{{y_single / 1e3:0.1f}}}{{\\kilo\\meter}}$",
+        label=f"\\( y = \\SI{{{y_single / 1e3:0.1f}}}{{\\kilo\\meter}} \\)",
     )
 _spectrum_1d.save(figure_dir)
 
