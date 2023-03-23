@@ -197,9 +197,9 @@ try:
     plt.contourf(x / 1000, y / 1000, b)
     plt.colorbar()
 
-    plt.title("Water depth [\si{\meter}]")
-    plt.xlabel("$x$ [\si{\kilo\meter}]")
-    plt.ylabel("$y$ [\si{\kilo\meter}]")
+    plt.title("Water depth [\\si{\\meter}]")
+    plt.xlabel("\\( x \\) [\\si{\\kilo\\meter}]")
+    plt.ylabel("\\( y \\) [\\si{\\kilo\\meter}]")
 
     plt.axhline(color="black", linewidth=1)
     plt.axvline(color="black", linewidth=1)
@@ -222,7 +222,7 @@ try:
     fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
     fig.set_size_inches(FIGSIZE_SQUARE)
     fig.set_dpi(150)
-    fig.suptitle("Pressure distribution [\si{\pascal}]")
+    fig.suptitle("Pressure distribution [\\si{\\pascal}]")
     fig.set_tight_layout(True)
 
     for i in range(4):
@@ -236,12 +236,12 @@ try:
         )
         _ax.set_xlim([0, 300])
         _ax.set_ylim([0, y.max() / 1000])
-        _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
+        _ax.set_title(f"\\( t = {plot_times[i] : 0.0f} \\)s")
 
         if i // 2:
-            _ax.set_xlabel("$x$ [\si{\kilo\meter}]")
+            _ax.set_xlabel("\\( x \\) [\\si{\\kilo\\meter}]")
         if not i % 2:
-            _ax.set_ylabel("$y$ [\si{\kilo\meter}]")
+            _ax.set_ylabel("\\( y \\) [\\si{\\kilo\\meter}]")
 
         fig.colorbar(im, ax=_ax)
 
@@ -264,7 +264,7 @@ try:
     fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
     fig.set_size_inches(FIGSIZE_SQUARE)
     fig.set_dpi(150)
-    fig.suptitle("Sea Surface Elevation [\si{\meter}]")
+    fig.suptitle("Sea Surface Elevation [\\si{\\meter}]")
     for i in range(4):
         _ax = ax[i // 2, i % 2]
         im = _ax.contourf(
@@ -276,12 +276,12 @@ try:
         )
         _ax.set_xlim([0, 300])
         _ax.set_ylim([0, y.max() / 1000])
-        _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
+        _ax.set_title(f"\\( t = {plot_times[i] : 0.0f} \\)s")
 
         if i // 2:
-            _ax.set_xlabel("$x$ [\si{\kilo\meter}]")
+            _ax.set_xlabel("\\( x \\) [\\si{\\kilo\\meter}]")
         if not i % 2:
-            _ax.set_ylabel("$y$ [\si{\kilo\meter}]")
+            _ax.set_ylabel("\\( y \\) [\\si{\\kilo\\meter}]")
 
         fig.colorbar(im, ax=_ax)
 
@@ -304,18 +304,18 @@ try:
     fig, ax = plt.subplots(2, 2, sharex=False, sharey=False)
     fig.set_size_inches(FIGSIZE_SQUARE)
     fig.set_dpi(150)
-    fig.suptitle("Along-shore profile of Sea Surface Elevation [\si{\meter}]")
+    fig.suptitle("Along-shore profile of Sea Surface Elevation [\\si{\\meter}]")
     for i in range(4):
         _ax = ax[i // 2, i % 2]
         im = _ax.plot(y / 1000, wl.interp(t=fu.to_timestr(plot_times[i]), x=10e3))
         _ax.set_xlim(plot_ylims[i])
         _ax.set_ylim([-1, 1])
-        _ax.set_title(f"$t = {plot_times[i] : 0.0f}$s")
+        _ax.set_title(f"\\( t = {plot_times[i] : 0.0f} \\)s")
 
         if i // 2:
-            _ax.set_xlabel("$y$ [\si{\kilo\meter}]")
+            _ax.set_xlabel("\\( y \\) [\\si{\\kilo\\meter}]")
         if not i % 2:
-            _ax.set_ylabel("$SSE$ [\si{\meter}]")
+            _ax.set_ylabel("\\( SSE \\) [\\si{\\meter}]")
 
         _ax.axvline(7.56e3, linestyle="--", color="gray", linewidth=1)
         _ax.axhline(color="black", linewidth=1)
@@ -337,14 +337,14 @@ try:
         plt.plot(
             x / 1000,
             wl.interp(t=fu.to_timestr(1.6e5), y=y_slices[i]),
-            label=f"$y={y_slices[i]/1000 : 0.0f}$ km",
+            label=f"\\( y = \\SI{{{y_slices[i]/1000 : 0.0f}}}{{\\kilo\\meter}} \\)",
         )
     plt.legend()
     plt.axhline(color="black", linewidth=1)
     plt.axvline(color="black", linewidth=1)
-    plt.title("Cross-shore profile of Sea Surface Elevation [\si{\meter}]")
-    plt.xlabel("$x$ [\si{\kilo\meter}]")
-    plt.ylabel("$SSE$ [\si{\meter}]")
+    plt.title("Cross-shore profile of Sea Surface Elevation [\\si{\\meter}]")
+    plt.xlabel("\\( x \\) [\\si{\\kilo\\meter}]")
+    plt.ylabel("\\( SSE \\) [\\si{\\meter}]")
     plt.xlim([0, 600])
     plt.ylim([0, 0.7])
 
@@ -365,12 +365,12 @@ linestyles = ["-", "--", "--"]
 
 try:
     plt.figure(figsize=FIGSIZE_NORMAL, dpi=150)
-    plt.title("Along-shore profile of Sea Surface Elevation [\si{\meter}]")
+    plt.title("Along-shore profile of Sea Surface Elevation [\\si{\\meter}]")
     for i in range(len(x_slices)):
         plt.plot(
             y / 1000,
             wl.interp(t=fu.to_timestr(1.6e5), x=x_slices[i]),
-            label=f"$x={x_slices[i]/1000 : 0.0f}$ km",
+            label=f"\\( x = \\SI{{{x_slices[i] / 1000:0.0f}}}{{\\kilo\\meter}} \\)",
             linestyle=linestyles[i],
         )
     plt.legend()
@@ -378,8 +378,8 @@ try:
     plt.axvline(color="black", linewidth=1)
     plt.xlim([0, y.max() / 1000])
     plt.axvline(7.56e3, linestyle="--", color="gray", linewidth=1)
-    plt.xlabel("$y$ [\si{\kilo\meter}]")
-    plt.ylabel("$SSE$ [\si{\meter}]")
+    plt.xlabel("\\( y \\) [\\si{\\kilo\\meter}]")
+    plt.ylabel("\\( SSE \\) [\\si{\\meter}]")
 
     plt.savefig(figure_dir + "sse_along_2", bbox_inches="tight", dpi=150)
 except:
