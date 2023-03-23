@@ -93,16 +93,16 @@ class plot_timeseries(plot_base):
             ax.set_xlabel("Time [hours]")
 
         # wl
-        ax = self.axes[0].set_ylabel("$wl$ [\si{\meter}]")
+        ax = self.axes[0].set_ylabel("\\( wl \\) [\\si{\\meter}]")
 
         # u
-        self.axes[1].set_ylabel("$u$ [\si{\meter\per\second}]")
+        self.axes[1].set_ylabel("\\( u \\) [\\si{\\meter\\per\\second}]")
 
         # v
-        self.axes[2].set_ylabel("$v$ [\si{\meter\per\second}]")
+        self.axes[2].set_ylabel("\\( v \\) [\\si{\\meter\\per\\second}]")
 
         # p
-        self.axes[3].set_ylabel("$p$ [\si{\pascal}]")
+        self.axes[3].set_ylabel("\\( p \\) [\\si{\\pascal}]")
         self.axes[3].set_ylim(0, None)
 
     def add_plot(
@@ -137,7 +137,7 @@ class plot_timeseries(plot_base):
         self.lines[ax_idx] += 1
 
         if label is None:
-            label = f"{dataset_name}; $x = {x/1000.:0.1f}$ km; $y = {y/1000.:0.1f}$ km"
+            label = f"{dataset_name}; \\( x = \\SI{{{x / 1000.:0.1f}}}{{\\kilo\\meter}} \\); \\( y = \\SI{{{y/1000.:0.1f}}}{{\\kilo\\meter}} \\)"
 
         # Extract data
         time = dataset["t"].values.astype("datetime64[s]").astype(float) / 3600.0
@@ -238,14 +238,14 @@ if __name__ == "__main__":
         x = 1e4
         y = 1e6
         plot_timeseries() \
-            .add_plot(data_a, "wl", x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "wl", x=x, y=2*y, label=f"$y={fmt(2*y)}$") \
-            .add_plot(data_a, "p",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "p",  x=x, y=2*y, label=f"$y={fmt(2*y)}$") \
-            .add_plot(data_a, "u",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "u",  x=x, y=2*y, label=f"$y={fmt(2*y)}$") \
-            .add_plot(data_a, "v",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "v",  x=x, y=2*y, label=f"$y={fmt(2*y)}$") \
+            .add_plot(data_a, "wl", x=x, y=1*y, label=f"\\( y = {fmt(1*y)} \\)") \
+            .add_plot(data_a, "wl", x=x, y=2*y, label=f"\\( y = {fmt(2*y)} \\)") \
+            .add_plot(data_a, "p",  x=x, y=1*y, label=f"\\( y = {fmt(1*y)} \\)") \
+            .add_plot(data_a, "p",  x=x, y=2*y, label=f"\\( y = {fmt(2*y)} \\)") \
+            .add_plot(data_a, "u",  x=x, y=1*y, label=f"\\( y = {fmt(1*y)} \\)") \
+            .add_plot(data_a, "u",  x=x, y=2*y, label=f"\\( y = {fmt(2*y)} \\)") \
+            .add_plot(data_a, "v",  x=x, y=1*y, label=f"\\( y = {fmt(1*y)} \\)") \
+            .add_plot(data_a, "v",  x=x, y=2*y, label=f"\\( y = {fmt(2*y)} \\)") \
             .save(figure_dir)
 
         plot_timeseries() \
@@ -254,12 +254,12 @@ if __name__ == "__main__":
             .save(figure_dir)
 
         plot_timeseries() \
-            .add_plot(data_a, "u",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "u",  x=x, y=3*y, label=f"$y={fmt(3*y)}$") \
-            .add_plot(data_a, "u",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
-            .add_plot(data_a, "v",  x=x, y=1*y, label=f"$y={fmt(1*y)}$") \
-            .add_plot(data_a, "v",  x=x, y=3*y, label=f"$y={fmt(3*y)}$") \
-            .add_plot(data_a, "v",  x=x, y=5*y, label=f"$y={fmt(5*y)}$") \
+            .add_plot(data_a, "u",  x=x, y=1*y, label=f"\\( y = {fmt(1*y)} \\)") \
+            .add_plot(data_a, "u",  x=x, y=3*y, label=f"\\( y = {fmt(3*y)} \\)") \
+            .add_plot(data_a, "u",  x=x, y=5*y, label=f"\\( y = {fmt(5*y)} \\)") \
+            .add_plot(data_a, "v",  x=x, y=1*y, label=f"\\( y = {fmt(1*y)} \\)") \
+            .add_plot(data_a, "v",  x=x, y=3*y, label=f"\\( y = {fmt(3*y)} \\)") \
+            .add_plot(data_a, "v",  x=x, y=5*y, label=f"\\( y = {fmt(5*y)} \\)") \
             .save(figure_dir)
 
         plot_timeseries() \
