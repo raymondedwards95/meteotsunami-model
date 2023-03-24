@@ -96,24 +96,24 @@ class plot_contour(plot_base):
 
         # Left
         for i in range(self.axes.shape[0]):
-            self.axes[i, 0].set_ylabel(f"$y$ [{self.unit}]")
-        # self.fig.supylabel(f"$y$ [{self.unit}]")
+            self.axes[i, 0].set_ylabel(f"\\( y \\) [{self.unit}]")
+        # self.fig.supylabel(f"\\( y \\) [{self.unit}]")
 
         # Bottom
         for j in range(self.axes.shape[1]):
-            self.axes[-1, j].set_xlabel(f"$x$ [{self.unit}]")
-        # self.fig.supxlabel(f"$x$ [{self.unit}]")
+            self.axes[-1, j].set_xlabel(f"\\( x \\) [{self.unit}]")
+        # self.fig.supxlabel(f"\\( x \\) [{self.unit}]")
 
     def _pick_label(self, variable: str) -> str:
         match variable.lower().strip():
             case "wl":
-                return "Water level [\si{\meter}]"
+                return "Water level [\\si{\\meter}]"
             case "u":
-                return "Cross-shore water\nvelocity [\si{\meter\per\second}]"
+                return "Cross-shore water\nvelocity [\\si{\\meter\\per\\second}]"
             case "v":
-                return "Along-shore water\nvelocity [\si{\meter\per\second}]"
+                return "Along-shore water\nvelocity [\\si{\\meter\\per\\second}]"
             case "p":
-                return "Surface air pressure [\si{\pascal}]"
+                return "Surface air pressure [\\si{\\pascal}]"
             case _:
                 raise ValueError(
                     f"'{self.figure_type} {self.figure_num}' - "
@@ -215,14 +215,14 @@ class plot_contour(plot_base):
                 )
 
                 # self.axes[var_idx, t_idx].annotate(
-                #     f"$t = {t / 3600:0.1f}$h",
+                #     f"\\( t = {t / 3600:0.1f} \\)h",
                 #     xy=(0.99, 0.98),
                 #     xycoords="axes fraction",
                 #     ha="right",
                 #     va="top",
                 # )
             self.axes[0, t_idx].set_title(
-                f"$t = {t / 3600:0.1f}$h",
+                f"\\( t = {t / 3600:0.1f} \\)h",
             )
 
         # Add colorbars
