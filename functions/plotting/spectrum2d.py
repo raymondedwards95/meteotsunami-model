@@ -98,7 +98,7 @@ class plot_spectrum_2d(plot_base):
 
         # General
         if self.title is None:
-            self.title = f"Power Spectrum - {self.variable_long} - $x = \SI{{{self.x / 1000:0.1f}}}{{\kilo\meter}}$"
+            self.title = f"Power Spectrum - {self.variable_long} - \\( x = \SI{{{self.x / 1000:0.1f}}}{{\kilo\meter}} \\)"
         super()._base_setup_figure()
 
     def _setup_plot(self) -> None:
@@ -274,7 +274,7 @@ class plot_spectrum_2d(plot_base):
                 rasterized=False,
             )
             self.ax.annotate(
-                text=f"$n={i}$",
+                text=f"\\( n = {i} \\)",
                 xytext=(
                     0.8 * 0.99 * self.scale_factor * wavenumber[-1],
                     0.8 * 1.02 * self.time_scale_factor * dispersion[-1],
