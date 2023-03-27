@@ -125,7 +125,7 @@ class plot_alongshore(plot_base):
             ax.set_ylim(-1.0 * max_lim, max_lim)
             # ax.ticklabel_format(scilimits=(-2, 2))
 
-        self.axes[-1].set_xlabel(f"$y$ [{self.unit}]")
+        self.axes[-1].set_xlabel(f"\\( y \\) [{self.unit}]")
         self.fig.supylabel(f"{self.variable_long} [{self.variable_unit}]")
 
     def add_subplot(
