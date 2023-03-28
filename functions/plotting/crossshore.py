@@ -120,7 +120,7 @@ class plot_crossshore(plot_base):
             ax.set_ylim(min_lim, max_lim)
             ax.ticklabel_format(scilimits=(-3, 3))
 
-        self.axes[-1].set_xlabel(f"$x$ [{self.unit}]")
+        self.axes[-1].set_xlabel(f"\\( x \\) [{self.unit}]")
         self.fig.supylabel(f"{self.variable_long} [{self.variable_unit}]")
 
     def plot_peaks(
@@ -294,7 +294,7 @@ class plot_crossshore(plot_base):
             dataset_name = ""
 
         if label is None:
-            label = f"$y = \\SI{{{y/1e3:0.0f}}}{{\\kilo\\meter}}$, $t = \\SI{{{t/3600.:0.1f}}}{{\\hour}}$"
+            label = f"\\( y = \\SI{{{y/1e3:0.0f}}}{{\\kilo\\meter}} \\), \\( t = \\SI{{{t/3600.:0.1f}}}{{\\hour}} \\)"
 
         if scale is not None:
             self.set_scale(scale)
@@ -323,7 +323,7 @@ class plot_crossshore(plot_base):
             )
 
             fit = fa.exp_decay(dataset["x"], k0, y0)
-            label_fit = f"$A e^{{-k_0 x}}$ with $1/k_0 = \\SI{{{1/k0/1e3:0.0f}}}{{\\kilo\\meter}}$"
+            label_fit = f"\\( A e^{{-k_0 x}} \\) with \\( 1/k_0 = \\SI{{{1/k0/1e3:0.0f}}}{{\\kilo\\meter}} \\)"
 
             self.axes[-1].plot(
                 dataset["x"] / self.scale_factor,
