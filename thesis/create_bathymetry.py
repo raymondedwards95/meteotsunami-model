@@ -17,8 +17,9 @@ print(f"\nStart creating bathymetry-files for exp")
 
 
 # Function
-def exponential_shelf(x, h=20, a=1e-5):
-    return -1.0 * h * (1.0 - np.exp(-1.0 * a * x))
+def exponential_shelf(x, ref_depth=20, decay=1e-5):
+    """ Computes bed height as `b = - ref_depth + e^(- decay * x)` """
+    return -1.0 * ref_depth * (1.0 - np.exp(-1.0 * decay * x))
 
 
 # Paths
@@ -31,7 +32,7 @@ os.makedirs(bathymetry_dir, exist_ok=True)
 x = np.sort(np.unique(np.concatenate([np.arange(0, 1, 0.5), np.logspace(0, 6, 100)])))
 y = np.linspace(-2e6, +3e6, 5)
 xx, yy = np.meshgrid(x, y)
-zz = exponential_shelf(xx, a=5e-4)
+zz = exponential_shelf(xx, decay=5e-4)
 
 
 # Write to file
