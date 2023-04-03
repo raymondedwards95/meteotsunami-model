@@ -158,6 +158,7 @@ class plot_alongshore(plot_base):
 
         # Add subplot
         self.axes.append(self.fig.add_subplot())
+        self.tx_done = set()
         print(f"# Added subplot for '{self.figure_type} {self.figure_num}'")
 
         # Add data
@@ -384,8 +385,10 @@ if __name__ == "__main__":
         plot_alongshore(variable="wl", y_max=5e6) \
             .add_subplot() \
             .add_plot(data_a, x=x, t=t, label=f"a - t={t}") \
+            .add_plot(data_a, x=x, t=2*t, label=f"a - t={2*t}") \
             .add_subplot() \
             .add_plot(data_b, x=x, t=t, label=f"b - t={t}") \
+            .add_plot(data_b, x=x, t=2*t, label=f"b - t={2*t}") \
             .save(figure_dir)
 
         plot_alongshore(variable="wl", y_min=0, scale="km") \
