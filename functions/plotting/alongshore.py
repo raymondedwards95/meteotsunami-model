@@ -293,7 +293,7 @@ class plot_alongshore(plot_base):
                 self.y_min_fixed = True
                 self.y_min = y_min
             else:
-                y_min_data = dataset["y"][np.abs(data) > 0.1 * data.std()][0]
+                y_min_data = dataset["y"][np.min(np.argwhere((np.abs(data) > 0.1 * data.std()).data)).compute()]
                 if self.y_min > (y_min_data):
                     self.y_min = y_min_data
 
@@ -304,7 +304,7 @@ class plot_alongshore(plot_base):
                 self.y_max_fixed = True
                 self.y_max = y_max
             else:
-                y_max_data = dataset["y"][np.abs(data) > 0.1 * data.std()][-1]
+                y_max_data = dataset["y"][np.max(np.argwhere((np.abs(data) > 0.1 * data.std()).data)).compute()]
                 if self.y_max < (y_max_data):
                     self.y_max = y_max_data
 
