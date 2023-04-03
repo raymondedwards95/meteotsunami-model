@@ -30,7 +30,7 @@ xx, yy = np.meshgrid(x, y)
 
 # Function
 def simple_slope(x, slope=1.0 / 400.0, ref_depth=0.0):
-    """ Computes bed height as `b = - ref_depth - slope * x` """
+    """Computes bed height as `b = - ref_depth - slope * x`"""
     return -1.0 * (ref_depth + slope * x)
 
 
