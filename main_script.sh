@@ -180,7 +180,7 @@ function func_parameters ()
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
     echo "## Finished creating parameter files in $dTTotal minutes"
-    echo "$(date) - Finished creating parameter files" >> $LogFile
+    echo "$(date) - Finished creating parameter files in $dTTotal minutes" >> $LogFile
 }
 
 # Define computations
@@ -220,7 +220,7 @@ function func_computations ()
 
     echo "# Finished computations for $LocalIdentifier case $LocalCase"
     echo "# Case $LocalIdentifier case $LocalCase took $dTTotal minutes in total: $dTComputation minutes for D3D and $dTRegrid minutes for regridding"
-    echo "$(date) - Finished all for '$LocalInputFile'" >> $LogFile
+    echo "$(date) - Finished all for '$LocalInputFile' in $dTTotal minutes" >> $LogFile
 }
 
 # Define animations
@@ -244,7 +244,7 @@ function func_animations ()
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
     echo "# Finished animations for case $LocalIdentifier case $LocalCase in $dTTotal minutes"
-    echo "$(date) - Finished animations for '$LocalInputFile'" >> $LogFile
+    echo "$(date) - Finished animations for '$LocalInputFile' in $dTTotal minutes" >> $LogFile
 }
 
 # Define figures
@@ -268,7 +268,7 @@ function func_figures ()
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
     echo "# Finished figures for case $LocalIdentifier case $LocalCase in $dTTotal minutes"
-    echo "$(date) - Finished figures for '$LocalInputFile'" >> $LogFile
+    echo "$(date) - Finished figures for '$LocalInputFile' in $dTTotal minutes" >> $LogFile
 }
 
 # Define theory
@@ -295,7 +295,7 @@ function func_theory ()
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
     echo "# Finished figures for theory in $dTTotal minutes"
-    echo "$(date) - Finished figures for theory" >> $LogFile
+    echo "$(date) - Finished figures for theory in $dTTotal minutes" >> $LogFile
 }
 
 # Define comparison
@@ -320,7 +320,7 @@ function func_comparison ()
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
     echo "# Finished figures for comparison in $dTTotal minutes"
-    echo "$(date) - Finished figures for comparison" >> $LogFile
+    echo "$(date) - Finished figures for comparison in $dTTotal minutes" >> $LogFile
 }
 
 # Define tests
@@ -359,7 +359,7 @@ function func_tests ()
     local dTTotal=$(python3 -c "print(f'{($TEnd - $TStart) / 60:0.1f}')")
 
     echo "# Finished doing tests in $dTTotal minutes"
-    echo "$(date) - Finished simple tests" >> $LogFile
+    echo "$(date) - Finished simple tests in $dTTotal minutes" >> $LogFile
 }
 
 # Create theory
