@@ -64,7 +64,7 @@ def comp_alongshore(data_list, title, cases, savename):
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(150)
     fig.set_tight_layout(True)
-    fig.suptitle(f"{title}\nAlong-shore Profile of Sea Surface Elevation")
+    # fig.suptitle(f"{title}\nAlong-shore Profile of Sea Surface Elevation")
 
     # Subplots
     for i in range(ax.size):
@@ -111,7 +111,7 @@ def comp_alongshore_diff(data_list, title, cases, savename):
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(150)
     fig.set_tight_layout(True)
-    fig.suptitle(f"{title}\nChange in Along-shore Profile")
+    # fig.suptitle(f"{title}\nChange in Along-shore Profile")
 
     # Subplots
     for i in range(ax.size):
@@ -161,7 +161,7 @@ def comp_crossshore(data_list, title, cases, savename):
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(150)
     fig.set_tight_layout(True)
-    fig.suptitle(f"{title}\nCross-shore Profile of Sea Surface Elevation")
+    # fig.suptitle(f"{title}\nCross-shore Profile of Sea Surface Elevation")
 
     if not isinstance(ax, np.ndarray):
         ax = np.array([ax])
@@ -223,7 +223,7 @@ def comp_crossshore_diff(data_list, title, cases, savename):
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_dpi(150)
     fig.set_tight_layout(True)
-    fig.suptitle(f"{title}\nChange in Cross-shore Profile")
+    # fig.suptitle(f"{title}\nChange in Cross-shore Profile")
 
     if not isinstance(ax, np.ndarray):
         ax = np.array([ax])

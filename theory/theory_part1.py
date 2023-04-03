@@ -41,7 +41,7 @@ def theory_figure_speed_vs_size(
     fig = plt.figure()
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_layout_engine("compressed")
-    fig.suptitle("Critical Storm Speed")
+    # fig.suptitle("Critical Storm Speed")
 
     for i in range(alpha.size):
         plt.semilogx(
@@ -99,7 +99,7 @@ def theory_figure_wavelength_vs_size(
     fig = plt.figure()
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_layout_engine("compressed")
-    fig.suptitle("Wavelength of Edge Wave Packet")
+    # fig.suptitle("Wavelength of Edge Wave Packet")
 
     for i in range(alpha.size):
         plt.plot(
@@ -166,7 +166,7 @@ def theory_figure_wavelength_vs_velocity(
     fig = plt.figure()
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_layout_engine("compressed")
-    fig.suptitle("Wavelength of Edge Wave Packet")
+    # fig.suptitle("Wavelength of Edge Wave Packet")
 
     for i in range(alpha.size):
         plt.plot(

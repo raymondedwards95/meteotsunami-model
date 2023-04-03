@@ -80,7 +80,7 @@ def theory_figure_map(
     fig = plt.figure()
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_layout_engine("compressed")
-    fig.suptitle("Area of Interest")
+    # fig.suptitle("Area of Interest")
 
     ax = fig.add_subplot(projection=ccrs.PlateCarree())
 
@@ -193,7 +193,7 @@ def theory_figure_cross(
     fig, ax = plt.subplots(1, 1)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_layout_engine("compressed")
-    fig.suptitle("Cross-sections of bottom topography")
+    # fig.suptitle("Cross-sections of bottom topography")
 
     for i, loc in enumerate(["Vlissingen", "Hoek van Holland", "Den Helder"]):
         # Select longitude

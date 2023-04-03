@@ -222,7 +222,7 @@ try:
     fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
     fig.set_size_inches(FIGSIZE_SQUARE)
     fig.set_dpi(150)
-    fig.suptitle("Pressure distribution [\\si{\\pascal}]")
+    # fig.suptitle("Pressure distribution [\\si{\\pascal}]")
     fig.set_tight_layout(True)
 
     for i in range(4):
@@ -264,7 +264,7 @@ try:
     fig, ax = plt.subplots(2, 2, sharex=True, sharey=True)
     fig.set_size_inches(FIGSIZE_SQUARE)
     fig.set_dpi(150)
-    fig.suptitle("Sea Surface Elevation [\\si{\\meter}]")
+    # fig.suptitle("Sea Surface Elevation [\\si{\\meter}]")
     for i in range(4):
         _ax = ax[i // 2, i % 2]
         im = _ax.contourf(
@@ -304,7 +304,7 @@ try:
     fig, ax = plt.subplots(2, 2, sharex=False, sharey=False)
     fig.set_size_inches(FIGSIZE_SQUARE)
     fig.set_dpi(150)
-    fig.suptitle("Along-shore profile of Sea Surface Elevation [\\si{\\meter}]")
+    # fig.suptitle("Along-shore profile of Sea Surface Elevation [\\si{\\meter}]")
     for i in range(4):
         _ax = ax[i // 2, i % 2]
         im = _ax.plot(y / 1000, wl.interp(t=fu.to_timestr(plot_times[i]), x=10e3))

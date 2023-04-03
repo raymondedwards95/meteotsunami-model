@@ -261,7 +261,7 @@ def plot_observations(
     fig, ax = plt.subplots(1, 1)
     fig.set_size_inches(FIGSIZE_NORMAL)
     fig.set_layout_engine("compressed")
-    fig.suptitle("Observation Points and Lines")
+    # fig.suptitle("Observation Points and Lines")
 
     # Layout
     ax.axhline(color="black", linewidth=1, alpha=0.5)

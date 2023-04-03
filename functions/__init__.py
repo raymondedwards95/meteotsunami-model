@@ -59,6 +59,7 @@ mpl.rcParams["legend.scatterpoints"] = 1  # 1 points instead of 1 for scatter
 
 mpl.rcParams["figure.dpi"] = 300
 mpl.rcParams["figure.titleweight"] = "bold"
+mpl.rcParams["figure.titlesize"] = "x-large"
 
 # Matplotlib video options
 mpl.rcParams["animation.codec"] = "libsvtav1"
