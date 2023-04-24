@@ -56,6 +56,8 @@ mpl.rcParams["grid.alpha"] = 0.8
 mpl.rcParams["legend.fancybox"] = False  # square box instead of rounded
 mpl.rcParams["legend.numpoints"] = 2  # 2 points instead of 1 for plot with markers
 mpl.rcParams["legend.scatterpoints"] = 1  # 1 points instead of 1 for scatter
+mpl.rcParams["legend.labelspacing"] = 1.2  # default: 0.5
+mpl.rcParams["legend.borderpad"] = 0.6  # default: 0.4
 
 mpl.rcParams["figure.dpi"] = 300
 mpl.rcParams["figure.titleweight"] = "bold"
