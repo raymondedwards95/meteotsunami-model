@@ -384,7 +384,7 @@ if [ "$create_comparison" = true ] ; then
 fi
 
 # Loop over all folders
-for Folder in $FolderList
+for Folder in ${FolderList[@]}
 do
     # Move to folder
     cd $Folder
