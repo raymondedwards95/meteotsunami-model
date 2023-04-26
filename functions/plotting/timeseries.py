@@ -52,19 +52,6 @@ class plot_timeseries(plot_base):
         self._check_if_closed()
         print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
 
-    def _match_variable(self, variable: str) -> int:
-        match variable.lower().strip():
-            case "wl":
-                return 0
-            case "u":
-                return 1
-            case "v":
-                return 2
-            case "p":
-                return 3
-            case _:
-                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
-
     def _setup_figure(self) -> None:
         """Figure setup"""
         # Checks

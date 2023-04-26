@@ -61,6 +61,19 @@ class plot_base:
             self.title = self.figure_type
         # self.fig.suptitle(self.title)
 
+    def _match_variable(self, variable: str) -> int:
+        match variable.lower().strip():
+            case "wl":
+                return 0
+            case "u":
+                return 1
+            case "v":
+                return 2
+            case "p":
+                return 3
+            case _:
+                raise ValueError(f"{variable=} should be 'wl', 'u', 'v' or 'p'")
+
     def _set_variable(self, variable: str) -> Self:
         match variable.lower().strip():
             case "wl":
