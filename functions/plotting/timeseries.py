@@ -37,6 +37,7 @@ class plot_timeseries(plot_base):
 
         Methods:
             `add_plot`: add data to the figure
+            `save`:     write figure to disk as png and pgf
         """
         plot_timeseries.number += 1
 
@@ -155,7 +156,7 @@ class plot_timeseries(plot_base):
         saveloc: str,
         close: bool = True,
     ) -> None:
-        """Saves the figure
+        """Saves the figure as png and pgf
 
         Input:
             `saveloc`:  location where the figure should be saved
