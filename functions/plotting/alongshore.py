@@ -43,11 +43,12 @@ class plot_alongshore(plot_base):
             `y_min`:        lower limit for y (in meters)
             `y_max`:        upper limit for y (in meters)
             `scale`:        scale of plots ('m', 'km' or 'Mm')
-            `title`:    figure title
+            `title`:        figure title
 
         Methods:
             `add_subplot`:  add a new subplot with data
             `add_plot`:     add data to the figure
+            `save`:         write figure to disk as png and pgf
         """
         plot_alongshore.number += 1
         print("\n# Creating new figure")
@@ -329,7 +330,7 @@ class plot_alongshore(plot_base):
         saveloc: str,
         close: bool = True,
     ) -> None:
-        """Saves the figure
+        """Saves the figure as png and pgf
 
         Input:
             `saveloc`:  location where the figure should be saved
