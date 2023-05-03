@@ -49,6 +49,7 @@ class plot_crossshore(plot_base):
             `plot_peaks`:   plot cross-shore profiles of peaks in different subplots
             `add_subplot`:  add a new subplot with data
             `add_plot`:     add data to the figure
+            `save`:         write figure to disk as png and pgf
         """
         plot_crossshore.number += 1
 
@@ -357,7 +358,7 @@ class plot_crossshore(plot_base):
         saveloc: str,
         close: bool = True,
     ) -> None:
-        """Saves the figure
+        """Saves the figure as png and pgf
 
         Input:
             `saveloc`:  location where the figure should be saved
