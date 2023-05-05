@@ -55,7 +55,7 @@ class plot_spectrum_2d(plot_base):
         Methods:
             `add_plot`:         add data to the figure
             `add_dispersion`:   add theoretical relationship between wavenumber and frequency
-            `save`:             writes the figure to disk
+            `save`:             write figure to disk as png and pgf
         """
         plot_spectrum_2d.number += 1
         self.time_scale_factor = 3600.0
@@ -302,7 +302,7 @@ class plot_spectrum_2d(plot_base):
         saveloc: str,
         close: bool = True,
     ) -> None:
-        """Saves the figure
+        """Saves the figure as png and pgf
 
         Input:
             `saveloc`:  location where the figure should be saved
