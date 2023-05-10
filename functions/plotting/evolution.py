@@ -2,7 +2,6 @@ import os
 import sys
 
 import matplotlib.pyplot as plt
-import numpy as np
 import xarray as xr
 
 # fmt: off
@@ -23,14 +22,26 @@ data_b = xr.open_dataset(data_b, chunks="auto")
 
 x_ref = 1e4
 
-
 fig, axes = plt.subplots(2, 1, sharex=True)
+
+time_max = 0
 
 for i, data in enumerate([data_a, data_b]):
     for j, var in enumerate(["wl", "p"]):
         data_time = data["t"].values.astype("datetime64[s]").astype(float) / 3600.0
         data_max = data[var].interp(x=x_ref).max(dim=["y"])
         data_min = -1.0 * data[var].interp(x=x_ref).min(dim=["y"])
+
+        a = data_max > 0.99 * data_max.max()
+        b = data_min > 0.99 * data_min.max()
+
+        time_max = np.max(
+            [
+                time_max,
+                data_time[a.argmax().values],
+                data_time[b.argmax().values],
+            ]
+        )
 
         axes[j].plot(
             data_time,
@@ -55,6 +66,7 @@ for i, data in enumerate([data_a, data_b]):
         )
 
 for ax in axes:
+    ax.set_xlim(0, time_max)
     ax.set_ylim(0, None)
     ax.legend()
     ax.grid()
@@ -65,6 +77,8 @@ axes[1].set_ylabel("Surface Air Pressure \n[pascals]")
 
 fig.align_labels()
 
-plt.savefig(f"{figure_dir}/test_evolution",
-        bbox_inches="tight",
-        pil_kwargs=FIG_PIL_KWARGS,)
+plt.savefig(
+    f"{figure_dir}/test_evolution",
+    bbox_inches="tight",
+    pil_kwargs=FIG_PIL_KWARGS,
+)
