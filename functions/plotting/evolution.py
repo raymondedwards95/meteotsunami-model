@@ -71,9 +71,9 @@ for ax in axes:
     ax.legend()
     ax.grid()
 
-axes[1].set_xlabel("Time [hours]")
-axes[0].set_ylabel("Water Level \n[meters]")
-axes[1].set_ylabel("Surface Air Pressure \n[pascals]")
+axes[1].set_xlabel("Time [\\si{\\hour}]")
+axes[0].set_ylabel("Water Level \n[\\si{\\meter}]")
+axes[1].set_ylabel("Surface Air Pressure \n[\\si{\\pascal}]")
 
 fig.align_labels()
 
