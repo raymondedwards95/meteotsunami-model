@@ -134,8 +134,8 @@ class plot_growth(plot_base):
             self.time_max = np.max(
                 [
                     self.time_max,
-                    1.5 * data_time[a.argmax().values],
-                    1.5 * data_time[b.argmax().values],
+                    1.2 * data_time[a.argmax().values],
+                    1.2 * data_time[b.argmax().values],
                 ]
             )
 
