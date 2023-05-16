@@ -192,6 +192,13 @@ for y_single in y_list:
     )
 _timeseries.save(figure_dir)
 
+# Waveheight evolution
+_growth = fpl.plot_growth(x=x_ref)
+_growth.add_plot(
+    dataset=data,
+)
+_growth.save(figure_dir)
+
 # Close data
 data.close()
 
