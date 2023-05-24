@@ -54,12 +54,7 @@ class plot_growth(plot_base):
         self.line_num = -1
 
         self.time_max = 1.0
-
-        self.x_ref: float
-        if x is None:
-            self.x_ref = 0.0
-        else:
-            self.x_ref = x
+        self.x = x
 
         self._check_if_closed()
         print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
@@ -117,16 +112,22 @@ class plot_growth(plot_base):
         if label is None:
             label = f"{dataset_name}"
 
-        if np.isclose(self.x_ref, 0.0):
-            self.x_ref = dataset["x"].min()
+        if self.x is not None:
+            if np.isclose(self.x, 0.0):
+                self.x = dataset["x"].min()
 
         # Plot data
         for j, var in enumerate(["wl", "p"]):
             data_time = (
                 dataset["t"].values.astype("datetime64[s]").astype(float) / 3600.0
             )
-            data_max = dataset[var].interp(x=self.x_ref).max(dim=["y"])
-            data_min = -1.0 * dataset[var].interp(x=self.x_ref).min(dim=["y"])
+
+            if self.x is None:
+                data_max = dataset[var].max(dim=["y", "x"])
+                data_min = -1.0 * dataset[var].min(dim=["y", "x"])
+            else:
+                data_max = dataset[var].interp(x=self.x).max(dim=["y"])
+                data_min = -1.0 * dataset[var].interp(x=self.x).min(dim=["y"])
 
             a = data_max > 0.99 * data_max.max()
             b = data_min > 0.99 * data_min.max()
@@ -167,7 +168,7 @@ class plot_growth(plot_base):
             )
 
         # Log
-        print(f"# Added data from {dataset_name} at {self.x_ref}, labeled by {label=}")
+        print(f"# Added data from {dataset_name} at x={self.x}, labeled by {label=}")
         return self
 
     def save(
