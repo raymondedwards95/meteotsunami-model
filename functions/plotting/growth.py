@@ -113,8 +113,16 @@ class plot_growth(plot_base):
             label = f"{dataset_name}"
 
         if self.x is not None:
-            if np.isclose(self.x, 0.0):
-                self.x = dataset["x"].min()
+            if self.x < (x_min := dataset["x"].min().values):
+                print(
+                    f"Reference x {self.x:0.1e} is not in the domain: setting reference x to {x_min:0.1e}"
+                )
+                self.x = x_min
+            if self.x > (x_max := dataset["x"].max().values):
+                print(
+                    f"Reference x {self.x:0.1e} is not in the domain: setting reference x to {x_max:0.1e}"
+                )
+                self.x = x_max
 
         # Plot data
         for j, var in enumerate(["wl", "p"]):
@@ -239,6 +247,14 @@ if __name__ == "__main__":
         plot_growth(x=1e5) \
             .add_plot(dataset=data_a) \
             .add_plot(dataset=data_b) \
+            .save(figure_dir)
+
+        plot_growth(x=0) \
+            .add_plot(dataset=data_a) \
+            .save(figure_dir)
+
+        plot_growth(x=data_a["x"].max().values * 2.0) \
+            .add_plot(dataset=data_a) \
             .save(figure_dir)
     # fmt: on
 
