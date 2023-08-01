@@ -200,6 +200,26 @@ class plot_timeseries(plot_base):
         return
 
 
+def plot_parametric(dataset, field_a, field_b, x, y, saveloc):
+    savename = f"{saveloc}/parametric_1".replace("//", "/")
+
+    values_a = dataset[field_a].interp(x=x, y=y)
+    values_b = dataset[field_b].interp(x=x, y=y)
+
+    valid_a = ~np.isclose(values_a, 0)
+    valid_b = ~np.isclose(values_b, 0)
+
+    values_a = values_a[valid_a & valid_b]
+    values_b = values_b[valid_a & valid_b]
+
+    fig, ax = plt.subplots(1, 1)
+
+    ax.plot(values_a, values_b)
+    ax.plot(values_a[0], values_b[0], marker="o")
+
+    save_figure(fig, savename)
+
+
 if __name__ == "__main__":
     # Additional imports
     import matplotlib.ticker as mticker
@@ -270,6 +290,13 @@ if __name__ == "__main__":
             .add_plot(data_b, "wl",  x=x, y=np.pi*y) \
             .add_plot(data_b, "p",  x=x, y=np.pi*y) \
             .save(figure_dir)
+
+    def test_parametric():
+        x = 1e4
+        y = 1e6
+
+        plot_parametric(dataset=data_a, field_a="wl", field_b="p", x=x, y=y, saveloc=figure_dir)
     # fmt: on
 
-    test_timeseries()
+    # test_timeseries()
+    test_parametric()
