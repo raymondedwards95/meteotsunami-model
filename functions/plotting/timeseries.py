@@ -206,16 +206,19 @@ def plot_parametric(dataset, field_a, field_b, x, y, saveloc):
     values_a = dataset[field_a].interp(x=x, y=y)
     values_b = dataset[field_b].interp(x=x, y=y)
 
-    valid_a = ~np.isclose(values_a, 0)
-    valid_b = ~np.isclose(values_b, 0)
+    valid_a = np.abs(values_a) > 0.001 * np.max(np.abs(values_a))
+    valid_b = np.abs(values_b) > 0.001 * np.max(np.abs(values_b))
 
-    values_a = values_a[valid_a & valid_b]
-    values_b = values_b[valid_a & valid_b]
+    valid = valid_a & valid_b
+    valid = valid.compute()
+
+    values_a[~valid] = np.nan
+    values_b[~valid] = np.nan
 
     fig, ax = plt.subplots(1, 1)
 
     ax.plot(values_a, values_b)
-    ax.plot(values_a[0], values_b[0], marker="o")
+    ax.plot(values_a[valid][0], values_b[valid][0], marker="o")
 
     save_figure(fig, savename)
 
