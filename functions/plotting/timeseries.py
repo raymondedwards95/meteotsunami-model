@@ -200,27 +200,152 @@ class plot_timeseries(plot_base):
         return
 
 
-def plot_parametric(dataset, field_a, field_b, x, y, saveloc):
-    savename = f"{saveloc}/parametric_1".replace("//", "/")
+class plot_parametric(plot_base):
+    """Methods to create a visualisation of time-series in a parametric plot"""
 
-    values_a = dataset[field_a].interp(x=x, y=y)
-    values_b = dataset[field_b].interp(x=x, y=y)
+    number = 0
 
-    valid_a = np.abs(values_a) > 0.001 * np.max(np.abs(values_a))
-    valid_b = np.abs(values_b) > 0.001 * np.max(np.abs(values_b))
+    def __init__(
+        self,
+        title: str = None,
+    ) -> None:
+        """Create and setup a figure for a parametric plot
 
-    valid = valid_a & valid_b
-    valid = valid.compute()
+        Options:
+            `title`:    figure title
 
-    values_a[~valid] = np.nan
-    values_b[~valid] = np.nan
+        Methods:
+            `add_plot`: add data to the figure
+            `save`:     write figure to disk as png and pgf
+        """
+        plot_parametric.number += 1
 
-    fig, ax = plt.subplots(1, 1)
+        super().__init__()
+        self.figsize = FIGSIZE_NORMAL
 
-    ax.plot(values_a, values_b)
-    ax.plot(values_a[valid][0], values_b[valid][0], marker="o")
+        self.fig, self.ax = plt.subplots(1, 1)
+        self.title = title
+        self.figure_type = "Parametric Plot"
+        self.figure_num = plot_parametric.number
 
-    save_figure(fig, savename)
+        self._check_if_closed()
+        print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
+
+    def _setup_figure(self) -> None:
+        """Figure setup"""
+        # Checks
+        self._check_if_closed()
+
+        # General
+        super()._base_setup_figure()
+
+    def _setup_plot(self) -> None:
+        """Plot setup"""
+        # Checks
+        self._check_if_closed()
+
+        # General
+        self.ax.axhline(color="black", linewidth=1, alpha=0.5)
+        self.ax.axvline(color="black", linewidth=1, alpha=0.5)
+        self.ax.legend(loc="upper right")
+        self.ax.grid()
+        # self.ax.ticklabel_format(scilimits=(-2, 2))
+
+    def add_plot(
+        self,
+        dataset: xr.Dataset,
+        variable_1: str,
+        variable_2: str,
+        x: Numeric,
+        y: Numeric,
+        label: str = None,
+    ) -> Self:
+        """Adds data to a plot
+
+        Input:
+            `dataset`:      dataset containing gridded model output
+            `variable_1`:   name of first variable
+            `variable_2`:   name of second variable
+            `x`:            x-coordinate
+            `y`:            y-coordinate
+
+        Options:
+            `label`:        label for plot
+        """
+        # Checks
+        self._check_if_closed()
+
+        dataset_name: str
+        try:
+            dataset_name = dataset.attrs["name"]
+        except KeyError:
+            dataset_name = "-"
+
+        if label is None:
+            label = f"{dataset_name}; \\( x = \\SI{{{x / 1000.:0.1f}}}{{\\kilo\\meter}} \\); \\( y = \\SI{{{y/1000.:0.1f}}}{{\\kilo\\meter}} \\)"
+
+        # Extract data
+        data_1 = dataset[variable_1].interp(x=x, y=y)
+        data_2 = dataset[variable_2].interp(x=x, y=y)
+
+        valid_1 = np.abs(data_1) > 0.001 * np.max(np.abs(data_1))
+        valid_2 = np.abs(data_2) > 0.001 * np.max(np.abs(data_2))
+
+        valid = valid_1 & valid_2
+        valid = valid.compute()
+
+        data_1[~valid] = np.nan
+        data_2[~valid] = np.nan
+
+        # Plot
+        self.ax.plot(
+            data_1,
+            data_2,
+            label=label,
+            rasterized=False,
+        )
+
+        # Log
+        print(
+            f"# Added {variable_1} vs {variable_2} from {dataset_name} for {x=} and {y=}, labeled by {label=}"
+        )
+        return self
+
+    def save(
+        self,
+        saveloc: str,
+        close: bool = True,
+    ) -> None:
+        """Saves the figure as png and pgf
+
+        Input:
+            `saveloc`:  location where the figure should be saved
+
+        Options:
+            `close`:    close figure
+        """
+        # Checks
+        self._check_if_closed()
+        savename = f"{saveloc}/parametric_{plot_parametric.number:02.0f}".replace(
+            "//", "/"
+        )
+
+        # Setup
+        self._setup_figure()
+        self._setup_plot()
+
+        # update ticks
+        self.ax.label_outer()
+
+        # Save
+        self.fig.get_layout_engine().execute(self.fig)
+        save_figure(self.fig, savename)
+
+        # End
+        print(f"# Saved figure '{self.figure_type} {self.figure_num}' as {savename}")
+        if close:
+            self.close()
+        return
 
 
 if __name__ == "__main__":
@@ -298,7 +423,22 @@ if __name__ == "__main__":
         x = 1e4
         y = 1e6
 
-        plot_parametric(dataset=data_a, field_a="wl", field_b="p", x=x, y=y, saveloc=figure_dir)
+        plot_parametric() \
+            .add_plot(data_a, "p", "wl", x=x, y=y) \
+            .save(figure_dir)
+
+        plot_parametric() \
+            .add_plot(data_a, "u", "v", x=x, y=y) \
+            .add_plot(data_b, "u", "v", x=x, y=y) \
+            .save(figure_dir)
+
+        plot_parametric() \
+            .add_plot(data_a, "p", "wl", x=x, y=y) \
+            .add_plot(data_a, "p", "wl", x=x, y=3*y) \
+            .add_plot(data_a, "p", "wl", x=x, y=5*y) \
+            .add_plot(data_a, "p", "wl", x=x, y=7*y) \
+            .add_plot(data_a, "p", "wl", x=x, y=9*y) \
+            .save(figure_dir)
     # fmt: on
 
     # test_timeseries()
