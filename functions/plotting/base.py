@@ -61,6 +61,14 @@ class plot_base:
             self.title = self.figure_type
         # self.fig.suptitle(self.title)
 
+    def _check_variable(self, variable: str) -> bool:
+        try:
+            if self._match_variable(variable) in [0, 1, 2, 3]:
+                return True
+        except ValueError as error:
+            print(f"# Caugth error: '{error}'")
+        return False
+
     def _match_variable(self, variable: str) -> int:
         match variable.lower().strip():
             case "wl":
