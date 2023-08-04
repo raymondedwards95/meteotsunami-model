@@ -207,9 +207,15 @@ class plot_parametric(plot_base):
 
     def __init__(
         self,
+        variable_1: str,
+        variable_2: str,
         title: str = None,
     ) -> None:
         """Create and setup a figure for a parametric plot
+
+        Input:
+            `variable_1`:   name of first variable
+            `variable_2`:   name of second variable
 
         Options:
             `title`:    figure title
@@ -227,6 +233,12 @@ class plot_parametric(plot_base):
         self.title = title
         self.figure_type = "Parametric Plot"
         self.figure_num = plot_parametric.number
+
+        self._check_variable(variable_1)
+        self._check_variable(variable_2)
+
+        self.variable_1 = variable_1
+        self.variable_2 = variable_2
 
         self._check_if_closed()
         print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
@@ -251,11 +263,45 @@ class plot_parametric(plot_base):
         self.ax.grid()
         # self.ax.ticklabel_format(scilimits=(-2, 2))
 
+    def _setup_xaxis(self) -> Self:
+        print(f"# x-axis represents {self.variable_1}")
+
+        match self.variable_1:
+            case "wl":
+                self.ax.set_xlabel("\\( wl \\) [\\si{\\meter}]")
+            case "u":
+                self.ax.set_xlabel("\\( u \\) [\\si{\\meter\\per\\second}]")
+            case "v":
+                self.ax.set_xlabel("\\( v \\) [\\si{\\meter\\per\\second}]")
+            case "p":
+                self.ax.set_xlabel("\\( p \\) [\\si{\\pascal}]")
+                self.ax.set_xlim(0, None)
+            case _:
+                raise ValueError(f"{self.variable_1=} should be 'wl', 'u', 'v' or 'p'")
+
+        return self
+
+    def _setup_yaxis(self) -> Self:
+        print(f"# y-axis represents {self.variable_2}")
+
+        match self.variable_2:
+            case "wl":
+                self.ax.set_ylabel("\\( wl \\) [\\si{\\meter}]")
+            case "u":
+                self.ax.set_ylabel("\\( u \\) [\\si{\\meter\\per\\second}]")
+            case "v":
+                self.ax.set_ylabel("\\( v \\) [\\si{\\meter\\per\\second}]")
+            case "p":
+                self.ax.set_ylabel("\\( p \\) [\\si{\\pascal}]")
+                self.ax.set_ylim(0, None)
+            case _:
+                raise ValueError(f"{self.variable_2=} should be 'wl', 'u', 'v' or 'p'")
+
+        return self
+
     def add_plot(
         self,
         dataset: xr.Dataset,
-        variable_1: str,
-        variable_2: str,
         x: Numeric,
         y: Numeric,
         label: str = None,
@@ -264,8 +310,6 @@ class plot_parametric(plot_base):
 
         Input:
             `dataset`:      dataset containing gridded model output
-            `variable_1`:   name of first variable
-            `variable_2`:   name of second variable
             `x`:            x-coordinate
             `y`:            y-coordinate
 
@@ -285,8 +329,8 @@ class plot_parametric(plot_base):
             label = f"{dataset_name}; \\( x = \\SI{{{x / 1000.:0.1f}}}{{\\kilo\\meter}} \\); \\( y = \\SI{{{y/1000.:0.1f}}}{{\\kilo\\meter}} \\)"
 
         # Extract data
-        data_1 = dataset[variable_1].interp(x=x, y=y)
-        data_2 = dataset[variable_2].interp(x=x, y=y)
+        data_1 = dataset[self.variable_1].interp(x=x, y=y)
+        data_2 = dataset[self.variable_2].interp(x=x, y=y)
 
         valid_1 = np.abs(data_1) > 0.001 * np.max(np.abs(data_1))
         valid_2 = np.abs(data_2) > 0.001 * np.max(np.abs(data_2))
@@ -307,7 +351,7 @@ class plot_parametric(plot_base):
 
         # Log
         print(
-            f"# Added {variable_1} vs {variable_2} from {dataset_name} for {x=} and {y=}, labeled by {label=}"
+            f"# Added data from {dataset_name} for {x=} and {y=}, labeled by {label=}"
         )
         return self
 
@@ -335,7 +379,8 @@ class plot_parametric(plot_base):
         self._setup_plot()
 
         # update ticks
-        self.ax.label_outer()
+        self._setup_xaxis()
+        self._setup_yaxis()
 
         # Save
         self.fig.get_layout_engine().execute(self.fig)
@@ -423,21 +468,21 @@ if __name__ == "__main__":
         x = 1e4
         y = 1e6
 
-        plot_parametric() \
-            .add_plot(data_a, "p", "wl", x=x, y=y) \
+        plot_parametric("p", "wl") \
+            .add_plot(data_a, x=x, y=y) \
             .save(figure_dir)
 
-        plot_parametric() \
-            .add_plot(data_a, "u", "v", x=x, y=y) \
-            .add_plot(data_b, "u", "v", x=x, y=y) \
+        plot_parametric("u", "v") \
+            .add_plot(data_a, x=x, y=y) \
+            .add_plot(data_b, x=x, y=y) \
             .save(figure_dir)
 
-        plot_parametric() \
-            .add_plot(data_a, "p", "wl", x=x, y=y) \
-            .add_plot(data_a, "p", "wl", x=x, y=3*y) \
-            .add_plot(data_a, "p", "wl", x=x, y=5*y) \
-            .add_plot(data_a, "p", "wl", x=x, y=7*y) \
-            .add_plot(data_a, "p", "wl", x=x, y=9*y) \
+        plot_parametric("p", "wl") \
+            .add_plot(data_a, x=x, y=y) \
+            .add_plot(data_a, x=x, y=3*y) \
+            .add_plot(data_a, x=x, y=5*y) \
+            .add_plot(data_a, x=x, y=7*y) \
+            .add_plot(data_a, x=x, y=9*y) \
             .save(figure_dir)
     # fmt: on
 
