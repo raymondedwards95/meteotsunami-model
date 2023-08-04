@@ -486,5 +486,5 @@ if __name__ == "__main__":
             .save(figure_dir)
     # fmt: on
 
-    # test_timeseries()
+    test_timeseries()
     test_parametric()
