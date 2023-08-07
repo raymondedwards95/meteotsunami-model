@@ -211,6 +211,27 @@ _growth.add_plot(
 )
 _growth.save(figure_dir)
 
+# Parametric plots
+_param = fpl.plot_parametric("p", "wl")
+for y_single in y_list:
+    _param.add_plot(
+        data,
+        x=x_ref,
+        y=y_single,
+        label=f"\\( y = \\SI{{{y_single / 1e3:0.1f}}}{{\\kilo\\meter}} \\)",
+    )
+_param.save(figure_dir)
+
+_param = fpl.plot_parametric("u", "v")
+for y_single in y_list:
+    _param.add_plot(
+        data,
+        x=x_ref,
+        y=y_single,
+        label=f"\\( y = \\SI{{{y_single / 1e3:0.1f}}}{{\\kilo\\meter}} \\)",
+    )
+_param.save(figure_dir)
+
 # Close data
 data.close()
 
