@@ -14,7 +14,7 @@ from functions.plotting.crossshore import plot_crossshore
 from functions.plotting.growth import plot_growth
 from functions.plotting.spectrum1d import plot_spectrum_1d
 from functions.plotting.spectrum2d import plot_spectrum_2d
-from functions.plotting.timeseries import plot_timeseries
+from functions.plotting.timeseries import plot_parametric, plot_timeseries
 # fmt: on
 
 
