@@ -234,7 +234,7 @@ def theory_figure_cross(
         # ax.fill_between(
         #     cross["distance"] / 1e3,
         #     cross,
-        #     alpha=0.1,
+        #     alpha=0.04,
         #     rasterized=False,
         # )
 

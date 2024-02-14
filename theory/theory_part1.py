@@ -52,7 +52,7 @@ def theory_figure_speed_vs_size(
         plt.fill_between(
             a / 1000.0,
             u_crit[i, :],
-            alpha=0.1,
+            alpha=0.04,
             rasterized=True,
         )
 
@@ -110,7 +110,7 @@ def theory_figure_wavelength_vs_size(
         plt.fill_between(
             a / 1000.0,
             wavelength[i, :] / 1000.0,
-            alpha=0.1,
+            alpha=0.04,
             rasterized=True,
         )
 
@@ -177,7 +177,7 @@ def theory_figure_wavelength_vs_velocity(
         plt.fill_between(
             velocity,
             wavelength[i, :] / 1000.0,
-            alpha=0.1,
+            alpha=0.04,
             rasterized=True,
         )
 
