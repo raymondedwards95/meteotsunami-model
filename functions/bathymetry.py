@@ -250,7 +250,7 @@ def plot_bathymetry(
         x / scale_factor,
         _ylims[0],
         b[i, :],
-        alpha=0.1,
+        alpha=0.04,
         rasterized=False,
     )
 
