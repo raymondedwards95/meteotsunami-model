@@ -157,7 +157,7 @@ def fig_2_along_sse(dataset: xr.Dataset, saveloc: str) -> None:
         ax.fill_between(
             dataset["y"] / 1e6,
             wl,
-            alpha=0.1,
+            alpha=0.04,
             rasterized=True,
         )
 
@@ -265,7 +265,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
         dataset["x"] / 1e3,
         wl,
         color="C0",
-        alpha=0.1,
+        alpha=0.04,
         rasterized=False,
     )
 
@@ -281,7 +281,7 @@ def fig_3_cross_sse(dataset: xr.Dataset, saveloc: str) -> None:
         dataset["x"] / 1e3,
         fit,
         color="C1",
-        alpha=0.1,
+        alpha=0.04,
         rasterized=False,
     )
 
