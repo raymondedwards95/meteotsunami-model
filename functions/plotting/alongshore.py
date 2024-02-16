@@ -283,7 +283,7 @@ class plot_alongshore(plot_base):
         self.axes[-1].fill_between(
             dataset["y"] / self.scale_factor,
             data,
-            alpha=0.1,
+            alpha=0.04,
             rasterized=True,
         )
 
