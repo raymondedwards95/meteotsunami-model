@@ -515,7 +515,7 @@ def plot_pressure(
         ax_2.fill_between(
             y / scale_factor,
             p[i, :, ix_single],
-            alpha=0.1,
+            alpha=0.04,
         )
 
     ax_2.axhline(
