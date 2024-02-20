@@ -313,7 +313,7 @@ class plot_crossshore(plot_base):
         self.axes[-1].fill_between(
             dataset["x"] / self.scale_factor,
             data,
-            alpha=0.1,
+            alpha=0.04,
             rasterized=False,
         )
 
@@ -333,7 +333,7 @@ class plot_crossshore(plot_base):
                 label=label_fit,
                 rasterized=False,
             )
-            # self.axes[-1].fill_between(dataset["x"] / self.scale_factor, fit, alpha=0.1, rasterized=False,)
+            # self.axes[-1].fill_between(dataset["x"] / self.scale_factor, fit, alpha=0.04, rasterized=False,)
 
         # Update plot-limits
         if self.x_max_fixed:
