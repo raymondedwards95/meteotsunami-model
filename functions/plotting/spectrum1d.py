@@ -167,7 +167,7 @@ class plot_spectrum_1d(plot_base):
         self.ax.fill_between(
             freqs,
             power,
-            alpha=0.1,
+            alpha=0.04,
             rasterized=False,
         )
 
