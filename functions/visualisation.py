@@ -527,7 +527,7 @@ def vis_spectrum_1d(
     for i in range(y_num):
         ax[i].plot(freqs_all[i] * 3600.0, power_all[i] / 3600.0, color=f"C{i}")
         ax[i].fill_between(
-            freqs_all[i] * 3600, power_all[i] / 3600, alpha=0.1, color=f"C{i}"
+            freqs_all[i] * 3600, power_all[i] / 3600, alpha=0.04, color=f"C{i}"
         )
         ax[i].axhline(color="black", linewidth=1)
         ax[i].set_ylim(0, None)
