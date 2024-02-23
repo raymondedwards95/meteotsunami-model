@@ -141,7 +141,7 @@ class plot_timeseries(plot_base):
         self.axes[ax_idx].fill_between(
             time,
             data,
-            alpha=0.1,
+            alpha=0.04,
             rasterized=False,
         )
 
