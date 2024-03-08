@@ -480,7 +480,7 @@ def plot_pressure(
             vmax=p_max,
             rasterized=True,
         )
-        ax_1[i].set_title(f"\\( t = {t[idx]/3600.:0.0f} \\)h")
+        ax_1[i].set_title(f"\\( t = {t[idx]/3600.:0.1f} \\)h")
         ax_1[i].set_xlim(x_scales)  # make it automatic?
 
     fig_1.supxlabel(f"\\( x \\) [{unit}]")
@@ -510,7 +510,7 @@ def plot_pressure(
         ax_2.plot(
             y / scale_factor,
             p[i, :, ix_single],
-            label=f"\\( t = {t[idx]/3600.:0.0f} \\)h",
+            label=f"\\( t = {t[idx]/3600.:0.1f} \\)h",
         )
         ax_2.fill_between(
             y / scale_factor,
