@@ -9,6 +9,7 @@ import numpy as np
 import seaborn as sns
 
 # Colors
+sns.set_style("white")
 sns.set_palette(sns.color_palette("muted"))
 
 # Matplotlib figure options
