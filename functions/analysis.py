@@ -174,21 +174,23 @@ def spectral_analysis_1d(
     x: Numeric = 1e4,
     variable: str = "wl",
     demean: bool = False,
+    normalize: bool = True,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Apply fourier transform on timeseries
 
     Input:
-        `data`:     Dataset containing all data and coordinates
-        `y`:        y-coordinate
-        `x`:        x-coordinate
+        `data`:         Dataset containing all data and coordinates
+        `y`:            y-coordinate
+        `x`:            x-coordinate
 
     Options:
-        `variable`: name of the variable to use, e.g. "wl" or "p", default="wl"
-        `demean`:   remove mean from signal, default=False
+        `variable`:     name of the variable to use, e.g. "wl" or "p", default="wl"
+        `demean`:       remove mean from signal, default=False
+        `normalize`:    normalize transforms, default=True
 
     Output:
-        `freqs`:    corresponding frequencies (time-domain)
-        `power`:    power-spectrum
+        `freqs`:        corresponding frequencies (time-domain)
+        `power`:        power-spectrum
     """
     t = data["t"].values.astype("datetime64[s]").astype(float)
     dt = np.median(np.diff(t))
@@ -198,8 +200,11 @@ def spectral_analysis_1d(
         var -= np.mean(var)
 
     transform = np.fft.rfft(var)
-    power = np.power(np.abs(transform), 2.0)
 
+    if normalize:
+        transform *= 2.0 / t.size
+
+    power = np.power(np.abs(transform), 2.0)
     freqs = np.fft.rfftfreq(var.size, dt)
 
     return (freqs, power)
@@ -210,6 +215,7 @@ def spectral_analysis_2d(
     x: Numeric = 1e4,
     variable: str = "wl",
     demean: bool = False,
+    normalize: bool = True,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Apply fourier transform on spatial and temporal varying data
 
@@ -220,6 +226,7 @@ def spectral_analysis_2d(
         `x`:            x-coordinate
         `variable`:     name of the variable to use, e.g. "wl" or "p", default="wl"
         `demean`:       remove mean from signal, default=False
+        `normalize`:    normalize transforms, default=True
 
     Output:
         `wavenumber`:   corresponding wavenumbers (space-domain)
@@ -237,6 +244,14 @@ def spectral_analysis_2d(
 
     # transform first over time, then space
     transform = np.fft.rfft2(var, axes=(1, 0))
+
+    if normalize:
+        # normalize over time
+        transform *= 2.0 / t.size
+
+        # normalize over space
+        transform *= 2.0 / y.size
+
     # rearrange data, so that wavenumber is in increasing order
     transform = np.fft.fftshift(transform, axes=1)
     power = np.power(np.abs(transform), 2.0)
