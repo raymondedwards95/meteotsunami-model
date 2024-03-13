@@ -117,7 +117,7 @@ class plot_base:
         match variable.lower().strip():
             case "wl":
                 return cmo.cm.balance
-            case ("u" | "v"):
+            case "u" | "v":
                 return cmo.cm.delta
             case "p":
                 return cmo.cm.curl

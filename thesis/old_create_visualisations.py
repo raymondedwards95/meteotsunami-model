@@ -1,4 +1,5 @@
 """ Script for making simple visualisations """
+
 import argparse
 import os
 import sys
