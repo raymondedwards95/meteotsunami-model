@@ -38,6 +38,7 @@ class plot_spectrum_2d(plot_base):
         f_max: Numeric = None,
         scale: str = "Mm",
         title: str = None,
+        normalize: bool = True,
     ) -> None:
         """Create and setup a figure for the 2d spectrum
 
@@ -51,6 +52,7 @@ class plot_spectrum_2d(plot_base):
             `f_max`:            upper limit for frequency f
             `scale`:            scale of plots ('m', 'km' or 'Mm')
             `title`:            figure title
+            `normalize`:        normalize transforms
 
         Methods:
             `add_plot`:         add data to the figure
@@ -73,6 +75,7 @@ class plot_spectrum_2d(plot_base):
         self.k_max = k_max
         self.f_max = f_max
         self.x = 0.0
+        self.normalize = normalize
 
         self.data_label = label
 
@@ -171,6 +174,7 @@ class plot_spectrum_2d(plot_base):
             x=self.x,
             variable=self.variable,
             demean=self.demean,
+            normalize=self.normalize,
         )
         # flip wavenumbers, since we only look at waves in a given direction
         wavenumber = -1.0 * wavenumber

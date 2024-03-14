@@ -32,20 +32,22 @@ class plot_spectrum_1d(plot_base):
         demean: bool = True,
         f_max: Numeric = None,
         title: str = None,
+        normalize: bool = True,
     ) -> None:
         """Create and setup a figure for the 1d spectrum
 
         Input:
-            `variable`: name of variable, i.e. "wl", "u", "v" or "p"
+            `variable`:     name of variable, i.e. "wl", "u", "v" or "p"
 
         Options:
-            `demean`:   remove mean from data
-            `f_max`:    upper limit for frequency f (units: cycles per hour)
-            `title`:    figure title
+            `demean`:       remove mean from data
+            `f_max`:        upper limit for frequency f (units: cycles per hour)
+            `title`:        figure title
+            `normalize`:    normalize transforms
 
         Methods:
-            `add_plot`: add data to the figure
-            `save`:     write figure to disk as png and pgf
+            `add_plot`:     add data to the figure
+            `save`:         write figure to disk as png and pgf
         """
         plot_spectrum_1d.number += 1
 
@@ -60,6 +62,7 @@ class plot_spectrum_1d(plot_base):
         self.demean = demean
         self.f_max = 0.0
         self.f_max_fixed = f_max
+        self.normalize = normalize
 
         self.variable: str
         self.variable_long: str
@@ -138,6 +141,7 @@ class plot_spectrum_1d(plot_base):
             x=x,
             variable=self.variable,
             demean=self.demean,
+            normalize=self.normalize,
         )
 
         # Scale time units from seconds to hours
@@ -152,6 +156,7 @@ class plot_spectrum_1d(plot_base):
                     (power > np.var(power)).astype(int)
                 )
             )
+            - 1
         ]
 
         if new_f_max > self.f_max:
