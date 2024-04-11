@@ -17,6 +17,7 @@
 logs
 *.log
 *nohup.out
+logs*.zip
 
 # Config
 settings.sh

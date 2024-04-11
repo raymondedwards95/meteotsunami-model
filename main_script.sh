@@ -376,13 +376,6 @@ if [ "$create_theory" = true ] ; then
     echo "### Finished theory"
 fi
 
-# Create comparison
-if [ "$create_comparison" = true ] ; then
-    echo "### Create figures comparison"
-    func_comparison
-    echo "### Finished comparison"
-fi
-
 # Loop over all folders
 for Folder in ${FolderList[@]}
 do
@@ -484,6 +477,13 @@ do
     # Return
     cd $BaseDir
 done  # end for-loop over folders
+
+# Create comparison
+if [ "$create_comparison" = true ] ; then
+    echo "### Create figures comparison"
+    func_comparison
+    echo "### Finished comparison"
+fi
 
 echo ""
 echo "### Finished all tasks"
