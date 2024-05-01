@@ -12,6 +12,9 @@ import seaborn as sns
 sns.set_style("white")
 sns.set_palette(sns.color_palette("muted"))
 
+# Matplotlib backend
+mpl.use("Agg")
+
 # Matplotlib figure options
 mpl.rcParams["pgf.texsystem"] = "xelatex"  # set xelatex as latex engine
 mpl.rcParams["pgf.rcfonts"] = False  # unset default matplotlib fonts for pgf
