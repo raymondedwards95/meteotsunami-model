@@ -211,6 +211,7 @@ for case_number in range(num_cases):
     fp.plot_pressure(data, filename=figurename, scale="Mm", filter=False)
 
     # End
+    data.close()
     tb = time.perf_counter()
     print(f"Finished creating pressure-field for {case=:02.0f} in {tb-ta:0.1f} seconds")
 
