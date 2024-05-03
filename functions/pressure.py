@@ -540,7 +540,10 @@ def plot_pressure(
     t1 = time.perf_counter_ns()
     print(f"# Finished visualising in {(t1-t0)*1e-9:0.3f} seconds")
 
-    return fig_1, fig_2
+    if keep_open:
+        return fig_1, fig_2
+
+    return None, None
 
 
 if __name__ == "__main__":
