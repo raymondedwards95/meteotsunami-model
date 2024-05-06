@@ -254,7 +254,7 @@ def extract_data(
         `close`:    close dataset after finishing
 
     Output:
-        `data`:     data array with structured data; if `close=False` then data is `None`
+        `data`:     data array with structured data; if `close=True` then data is `None`
     """
     t0 = time.perf_counter_ns()
 
@@ -430,7 +430,7 @@ if __name__ == "__main__":
 
     # Convert data
     time.sleep(2)
-    extract_data(filename=filename_original, savename=filename_processed)
+    extract_data(filename=filename_original, savename=filename_processed, close=True)
 
     # Clean up data
     if delete_original_model_output:
