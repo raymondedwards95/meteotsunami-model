@@ -240,6 +240,13 @@ class plot_parametric(plot_base):
         self.variable_1 = variable_1
         self.variable_2 = variable_2
 
+        self.variable_1_scaling = [1.0, 1.0, 1.0, 1e-2][
+            self._match_variable(variable_1)
+        ]
+        self.variable_2_scaling = [1.0, 1.0, 1.0, 1e-2][
+            self._match_variable(variable_2)
+        ]
+
         self._check_if_closed()
         print(f"\n# Initiated figure '{self.figure_type} {self.figure_num}'")
 
@@ -274,7 +281,7 @@ class plot_parametric(plot_base):
             case "v":
                 self.ax.set_xlabel("\\( v \\) [\\si{\\meter\\per\\second}]")
             case "p":
-                self.ax.set_xlabel("\\( p \\) [\\si{\\pascal}]")
+                self.ax.set_xlabel("\\( p \\) [\\si{\\hecto\\pascal}]")
                 self.ax.set_xlim(0, None)
             case _:
                 raise ValueError(f"{self.variable_1=} should be 'wl', 'u', 'v' or 'p'")
@@ -292,7 +299,7 @@ class plot_parametric(plot_base):
             case "v":
                 self.ax.set_ylabel("\\( v \\) [\\si{\\meter\\per\\second}]")
             case "p":
-                self.ax.set_ylabel("\\( p \\) [\\si{\\pascal}]")
+                self.ax.set_ylabel("\\( p \\) [\\si{\\hecto\\pascal}]")
                 self.ax.set_ylim(0, None)
             case _:
                 raise ValueError(f"{self.variable_2=} should be 'wl', 'u', 'v' or 'p'")
@@ -340,6 +347,9 @@ class plot_parametric(plot_base):
 
         data_1[~valid] = np.nan
         data_2[~valid] = np.nan
+
+        data_1 *= self.variable_1_scaling
+        data_2 *= self.variable_2_scaling
 
         # Plot
         self.ax.plot(
