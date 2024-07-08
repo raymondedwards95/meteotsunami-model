@@ -207,7 +207,7 @@ _growth.add_plot(
 _growth.save(figure_dir)
 
 # Parametric plots
-_param = fpl.plot_parametric("p", "wl")
+_param = fpl.plot_parametric("wl", "p")
 for y_single in y_list:
     _param.add_plot(
         data,
