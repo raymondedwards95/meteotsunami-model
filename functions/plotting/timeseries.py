@@ -131,6 +131,14 @@ class plot_timeseries(plot_base):
         time = dataset["t"].values.astype("datetime64[s]").astype(float) / 3600.0
         data = dataset[variable].interp(x=x, y=y)
 
+        # Check
+        data_max = dataset[variable].map_blocks(np.fabs).max().values
+        data_var = data.var().values
+
+        if (ratio := data_var / data_max) < 1e-2:
+            print(f"# Did NOT add {variable} data for {x=} and {y=} because the relative variance was too low ({ratio=:0.5f} < 1e-2)")
+            return self
+
         # Plot
         self.axes[ax_idx].plot(
             time,
