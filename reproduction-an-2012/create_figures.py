@@ -189,6 +189,7 @@ for y_single in y_list:
         variable="wl",
         x=x_ref,
         y=y_single,
+        label=f"\\( y = \\SI{{{y_single / 1e3:5.0f}}}{{\\kilo\\meter}} \\)",
     )
 _timeseries.save(figure_dir)
 
