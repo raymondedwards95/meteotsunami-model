@@ -71,3 +71,5 @@ All different cases are numbered.
 | 41 | Set `alpha` from `1/400` to `0` and set `average_depth` to `250` m and set `x0_p` from `0` to `500` km | Flat bottom and see 33|
 | 42 | Set `alpha` from `1/400` to `0` and set `average_depth` to `100` m and set `x0_p` from `0` to `500` km | See 41 |
 | 43 | Set `alpha` from `1/400` to `0` and set `average_depth` to `500` m and set `x0_p` from `0` to `500` km | See 41 |
+||||
+| 51 | Make `p` independent of `x` | Set pressure disturbance in a line, instead of a point |

@@ -22,7 +22,7 @@ print(f"\nStart creating bathymetry-files for repr")
 
 # Parameters
 # generic
-cases = [0, 10, 11, 12, 15, 16, 17, 31, 32, 33, 41]
+cases = [0, 10, 11, 12, 15, 16, 17, 31, 32, 33, 41, 51]
 num_cases = len(cases)
 
 # pressure distribution
@@ -44,7 +44,7 @@ x_min = 0.0
 x_max = 1e6
 x_steps = (
     np.array(
-        [10, 5, 20, 40, 10, 10, 10, 10, 10, 10, 10],
+        [10, 5, 20, 40, 10, 10, 10, 10, 10, 10, 10, 10],
         dtype=np.float32,
     )
     * 1e3
@@ -67,7 +67,7 @@ t_min = 0
 t_max = 55 * 3600.0
 t_steps = (
     np.array(
-        [30, 30, 30, 30, 60, 20, 15, 30, 30, 30, 30],
+        [30, 30, 30, 30, 60, 20, 15, 30, 30, 30, 30, 30],
         dtype=np.float32,
     )
     * 60.0
@@ -109,29 +109,70 @@ with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
 
 
 # Function
-def pressure(x, y, t, t0=T0, U=U, a=a, p0=p0, x0=0.0):
+def pressure_point(
+    x: float,
+    y: float,
+    t: float,
+    t0: float = T0,
+    U: float = U,
+    a: float = a,
+    p0: float = p0,
+    x0: float = 0.0,
+) -> float:
     """Pressure disturbance distribution used for experiments
+    Disturbance is centered around a point, determined by `x0`, `t0` and `U`
 
     Input:
-        x:  array of x-coordinates
-        y:  array of y-coordinates
-        t:  array of time-coordinates
+        `x`:    array of x-coordinates
+        `y`:    array of y-coordinates
+        `t`:    array of time-coordinates
 
     Options:
-        t0: growth-timescale factor
-        U:  travel velocity of pressure disturbance
-        a:  size of pressure disturbance
-        p0: magnitude of pressure disturbance
-        x0: x-coordinate of the center of the pressure disturbance
+        `t0`:   growth-timescale factor
+        `U`:    travel velocity of pressure disturbance
+        `a`:    size of pressure disturbance
+        `p0`:   magnitude of pressure disturbance
+        `x0`:   x-coordinate of the center of the pressure disturbance
 
     Output:
-        p:  pressure
+        `p`:    pressure
     """
     return (
         p0
         * (1.0 - da.exp(-t / t0))
         * da.exp(-((x - x0) ** 2.0 + (y - U * t) ** 2.0) / a**2.0)
     )
+
+
+def pressure_line(
+    x: float,
+    y: float,
+    t: float,
+    t0: float = T0,
+    U: float = U,
+    a: float = a,
+    p0: float = p0,
+    x0: float = 0.0,
+) -> float:
+    """Alternative pressure disturbance distribution used for experiments
+    Shape of the disturbance is a line, instead of a point
+
+    Input:
+        `x`:    array of x-coordinates
+        `y`:    array of y-coordinates
+        `t`:    array of time-coordinates
+
+    Options:
+        `t0`:   growth-timescale factor
+        `U`:    travel velocity of pressure disturbance
+        `a`:    size of pressure disturbance
+        `p0`:   magnitude of pressure disturbance
+        `x0`:   (unused) x-coordinate of the center of the pressure disturbance
+
+    Output:
+        `p`:    pressure
+    """
+    return p0 * (1.0 - da.exp(-t / t0)) * da.exp(-((y - U * t) ** 2.0) / a**2.0)
 
 
 # Compute field
@@ -145,6 +186,10 @@ for case_number in range(num_cases):
     y_step = y_steps[case_number]
     t_step = t_steps[case_number]
     x0 = x0_vals[case_number]
+
+    pressure = pressure_point
+    if case in [51]:
+        pressure = pressure_line
 
     print(
         f"\nComputing pressure field for case {case:02.0f} ({x_step:0.1f}, {y_step:0.1f}, {t_step:0.1f}, {x0:0.1f})"
