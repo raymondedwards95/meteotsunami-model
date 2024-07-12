@@ -197,6 +197,9 @@ for p_i, pressure_function in enumerate([pressure_point, pressure_line]):
         if (p_i > 0) and (not np.isclose(x0, 0)):
             continue
 
+        if (not np.isclose(a, a_list[0])) and (not np.isclose(x0, 0)):
+            continue
+
         # Set paths
         filename = f"{pressure_dir}/exp_{case:02.0f}"
         file_input_mdu = f"{current_dir}/input_exp_{case:02.0f}.mdu"
