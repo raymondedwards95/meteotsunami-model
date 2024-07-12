@@ -166,7 +166,7 @@ dt = t_step
 
 t_num = t.size
 
-tt, yy, xx = da.meshgrid(t, y, x, indexing="ij", sparse=True)
+tt, yy, xx = da.meshgrid(t, y, x, indexing="ij", sparse=False)
 # tt = tt.rechunk("auto")
 # yy = yy.rechunk(tt.chunksize)
 # xx = xx.rechunk(tt.chunksize)
@@ -183,6 +183,7 @@ print(f"{yy.chunksize=}")
 for p_i, pressure_function in enumerate([pressure_point, pressure_line]):
     print(f"\n#####\n# {p_i} #\n#####\n")
     case_offset = p_i * 50
+
     for case_number in range(num_cases):
         ta = time.perf_counter()
 
