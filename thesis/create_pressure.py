@@ -21,23 +21,33 @@ print(f"\nStart creating bathymetry-files for exp")
 
 
 # Parameters
-def pressure(x, y, t, t0=10000.0, U=50.0, a=200000.0, p0=2000.0, x0=0.0):
+def pressure_point(
+    x: float,
+    y: float,
+    t: float,
+    t0: float = 1e4,
+    U: float = 5e1,
+    a: float = 2e5,
+    p0: float = 2e3,
+    x0: float = 0.0,
+) -> float:
     """Pressure disturbance distribution used for experiments
+    Disturbance is centered around a point, determined by `x0`, `t0` and `U`
 
     Input:
-        x:  array of x-coordinates
-        y:  array of y-coordinates
-        t:  array of time-coordinates
+        `x`:    array of x-coordinates
+        `y`:    array of y-coordinates
+        `t`:    array of time-coordinates
 
     Options:
-        t0: growth-timescale factor
-        U:  travel velocity of pressure disturbance
-        a:  size of pressure disturbance
-        p0: magnitude of pressure disturbance
-        x0: x-coordinate of the center of the pressure disturbance
+        `t0`:   growth-timescale factor
+        `U`:    travel velocity of pressure disturbance
+        `a`:    size of pressure disturbance
+        `p0`:   magnitude of pressure disturbance
+        `x0`:   x-coordinate of the center of the pressure disturbance
 
     Output:
-        p:  pressure
+        `p`:    pressure
     """
     return (
         p0
@@ -46,15 +56,46 @@ def pressure(x, y, t, t0=10000.0, U=50.0, a=200000.0, p0=2000.0, x0=0.0):
     )
 
 
+def pressure_line(
+    x: float,
+    y: float,
+    t: float,
+    t0: float = 1e4,
+    U: float = 5e1,
+    a: float = 2e5,
+    p0: float = 2e3,
+    x0: float = 0.0,
+) -> float:
+    """Alternative pressure disturbance distribution used for experiments
+    Shape of the disturbance is a line, instead of a point
+
+    Input:
+        `x`:    array of x-coordinates
+        `y`:    array of y-coordinates
+        `t`:    array of time-coordinates
+
+    Options:
+        `t0`:   growth-timescale factor
+        `U`:    travel velocity of pressure disturbance
+        `a`:    size of pressure disturbance
+        `p0`:   magnitude of pressure disturbance
+        `x0`:   (unused) x-coordinate of the center of the pressure disturbance
+
+    Output:
+        `p`:    pressure
+    """
+    return p0 * (1.0 - da.exp(-t / t0)) * da.exp(-((y - U * t) ** 2.0) / a**2.0)
+
+
 # pressure distribution
-t0_value = 10000
-U_list = np.array([5, 10, 15, 20, 25], dtype=np.float32)
+t0_value = 10000.0
+U_list = np.array([5, 15, 25, 35, 45, 55], dtype=np.float32)
 a_list = np.array([10000, 20000, 30000], dtype=np.float32)
 p0_list = np.array([2000], dtype=np.float32)
 x0_list = np.array([0, 50000], dtype=np.float32)
 
 # cross shore (meters)
-x_min = 0
+x_min = 0.0
 x_max = 1e6
 x_step = 2.5e3
 
@@ -64,7 +105,7 @@ y_max = +3e6
 y_step = x_step
 
 # time (seconds)
-t_min = 0
+t_min = 0.0
 t_max = 50.0 * 3600.0
 t_step = 3600.0 / 10.0
 
@@ -139,82 +180,90 @@ print(f"{yy.chunksize=}")
 
 
 # Compute fields
-for case_number in range(num_cases):
-    ta = time.perf_counter()
+for p_i, pressure_function in enumerate([pressure_point, pressure_line]):
+    print(f"\n#####\n# {p_i} #\n#####\n")
+    case_offset = p_i * 50
+    for case_number in range(num_cases):
+        ta = time.perf_counter()
 
-    # Set parameters
-    case = cases[case_number]
-    U = U_array[case_number]
-    a = a_array[case_number]
-    p0 = p0_array[case_number]
-    x0 = x0_array[case_number]
+        # Set parameters
+        case = cases[case_number] + case_offset
+        U = U_array[case_number]
+        a = a_array[case_number]
+        p0 = p0_array[case_number]
+        x0 = x0_array[case_number]
 
-    # Set paths
-    filename = f"{pressure_dir}/exp_{case:02.0f}"
-    file_input_mdu = f"{current_dir}/input_exp_{case:02.0f}.mdu"
-    file_forcing_ext = f"{pressure_dir}/forcing_exp_{case:02.0f}.ext"
-    figurename = f"{pressure_dir}/exp_{case:02.0f}"
+        if (p_i > 0) and (not np.isclose(x0, 0)):
+            continue
 
-    # Compute pressure
-    print(f"\nComputing pressure field for {case=:02.0f} ({U=}, {a=}, {p0=}, {x0=})")
-    p = pressure(xx, yy, tt, t0_value, U, a, p0, x0).astype(np.float32)
+        # Set paths
+        filename = f"{pressure_dir}/exp_{case:02.0f}"
+        file_input_mdu = f"{current_dir}/input_exp_{case:02.0f}.mdu"
+        file_forcing_ext = f"{pressure_dir}/forcing_exp_{case:02.0f}.ext"
+        figurename = f"{pressure_dir}/exp_{case:02.0f}"
 
-    # Process pressure
-    print(f"Process pressure field for {case=:02.0f}")
-    fp.convert_to_xarray(t, x, y, p, savename=filename, close=True)
-    del p
-
-    # Re-read data (lazy)
-    print(f"Read data for {case=:02.0f}")
-    data = xr.open_dataarray(f"{filename}.nc", chunks="auto")
-
-    # Filter data
-    data = fp.filter_pressure(data, decimals=3)
-
-    # Write field
-    print(f"Writing pressure field for {case=:02.0f}")
-    fp.write_pressure(data, filename, filter=False)
-
-    # Write forcing file
-    print(f"Overwriting forcing file for {case=:02.0f} - '{file_forcing_ext}'")
-    with open(file_forcing_ext, "w") as file:
-        file.write("* Meteo forcing \n")
-        file.write("QUANTITY = atmosphericpressure \n")
-        file.write(f"FILENAME = exp_{case:02.0f}.amp \n")
-        file.write("FILETYPE = 4 \n")
-        file.write("METHOD   = 1 \n")
-        file.write("OPERAND  = O \n")
-
-    # Write input_*.mdu for D3D-FM
-    if int(case) != 0:
-        print(f"Overwriting input file for {case=:02.0f} - '{file_input_mdu}'")
-
-        # use case exp_00 as template
-        with open(f"{current_dir}/input_exp_00.mdu", "r") as file:
-            file_contents = file.read()
-
-        # replace lines with forcing and output
-        file_contents = file_contents.replace(
-            "forcing_exp_00.ext",
-            f"forcing_exp_{case:02.0f}.ext",
+        # Compute pressure
+        print(
+            f"\nComputing pressure field for {case=:02.0f} ({U=}, {a=}, {p0=}, {x0=})"
         )
-        file_contents = file_contents.replace(
-            "output/exp_00",
-            f"output/exp_{case:02.0f}",
-        )
+        p = pressure_function(xx, yy, tt, t0_value, U, a, p0, x0).astype(np.float32)
 
-        # write to new file
-        with open(file_input_mdu, "w") as file:
-            file.write(file_contents)
+        # Process pressure
+        print(f"Process pressure field for {case=:02.0f}")
+        fp.convert_to_xarray(t, x, y, p, savename=filename, close=True)
+        del p
 
-    # Visualise field
-    print(f"Plotting pressure field for {case=:02.0f}")
-    fp.plot_pressure(data, filename=figurename, scale="km", filter=False)
+        # Re-read data (lazy)
+        print(f"Read data for {case=:02.0f}")
+        data = xr.open_dataarray(f"{filename}.nc", chunks="auto")
 
-    # End
-    data.close()
-    tb = time.perf_counter()
-    print(f"Finished creating pressure-field {case=:02.0f} in {tb-ta:0.1f} seconds")
+        # Filter data
+        data = fp.filter_pressure(data, decimals=3)
+
+        # Write field
+        print(f"Writing pressure field for {case=:02.0f}")
+        fp.write_pressure(data, filename, filter=False)
+
+        # Write forcing file
+        print(f"Overwriting forcing file for {case=:02.0f} - '{file_forcing_ext}'")
+        with open(file_forcing_ext, "w") as file:
+            file.write("* Meteo forcing \n")
+            file.write("QUANTITY = atmosphericpressure \n")
+            file.write(f"FILENAME = exp_{case:02.0f}.amp \n")
+            file.write("FILETYPE = 4 \n")
+            file.write("METHOD   = 1 \n")
+            file.write("OPERAND  = O \n")
+
+        # Write input_*.mdu for D3D-FM
+        if int(case) != 0:
+            print(f"Overwriting input file for {case=:02.0f} - '{file_input_mdu}'")
+
+            # use case exp_00 as template
+            with open(f"{current_dir}/input_exp_00.mdu", "r") as file:
+                file_contents = file.read()
+
+            # replace lines with forcing and output
+            file_contents = file_contents.replace(
+                "forcing_exp_00.ext",
+                f"forcing_exp_{case:02.0f}.ext",
+            )
+            file_contents = file_contents.replace(
+                "output/exp_00",
+                f"output/exp_{case:02.0f}",
+            )
+
+            # write to new file
+            with open(file_input_mdu, "w") as file:
+                file.write(file_contents)
+
+        # Visualise field
+        print(f"Plotting pressure field for {case=:02.0f}")
+        fp.plot_pressure(data, filename=figurename, scale="km", filter=False)
+
+        # End
+        data.close()
+        tb = time.perf_counter()
+        print(f"Finished creating pressure-field {case=:02.0f} in {tb-ta:0.1f} seconds")
 
 
 # plt.show()
