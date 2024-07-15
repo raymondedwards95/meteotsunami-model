@@ -11,6 +11,7 @@ import xarray as xr
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 import functions.pressure as fp
 # fmt: on
 
@@ -110,14 +111,14 @@ with open(f"{pressure_dir}/parameters_pressure.txt", "w") as file:
 
 # Function
 def pressure_point(
-    x: float,
-    y: float,
-    t: float,
-    t0: float = T0,
-    U: float = U,
-    a: float = a,
-    p0: float = p0,
-    x0: float = 0.0,
+    x: Numeric,
+    y: Numeric,
+    t: Numeric,
+    t0: Numeric = T0,
+    U: Numeric = U,
+    a: Numeric = a,
+    p0: Numeric = p0,
+    x0: Numeric = 0.0,
 ) -> float:
     """Pressure disturbance distribution used for experiments
     Disturbance is centered around a point, determined by `x0`, `t0` and `U`
@@ -145,14 +146,14 @@ def pressure_point(
 
 
 def pressure_line(
-    x: float,
-    y: float,
-    t: float,
-    t0: float = T0,
-    U: float = U,
-    a: float = a,
-    p0: float = p0,
-    x0: float = 0.0,
+    x: Numeric,
+    y: Numeric,
+    t: Numeric,
+    t0: Numeric = T0,
+    U: Numeric = U,
+    a: Numeric = a,
+    p0: Numeric = p0,
+    x0: Numeric = 0.0,
 ) -> float:
     """Alternative pressure disturbance distribution used for experiments
     Shape of the disturbance is a line, instead of a point

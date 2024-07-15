@@ -11,6 +11,7 @@ import xarray as xr
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 import functions.pressure as fp
 # fmt: on
 
@@ -22,14 +23,14 @@ print(f"\nStart creating bathymetry-files for exp")
 
 # Parameters
 def pressure_point(
-    x: float,
-    y: float,
-    t: float,
-    t0: float = 1e4,
-    U: float = 5e1,
-    a: float = 2e5,
-    p0: float = 2e3,
-    x0: float = 0.0,
+    x: Numeric,
+    y: Numeric,
+    t: Numeric,
+    t0: Numeric = 1e4,
+    U: Numeric = 5e1,
+    a: Numeric = 2e5,
+    p0: Numeric = 2e3,
+    x0: Numeric = 0.0,
 ) -> float:
     """Pressure disturbance distribution used for experiments
     Disturbance is centered around a point, determined by `x0`, `t0` and `U`
@@ -57,14 +58,14 @@ def pressure_point(
 
 
 def pressure_line(
-    x: float,
-    y: float,
-    t: float,
-    t0: float = 1e4,
-    U: float = 5e1,
-    a: float = 2e5,
-    p0: float = 2e3,
-    x0: float = 0.0,
+    x: Numeric,
+    y: Numeric,
+    t: Numeric,
+    t0: Numeric = 1e4,
+    U: Numeric = 5e1,
+    a: Numeric = 2e5,
+    p0: Numeric = 2e3,
+    x0: Numeric = 0.0,
 ) -> float:
     """Alternative pressure disturbance distribution used for experiments
     Shape of the disturbance is a line, instead of a point
