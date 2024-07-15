@@ -194,9 +194,11 @@ for p_i, pressure_function in enumerate([pressure_point, pressure_line]):
         p0 = p0_array[case_number]
         x0 = x0_array[case_number]
 
+        # Filter parameters; remove if necessary
         if (p_i > 0) and (not np.isclose(x0, 0)):
             continue
 
+        # Filter parameters; remove if necessary
         if (not np.isclose(a, a_list[0])) and (not np.isclose(x0, 0)):
             continue
 
