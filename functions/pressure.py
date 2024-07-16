@@ -106,7 +106,7 @@ def filter_pressure(
     xmax: Numeric = None,
     ymin: Numeric = None,
     ymax: Numeric = None,
-    offset: Numeric = 1,
+    offset: Integer = 1,
     decimals: Integer = 2,
 ) -> xr.DataArray:
     """Rounds data and remove columns and rows that only contain zeros and return a DataArray containing filtered pressure data
@@ -151,10 +151,10 @@ def filter_pressure(
     shape = data.shape
 
     # Process options
-    ixmin: int = -1
-    ixmax: int = -1
-    iymin: int = -1
-    iymax: int = -1
+    ixmin: Integer = -1
+    ixmax: Integer = -1
+    iymin: Integer = -1
+    iymax: Integer = -1
 
     if xmin is not None:
         ixmin = np.searchsorted(data["x"].values, xmin)
