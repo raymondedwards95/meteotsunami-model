@@ -9,6 +9,7 @@ import numpy as np
 # fmt: off
 # fix for importing functions below
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+from functions import *
 import functions.bathymetry as fb
 # fmt: on
 
@@ -19,7 +20,7 @@ print(f"\nStart creating bathymetry-files for repr")
 # Parameters
 cases = [0, 36, 41, 42, 43]
 slopes = [1.0 / 400.0, 1.0 / 800.0, 0.0, 0.0, 0.0]
-depths = [0, 0, 250, 100, 500]
+depths = [0.0, 0.0, 250.0, 100.0, 500.0]
 
 
 # Grid
@@ -29,7 +30,11 @@ xx, yy = np.meshgrid(x, y)
 
 
 # Function
-def simple_slope(x, slope=1.0 / 400.0, ref_depth=0.0):
+def simple_slope(
+    x: Numeric,
+    slope: Numeric = 1.0 / 400.0,
+    ref_depth: Numeric = 0.0,
+) -> float:
     """Computes bed height as `b = - ref_depth - slope * x`"""
     return -1.0 * (ref_depth + slope * x)
 
