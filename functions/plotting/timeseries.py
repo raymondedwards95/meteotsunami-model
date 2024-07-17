@@ -136,7 +136,9 @@ class plot_timeseries(plot_base):
         data_var = data.var().values
 
         if (ratio := data_var / data_max) < 1e-2:
-            print(f"# Did NOT add {variable} data for {x=} and {y=} because the relative variance was too low ({ratio=:0.5f} < 1e-2)")
+            print(
+                f"# Did NOT add {variable} data for {x=} and {y=} because the relative variance was too low ({ratio=:0.5f} < 1e-2)"
+            )
             return self
 
         # Plot
