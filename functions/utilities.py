@@ -231,7 +231,7 @@ def find_local_maxima_y(
     return y_idx_valid
 
 
-def relative_ceil(x: float, e: float = None, s: float = 1) -> float:
+def relative_ceil(x: Numeric, e: Numeric = None, s: Numeric = 1) -> float:
     """Takes closest ceiling of a number
 
     Input:
