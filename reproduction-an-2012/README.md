@@ -4,22 +4,22 @@ This part is aimed at reproducing the results of the experiments in the paper by
 The purpose is to get the model running and to get results comparable with those in the mentioned paper.
 An other goal is to investigate the effects of the different model parameters on the simulations.
 
-
 ### Structure
 
 Scripts are used to create all different fields:
-* `create_bathymetry.py` creates `*.xyb` (and additional `*.nc`) files in `./bathymetry/` that contain the bathymetry;
-* `create_grid.py` creates all grids in `./grid/` using macros in `Delta Shell` (this also means that `Delta Shell` is necessary to run this file);
-* `create_observations.py` creates `*.xyn` and `*_crs.pli` in `./obs/` that contain points and cross-sections for data aquisition during simulation;
-* `create_pressure.py` sets up a space and time varying pressure field and writes them to `.amp` (and additionally in `*.nc`) files in `./pressure/` and also creates corresponding `forcing_*.ext` files in that location to activate the pressure fields in the model.
+
+- `create_bathymetry.py` creates `*.xyb` (and additional `*.nc`) files in `./bathymetry/` that contain the bathymetry;
+- `create_grid.py` creates all grids in `./grid/` using macros in `Delta Shell` (this also means that `Delta Shell` is necessary to run this file);
+- `create_observations.py` creates `*.xyn` and `*_crs.pli` in `./obs/` that contain points and cross-sections for data aquisition during simulation;
+- `create_pressure.py` sets up a space and time varying pressure field and writes them to `.amp` (and additionally in `*.nc`) files in `./pressure/` and also creates corresponding `forcing_*.ext` files in that location to activate the pressure fields in the model.
 
 The `input*.mdu` are the main files that contain all parameters for simulations. They also specify what additional files are used, like bathymetry, pressure and grid.
 
 Three scripts are used to visualize data:
-* `create_animations.py` for animations;
-* `create_comparison.py` for comparisons with the paper by An et al. (2012);
-* `create_figures.py` for figures.
 
+- `create_animations.py` for animations;
+- `create_comparison.py` for comparisons with the paper by An et al. (2012);
+- `create_figures.py` for figures.
 
 ### Running experiments
 
@@ -27,7 +27,6 @@ Simulations can be done by running `bash run_reproduction.sh case`, where `case`
 It will run the model and afterwards it will create some figures.
 
 Running `bash run_all.sh` will run all experiments.
-
 
 ### Experiments
 
@@ -72,4 +71,14 @@ All different cases are numbered.
 | 42 | Set `alpha` from `1/400` to `0` and set `average_depth` to `100` m and set `x0_p` from `0` to `500` km | See 41 |
 | 43 | Set `alpha` from `1/400` to `0` and set `average_depth` to `500` m and set `x0_p` from `0` to `500` km | See 41 |
 ||||
-| 51 | Make `p` independent of `x` | Set pressure disturbance in a line, instead of a point |
+| 51 | Make `p` independent of `x` | Set pressure disturbance along a line, instead of centered around a point |
+
+### Notes on pressure distribution
+
+In all cases the following description for the pressure disturbance is used:
+
+$ p \left( x, y, t \right) = p_0 \; \left( 1 - \exp\left( - \frac{t}{t_0} \right) \right) \; \exp\left( - \frac{(x - x_0)^2 + (y - U t)^2}{a^2} \right) $.
+
+Some cases use a disturbance along a line in the x-direction instead of centered around a point:
+
+$ p \left( x, y, t \right) = p_0 \; \left( 1 - \exp\left( - \frac{t}{t_0} \right) \right) \; \exp\left( - \frac{(y - U t)^2}{a^2} \right) $.

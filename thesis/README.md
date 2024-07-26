@@ -9,6 +9,7 @@ Two different types of pressure disturbances are used. The first type is centere
 ### Parameters 1
 
 Pressure distribution 1 is given by
+
 $ p \left( x, y, t \right) = p_0 \; \left( 1 - \exp\left( - \frac{t}{t_0} \right) \right) \; \exp\left( - \frac{(x - x_0)^2 + (y - U t)^2}{a^2} \right) $.
 
 | Number | Speed `U` | Radius `a` | Shift `x0` |
@@ -41,6 +42,7 @@ $ p \left( x, y, t \right) = p_0 \; \left( 1 - \exp\left( - \frac{t}{t_0} \right
 ### Parameters 2
 
 Pressure distribution 2 is given by
+
 $ p \left( x, y, t \right) = p_0 \; \left( 1 - \exp\left( - \frac{t}{t_0} \right) \right) \; \exp\left( - \frac{(y - U t)^2}{a^2} \right) $.
 
 | Number | Speed `U` | Radius `a` | Shift `x0` |
