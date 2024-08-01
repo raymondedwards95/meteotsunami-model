@@ -2,6 +2,7 @@
 
 Main functions:
     critical_velocity_sloped
+    fundamental_wavelength_sloped
 """
 
 import os
