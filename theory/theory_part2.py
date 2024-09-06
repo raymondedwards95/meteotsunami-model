@@ -1,4 +1,4 @@
-""" Scripts to make figures for help with explaining the theory parts """
+"""Scripts to make figures for help with explaining the theory parts"""
 
 import os
 import sys
