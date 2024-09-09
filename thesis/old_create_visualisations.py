@@ -1,4 +1,4 @@
-""" Script for making simple visualisations """
+"""Script for making simple visualisations"""
 
 import argparse
 import os

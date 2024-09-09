@@ -1,4 +1,4 @@
-""" Creates files to describe atmospheric pressure for D3D-FM-FLOW for the experiments """
+"""Creates files to describe atmospheric pressure for D3D-FM-FLOW for the experiments"""
 
 import os
 import sys

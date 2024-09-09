@@ -1,4 +1,4 @@
-""" Creates a bathymetry file for D3D-FM-FLOW """
+"""Creates a bathymetry file for D3D-FM-FLOW"""
 
 import os
 import sys
