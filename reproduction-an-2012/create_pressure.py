@@ -1,4 +1,4 @@
-""" Creates files for D3D-FM-FLOW with the pressure-field as in the paper An et al. (2012) """
+"""Creates files for D3D-FM-FLOW with the pressure-field as in the paper An et al. (2012)"""
 
 import os
 import sys

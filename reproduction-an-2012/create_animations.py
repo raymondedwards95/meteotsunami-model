@@ -1,4 +1,4 @@
-"""Script for creating animations from gridded model output """
+"""Script for creating animations from gridded model output"""
 
 import argparse
 import os

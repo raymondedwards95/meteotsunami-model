@@ -1,4 +1,4 @@
-"""Script for creating figures to compare with paper An et al. (2012) """
+"""Script for creating figures to compare with paper An et al. (2012)"""
 
 import argparse
 import os

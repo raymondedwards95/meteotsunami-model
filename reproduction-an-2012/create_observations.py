@@ -1,4 +1,4 @@
-""" Creates a file that contains the observation cross-sections for D3D-FM-FLOW """
+"""Creates a file that contains the observation cross-sections for D3D-FM-FLOW"""
 
 import os
 import sys

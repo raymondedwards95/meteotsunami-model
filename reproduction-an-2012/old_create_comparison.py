@@ -1,4 +1,4 @@
-""" Script to compare different simulations """
+"""Script to compare different simulations"""
 
 import os
 import sys
