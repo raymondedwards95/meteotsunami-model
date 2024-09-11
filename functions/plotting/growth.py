@@ -1,4 +1,4 @@
-""" Functions for visualising wave evolution from model output
+"""Functions for visualising wave evolution from model output
 
 Main classes:
     plot_growth

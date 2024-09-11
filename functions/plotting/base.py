@@ -1,4 +1,4 @@
-""" Common functions for plots of model output
+"""Common functions for plots of model output
 
 Main classes:
     plot_base

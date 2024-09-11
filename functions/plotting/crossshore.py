@@ -1,4 +1,4 @@
-""" Functions for visualising cross-shore wave profiles from model output
+"""Functions for visualising cross-shore wave profiles from model output
 
 Main classes:
     plot_crossshore

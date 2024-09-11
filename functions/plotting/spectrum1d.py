@@ -1,4 +1,4 @@
-""" Functions for visualising 1d spectra from model output
+"""Functions for visualising 1d spectra from model output
 
 Main classes:
     plot_spectrum_1d

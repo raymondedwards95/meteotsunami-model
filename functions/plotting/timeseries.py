@@ -1,4 +1,4 @@
-""" Functions for visualising time-series from model output
+"""Functions for visualising time-series from model output
 
 Main classes:
     plot_timeseries

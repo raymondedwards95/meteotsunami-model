@@ -1,4 +1,4 @@
-""" Functions for contour plots of model output
+"""Functions for contour plots of model output
 
 Main classes:
     plot_contour

@@ -1,4 +1,4 @@
-""" Functions for visualising along-shore wave profiles from model output
+"""Functions for visualising along-shore wave profiles from model output
 
 Main classes:
     plot_alongshore
