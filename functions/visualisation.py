@@ -1,4 +1,4 @@
-""" Functions for visualising model outputs
+"""Functions for visualising model outputs
 
 Main functions:
     vis_timeseries

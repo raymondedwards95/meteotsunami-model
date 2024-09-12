@@ -1,4 +1,4 @@
-""" Theoretical relationships
+"""Theoretical relationships
 
 Main functions:
     critical_velocity_sloped

@@ -1,4 +1,4 @@
-""" Additional analysis of waterlevel and water velocity data
+"""Additional analysis of waterlevel and water velocity data
 
 Main functions:
     compute_decay_parameter
