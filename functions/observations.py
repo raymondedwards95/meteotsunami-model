@@ -1,4 +1,4 @@
-""" Functions to create observation points and cross sections for D3D-FM
+"""Functions to create observation points and cross sections for D3D-FM
 
 Main classes:
     ObservationPoint

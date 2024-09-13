@@ -1,4 +1,4 @@
-""" Functions to process output files from Delft3D-FM into structured arrays
+"""Functions to process output files from Delft3D-FM into structured arrays
 
 Can be used as standalone script
 

@@ -1,4 +1,4 @@
-""" Functions to write bathymetry data in xyz- or xyb-format
+"""Functions to write bathymetry data in xyz- or xyb-format
 
 Main functions:
     convert_to_xarray
