@@ -346,15 +346,16 @@ unit1           = Pa
 
 def plot_pressure(
     data: xr.DataArray,
-    filename: str = None,
-    x_scales: Numeric = None,
+    filename: str | None = None,
+    x_scales: Numeric | None = None,
     keep_open: bool = False,
-    x_min: Numeric = None,
-    x_max: Numeric = None,
-    y_min: Numeric = None,
-    y_max: Numeric = None,
+    x_min: Numeric | None = None,
+    x_max: Numeric | None = None,
+    y_min: Numeric | None = None,
+    y_max: Numeric | None = None,
     scale: str = "Mm",
     filter: bool = True,
+    t_list: list | npt.ArrayLike | None = None,
 ) -> tuple[plt.Figure, plt.Figure]:
     """Function to visualize pressure data
 
@@ -370,6 +371,7 @@ def plot_pressure(
         `y_max`:        upper limit of y
         `scale`:        scale of plots ('m', 'km' or 'Mm')
         `filter`:       skip rows and columns without any perturbation from 0
+        `t_list`:       list of moments in time to plot
     """
     # prepare
     t0 = time.perf_counter_ns()
@@ -402,6 +404,10 @@ def plot_pressure(
         filename.replace(".jpg", "")
 
     t_num = 5
+    t_fix = False
+    if isinstance(t_list, (list, np.ndarray)):
+        t_num = len(t_list)
+        t_fix = True
 
     unit: str
     scale_factor: float
@@ -437,7 +443,12 @@ def plot_pressure(
     # extract data
     x = data["x"].values
     y = data["y"].values
-    t = np.linspace(data["t"].min(), data["t"].max(), t_num)
+    if t_fix:
+        t = np.array(t_list)
+        t = t[(data["t"].min().values <= t) & (t <= data["t"].max().values)]
+        t_num = len(t)
+    else:
+        t = np.linspace(data["t"].min(), data["t"].max(), t_num)
     p = data.interp(t=t).compute().values
 
     ix_single = data.argmax(["x", "y", "t"])["x"]
